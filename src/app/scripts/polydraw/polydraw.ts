@@ -1,7 +1,7 @@
 //import 'core-js';
 import 'regenerator-runtime/runtime';
 
-import { FeatureGroup, Point } from 'leaflet';
+import L, { FeatureGroup, Point } from 'leaflet';
 import { select } from 'd3-selection';
 import { line, curveMonotoneX } from 'd3-shape';
 import Set from 'es6-set';
@@ -66,233 +66,234 @@ export default class PolyDraw extends FeatureGroup {
         map.simplifyPolygon = simplifyPolygon;
 
     //    // Add the item to the map.
-    //    polygons.set(map, new Set());
+       polygons.set(map, new Set());
 
     //    // Set the initial mode.
-    //    modeFor(map, this.options.mode, this.options);
+       modeFor(map, this.options.mode, this.options);
 
-    //    // Instantiate the SVG layer that sits on top of the map.
-    //    const svg = this.svg = select(map._container).append('svg')
-    //                             .classed('free-draw', true).attr('width', '100%').attr('height', '100%')
-    //                             .style('pointer-events', 'none').style('z-index', '1001').style('position', 'relative');
+       // Instantiate the SVG layer that sits on top of the map.
+       const svg = L.svg = select(map._container).append('svg')
+                                .classed('free-draw', true).attr('width', '100%').attr('height', '100%')
+                                .style('pointer-events', 'none').style('z-index', '1001').style('position', 'relative');
 
     //    // Set the mouse events.
-    //    this.listenForEvents(map, svg, this.options);
+       this.listenForEvents(map, svg, this.options);
         return null;
     }
 
 
 
-// /**
-//      * @method onRemove
-//      * @param {Object} map
-//      * @return {void}
-//      */
-//     onRemove(map):any {
+/**
+     * @method onRemove
+     * @param {Object} map
+     * @return {void}
+     */
+    onRemove(map):any {
 
-//         // Remove the item from the map.
-//         polygons.delete(map);
+        // Remove the item from the map.
+        polygons.delete(map);
 
-//         // Remove the SVG layer.
-//         this.svg.remove();
+        // Remove the SVG layer.
+        L.svg.remove();
 
-//         // Remove the appendages from the map container.
-//         delete map[cancelKey];
-//         delete map[instanceKey];
-//         delete map.simplifyPolygon;
+        // Remove the appendages from the map container.
+        delete map[cancelKey];
+        delete map[instanceKey];
+        delete map.simplifyPolygon;
 
-//     }
+    }
 
-//     /**
-//      * @method create
-//      * @param {LatLng[]} latLngs
-//      * @param {Object} [options = { concavePolygon: false }]
-//      * @return {Object}
-//      */
-//     create(latLngs, options = { concavePolygon: false }) {
-//         const created = createFor(this.map, latLngs, { ...this.options, ...options });
-//         updateFor(this.map, 'create');
-//         return created;
-//     }
+    /**
+     * @method create
+     * @param {LatLng[]} latLngs
+     * @param {Object} [options = { concavePolygon: false }]
+     * @return {Object}
+     */
+    create(latLngs, options = { concavePolygon: false }) {
+        const created = createFor(this.map, latLngs, { ...this.options, ...options });
+        updateFor(this.map, 'create');
+        return created;
+    }
 
-//     /**
-//      * @method remove
-//      * @param {Object} polygon
-//      * @return {void}
-//      */
-//     remove(polygon: object) {
-//         polygon ? removeFor(this.map, polygon) : super.remove();
-//         updateFor(this.map, 'remove');
-//     }
+    /**
+     * @method remove
+     * @param {Object} polygon
+     * @return {void}
+     */
+    remove(polygon: object) {
+        polygon ? removeFor(this.map, polygon) : super.remove();
+        updateFor(this.map, 'remove');
+    }
 
-//     /**
-//      * @method clear
-//      * @return {void}
-//      */
-//     clear() {
-//         clearFor(this.map);
-//         updateFor(this.map, 'clear');
-//     }
+    /**
+     * @method clear
+     * @return {void}
+     */
+    clear() {
+        clearFor(this.map);
+        updateFor(this.map, 'clear');
+    }
 
-//     /**
-//      * @method setMode
-//      * @param {Number} [mode = null]
-//      * @return {Number}
-//      */
-//     mode(mode = null) {
+    /**
+     * @method setMode
+     * @param {Number} [mode = null]
+     * @return {Number}
+     */
+    mode(mode = null) {
+      console.log("Polydraw.mode: ",mode)
+        // Set mode when passed `mode` is numeric, and then yield the current mode.
+        typeof mode === 'number' && modeFor(this.map, mode, this.options);
+        return this.map[modesKey];
 
-//         // Set mode when passed `mode` is numeric, and then yield the current mode.
-//         typeof mode === 'number' && modeFor(this.map, mode, this.options);
-//         return this.map[modesKey];
+    }
 
-//     }
+    /**
+     * @method size
+     * @return {Number}
+     */
+    size() {
+        return polygons.get(this.map).size;
+    }
 
-//     /**
-//      * @method size
-//      * @return {Number}
-//      */
-//     size() {
-//         return polygons.get(this.map).size;
-//     }
+    /**
+     * @method all
+     * @return {Array}
+     */
+    all() {
+        return Array.from(polygons.get(this.map));
+    }
 
-//     /**
-//      * @method all
-//      * @return {Array}
-//      */
-//     all() {
-//         return Array.from(polygons.get(this.map));
-//     }
+    /**
+     * @method cancel
+     * @return {void}
+     */
+    cancel() {
+        this.map[cancelKey]();
+    }
 
-//     /**
-//      * @method cancel
-//      * @return {void}
-//      */
-//     cancel() {
-//         this.map[cancelKey]();
-//     }
+    /**
+     * @method listenForEvents
+     * @param {Object} map
+     * @param {Object} svg
+     * @param {Object} options
+     * @return {void}
+     */
+    listenForEvents(map, svg, options) {
 
-//     /**
-//      * @method listenForEvents
-//      * @param {Object} map
-//      * @param {Object} svg
-//      * @param {Object} options
-//      * @return {void}
-//      */
-//     listenForEvents(map, svg, options) {
+        /**
+         * @method mouseDown
+         * @param {Object} event
+         * @return {void}
+         */
+        const mouseDown = event => {
 
-//         /**
-//          * @method mouseDown
-//          * @param {Object} event
-//          * @return {void}
-//          */
-//         const mouseDown = event => {
+            if (!(map[modesKey] & CREATE)) {
 
-//             if (!(map[modesKey] & CREATE)) {
+                // Polygons can only be created when the mode includes create.
+                return;
 
-//                 // Polygons can only be created when the mode includes create.
-//                 return;
+            }
+            console.log(event)
+            /**
+             * @constant latLngs
+             * @type {Set}
+             */
+            const latLngs = new Set();
 
-//             }
+            // Create the line iterator and move it to its first `yield` point, passing in the start point
+            // from the mouse down event.
+            const lineIterator = this.createPath(svg, map.latLngToContainerPoint(event.latlng), options.strokeWidth);
 
-//             /**
-//              * @constant latLngs
-//              * @type {Set}
-//              */
-//             const latLngs = new Set();
+            /**
+             * @method mouseMove
+             * @param {Object} event
+             * @return {void}
+             */
+            const mouseMove = event => {
 
-//             // Create the line iterator and move it to its first `yield` point, passing in the start point
-//             // from the mouse down event.
-//             const lineIterator = this.createPath(svg, map.latLngToContainerPoint(event.latlng), options.strokeWidth);
+                // Resolve the pixel point to the latitudinal and longitudinal equivalent.
+                const point = map.mouseEventToContainerPoint(event.originalEvent);
 
-//             /**
-//              * @method mouseMove
-//              * @param {Object} event
-//              * @return {void}
-//              */
-//             const mouseMove = event => {
+                // Push each lat/lng value into the points set.
+                latLngs.add(map.containerPointToLatLng(point));
 
-//                 // Resolve the pixel point to the latitudinal and longitudinal equivalent.
-//                 const point = map.mouseEventToContainerPoint(event.originalEvent);
+                // Invoke the generator by passing in the starting point for the path.
+                lineIterator(new Point(point.x, point.y));
 
-//                 // Push each lat/lng value into the points set.
-//                 latLngs.add(map.containerPointToLatLng(point));
+            };
 
-//                 // Invoke the generator by passing in the starting point for the path.
-//                 lineIterator(new Point(point.x, point.y));
+            // Create the path when the user moves their cursor.
+            map.on('mousemove touchmove', mouseMove);
 
-//             };
+            /**
+             * @method mouseUp
+             * @param {Boolean} [create = true]
+             * @return {Function}
+             */
+            const mouseUp = (_, create = true) => {
 
-//             // Create the path when the user moves their cursor.
-//             map.on('mousemove touchmove', mouseMove);
+                // Remove the ability to invoke `cancel`.
+                map[cancelKey] = () => {};
 
-//             /**
-//              * @method mouseUp
-//              * @param {Boolean} [create = true]
-//              * @return {Function}
-//              */
-//             const mouseUp = (_, create = true) => {
+                // Stop listening to the events.
+                map.off('mouseup', mouseUp);
+                map.off('mousemove', mouseMove);
+                'body' in document && document.body.removeEventListener('mouseleave', mouseUp);
 
-//                 // Remove the ability to invoke `cancel`.
-//                 map[cancelKey] = () => {};
+                // Clear the SVG canvas.
+                svg.selectAll('*').remove();
 
-//                 // Stop listening to the events.
-//                 map.off('mouseup', mouseUp);
-//                 map.off('mousemove', mouseMove);
-//                 'body' in document && document.body.removeEventListener('mouseleave', mouseUp);
+                if (create) {
+                  polygons.set(map, latLngs);
+                  console.log("mouseUp: ",latLngs)
+                    // ...And finally if we have any lat/lngs in our set then we can attempt to
+                    // create the polygon.
+                    latLngs.size && createFor(map, Array.from(latLngs), options);
 
-//                 // Clear the SVG canvas.
-//                 svg.selectAll('*').remove();
+                    // Finally invoke the callback for the polygon regions.
+                    updateFor(map, 'create');
 
-//                 if (create) {
+                    // Exit the `CREATE` mode if the options permit it.
+                    options.leaveModeAfterCreate && this.mode(this.mode() ^ CREATE);
 
-//                     // ...And finally if we have any lat/lngs in our set then we can attempt to
-//                     // create the polygon.
-//                     latLngs.size && createFor(map, Array.from(latLngs), options);
+                }
 
-//                     // Finally invoke the callback for the polygon regions.
-//                     updateFor(map, 'create');
+            };
 
-//                     // Exit the `CREATE` mode if the options permit it.
-//                     options.leaveModeAfterCreate && this.mode(this.mode() ^ CREATE);
+            // Clear up the events when the user releases the mouse.
+            map.on('mouseup touchend', mouseUp);
+            'body' in document && document.body.addEventListener('mouseleave', mouseUp);
 
-//                 }
+            // Setup the function to invoke when `cancel` has been invoked.
+            map[cancelKey] = () => mouseUp({}, false);
 
-//             };
+        };
 
-//             // Clear up the events when the user releases the mouse.
-//             map.on('mouseup touchend', mouseUp);
-//             'body' in document && document.body.addEventListener('mouseleave', mouseUp);
+        map.on('mousedown touchstart', mouseDown);
 
-//             // Setup the function to invoke when `cancel` has been invoked.
-//             map[cancelKey] = () => mouseUp({}, false);
+    }
 
-//         };
+    /**
+     * @method createPath
+     * @param {Object} svg
+     * @param {Point} fromPoint
+     * @param {Number} strokeWidth
+     * @return {void}
+     */
+    createPath(svg, fromPoint, strokeWidth) {
+        let lastPoint = fromPoint;
 
-//         map.on('mousedown touchstart', mouseDown);
+        const lineFunction = line().curve(curveMonotoneX).x(d => d.x).y(d => d.y);
 
-//     }
-
-//     /**
-//      * @method createPath
-//      * @param {Object} svg
-//      * @param {Point} fromPoint
-//      * @param {Number} strokeWidth
-//      * @return {void}
-//      */
-//     createPath(svg, fromPoint, strokeWidth) {
-//         let lastPoint = fromPoint;
-
-//         const lineFunction = line().curve(curveMonotoneX).x(d => d.x).y(d => d.y);
-
-//         return toPoint => {
-//             const lineData = [ lastPoint, toPoint ];
-//             lastPoint = toPoint;
-//             // Draw SVG line based on the last movement of the mouse's position.
-//             svg.append('path').classed('leaflet-line', true)
-//                 .attr('d', lineFunction(lineData)).attr('fill', 'none')
-//                 .attr('stroke', 'black').attr('stroke-width', strokeWidth);
-//         };
-//     }
+        return toPoint => {
+            const lineData = [ lastPoint, toPoint ];
+            lastPoint = toPoint;
+            // Draw SVG line based on the last movement of the mouse's position.
+            svg.append('path').classed('leaflet-line', true)
+                .attr('d', lineFunction(lineData)).attr('fill', 'none')
+                .attr('stroke', 'black').attr('stroke-width', strokeWidth);
+        };
+    }
 
 
     
@@ -302,11 +303,11 @@ export default class PolyDraw extends FeatureGroup {
 //  * @method freeDraw
 //  * @return {Object}
 //  */
-// export const freeDraw = options => {
-//     return new FreeDraw(options);
-// };
+export const freeDraw = options => {
+    return new PolyDraw(options);
+};
 
-// export { CREATE, EDIT, DELETE, APPEND, EDIT_APPEND, NONE, ALL } from './helpers/Flags';
+export { CREATE, EDIT, DELETE, APPEND, EDIT_APPEND, NONE, ALL } from './helpers/flags';
 
 // if (typeof window !== 'undefined') {
 

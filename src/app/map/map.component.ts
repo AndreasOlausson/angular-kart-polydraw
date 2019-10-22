@@ -1,4 +1,4 @@
-import { Component, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, OnChanges, AfterViewInit, Input } from '@angular/core';
 import {MapHelperService} from './map-helper.service'
 
 
@@ -20,12 +20,18 @@ import {MapHelperService} from './map-helper.service'
 })
 export class MapComponent implements OnChanges, AfterViewInit {
   map;
+  @Input() mode: number; 
+  
   constructor(private helper:MapHelperService){
 
   }
 
   ngOnChanges(ch) {
-    
+    if(ch.mode.currentValue != null){
+      this.helper.draw(ch.mode.currentValue)
+    }
+   
+
   }
 
   ngAfterViewInit() {

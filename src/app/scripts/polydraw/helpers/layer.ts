@@ -10,11 +10,13 @@ import { NONE, CREATE, EDIT, DELETE, APPEND } from './flags';
  */
 export const updateFor = (map, eventType) => {
 
-    const latLngs = Array.from(polygons.get(map)).map(polygon => {
+    const latLngs = Array.from(polygons.get(map)).map((polygon: any) => {
 
         // Ensure the polygon has been closed.
+        
         const latLngs = polygon.getLatLngs();
         return [ ...latLngs[0], latLngs[0][0] ];
+    
 
     });
 
@@ -46,7 +48,7 @@ export const classesFor = (map, mode) => {
     Object.keys(modeMap).forEach(key => {
 
         const className = modeMap[key];
-        const isModeActive = mode & key;
+        const isModeActive = mode && key;
 
         // Remove the class name if it's set already on the map container.
         DomUtil.removeClass(map._container, className);

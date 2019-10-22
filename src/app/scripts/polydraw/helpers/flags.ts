@@ -18,11 +18,11 @@ export const ALL = CREATE | EDIT | DELETE | APPEND;
  * @param {Object} options
  * @return {Number}
  */
-export const modeFor = (map: L.Map, mode: number, options, IPolyDrawOptions) => {
-
+export const modeFor = (map: L.Map, mode: number, options) => {
+console.log("flags: ",mode)
     // Update the mode.
     map[modesKey] = mode;
-
+console.log("mapmode: ",map[modesKey])
     // Fire the updated mode.
     map[instanceKey].fire('mode', { mode });
 
@@ -47,7 +47,7 @@ export const modeFor = (map: L.Map, mode: number, options, IPolyDrawOptions) => 
     // `notifyAfterEditExit` option is equal to `true`, and then reset the `notifyDeferredKey`.
     options.notifyAfterEditExit && map[notifyDeferredKey]();
     map[notifyDeferredKey] = () => {};
-
+    console.log("flags: ",mode)
     return mode;
 
 };

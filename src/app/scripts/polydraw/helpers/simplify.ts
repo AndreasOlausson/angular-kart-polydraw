@@ -9,11 +9,13 @@ import { Clipper, PolyFillType } from 'clipper-lib';
  * @return {Array}
  */
 export const latLngsToClipperPoints = (map: L.Map, latLng: L.LatLngExpression) => {
-
+    console.log(latLng)
     let latLngs: any;
 
-    return latLngs.map((latLng: L.LatLngExpression) => {
+    return latLng.map((latLng: L.LatLngExpression) => {
+      console.log(latLng)
         const point = map.latLngToLayerPoint(latLng);
+        console.log(point.x, point.y)
         return { X: point.x, Y: point.y };
     });
 
@@ -26,7 +28,7 @@ export const latLngsToClipperPoints = (map: L.Map, latLng: L.LatLngExpression) =
  * @return {Array}
  */
 const clipperPolygonsToLatLngs = (map, polygons) => {
-
+  
     return polygons.map(polygon => {
 
         return polygon.map(point => {
@@ -45,10 +47,13 @@ const clipperPolygonsToLatLngs = (map, polygons) => {
  * @return {LatLng[]}
  */
 export default (map, latLngs, options) => {
-
+  console.log(options)
+  
     const points = Clipper.CleanPolygon(latLngsToClipperPoints(map, latLngs), options.simplifyFactor);
+    console.log("points: ", points)
     const polygons = Clipper.SimplifyPolygon(points, PolyFillType.pftNonZero);
-
+    
+  console.log("SimplifyPolygon: ",clipperPolygonsToLatLngs(map, polygons) )
     return clipperPolygonsToLatLngs(map, polygons);
 
 };

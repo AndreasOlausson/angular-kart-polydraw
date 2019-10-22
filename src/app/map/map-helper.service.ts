@@ -6,10 +6,12 @@ import {Observable} from "rxjs";
 import L from 'leaflet';
 import FreeDraw from 'leaflet-freedraw';
 
+import PolyDraw, { NONE, CREATE, EDIT, DELETE, APPEND, ALL, polygons } from "../scripts/polydraw/polydraw"
+
 @Injectable()
 export class MapHelperService {
   public map; 
-
+  pd = new PolyDraw()
 
 initMap(){
      this.map = new L.Map("map");
@@ -35,7 +37,9 @@ initMap(){
              attribution: 'HOT'
           }).addTo(this.map);
    
-   } 
+   this.map.addLayer(this.pd);
+   
+} 
    drawPoints(data){
       // points
       data.points.forEach(p=>this.addMarker(p.pos.lat, p.pos.lon));
@@ -49,6 +53,12 @@ initMap(){
         this.addLine(l.pos.src, l.pos.dest);             
       });
    }
+
+    draw(mode: number){
+      console.log(mode)
+      this.pd.mode(mode)
+    }
+
    addMarker(lat,lng){
     let m = L.marker([lat,lng]).addTo(this.map);
    }
