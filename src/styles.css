@@ -1,0 +1,10 @@
+/* Add application styles & imports to this file! */
+
+html, body{
+  height:100%;
+}
+#blitz-app{
+  height:100%
+}
+
+@import "~leaflet/dist/leaflet.css";
