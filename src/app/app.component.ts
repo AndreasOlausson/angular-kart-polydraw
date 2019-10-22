@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import * as L  from 'leaflet';
+
+
+
 
 @Component({
   selector: 'my-app',
@@ -7,4 +11,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent  {
   name = 'Angular';
+
+
+togglePolyDraw(idx: number): void {
+  console.log(idx);
+         
+}
+
 }
