@@ -9,14 +9,13 @@ import { IPolyDrawOptions } from '../polydraw';
  * @param {LatLng[]} latLngs
  * @return {Array}
  */
-export const latLngsToClipperPoints = (map: L.Map, latLng: L.LatLngExpression) => {
-    console.log(latLng)
-    let latLngs: any;
-
-    return latLng.map((latLng: L.LatLngExpression) => {
-      console.log(latLng)
+export const latLngsToClipperPoints = (map: L.Map, latLngs: L.LatLngExpression[]) => {
+    console.log(latLngs)
+    
+    return latLngs.map((latLng: L.LatLngExpression) => {
+      
         const point = map.latLngToLayerPoint(latLng);
-        console.log(point.x, point.y)
+        
         return { X: point.x, Y: point.y };
     });
 
@@ -29,10 +28,11 @@ export const latLngsToClipperPoints = (map: L.Map, latLng: L.LatLngExpression) =
  * @return {Array}
  */
 const clipperPolygonsToLatLngs = (map: L.Map, polygons: L.Polygon[]) => {
-  
+    
     return polygons.map(polygon => {
-
+        
         return polygon.map(point => {
+          
             const updatedPoint = new Point(point.X, point.Y);
             return map.layerPointToLatLng(updatedPoint);
         });
@@ -48,13 +48,13 @@ const clipperPolygonsToLatLngs = (map: L.Map, polygons: L.Polygon[]) => {
  * @return {LatLng[]}
  */
 export default (map: L.Map, latLngs: L.LatLng[], options: IPolyDrawOptions) => {
-  console.log(options)
+  console.log(latLngs)
   
     const points = Clipper.CleanPolygon(latLngsToClipperPoints(map, latLngs), options.simplifyFactor);
-    console.log("points: ", points)
+    
     const polygons = Clipper.SimplifyPolygon(points, PolyFillType.pftNonZero);
     
-  console.log("SimplifyPolygon: ",clipperPolygonsToLatLngs(map, polygons) )
+  
     return clipperPolygonsToLatLngs(map, polygons);
 
 };

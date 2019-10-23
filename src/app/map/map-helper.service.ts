@@ -11,11 +11,12 @@ import PolyDraw, { NONE, CREATE, EDIT, DELETE, APPEND, ALL, polygons } from "../
 @Injectable()
 export class MapHelperService {
   public map; 
-  pd = new PolyDraw()
+  pd = new PolyDraw({mode: ALL});
+  polygons = polygons; 
 
 initMap(){
      this.map = new L.Map("map");
-     this.map.setView(new L.LatLng(59.911491, 10.757933), 2);
+     this.map.setView(new L.LatLng(59.911491, 10.757933), 14);
   /*    L.tileLayer(`http://{s}.basemaps.cartocdn.com/hot/{z}/{x}/{y}.png`, {
              maxZoom: 20,
             //  minZoom: 3,
@@ -56,7 +57,18 @@ initMap(){
 
     draw(mode: number){
       console.log(mode)
+      if(mode === 4){
+        this.deletePolygon()
+      }
+      else{
+        console.log("draw: ", this.polygons);
       this.pd.mode(mode)
+    }
+    
+    }
+
+    deletePolygon(){
+      this.pd.clear();
     }
 
    addMarker(lat,lng){

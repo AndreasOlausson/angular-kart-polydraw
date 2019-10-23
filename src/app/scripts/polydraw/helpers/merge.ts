@@ -25,6 +25,8 @@ export function fillPolygon(map: L.Map, polygon, options: IPolyDrawOptions) {
     // Convert the Clipper points back into lat/lng pairs.
     const latLngs = points.map(model => map.layerPointToLatLng(new Point(model.X, model.Y)));
 
+    
+
     createFor(map, latLngs, options, true);
 
 }
@@ -37,6 +39,8 @@ export function fillPolygon(map: L.Map, polygon, options: IPolyDrawOptions) {
 function latLngsToTuple(latLngs) {
     return latLngs.map(model => [model.lat, model.lng]);
 }
+
+
 
 /**
  * @param {Object} map
@@ -51,13 +55,13 @@ export default (map: L.Map, polygons: L.Polygon[], options: IPolyDrawOptions) =>
 
     const analysis = polygons.reduce((accum, polygon: L.Polygon) => {
 
-        const latLngs = polygon.getLatLngs()[0];
-        const points = latLngsToClipperPoints(map, polygon.getLatLngs()[0]);
+        const latLngs = polygon;
+        const points = latLngsToClipperPoints(map, polygon);
         const turfPolygon = toTurfPolygon(latLngs);
 
         // Determine if the current polygon intersects any of the other polygons currently on the map.
         const intersects = polygons.filter(complement(identical(polygon))).some((polygon: L.Polygon) => {
-            return Boolean(isIntersecting(turfPolygon, toTurfPolygon(polygon.getLatLngs()[0])));
+            return Boolean(isIntersecting(turfPolygon, toTurfPolygon(polygon)));
         });
 
         const key = intersects ? 'intersecting' : 'rest';
@@ -82,6 +86,8 @@ export default (map: L.Map, polygons: L.Polygon[], options: IPolyDrawOptions) =>
         const latLngs = polygon.map(model => {
             return map.layerPointToLatLng(new Point(model.X, model.Y));
         });
+
+        
 
         // Create the polygon, but this time prevent any merging, otherwise we'll find ourselves
         // in an infinite loop.

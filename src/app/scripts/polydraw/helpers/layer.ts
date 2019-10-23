@@ -10,13 +10,18 @@ import { NONE, CREATE, EDIT, DELETE, APPEND } from './flags';
  * @return {void}
  */
 export const updateFor = (map: L.Map, eventType: string): void => {
-
-    const latLngs = Array.from(polygons.get(map)).map((polygon: L.Polygon) => {
+    console.log("updateFor polygons: ",polygons.get(map));
+    const latLngs = polygons.get(map).map((polygon: L.Polygon) => {
         // Ensure the polygon has been closed.
+        console.log("updateFor: ",polygon);
         
-        const latLngs: L.LatLng[] | L.LatLng[][] | L.LatLng[][][] = polygon.getLatLngs();
-        return [ ...latLngs[0], latLngs[0][0] ];
+        let latLng: L.LatLng[] | L.LatLng[][] | L.LatLng[][][] = [];
+        latLng.push(polygon)
+
+        
+        return [ ...latLng, latLng ];
     });
+    
     // Fire the current set of lat lngs.
     map[instanceKey].fire('markers', { latLngs, eventType });
 };

@@ -60,23 +60,19 @@ const appendEdgeFor = (map: L.Map, polygon, options: IPolyDrawOptions, { parts, 
  * @param {Boolean} [preventMutations = false]
  * @return {Array|Boolean}
  */
-export const createFor = (map: L.Map, latLngs, options: IPolyDrawOptions = defaultOptions, preventMutations: boolean = false) => {
-  console.log("createFor: ",polygons.get(map).size)
+export const createFor = (map: L.Map, latLngs:L.LatLng[], options: IPolyDrawOptions = defaultOptions, preventMutations: boolean = false) => {
+  console.log("createFor: ",latLngs)
     // Determine whether we've reached the maximum polygons.
     const limitReached = polygons.get(map).size === options.maximumPolygons;
 
     // Apply the concave hull algorithm to the created polygon if the options allow.
     const concavedLatLngs = !preventMutations && options.concavePolygon ? concavePolygon(map, latLngs) : latLngs;
-console.log("concavedLatLngs: ",concavedLatLngs)
-console.log("limitReached: ",limitReached)
+
     // Simplify the polygon before adding it to the map.
     const addedPolygons = limitReached ? [] : map.simplifyPolygon(map, concavedLatLngs, options).map(latLngs => {
-        console.log(latLngs)
-        const polygon = new Polygon(latLngs, {
-            ...defaultOptions, ...options, className: 'leaflet-polygon'
-        }).addTo(map);
-
-        // Attach the edges to the polygon.
+        console.log(latLngs);
+        const polygon = new Polygon(latLngs).addTo(map);
+        /* // Attach the edges to the polygon.
         polygon[edgesKey] = createEdges(map, polygon, options);
 
         // Disable the propagation when you click on the marker.
@@ -84,16 +80,18 @@ console.log("limitReached: ",limitReached)
 
         // Yield the click handler to the `handlePolygonClick` function.
         polygon.off('click');
-        polygon.on('click', handlePolygonClick(map, polygon, options));
+        polygon.on('click', handlePolygonClick(map, polygon, options)); */
 
-        return polygon;
+        // return polygon;
+        return latLngs;
 
     });
-
+    console.log(addedPolygons);
     // Append the current polygon to the master set.
-    addedPolygons.forEach(polygon => polygons.get(map).add(polygon));
+    addedPolygons[0].forEach(polygon => {
+        polygons.get(map).push(polygon)});
 
-    if (!limitReached && !preventMutations && polygons.get(map).size > 1 && options.mergePolygons) {
+    /* if (!limitReached && !preventMutations && polygons.get(map).size > 1 && options.mergePolygons) {
 
         // Attempt a merge of all the polygons if the options allow, and the polygon count is above one.
         const addedMergedPolygons = mergePolygons(map, Array.from(polygons.get(map)), options);
@@ -103,8 +101,8 @@ console.log("limitReached: ",limitReached)
 
         return addedMergedPolygons;
 
-    }
-
+    } */
+    
     return addedPolygons;
 
 };
@@ -169,6 +167,7 @@ export default (map: L.Map, polygon, options: IPolyDrawOptions) => {
 
         // Setup the conditions for the switch statement to make the cases clearer.
         const mode = map[modesKey];
+        console.log(mode);
         const isDelete = Boolean(mode & DELETE);
         const isAppend = Boolean(mode & APPEND);
         const isDeleteAndAppend = Boolean(mode & DELETE && mode & APPEND);
