@@ -50,7 +50,7 @@ export default class PolyDraw extends FeatureGroup {
     map: L.Map;
     options: IPolyDrawOptions;
 
-    constructor(options = defaultOptions) {
+    constructor(options: IPolyDrawOptions = defaultOptions) {
         super();
         this.options = { ...defaultOptions, ...options };
     }
@@ -73,13 +73,15 @@ export default class PolyDraw extends FeatureGroup {
        modeFor(map, this.options.mode, this.options);
 
        // Instantiate the SVG layer that sits on top of the map.
-       const svg = L.svg = select(map._container).append('svg')
+       const svg: L.SVG = L.svg = select(map._container).append('svg')
                                 .classed('free-draw', true).attr('width', '100%').attr('height', '100%')
                                 .style('pointer-events', 'none').style('z-index', '1001').style('position', 'relative');
 
     //    // Set the mouse events.
        this.listenForEvents(map, svg, this.options);
-        return null;
+
+       // return featuregroup-this
+        return this;
     }
 
 
@@ -89,7 +91,7 @@ export default class PolyDraw extends FeatureGroup {
      * @param {Object} map
      * @return {void}
      */
-    onRemove(map):any {
+    onRemove(map: L.Map):this {
 
         // Remove the item from the map.
         polygons.delete(map);
@@ -101,6 +103,8 @@ export default class PolyDraw extends FeatureGroup {
         delete map[cancelKey];
         delete map[instanceKey];
         delete map.simplifyPolygon;
+
+        return this;
 
     }
 
@@ -121,16 +125,18 @@ export default class PolyDraw extends FeatureGroup {
      * @param {Object} polygon
      * @return {void}
      */
-    remove(polygon: object) {
+    remove(polygon: object): this {
         polygon ? removeFor(this.map, polygon) : super.remove();
         updateFor(this.map, 'remove');
+
+        return this;
     }
 
     /**
      * @method clear
      * @return {void}
      */
-    clear() {
+    clear(): void {
         clearFor(this.map);
         updateFor(this.map, 'clear');
     }

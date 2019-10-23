@@ -9,21 +9,16 @@ import { NONE, CREATE, EDIT, DELETE, APPEND } from './flags';
  * @param {String} eventType
  * @return {void}
  */
-export const updateFor = (map: L.Map, eventType) => {
+export const updateFor = (map: L.Map, eventType: string): void => {
 
-    const latLngs = Array.from(polygons.get(map)).map((polygon: any) => {
-
+    const latLngs = Array.from(polygons.get(map)).map((polygon: L.Polygon) => {
         // Ensure the polygon has been closed.
         
-        const latLngs = polygon.getLatLngs();
+        const latLngs: L.LatLng[] | L.LatLng[][] | L.LatLng[][][] = polygon.getLatLngs();
         return [ ...latLngs[0], latLngs[0][0] ];
-    
-
     });
-
     // Fire the current set of lat lngs.
     map[instanceKey].fire('markers', { latLngs, eventType });
-
 };
 
 /**
@@ -32,12 +27,13 @@ export const updateFor = (map: L.Map, eventType) => {
  * @param {Number} mode
  * @return {void}
  */
-export const classesFor = (map: L.Map, mode) => {
+export const classesFor = (map: L.Map, mode: number):void => {
 
     /**
      * @constant modeMap
      * @type {Object}
      */
+    console.log("TODO: type -> modeMap");
     const modeMap = {
         [NONE]: 'mode-none',
         [CREATE]: 'mode-create',
@@ -45,8 +41,8 @@ export const classesFor = (map: L.Map, mode) => {
         [DELETE]: 'mode-delete',
         [APPEND]: 'mode-append'
     };
-
-    Object.keys(modeMap).forEach(key => {
+console.log("modeMap", modeMap);
+    Object.keys(modeMap).forEach((key: string) => {
 
         const className = modeMap[key];
         const isModeActive = mode && key;

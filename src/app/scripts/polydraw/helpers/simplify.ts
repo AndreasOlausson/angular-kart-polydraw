@@ -1,6 +1,7 @@
 import { Point } from 'leaflet';
 import * as L from 'leaflet';
 import { Clipper, PolyFillType } from 'clipper-lib';
+import { IPolyDrawOptions } from '../polydraw';
 
 /**
  * @method latLngsToClipperPoints
@@ -27,7 +28,7 @@ export const latLngsToClipperPoints = (map: L.Map, latLng: L.LatLngExpression) =
  * @param {Array} polygons
  * @return {Array}
  */
-const clipperPolygonsToLatLngs = (map, polygons) => {
+const clipperPolygonsToLatLngs = (map: L.Map, polygons: L.Polygon[]) => {
   
     return polygons.map(polygon => {
 
@@ -46,7 +47,7 @@ const clipperPolygonsToLatLngs = (map, polygons) => {
  * @param {Object} options
  * @return {LatLng[]}
  */
-export default (map, latLngs, options) => {
+export default (map: L.Map, latLngs: L.LatLng[], options: IPolyDrawOptions) => {
   console.log(options)
   
     const points = Clipper.CleanPolygon(latLngsToClipperPoints(map, latLngs), options.simplifyFactor);

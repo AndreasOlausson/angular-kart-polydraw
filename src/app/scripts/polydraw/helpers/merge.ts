@@ -44,19 +44,19 @@ function latLngsToTuple(latLngs) {
  * @param {Object} options
  * @return {Array}
  */
-export default (map: L.Map, polygons, options: IPolyDrawOptions) => {
+export default (map: L.Map, polygons: L.Polygon[], options: IPolyDrawOptions) => {
 
     // Transform a L.LatLng object into a GeoJSON polygon that TurfJS expects to receive.
     const toTurfPolygon = compose(createPolygon, x => [x], x => [...x, head(x)], latLngsToTuple);
 
-    const analysis = polygons.reduce((accum, polygon) => {
+    const analysis = polygons.reduce((accum, polygon: L.Polygon) => {
 
         const latLngs = polygon.getLatLngs()[0];
         const points = latLngsToClipperPoints(map, polygon.getLatLngs()[0]);
         const turfPolygon = toTurfPolygon(latLngs);
 
         // Determine if the current polygon intersects any of the other polygons currently on the map.
-        const intersects = polygons.filter(complement(identical(polygon))).some(polygon => {
+        const intersects = polygons.filter(complement(identical(polygon))).some((polygon: L.Polygon) => {
             return Boolean(isIntersecting(turfPolygon, toTurfPolygon(polygon.getLatLngs()[0])));
         });
 
