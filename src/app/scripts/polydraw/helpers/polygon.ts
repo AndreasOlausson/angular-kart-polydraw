@@ -1,5 +1,6 @@
 import { LineUtil, Point, Polygon, DomEvent } from 'leaflet';
-import { defaultOptions, edgesKey, modesKey, polygons } from '../polydraw';
+import * as L from 'leaflet'; 
+import { defaultOptions, edgesKey, modesKey, polygons, IPolyDrawOptions } from '../polydraw';
 import { updateFor } from './layer';
 import createEdges from './edges';
 import { DELETE, APPEND } from './flags';
@@ -18,7 +19,7 @@ import mergePolygons from './merge';
  * @param {Object} endPoint
  * @return {void}
  */
-const appendEdgeFor = (map, polygon, options, { parts, newPoint, startPoint, endPoint }) => {
+const appendEdgeFor = (map: L.Map, polygon, options: IPolyDrawOptions, { parts, newPoint, startPoint, endPoint }) => {
 
     const latLngs = parts.reduce((accumulator, point, index) => {
 
@@ -59,7 +60,7 @@ const appendEdgeFor = (map, polygon, options, { parts, newPoint, startPoint, end
  * @param {Boolean} [preventMutations = false]
  * @return {Array|Boolean}
  */
-export const createFor = (map, latLngs, options = defaultOptions, preventMutations = false) => {
+export const createFor = (map: L.Map, latLngs, options: IPolyDrawOptions = defaultOptions, preventMutations: boolean = false) => {
   console.log("createFor: ",polygons.get(map).size)
     // Determine whether we've reached the maximum polygons.
     const limitReached = polygons.get(map).size === options.maximumPolygons;
@@ -114,7 +115,7 @@ console.log("limitReached: ",limitReached)
  * @param {Object} polygon
  * @return {void}
  */
-export const removeFor = (map, polygon) => {
+export const removeFor = (map: L.Map, polygon) => {
 
     // Remove polygon and all of its associated edges.
     map.removeLayer(polygon);
@@ -130,7 +131,7 @@ export const removeFor = (map, polygon) => {
  * @param {Object} map
  * @return {void}
  */
-export const clearFor = map => {
+export const clearFor = (map: L.Map) => {
     Array.from(polygons.get(map).values()).forEach(polygon => removeFor(map, polygon));
 };
 
@@ -140,7 +141,7 @@ export const clearFor = map => {
  * @param {Object} options
  * @return {Function}
  */
-export default (map, polygon, options) => {
+export default (map: L.Map, polygon, options: IPolyDrawOptions) => {
 
     return event => {
 

@@ -1,10 +1,12 @@
 import { Point } from 'leaflet';
+import * as L from 'leaflet';
 import { flatten, identical, complement, compose, head } from 'ramda';
 import { Clipper, PolyFillType } from 'clipper-lib';
 import createPolygon from 'turf-polygon';
 import isIntersecting from 'turf-intersect';
 import { createFor, removeFor } from './polygon';
 import { latLngsToClipperPoints } from './simplify';
+import { IPolyDrawOptions } from '../polydraw';
 
 /**
  * @method fillPolygon
@@ -13,7 +15,7 @@ import { latLngsToClipperPoints } from './simplify';
  * @param {Object} options
  * @return {Array}
  */
-export function fillPolygon(map, polygon, options) {
+export function fillPolygon(map: L.Map, polygon, options: IPolyDrawOptions) {
 
     // Simplify the polygon which prevents voids in its shape.
     const points = latLngsToClipperPoints(map, polygon.getLatLngs()[0]);
@@ -42,7 +44,7 @@ function latLngsToTuple(latLngs) {
  * @param {Object} options
  * @return {Array}
  */
-export default (map, polygons, options) => {
+export default (map: L.Map, polygons, options: IPolyDrawOptions) => {
 
     // Transform a L.LatLng object into a GeoJSON polygon that TurfJS expects to receive.
     const toTurfPolygon = compose(createPolygon, x => [x], x => [...x, head(x)], latLngsToTuple);

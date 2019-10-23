@@ -18,7 +18,7 @@ export const ALL = CREATE | EDIT | DELETE | APPEND;
  * @param {Object} options
  * @return {Number}
  */
-export const modeFor = (map: L.Map, mode: number, options) => {
+export const modeFor = (map: L.Map, mode: number, options: IPolyDrawOptions) => {
 console.log("flags: ",mode)
     // Update the mode.
     map[modesKey] = mode;

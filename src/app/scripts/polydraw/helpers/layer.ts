@@ -1,4 +1,5 @@
 import { DomUtil } from 'leaflet';
+import * as L from 'leaflet';
 import { polygons, instanceKey } from '../polydraw';
 import { NONE, CREATE, EDIT, DELETE, APPEND } from './flags';
 
@@ -8,7 +9,7 @@ import { NONE, CREATE, EDIT, DELETE, APPEND } from './flags';
  * @param {String} eventType
  * @return {void}
  */
-export const updateFor = (map, eventType) => {
+export const updateFor = (map: L.Map, eventType) => {
 
     const latLngs = Array.from(polygons.get(map)).map((polygon: any) => {
 
@@ -31,7 +32,7 @@ export const updateFor = (map, eventType) => {
  * @param {Number} mode
  * @return {void}
  */
-export const classesFor = (map, mode) => {
+export const classesFor = (map: L.Map, mode) => {
 
     /**
      * @constant modeMap

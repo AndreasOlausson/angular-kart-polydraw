@@ -1,7 +1,8 @@
 //import 'core-js';
 import 'regenerator-runtime/runtime';
 
-import L, { FeatureGroup, Point } from 'leaflet';
+import { FeatureGroup, Point } from 'leaflet';
+import * as L from 'leaflet';
 import { select } from 'd3-selection';
 import { line, curveMonotoneX } from 'd3-shape';
 import Set from 'es6-set';
@@ -178,7 +179,7 @@ export default class PolyDraw extends FeatureGroup {
      * @param {Object} options
      * @return {void}
      */
-    listenForEvents(map, svg, options) {
+    listenForEvents(map: L.Map , svg: L.SVG, options: IPolyDrawOptions) {
 
         /**
          * @method mouseDown
@@ -209,7 +210,7 @@ export default class PolyDraw extends FeatureGroup {
              * @param {Object} event
              * @return {void}
              */
-            const mouseMove = event => {
+            const mouseMove = (event: L.event) => {
 
                 // Resolve the pixel point to the latitudinal and longitudinal equivalent.
                 const point = map.mouseEventToContainerPoint(event.originalEvent);

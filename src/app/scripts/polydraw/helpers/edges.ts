@@ -1,10 +1,9 @@
 import { DivIcon, Marker, DomEvent } from 'leaflet';
-import { polygons, modesKey, notifyDeferredKey } from '../polydraw';
+import * as L from 'leaflet';
+import { polygons, modesKey, notifyDeferredKey, IPolyDrawOptions } from '../polydraw';
 import { updateFor } from './layer';
 import { CREATE, EDIT } from './flags';
 import mergePolygons, { fillPolygon } from './merge';
-
-// Default freedraw, ikke endringer i denne
 
 /**
  * @method createEdges
@@ -13,7 +12,7 @@ import mergePolygons, { fillPolygon } from './merge';
  * @param {Object} options
  * @return {Array}
  */
-export default function createEdges(map, polygon, options) {
+export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPolyDrawOptions) {
 
     /**
      * @method fetchLayerPoints
@@ -56,17 +55,17 @@ export default function createEdges(map, polygon, options) {
              * @param {Object} event
              * @return {void}
              */
-            const mouseMove = event => {
+            const mouseMove = (event: L.MouseEvent) => {
 
                 // Determine where to move the marker to from the mouse move event.
-                const containerPoint = map.latLngToContainerPoint(event.latlng);
-                const latLng = map.containerPointToLatLng(containerPoint);
+                const containerPoint: L.Point = map.latLngToContainerPoint(event.latlng);
+                const latLng: L.LatLng = map.containerPointToLatLng(containerPoint);
 
                 // Update the marker with the new lat/lng.
                 marker.setLatLng(latLng);
 
                 // ...And finally update the polygon to match the current markers.
-                const latLngs = markers.map(marker => marker.getLatLng());
+                const latLngs: L.LatLng[] = markers.map(marker => marker.getLatLng());
                 polygon.setLatLngs(latLngs);
                 polygon.redraw();
 
