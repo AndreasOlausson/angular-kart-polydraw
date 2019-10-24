@@ -11,7 +11,7 @@ import PolyDraw, { NONE, CREATE, EDIT, DELETE, APPEND, ALL, polygons } from "../
 @Injectable()
 export class MapHelperService {
   public map; 
-  pd = new PolyDraw({mode: ALL});
+  pd = new PolyDraw();
   polygons = polygons; 
 
 initMap(){

@@ -209,19 +209,7 @@ export default class PolyDraw extends FeatureGroup {
        * @constant latLngs
        */
       let polygon = [];
-
-      // Create the line iterator and move it to its first `yield` point, passing in the start point
-      // from the mouse down event.
-
-      let lineIterator;
-      if (event.originalEvent != null) {
-        console.log(event.originalEvent);
-        // lineIterator = this.createPath(svg, map.latLngToLayerPoint(event.latlng), options.strokeWidth);
-      } else {
-        const points = map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-        // lineIterator = this.createPath(svg, map.latLngToContainerPoint(points), options.strokeWidth);
-      }
-
+    
       /**
        * @method mouseMove
        * @param {Object} event
@@ -229,28 +217,17 @@ export default class PolyDraw extends FeatureGroup {
        */
       const mouseMove = (event: L.MouseEvent) => {
         if (event.originalEvent != null) {
-            // console.log(event.originalEvent);
           let latLng = map.mouseEventToLatLng(event.originalEvent);
-          let point;
+      
           polygon.push(latLng);
          polylyne= new L.polyline(polygon, {fill:false, className:"polyline"}).addTo(map)
         
-         polygroup = L.layerGroup().addLayer(polylyne)
-         
-          /* if (polygon.indexOf(latLng) !== 0) {
-            point = map.latLngToContainerPoint(polygon[polygon.indexOf(latLng) - 1]);
-          } else {
-            point = map.latLngToContainerPoint(polygon[0]);
-          }
-          let fromPoint =  map.mouseEventToContainerPoint(event.originalEvent)
-          console.log(map.mouseEventToContainerPoint(event.originalEvent));
-          console.log(new Point(fromPoint.x, fromPoint.y));
-          console.log(map.containerPointToLatLng(fromPoint));
-          this.createPath(svg, new Point(fromPoint.x, fromPoint.y), point, options.strokeWidth); */
-          //   lineIterator(latLng);
         } else {
-          /* const points = map.layerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-            
+          let points = map.mouseEventToLatLng(event.touches[0]);
+          
+          polygon.push(points)
+          polylyne= new L.polyline(polygon, {fill:false, className:"polyline"}).addTo(map)
+            /* 
                 latLngs.push(points);
                 
                 lineIterator(points); */
@@ -266,7 +243,7 @@ export default class PolyDraw extends FeatureGroup {
       };
 
       // Create the path when the user moves their cursor.
-      map.on("mousemove touchmove", mouseMove);
+      map.on("mousemove", mouseMove);
 
       document.addEventListener("touchmove", e => {
         e.stopPropagation();
@@ -284,18 +261,23 @@ export default class PolyDraw extends FeatureGroup {
 
         // Stop listening to the events.
         map.off("mouseup", mouseUp);
+        document.removeEventListener(
+          "touchstart",
+          e => {
+            mouseDown(e);
+          },
+          true
+        );
+        document.removeEventListener("touchend", mouseUp, true);
+
         map.off("mousemove", mouseMove);
         "body" in document && document.body.removeEventListener("mouseleave", mouseUp);
 
         // Clear the SVG canvas.
          let polygonTest= new  L.Polygon(polylyne.getLatLngs(), options).addTo(map)
 
-
-         
         console.log("map: ", polygonTest._latlngs);
         svg.selectAll("*").remove();
-        // polylyne.removeFrom(map)
-        // map.removeLayer(polylyne)
         
 
         if (create) {
@@ -311,15 +293,7 @@ export default class PolyDraw extends FeatureGroup {
           // Finally invoke the callback for the polygon regions.
           updateFor(map, "create");
 
-          document.removeEventListener(
-            "touchstart",
-            e => {
-              mouseDown(e);
-            },
-            true
-          );
-          document.removeEventListener("touchend", mouseUp);
-
+         
           // Exit the `CREATE` mode if the options permit it.
           options.leaveModeAfterCreate && this.mode(this.mode() ^ CREATE);
           polygon = [];
@@ -328,6 +302,7 @@ export default class PolyDraw extends FeatureGroup {
 
       // Clear up the events when the user releases the mouse.
       map.on("mouseup touchend", mouseUp);
+      document.addEventListener("touchend", (e) => console.log(e));
       document.addEventListener("touchend", mouseUp);
       "body" in document && document.body.addEventListener("mouseleave", mouseUp);
 

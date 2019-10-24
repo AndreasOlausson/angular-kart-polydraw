@@ -10,7 +10,7 @@ import { IPolyDrawOptions } from '../polydraw';
  * @return {Array}
  */
 export const latLngsToClipperPoints = (map: L.Map, latLngs: L.LatLngExpression[]) => {
-    console.log(latLngs)
+    
     
     return latLngs.map((latLng: L.LatLngExpression) => {
       
@@ -48,7 +48,6 @@ const clipperPolygonsToLatLngs = (map: L.Map, polygons: L.Polygon[]) => {
  * @return {LatLng[]}
  */
 export default (map: L.Map, latLngs: L.LatLng[], options: IPolyDrawOptions) => {
-  console.log(latLngs)
   
     const points = Clipper.CleanPolygon(latLngsToClipperPoints(map, latLngs), options.simplifyFactor);
     

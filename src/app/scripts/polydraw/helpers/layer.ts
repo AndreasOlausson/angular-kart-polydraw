@@ -13,13 +13,13 @@ export const updateFor = (map: L.Map, eventType: string): void => {
     console.log("updateFor polygons: ",polygons.get(map));
     const latLngs = polygons.get(map).map((polygon: L.Polygon) => {
         // Ensure the polygon has been closed.
-        console.log("updateFor: ",polygon);
         
+        /* 
         let latLng: L.LatLng[] | L.LatLng[][] | L.LatLng[][][] = [];
         latLng.push(polygon)
 
         
-        return [ ...latLng, latLng ];
+        return [ ...latLng, latLng ]; */
     });
     
     // Fire the current set of lat lngs.
