@@ -233,9 +233,9 @@ export default class PolyDraw extends FeatureGroup {
           let latLng = map.mouseEventToLatLng(event.originalEvent);
           let point;
           polygon.push(latLng);
-         polylyne= L.polyline(polygon, {fill:false, className:"polyline"})
-
-         polygroup = L.layerGroup().addLayer(polylyne).addTo(map)
+         polylyne= new L.polyline(polygon, {fill:false, className:"polyline"}).addTo(map)
+        
+         polygroup = L.layerGroup().addLayer(polylyne)
          
           /* if (polygon.indexOf(latLng) !== 0) {
             point = map.latLngToContainerPoint(polygon[polygon.indexOf(latLng) - 1]);
@@ -288,14 +288,15 @@ export default class PolyDraw extends FeatureGroup {
         "body" in document && document.body.removeEventListener("mouseleave", mouseUp);
 
         // Clear the SVG canvas.
-        console.log(polygroup.getLayerId(polylyne));
-        console.log("map: ", map);
+         let polygonTest= new  L.Polygon(polylyne.getLatLngs(), options).addTo(map)
+
+
+         
+        console.log("map: ", polygonTest._latlngs);
         svg.selectAll("*").remove();
+        // polylyne.removeFrom(map)
+        // map.removeLayer(polylyne)
         
-        polygroup.removeLayer(polygroup.getLayerId(polylyne))
-        
-        // map.remove(polygroup)
-        console.log("map after: ", map);
 
         if (create) {
           

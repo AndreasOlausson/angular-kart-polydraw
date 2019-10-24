@@ -71,7 +71,7 @@ export const createFor = (map: L.Map, latLngs:L.LatLng[], options: IPolyDrawOpti
     // Simplify the polygon before adding it to the map.
     const addedPolygons = limitReached ? [] : map.simplifyPolygon(map, concavedLatLngs, options).map(latLngs => {
         console.log(latLngs);
-        const polygon = new Polygon(latLngs).addTo(map);
+        // const polygon = new Polygon(latLngs).addTo(map);
         
         /* // Attach the edges to the polygon.
         polygon[edgesKey] = createEdges(map, polygon, options);
