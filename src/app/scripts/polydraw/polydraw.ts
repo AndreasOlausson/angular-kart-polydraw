@@ -1,10 +1,10 @@
 //import 'core-js';
 import "regenerator-runtime/runtime";
 
-import { FeatureGroup } from "leaflet";
+import { FeatureGroup, Point } from "leaflet";
 import * as L from "leaflet";
 import { select } from "d3-selection";
-import { line, curveMonotoneX } from "d3-shape";
+import { line, curveMonotoneY, curveMonotoneX } from "d3-shape";
 import WeakMap from "es6-weak-map";
 import Symbol from "es6-symbol";
 import { updateFor } from "./helpers/layer";
@@ -48,6 +48,7 @@ export default class PolyDraw extends FeatureGroup {
   map: L.Map;
   options: IPolyDrawOptions;
   coordinates = [];
+  polylyne: L.polyline;
 
   constructor(options: IPolyDrawOptions = defaultOptions) {
     super();
@@ -70,15 +71,19 @@ export default class PolyDraw extends FeatureGroup {
     //    // Set the initial mode.
     modeFor(map, this.options.mode, this.options);
 
+    var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
     // Instantiate the SVG layer that sits on top of the map.
-    const svg: L.SVG = (L.svg = select(map._container)
+    const svg =  select(map._container)
       .append("svg")
       .classed("free-draw", true)
       .attr("width", "100%")
       .attr("height", "100%")
       .style("pointer-events", "none")
       .style("z-index", "1001")
-      .style("position", "relative"));
+      .style("position", "relative")
+      ;
 
     //    // Set the mouse events.
     this.listenForEvents(map, svg, this.options);
@@ -188,6 +193,8 @@ export default class PolyDraw extends FeatureGroup {
    * @return {void}
    */
   listenForEvents(map: L.Map, svg: L.SVG, options: IPolyDrawOptions) {
+    let polylyne; 
+    let polygroup; 
     /**
      * @method mouseDown
      * @param {Object} event
@@ -222,17 +229,24 @@ export default class PolyDraw extends FeatureGroup {
        */
       const mouseMove = (event: L.MouseEvent) => {
         if (event.originalEvent != null) {
-            console.log(event.originalEvent);
+            // console.log(event.originalEvent);
           let latLng = map.mouseEventToLatLng(event.originalEvent);
           let point;
           polygon.push(latLng);
-          if (polygon.indexOf(latLng) !== 0) {
+         polylyne= L.polyline(polygon, {fill:false, className:"polyline"})
+
+         polygroup = L.layerGroup().addLayer(polylyne).addTo(map)
+         
+          /* if (polygon.indexOf(latLng) !== 0) {
             point = map.latLngToContainerPoint(polygon[polygon.indexOf(latLng) - 1]);
           } else {
-            point = point = map.latLngToContainerPoint(polygon[0]);
+            point = map.latLngToContainerPoint(polygon[0]);
           }
-          console.log();
-          lineIterator = this.createPath(svg, map.latLngToContainerPoint(latLng), point, options.strokeWidth);
+          let fromPoint =  map.mouseEventToContainerPoint(event.originalEvent)
+          console.log(map.mouseEventToContainerPoint(event.originalEvent));
+          console.log(new Point(fromPoint.x, fromPoint.y));
+          console.log(map.containerPointToLatLng(fromPoint));
+          this.createPath(svg, new Point(fromPoint.x, fromPoint.y), point, options.strokeWidth); */
           //   lineIterator(latLng);
         } else {
           /* const points = map.layerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
@@ -248,6 +262,7 @@ export default class PolyDraw extends FeatureGroup {
             true
           );
         }
+        
       };
 
       // Create the path when the user moves their cursor.
@@ -273,7 +288,14 @@ export default class PolyDraw extends FeatureGroup {
         "body" in document && document.body.removeEventListener("mouseleave", mouseUp);
 
         // Clear the SVG canvas.
+        console.log(polygroup.getLayerId(polylyne));
+        console.log("map: ", map);
         svg.selectAll("*").remove();
+        
+        polygroup.removeLayer(polygroup.getLayerId(polylyne))
+        
+        // map.remove(polygroup)
+        console.log("map after: ", map);
 
         if (create) {
           
@@ -329,6 +351,7 @@ export default class PolyDraw extends FeatureGroup {
   createPath(svg, fromPoint, startPoint, strokeWidth) {
     const lineFunction = line()
       .curve(curveMonotoneX)
+      
       .x(d => d.x)
       .y(d => d.y);
 
@@ -338,10 +361,17 @@ export default class PolyDraw extends FeatureGroup {
     svg
       .append("path")
       .classed("leaflet-line", true)
-      .attr("d", lineFunction(lineData))
-      .attr("fill", "none")
+      .data([lineData])
+      // .attr("fill", "none")
       .attr("stroke", "black")
-      .attr("stroke-width", strokeWidth);
+      .attr("stroke-width", strokeWidth)
+      // .style("position", "absolute")
+      .attr("d", lineFunction);
+
+      return toPoint => {
+        console.log(toPoint);
+      }
+
   }
 }
 
