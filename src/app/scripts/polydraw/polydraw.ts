@@ -71,19 +71,18 @@ export default class PolyDraw extends FeatureGroup {
     //    // Set the initial mode.
     modeFor(map, this.options.mode, this.options);
 
-    var margin = {top: 0, right: 0, bottom: 0, left: 0},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    var margin = { top: 0, right: 0, bottom: 0, left: 0 },
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
     // Instantiate the SVG layer that sits on top of the map.
-    const svg =  select(map._container)
+    const svg = select(map._container)
       .append("svg")
       .classed("free-draw", true)
       .attr("width", "100%")
       .attr("height", "100%")
       .style("pointer-events", "none")
       .style("z-index", "1001")
-      .style("position", "relative")
-      ;
+      .style("position", "relative");
 
     //    // Set the mouse events.
     this.listenForEvents(map, svg, this.options);
@@ -157,8 +156,8 @@ export default class PolyDraw extends FeatureGroup {
     return this.map[modesKey];
   }
 
-  getPolygons(){
-      return this.coordinates;
+  getPolygons() {
+    return this.coordinates;
   }
 
   /**
@@ -193,8 +192,8 @@ export default class PolyDraw extends FeatureGroup {
    * @return {void}
    */
   listenForEvents(map: L.Map, svg: L.SVG, options: IPolyDrawOptions) {
-    let polylyne; 
-    let polygroup; 
+    let multiPolygons = []; //polygons after clipper
+    let polygon: L.LatLng[] = []; //each polygons
     /**
      * @method mouseDown
      * @param {Object} event
@@ -208,8 +207,7 @@ export default class PolyDraw extends FeatureGroup {
       /**
        * @constant latLngs
        */
-      let polygon = [];
-    
+
       /**
        * @method mouseMove
        * @param {Object} event
@@ -218,19 +216,16 @@ export default class PolyDraw extends FeatureGroup {
       const mouseMove = (event: L.MouseEvent) => {
         if (event.originalEvent != null) {
           let latLng = map.mouseEventToLatLng(event.originalEvent);
-      
+
           polygon.push(latLng);
-         polylyne= new L.polyline(polygon, {fill:false, className:"polyline"}).addTo(map)
-        
+          new L.polyline(polygon, { fill: false }).addTo(map);
         } else {
-          let points = map.mouseEventToLatLng(event.touches[0]);
-          
-          polygon.push(points)
-          polylyne= new L.polyline(polygon, {fill:false, className:"polyline"}).addTo(map)
-            /* 
-                latLngs.push(points);
-                
-                lineIterator(points); */
+          let points = map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+
+          polygon.push(points);
+
+          new L.Polyline(polygon, { fill: false }).addTo(map);
+
           document.removeEventListener(
             "touchmove",
             e => {
@@ -239,7 +234,6 @@ export default class PolyDraw extends FeatureGroup {
             true
           );
         }
-        
       };
 
       // Create the path when the user moves their cursor.
@@ -258,61 +252,33 @@ export default class PolyDraw extends FeatureGroup {
       const mouseUp = (_, create = true) => {
         // Remove the ability to invoke `cancel`.
         map[cancelKey] = () => {};
-
+        console.log("test");
         // Stop listening to the events.
-        map.off("mouseup", mouseUp);
-        document.removeEventListener(
-          "touchstart",
-          e => {
-            mouseDown(e);
-          },
-          true
-        );
-        document.removeEventListener("touchend", mouseUp, true);
+        map.off("mouseup touchend", mouseUp);
 
         map.off("mousemove", mouseMove);
-        "body" in document && document.body.removeEventListener("mouseleave", mouseUp);
 
-        // Clear the SVG canvas.
-         let polygonTest= new  L.Polygon(polylyne.getLatLngs(), options).addTo(map)
-
-        console.log("map: ", polygonTest._latlngs);
-        svg.selectAll("*").remove();
-        
-
-        if (create) {
-          
-          //   polygons.set(map, polygon);
-          // ...And finally if we have any lat/lngs in our set then we can attempt to
-          // create the polygon.
-          if (polygon.length > 0) {
-            polygon = createFor(map, polygon, options);
-        }
-
-
-          // Finally invoke the callback for the polygon regions.
-          updateFor(map, "create");
-
-         
-          // Exit the `CREATE` mode if the options permit it.
-          options.leaveModeAfterCreate && this.mode(this.mode() ^ CREATE);
+        if (polygon.length > 0) {
+          console.log(polygon.length);
+          new L.Polygon(polygon).addTo(map);
+          multiPolygons.push(createFor(map, polygon, options));
           polygon = [];
         }
+
+        // Exit the `CREATE` mode if the options permit it.
+        options.leaveModeAfterCreate && this.mode(this.mode() ^ CREATE);
       };
 
       // Clear up the events when the user releases the mouse.
-      map.on("mouseup touchend", mouseUp);
-      document.addEventListener("touchend", (e) => console.log(e));
-      document.addEventListener("touchend", mouseUp);
-      "body" in document && document.body.addEventListener("mouseleave", mouseUp);
+      map.on("mouseup", mouseUp);
 
+      document.addEventListener("touchend", mouseUp);
       // Setup the function to invoke when `cancel` has been invoked.
       map[cancelKey] = () => mouseUp({}, false);
     };
 
-    map.on("mousedown touchstart", mouseDown);
+    map.on("mousedown", mouseDown);
     document.addEventListener("touchstart", e => {
-      // e.stopPropagation();
       mouseDown(e);
     });
   }
@@ -327,11 +293,11 @@ export default class PolyDraw extends FeatureGroup {
   createPath(svg, fromPoint, startPoint, strokeWidth) {
     const lineFunction = line()
       .curve(curveMonotoneX)
-      
+
       .x(d => d.x)
       .y(d => d.y);
 
-    const lineData = [fromPoint,startPoint ];
+    const lineData = [fromPoint, startPoint];
 
     // Draw SVG line based on the last movement of the mouse's position.
     svg
@@ -344,10 +310,9 @@ export default class PolyDraw extends FeatureGroup {
       // .style("position", "absolute")
       .attr("d", lineFunction);
 
-      return toPoint => {
-        console.log(toPoint);
-      }
-
+    return toPoint => {
+      console.log(toPoint);
+    };
   }
 }
 
