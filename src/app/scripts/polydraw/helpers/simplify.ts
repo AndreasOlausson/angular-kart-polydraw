@@ -1,7 +1,7 @@
-import { Point } from 'leaflet';
-import * as L from 'leaflet';
-import { Clipper, PolyFillType } from 'clipper-lib';
-import { IPolyDrawOptions } from '../polydraw';
+import { Point } from "leaflet";
+import * as L from "leaflet";
+import { Clipper, PolyFillType } from "clipper-lib";
+import { IPolyDrawOptions } from "../polydraw";
 
 /**
  * @method latLngsToClipperPoints
@@ -10,15 +10,11 @@ import { IPolyDrawOptions } from '../polydraw';
  * @return {Array}
  */
 export const latLngsToClipperPoints = (map: L.Map, latLngs: L.LatLngExpression[]) => {
-    
-    
-    return latLngs.map((latLng: L.LatLngExpression) => {
-      
-        const point = map.latLngToLayerPoint(latLng);
-        
-        return { X: point.x, Y: point.y };
-    });
-
+    console.log(latLngs);
+  return latLngs.map((latLng: L.LatLngExpression) => {
+    const point = map.latLngToLayerPoint(latLng);
+    return { X: point.x, Y: point.y };
+  });
 };
 
 /**
@@ -28,17 +24,12 @@ export const latLngsToClipperPoints = (map: L.Map, latLngs: L.LatLngExpression[]
  * @return {Array}
  */
 const clipperPolygonsToLatLngs = (map: L.Map, polygons: L.Polygon[]) => {
-    
-    return polygons.map(polygon => {
-        
-        return polygon.map(point => {
-          
-            const updatedPoint = new Point(point.X, point.Y);
-            return map.layerPointToLatLng(updatedPoint);
-        });
-
+  return polygons.map(polygon => {
+    return polygon.map(point => {
+      const updatedPoint = new Point(point.X, point.Y);
+      return map.layerPointToLatLng(updatedPoint);
     });
-
+  });
 };
 
 /**
@@ -48,12 +39,8 @@ const clipperPolygonsToLatLngs = (map: L.Map, polygons: L.Polygon[]) => {
  * @return {LatLng[]}
  */
 export default (map: L.Map, latLngs: L.LatLng[], options: IPolyDrawOptions) => {
-  
-    const points = Clipper.CleanPolygon(latLngsToClipperPoints(map, latLngs), options.simplifyFactor);
-    
-    const polygons = Clipper.SimplifyPolygon(points, PolyFillType.pftNonZero);
-    
-  
-    return clipperPolygonsToLatLngs(map, polygons);
-
+    console.log(latLngs);
+  const points = Clipper.CleanPolygon(latLngsToClipperPoints(map, latLngs), options.simplifyFactor);
+  const polygons = Clipper.SimplifyPolygon(points, PolyFillType.pftNonZero);
+  return clipperPolygonsToLatLngs(map, polygons);
 };

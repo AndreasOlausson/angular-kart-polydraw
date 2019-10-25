@@ -1,27 +1,19 @@
-import { DivIcon, Marker, DomEvent } from 'leaflet';
+/* import { DivIcon, Marker, DomEvent } from 'leaflet';
 import * as L from 'leaflet';
 import { polygons, modesKey, notifyDeferredKey, IPolyDrawOptions } from '../polydraw';
 import { updateFor } from './layer';
 import { CREATE, EDIT } from './flags';
 import mergePolygons, { fillPolygon } from './merge';
+import { createFor } from './polygon';
 
-/**
- * @method createEdges
- * @param {Object} map
- * @param {L.Polygon} polygon
- * @param {Object} options
- * @return {Array}
- */
-export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPolyDrawOptions) {
 
-    /**
-     * @method fetchLayerPoints
-     * @param polygon {Object}
-     * @return {Array}
-     */
+ //Dette skal være de grønne sirklene på polygonet
+export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPolyDrawOptions,polylayer: L.Polygon) {
+let id;
+let merge;
     const fetchLayerPoints = polygon => {
-
-        return polygon.getLatLngs()[0].map(latLng => {
+        console.log("fetchLayerPoints: ",polygon);
+        return polygon.map(latLng => {
             return map.latLngToLayerPoint(latLng);
         });
 
@@ -30,9 +22,10 @@ export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPo
     const markers = fetchLayerPoints(polygon).map(point => {
 
         const mode = map[modesKey];
-        const icon = new DivIcon({ className: `leaflet-edge ${mode & EDIT ? '' : 'disabled'}`.trim() });
+        const icon = new DivIcon({ className:'my-div-icon' });
         const latLng = map.layerPointToLatLng(point);
-        const marker = new Marker(latLng, { icon }).addTo(map);
+        const marker = new Marker(latLng).addTo(map);
+        var merged = []
 
         // Disable the propagation when you click on the marker.
         DomEvent.disableClickPropagation(marker);
@@ -50,11 +43,6 @@ export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPo
             // Disable the map dragging as otherwise it's difficult to reposition the edge.
             map.dragging.disable();
 
-            /**
-             * @method mouseMove
-             * @param {Object} event
-             * @return {void}
-             */
             const mouseMove = (event: L.MouseEvent) => {
 
                 // Determine where to move the marker to from the mouse move event.
@@ -66,20 +54,18 @@ export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPo
 
                 // ...And finally update the polygon to match the current markers.
                 const latLngs: L.LatLng[] = markers.map(marker => marker.getLatLng());
-                polygon.setLatLngs(latLngs);
-                polygon.redraw();
+       
+                merged = latLngs;
+                
+                
 
             };
 
             // Listen for the mouse move events to determine where to move the marker to.
             map.on('mousemove', mouseMove);
 
-            /**
-             * @method mouseUp
-             * @return {void}
-             */
             function mouseUp() {
-
+                
                 if (!(map[modesKey] & CREATE)) {
 
                     // Re-enable the dragging of the map only if created mode is not enabled.
@@ -93,11 +79,19 @@ export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPo
                 map.off('mousemove', mouseMove);
 
                 // Attempt to simplify the polygon to prevent voids in the polygon.
-                fillPolygon(map, polygon, options);
-
+                console.log("edges: ",polygon);
+                console.log("merged: ",merged);
                 // Merge the polygons if the options allow using a two-pass approach as this yields the better results.
-                const merge = () => mergePolygons(map, Array.from(polygons.get(map)), options);
-                options.mergePolygons && merge() && merge();
+                if(id != null){
+                     merge =  mergePolygons(map, polygon, merged, id);    
+                }
+                else{
+                    console.log("HER");
+                   merge =  mergePolygons(map, polygon, merged,  polylayer);
+                }
+                // options.mergePolygons && merge() && merge();
+                
+                id = merge;
 
                 // Trigger the event for having modified the edges of a polygon, unless the `notifyAfterEditExit`
                 // option is equal to `true`, in which case we'll defer the notification.
@@ -107,7 +101,7 @@ export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPo
                     map[notifyDeferredKey] = () => updateFor(map, 'edit');
 
                 })() : updateFor(map, 'edit');
-
+                
             }
 
             // Cleanup the mouse events when the user releases the mouse button.
@@ -124,4 +118,4 @@ export default function createEdges(map: L.Map, polygon: L.Polygon, options: IPo
 
     return markers;
 
-}
+} */

@@ -10,6 +10,7 @@
     "@angular/platform-browser": "^8.2.11",
     "@angular/platform-browser-dynamic": "^8.2.11",
     "@angular/router": "^8.2.11",
+    "@turf/turf": "^5.1.6",
     "clipper-lib": "^6.2.1",
     "concavehull": "^0.1.6",
     "core-js": "2.6.9",

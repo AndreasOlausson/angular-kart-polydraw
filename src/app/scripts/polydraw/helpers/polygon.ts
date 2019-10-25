@@ -1,4 +1,4 @@
-import { LineUtil, Point, Polygon, DomEvent } from "leaflet";
+/* import { LineUtil, Point, Polygon, DomEvent } from "leaflet";
 import * as L from "leaflet";
 import { defaultOptions, edgesKey, modesKey, polygons, IPolyDrawOptions } from "../polydraw";
 import { updateFor } from "./layer";
@@ -8,18 +8,9 @@ import handlePolygonClick from "./polygon";
 import concavePolygon from "./concave";
 import mergePolygons from "./merge";
 
-/**
- * @method appendEdgeFor
- * @param {Object} map
- * @param {Object} polygon
- * @param {Object} options
- * @param {Array} parts
- * @param {Object} newPoint
- * @param {Object} startPoint
- * @param {Object} endPoint
- * @return {void}
- */
+
 const appendEdgeFor = (map: L.Map, polygon, options: IPolyDrawOptions, { parts, newPoint, startPoint, endPoint }) => {
+  console.log(parts);
   const latLngs = parts.reduce((accumulator, point, index) => {
     const nextPoint = parts[index + 1] || parts[0];
 
@@ -41,17 +32,9 @@ const appendEdgeFor = (map: L.Map, polygon, options: IPolyDrawOptions, { parts, 
   // Remove the current set of edges for the polygon, and then recreate them, assigning the
   // new set of edges back into the polygon.
   polygon[edgesKey].map(edge => map.removeLayer(edge));
-  polygon[edgesKey] = createEdges(map, polygon, options);
+  // polygon[edgesKey] = createEdges(map, polygon, options);
 };
 
-/**
- * @method createFor
- * @param {Object} map
- * @param {Array} latLngs
- * @param {Object} [options = defaultOptions]
- * @param {Boolean} [preventMutations = false]
- * @return {Array|Boolean}
- */
 export const createFor = (
   map: L.Map,
   latLngs: L.LatLng[],
@@ -60,6 +43,7 @@ export const createFor = (
 ) => {
   // Determine whether we've reached the maximum polygons.
   const limitReached = polygons.get(map).size === options.maximumPolygons;
+  let poly = []
 
   // Apply the concave hull algorithm to the created polygon if the options allow.
   const concavedLatLngs = !preventMutations && options.concavePolygon ? concavePolygon(map, latLngs) : latLngs;
@@ -68,48 +52,22 @@ export const createFor = (
   const addedPolygons = limitReached
     ? []
     : map.simplifyPolygon(map, concavedLatLngs, options).map((latLngs: L.LatLng) => {
-        // const polygon = new Polygon(latLngs).addTo(map);
-
-        /* // Attach the edges to the polygon.
-        polygon[edgesKey] = createEdges(map, polygon, options);
-
-        // Disable the propagation when you click on the marker.
-        DomEvent.disableClickPropagation(polygon);
-
-        // Yield the click handler to the `handlePolygonClick` function.
-        polygon.off('click');
-        polygon.on('click', handlePolygonClick(map, polygon, options)); */
-
-        // return polygon;
+     
         return latLngs;
       });
   console.log(addedPolygons);
   // Append the current polygon to the master set.
   addedPolygons[0].forEach(polygon => {
     polygons.get(map).push(polygon);
+    poly.push(polygon)
   });
 
-  /* if (!limitReached && !preventMutations && polygons.get(map).size > 1 && options.mergePolygons) {
-
-        // Attempt a merge of all the polygons if the options allow, and the polygon count is above one.
-        const addedMergedPolygons = mergePolygons(map, Array.from(polygons.get(map)), options);
-
-        // Clear the set, and added all of the merged polygons into the master set.
-        addedMergedPolygons.forEach(polygon => polygons.get(map).add(polygon));
-
-        return addedMergedPolygons;
-
-    } */
-
-  return addedPolygons;
+console.log(poly);
+  return poly;
 };
 
-/**
- * @method removeFor
- * @param {Object} map
- * @param {Object} polygon
- * @return {void}
- */
+
+ //har ikke testet denne, men burde være mulig å få fikset dette til å følge søppelkassene: 
 export const removeFor = (map: L.Map, polygon) => {
   // Remove polygon and all of its associated edges.
   map.removeLayer(polygon);
@@ -119,23 +77,14 @@ export const removeFor = (map: L.Map, polygon) => {
   polygons.get(map).delete(polygon);
 };
 
-/**
- * @method clearFor
- * @param {Object} map
- * @return {void}
- */
+//Ikke testet, men brude ikke være noe stress:
 export const clearFor = (map: L.Map) => {
   Array.from(polygons.get(map).values()).forEach(polygon => removeFor(map, polygon));
 };
 
-/**
- * @param {Object} map
- * @param {Object} polygon
- * @param {Object} options
- * @return {Function}
- */
 export default (map: L.Map, polygon, options: IPolyDrawOptions) => {
   return event => {
+    console.log(event);
     // Gather all of the points from the lat/lngs of the current polygon.
     const newPoint = map.mouseEventToContainerPoint("originalEvent" in event ? event.originalEvent : event);
     const parts = polygon.getLatLngs()[0].map(latLng => map.latLngToContainerPoint(latLng));
@@ -159,7 +108,6 @@ export default (map: L.Map, polygon, options: IPolyDrawOptions) => {
 
     // Setup the conditions for the switch statement to make the cases clearer.
     const mode = map[modesKey];
-    console.log(mode);
     const isDelete = Boolean(mode & DELETE);
     const isAppend = Boolean(mode & APPEND);
     const isDeleteAndAppend = Boolean(mode & DELETE && mode & APPEND);
@@ -188,3 +136,4 @@ export default (map: L.Map, polygon, options: IPolyDrawOptions) => {
     (isDelete || isAppend) && updateFor(map, isDelete ? "remove" : "append");
   };
 };
+ */

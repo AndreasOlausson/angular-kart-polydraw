@@ -2,7 +2,7 @@
 @import "~leaflet/dist/leaflet.css";
 html, body{
   height:90%;
-  cursor: crosshair;
+  
 }
 
 #blitz-app{

@@ -1,20 +1,14 @@
-//import 'core-js';
-import "regenerator-runtime/runtime";
 
-import { FeatureGroup, Point } from "leaflet";
+import { FeatureGroup, Marker } from "leaflet";
 import * as L from "leaflet";
-import { select } from "d3-selection";
-import { line, curveMonotoneY, curveMonotoneX } from "d3-shape";
-import WeakMap from "es6-weak-map";
-import Symbol from "es6-symbol";
-import { updateFor } from "./helpers/layer";
-import { createFor, removeFor, clearFor } from "./helpers/polygon";
-import { CREATE, EDIT, DELETE, APPEND, EDIT_APPEND, NONE, ALL, modeFor } from "./helpers/flags";
-import simplifyPolygon from "./helpers/simplify";
+import * as turf from "@turf/turf";
+
+import * as ConcaveHull from "concavehull"
 
 export interface IPolyDrawOptions {
   mode?: number;
   smoothFactor?: number;
+  polyline?: Object; 
   elbowDistance?: number;
   simplifyFactor?: number;
   mergePolygons?: boolean;
@@ -24,10 +18,8 @@ export interface IPolyDrawOptions {
   leaveModeAfterCreate?: boolean;
   strokeWidth?: number;
 }
-
-export const polygons = new WeakMap();
 export const defaultOptions: IPolyDrawOptions = {
-  mode: ALL,
+  
   smoothFactor: 0.3,
   elbowDistance: 10,
   simplifyFactor: 1.1,
@@ -38,305 +30,447 @@ export const defaultOptions: IPolyDrawOptions = {
   leaveModeAfterCreate: false,
   strokeWidth: 2
 };
-export const instanceKey = Symbol("freedraw/instance");
+/* export const instanceKey = Symbol("freedraw/instance");
 export const modesKey = Symbol("freedraw/modes");
 export const notifyDeferredKey = Symbol("freedraw/notify-deferred");
-export const edgesKey = Symbol("freedraw/edges");
-const cancelKey = Symbol("freedraw/cancel");
+export const edgesKey = Symbol("freedraw/edges"); */
+
 
 export default class PolyDraw extends FeatureGroup {
   map: L.Map;
   options: IPolyDrawOptions;
-  coordinates = [];
-  polylyne: L.polyline;
+  polyLineOptions = {  
+      color:'#5cb85c',
+      opacity:1,
+      smoothFactor: 0,
+      noClip : true,
+      clickable : false,
+      weight:2
+  
+  }
+  newJson;
+  polygonOptions = {
+    className: 'leaflet-free-hand-shapes',
+    smoothFactor: 1,
+    // fill:false,
+    fillOpacity : 0.5,
+    noClip : true,
+  }
+  Polygon: L.Polygon; 
+  drawMode: string = "";
+  simplify_tolerance: number = 0.005; 
+  merge_polygons: boolean= true
+  concave_polygons: boolean = true
+  creating: boolean = false;
+  defaultPreferences; //Trenger en Interface
+  LayerGroup: L.LayerGroup;
+  layers:L.LayerGroup[] = [];
+
+  tracer = L.polyline([[0,0]], L.extend({}, this.polyLineOptions));
 
   constructor(options: IPolyDrawOptions = defaultOptions) {
     super();
     this.options = { ...defaultOptions, ...options };
   }
 
-  onAdd(map: L.Map): this {
+  onAdd(map: L.Map) {
+    var _this = this; 
     this.map = map;
 
-    map[cancelKey] = () => {};
-    map[instanceKey] = this;
-    map[notifyDeferredKey] = () => {};
-
-    // Setup the dependency injection for simplifying the polygon.
-    map.simplifyPolygon = simplifyPolygon;
-
-    //    // Add the item to the map.
-    polygons.set(map, []);
-
-    //    // Set the initial mode.
-    modeFor(map, this.options.mode, this.options);
-
-    var margin = { top: 0, right: 0, bottom: 0, left: 0 },
-      width = 960 - margin.left - margin.right,
-      height = 500 - margin.top - margin.bottom;
-    // Instantiate the SVG layer that sits on top of the map.
-    const svg = select(map._container)
-      .append("svg")
-      .classed("free-draw", true)
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .style("pointer-events", "none")
-      .style("z-index", "1001")
-      .style("position", "relative");
-
-    //    // Set the mouse events.
-    this.listenForEvents(map, svg, this.options);
-
-    // return featuregroup-this
-    return this;
+    this.defaultPreferences = {
+      dragging: this.map.dragging._enabled,
+      doubleClickZoom: this.map.doubleClickZoom._enabled,
+      scrollWheelZoom: this.map.scrollWheelZoom._enabled
   }
 
-  /**
-   * @method onRemove
-   * @param {Object} map
-   * @return {void}
-   */
-  onRemove(map: L.Map): this {
-    // Remove the item from the map.
-    polygons.delete(map);
+  this.Polygon = L.Polygon.extend({
+    getGroup : function () {
+        return _this;
+    },
+    destroy : function () {
+        this.map.removeLayer(this);
+    },
+    onAdd : function (_map) {
+        this.on('click', this._onClick, this);
+        L.Polygon.prototype.onAdd.call(this, _map);
+    },
+    _onClick : function (e) {
+        _this.polygonClick(this, e);
+    }
+});
 
-    // Remove the SVG layer.
-    L.svg.remove();
+    // Set the mouse events.
+    this.__events('on');
+    this.map.addLayer(this.tracer)
 
-    // Remove the appendages from the map container.
-    delete map[cancelKey];
-    delete map[instanceKey];
-    delete map.simplifyPolygon;
-
-    return this;
   }
 
-  /**
-   * @method create
-   * @param {LatLng[]} latLngs
-   * @param {Object} [options = { concavePolygon: false }]
-   * @return {Object}
-   */
-  create(latLngs, options = { concavePolygon: false }) {
-    const created = createFor(this.map, latLngs, { ...this.options, ...options });
-    console.log("create", created);
-    updateFor(this.map, "create");
-    return created;
+
+  __events(onoff: string){
+    let onoroff = onoff || 'on'; 
+
+    if(L.version.substr(0,1 ) === '1'){
+      this.map[onoroff]('mousedown touchstart', this.mouseDown, this);
+      this.map[ onoff ]('zoomstart movestart', this.zoomMoveStart, this);
+    }
   }
 
-  /**
-   * @method remove
-   * @param {Object} polygon
-   * @return {void}
-   */
-  remove(polygon: object): this {
-    polygon ? removeFor(this.map, polygon) : super.remove();
-    updateFor(this.map, "remove");
-
-    return this;
+  zoomMoveStart(){
+    if(!this.creating) return;
+    this.stopDraw()
   }
 
-  /**
-   * @method clear
-   * @return {void}
-   */
-  clear(): void {
-    clearFor(this.map);
-    updateFor(this.map, "clear");
+  mouseDown(event){
+    let rightClick = 2,
+    originalEvent = event.originalEvent; 
+    
+   if(L.Path.CANVAS){
+     console.log("L.Path");
+    this.tracer._leaflet_id = 0;
+    L.stamp(this.tracer);
+    this.map.addLayer(this.tracer)
+   }
+
+   this.tracer.setLatLngs([event.latlng]);
+
+   if(!L.Path.CANVAS){
+     this.tracer.bringToFront();
+   }
+
+   this.startDraw()
   }
 
-  /**
-   * @method setMode
-   * @param {Number} [mode = null]
-   * @return {Number}
-   */
-  mode(mode = null) {
-    // Set mode when passed `mode` is numeric, and then yield the current mode.
-    typeof mode === "number" && modeFor(this.map, mode, this.options);
-    return this.map[modesKey];
+  startDraw(){
+    this.creating = true; 
+    this.drawStartedEvents('on');
+    this.setMapPermissions('disable')
   }
 
-  getPolygons() {
-    return this.coordinates;
+  stopDraw(){
+    this.creating = false; 
+  this.resetTracker(); 
+  this.drawStartedEvents('off');
+  this.setMapPermissions('enable')    
   }
 
-  /**
-   * @method size
-   * @return {Number}
-   */
-  size() {
-    return polygons.get(this.map).size;
+  drawStartedEvents(onoff: string){
+    let onoroff = onoff || 'on';
+
+    this.map[onoroff]('mousemove touchmove', this.mouseMove, this);
+    this.map[onoff]('mouseup touchend', this.mouseUpLeave, this);
   }
 
-  /**
-   * @method all
-   * @return {Array}
-   */
-  all() {
-    return Array.from(polygons.get(this.map));
+  mouseMove(event){
+    
+    this.tracer.addLatLng(event.latlng)
   }
 
-  /**
-   * @method cancel
-   * @return {void}
-   */
-  cancel() {
-    this.map[cancelKey]();
+  mouseUpLeave(){
+    //Hvis denne er utkommentert så kan vi ikke få tegnet ut polygonene slik personen har tegnet dem: 
+    //var latlngs = this.getSimplified( this.tracer.getLatLngs() );
+    var latlngs = this.tracer.getLatLngs() ;
+    this.stopDraw(); 
+
+    if(latlngs.length < 3) return
+
+    if(this.concave_polygons){
+      latlngs.push(latlngs[0]);
+      latlngs = new ConcaveHull(latlngs).getLatLngs();
+    }
+    this.addPolygon(latlngs, true)
+    if(this.drawMode === 'add'){
+      this.addPolygon(latlngs, true)
+    } else if(this.drawMode === 'subtract'){
+      this.subtractPolygon(latlngs,true)
+    }
   }
 
-  /**
-   * @method listenForEvents
-   * @param {Object} map
-   * @param {Object} svg
-   * @param {Object} options
-   * @return {void}
-   */
-  listenForEvents(map: L.Map, svg: L.SVG, options: IPolyDrawOptions) {
-    let multiPolygons = []; //polygons after clipper
-    let polygon: L.LatLng[] = []; //each polygons
-    /**
-     * @method mouseDown
-     * @param {Object} event
-     * @return {void}
-     */
-    const mouseDown = event => {
-      if (!(map[modesKey] & CREATE)) {
-        // Polygons can only be created when the mode includes create.
-        return;
+  getCoordsFromLatLngs(latlngs) {
+    
+    var coords = [L.GeoJSON.latLngsToCoords(latlngs)];
+  
+    coords[0].push(coords[0][0]);
+  
+    return coords;
+  }
+
+  getLatLngsFromJSON(json) {
+    console.log(json);
+    var coords = json.geometry ? json.geometry.coordinates : json;
+    return L.GeoJSON.coordsToLatLngs(coords, 1, L.GeoJSON.coordsToLatLng);
+  }
+
+
+  _tryturf(method, a, b) {
+    var fnc = turf[method];
+    try {
+      return fnc(a, b);
+    } catch (_) {
+      // buffer non-noded intersections
+      try {
+        return fnc(turf.buffer(a, 0.000001), turf.buffer(b, 0.000001));
+      } catch (_) {
+        // try buffering again
+        try {
+          return fnc(turf.buffer(a, 0.1), turf.buffer(b, 0.1));
+        } catch (_) {
+          // try buffering one more time
+          try {
+            return fnc(turf.buffer(a, 1), turf.buffer(b, 1));
+          } catch (e) {
+            // give up
+            console.error("turf failed", a, b, e);
+            return false;
+          }
+        }
       }
-      /**
-       * @constant latLngs
-       */
+    }
+  }
 
-      /**
-       * @method mouseMove
-       * @param {Object} event
-       * @return {void}
-       */
-      const mouseMove = (event: L.MouseEvent) => {
-        if (event.originalEvent != null) {
-          let latLng = map.mouseEventToLatLng(event.originalEvent);
+  merge(latlngs){
+    let newJson = turf.buffer(turf.polygon(this.getCoordsFromLatLngs(latlngs)), 0);
+    console.log(this.LayerGroup);
+    let polys = this.LayerGroup;
+    
+    console.log("layers: ", this.layers);
+    let fnc = this._tryturf.bind(this, 'union')
+    polys.eachLayer(poly => {
+      let element = poly.toGeoJSON()
+    
+    var siblingjson = element,
+       union;
 
-          polygon.push(latLng);
-          new L.polyline(polygon, { fill: false }).addTo(map);
-        } else {
-          let points = map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+   if (!turf.intersect(newJson, siblingjson)) {
+       return;
+   }
 
-          polygon.push(points);
+   union = fnc(newJson, siblingjson);
 
-          new L.Polyline(polygon, { fill: false }).addTo(map);
+   if (union === false) {
+    this.LayerGroup.removeLayer( poly );
+    
+       this.map.removeLayer( poly );
+       return;
+   } 
 
-          document.removeEventListener(
-            "touchmove",
-            e => {
-              mouseMove(e);
-            },
-            true
-          );
-        }
-      };
+   if (union.geometry.type === "MultiPolygon") {
+       // do not union non-contiguous polys
+       return;
+   }
 
-      // Create the path when the user moves their cursor.
-      map.on("mousemove", mouseMove);
+   // destroy the old, merge into new
+    
+       this.map.removeLayer( poly );
+   newJson = union;
+  });
+   this.cb(newJson)
 
-      document.addEventListener("touchmove", e => {
-        e.stopPropagation();
-        mouseMove(e);
-      });
+  }
 
-      /**
-       * @method mouseUp
-       * @param {Boolean} [create = true]
-       * @return {Function}
-       */
-      const mouseUp = (_, create = true) => {
-        // Remove the ability to invoke `cancel`.
-        map[cancelKey] = () => {};
-        console.log("test");
-        // Stop listening to the events.
-        map.off("mouseup touchend", mouseUp);
+  cb (newJson) {
+    var _latlngs = []; 
 
-        map.off("mousemove", mouseMove);
+    console.log("newJson: ",newJson);
+    _latlngs = this.getLatLngsFromJSON(newJson);
+    console.log("merge",_latlngs);
+    this.addLayer( this.getPolygon(_latlngs), false );
+}
 
-        if (polygon.length > 0) {
-          console.log(polygon.length);
-          new L.Polygon(polygon).addTo(map);
-          multiPolygons.push(createFor(map, polygon, options));
-          polygon = [];
-        }
+  addLayer(layer, noevent){
+    this.LayerGroup = L.LayerGroup.prototype.addLayer.call(this,layer); 
+    this.layers.push(layer)
+    console.log(layer);
+    if(noevent){
+      return this; 
+    }
+    console.log(); 
+    
+    this.map.addLayer(layer)
+  }
 
-        // Exit the `CREATE` mode if the options permit it.
-        options.leaveModeAfterCreate && this.mode(this.mode() ^ CREATE);
-      };
+  
 
-      // Clear up the events when the user releases the mouse.
-      map.on("mouseup", mouseUp);
+  polygonClick(layer, event){
+    if (this.drawMode === 'delete') { 
+      this.map.removeLayer(layer);
+  }
+  }
 
-      document.addEventListener("touchend", mouseUp);
-      // Setup the function to invoke when `cancel` has been invoked.
-      map[cancelKey] = () => mouseUp({}, false);
-    };
+  addPolygon(latlngs,force: boolean, nomerge: boolean = false, noevent:boolean = true){
+    var latLngs = force ? latlngs : this.getSimplified(latlngs); 
 
-    map.on("mousedown", mouseDown);
-    document.addEventListener("touchstart", e => {
-      mouseDown(e);
+    console.log(latLngs, force, nomerge, noevent);
+
+    if(this.merge_polygons && !nomerge && this.layers.length>0){
+      this.merge(latlngs); 
+      
+    } else {
+      this.addLayer(this.getPolygon(latLngs), noevent)
+    }
+  }
+
+  getPolygon(latlngs){
+    if(this.LayerGroup != null)
+    console.log("layerGroup: ",this.LayerGroup.toGeoJSON());
+    // const marker = 
+    var polyoptions = L.extend({}, this.polygonOptions)
+    this.addMarker(latlngs)
+    console.log(new L.Polygon(latlngs,polyoptions));
+    return new L.Polygon(latlngs,polyoptions)
+  }
+
+  addMarker(latlngs){
+    latlngs.forEach(latlng => {
+      // L.LayerGroup.prototype.addLayer.call(this,new Marker(latlng).addTo(this.map));
+      
     });
   }
 
-  /**
-   * @method createPath
-   * @param {Object} svg
-   * @param {Point} fromPoint
-   * @param {Number} strokeWidth
-   * @return {void}
-   */
-  createPath(svg, fromPoint, startPoint, strokeWidth) {
-    const lineFunction = line()
-      .curve(curveMonotoneX)
+  subtractPolygon(latlngs, force){
+    var latLngs = force ? latlngs: this.getSimplified(latlngs); 
+    var polygon = new L.Polygon(latLngs)
 
-      .x(d => d.x)
-      .y(d => d.y);
+    this.subtract(polygon)
+  }
 
-    const lineData = [fromPoint, startPoint];
+  subtract(polygon){
+    var polys = this.map.getLayers();
+    var newJson = polygon.toGeoJson(); 
+    var fnc = this._tryturf.bind(this, 'difference');
+    
+    for (var i = 0, len = polys.length; i < len; i++) {
+      var poly = polys[i],
+          siblingjson = poly.toGeoJSON(),
+          diff = fnc(siblingjson, newJson);
 
-    // Draw SVG line based on the last movement of the mouse's position.
-    svg
-      .append("path")
-      .classed("leaflet-line", true)
-      .data([lineData])
-      // .attr("fill", "none")
-      .attr("stroke", "black")
-      .attr("stroke-width", strokeWidth)
-      // .style("position", "absolute")
-      .attr("d", lineFunction);
+      if (diff === false) {
+          // turf failed
+          continue;
+      } 
 
-    return toPoint => {
-      console.log(toPoint);
-    };
+      if (diff === undefined) {
+          // poly was removed
+          this.map.removeLayer( poly );
+          continue;
+      }
+
+      if (diff.geometry.type === "MultiPolygon") {
+          // poly was split into multi
+          // destroy and rebuild
+          this.map.removeLayer( poly );
+
+          var coords = diff.geometry.coordinates;
+
+          for (var j = 0, lenj = coords.length; j < lenj; j++) {
+              var polyjson = turf.polygon( coords[ j ] ),
+                  latlngs = this.getLatLngsFromJSON( polyjson );
+              this.addPolygon(latlngs, true, true, true);
+          }
+      } else {
+          // poly wasn't split: reset latlngs
+          poly.setLatLngs( this.getLatLngsFromJSON( diff ) );
+      }
+  }
+  }
+
+  getSimplified(latLngs){
+    var latlngs = latLngs || [],
+    points, 
+    simplified, 
+    tolerance = this.simplify_tolerance; 
+
+    if(latlngs.length && tolerance){
+      points = latlngs.map(function(a){
+        return {x: a.lat, y: a.lng}
+      })
+
+      simplified = L.LineUtil.simplify(points, tolerance); 
+
+      latlngs = simplified.map(function (a) {
+        return {lat: a.x, lng: a.y}
+      });
+    }
+    return latlngs
+  }
+
+  setMapPermissions(method: string){
+    let preferences = this.defaultPreferences; 
+
+    this.map.dragging[method]();
+    this.map.doubleClickZoom[method]()
+    this.map.scrollWheelZoom[method]()
+
+    if(method === 'enable'){
+      if(!preferences.dragging){
+        this.map.dragging.disable();
+      }
+
+      if(!preferences.doubleClickZoom){
+        this.map.doubleClickZoom.disable();
+      }
+
+      if(!preferences.scrollWheelZoom){
+        this.map.scrollWheelZoom.disable();
+      }
+
+    } else {
+
+    }
+  }
+
+  setMode(mode:string){
+    var mode = mode || 'view'
+
+    mode = mode.toLowerCase(); 
+
+    this.drawMode = mode; 
+
+  /*   this.fire('mode', {
+      mode: mode
+    }) */
+
+    if(mode === 'subtract'){
+      this.tracer.setStyle({
+        color: '#9534f'
+      })
+    }
+    else if(mode === 'add'){
+      this.tracer.setStyle({
+        color: this.polyLineOptions.color
+      })
+    }
+
+    if (!this.map) {
+      return;
+  }
+
+  if (mode === 'add' || mode === 'subtract') {
+      this.map.dragging.disable();
+  } else {
+      this.map.dragging.enable();
+  }
+  this.setMapClass();
+  }
+
+  setMapClass(){
+    var map = this.map._container; 
+  var util = L.DomUtil; 
+  var removeClass = util.removeClass;
+
+  removeClass(map, 'leaflet-fhs-add');
+        removeClass(map, 'leaflet-fhs-subtract');
+        removeClass(map, 'leaflet-fhs-delete');
+        removeClass(map, 'leaflet-fhs-view');
+
+        util.addClass(map, 'leaflet-fhs-' + this.drawMode);
+  }
+
+  resetTracker(){
+    this.tracer.setLatLngs([[0,0]]);
   }
 }
 
-// /**
-//  * @method freeDraw
-//  * @return {Object}
-//  */
 export const freeDraw = options => {
   return new PolyDraw(options);
 };
 
-export { CREATE, EDIT, DELETE, APPEND, EDIT_APPEND, NONE, ALL } from "./helpers/flags";
-
-// if (typeof window !== 'undefined') {
-
-//     // Attach to the `window` as `FreeDraw` if it exists, as this would prevent `new FreeDraw.default` when
-//     // using the web version.
-//     window.FreeDraw = FreeDraw;
-//     FreeDraw.CREATE = CREATE;
-//     FreeDraw.EDIT = EDIT;
-//     FreeDraw.DELETE = DELETE;
-//     FreeDraw.APPEND = APPEND;
-//     FreeDraw.EDIT_APPEND = EDIT_APPEND;
-//     FreeDraw.NONE = NONE;
-//     FreeDraw.ALL = ALL;
-
-// }
