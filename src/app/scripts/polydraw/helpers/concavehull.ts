@@ -198,7 +198,7 @@ export class ConcaveHull {
 
         } else {
 
-            angle = $math.atan(vector / scale) * 180.0 / $math.PI;
+            angle = Math.atan(vector / scale) * 180.0 / Math.PI;
 
             if (scale < 0) {
 

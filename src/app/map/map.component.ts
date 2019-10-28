@@ -28,6 +28,7 @@ export class MapComponent implements OnChanges, AfterViewInit {
 
   ngOnChanges(ch) {
     if(ch.mode.currentValue != null){
+      console.dir(ch);
       this.helper.draw(ch.mode.currentValue)
     }
    

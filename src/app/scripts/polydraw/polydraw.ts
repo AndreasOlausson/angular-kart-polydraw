@@ -76,7 +76,7 @@ export default class PolyDraw extends FeatureGroup {
   onAdd(map: L.Map) {
     var _this = this; 
     this.map = map;
-
+    console.log(this.map);
     this.defaultPreferences = {
       dragging: this.map.dragging._enabled,
       doubleClickZoom: this.map.doubleClickZoom._enabled,
@@ -100,7 +100,7 @@ export default class PolyDraw extends FeatureGroup {
 });
 
     // Set the mouse events.
-    this.__events('on');
+    // this
     this.map.addLayer(this.tracer)
 
   }
@@ -108,10 +108,11 @@ export default class PolyDraw extends FeatureGroup {
 
   __events(onoff: string){
     let onoroff = onoff || 'on'; 
-
+    console.log(onoroff);
     if(L.version.substr(0,1 ) === '1'){
+      console.log(this.map);
       this.map[onoroff]('mousedown touchstart', this.mouseDown, this);
-      this.map[ onoff ]('zoomstart movestart', this.zoomMoveStart, this);
+      this.map[ onoroff ]('zoomstart movestart', this.zoomMoveStart, this);
     }
   }
 
@@ -123,7 +124,7 @@ export default class PolyDraw extends FeatureGroup {
   mouseDown(event){
     let rightClick = 2,
     originalEvent = event.originalEvent; 
-    
+    console.log(event);
    if(L.Path.CANVAS){
      console.log("L.Path");
     this.tracer._leaflet_id = 0;
@@ -177,7 +178,7 @@ export default class PolyDraw extends FeatureGroup {
       latlngs.push(latlngs[0]);
       latlngs = new ConcaveHull(latlngs).getLatLngs();
     }
-    this.addPolygon(latlngs, true)
+    // this.addPolygon(latlngs, true)
     if(this.drawMode === 'add'){
       this.addPolygon(latlngs, true)
     } else if(this.drawMode === 'subtract'){
@@ -334,24 +335,24 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   subtract(polygon){
-    var polys = this.map.getLayers();
-    var newJson = polygon.toGeoJson(); 
+    
+    var polys = this.LayerGroup;
+    var newJson = polygon.toGeoJSON(); 
     var fnc = this._tryturf.bind(this, 'difference');
     
-    for (var i = 0, len = polys.length; i < len; i++) {
-      var poly = polys[i],
-          siblingjson = poly.toGeoJSON(),
+    polys.eachLayer(poly => {
+      var    siblingjson = poly.toGeoJSON(),
           diff = fnc(siblingjson, newJson);
-
+          console.log(diff);
       if (diff === false) {
           // turf failed
-          continue;
+          return;
       } 
 
       if (diff === undefined) {
           // poly was removed
           this.map.removeLayer( poly );
-          continue;
+          return;
       }
 
       if (diff.geometry.type === "MultiPolygon") {
@@ -370,7 +371,7 @@ export default class PolyDraw extends FeatureGroup {
           // poly wasn't split: reset latlngs
           poly.setLatLngs( this.getLatLngsFromJSON( diff ) );
       }
-  }
+  })
   }
 
   getSimplified(latLngs){
@@ -419,6 +420,7 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   setMode(mode:string){
+    console.log(mode);
     var mode = mode || 'view'
 
     mode = mode.toLowerCase(); 

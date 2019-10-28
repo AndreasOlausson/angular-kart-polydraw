@@ -6,13 +6,12 @@ import {Observable} from "rxjs";
 import L from 'leaflet';
 import FreeDraw from 'leaflet-freedraw';
 
-import PolyDraw, { NONE, CREATE, EDIT, DELETE, APPEND, ALL, polygons } from "../scripts/polydraw/polydraw"
+import PolyDraw from "../scripts/polydraw/polydraw"
 
 @Injectable()
 export class MapHelperService {
   public map; 
   pd = new PolyDraw();
-  polygons = polygons; 
 
 initMap(){
      this.map = new L.Map("map");
@@ -39,48 +38,27 @@ initMap(){
           }).addTo(this.map);
    
    this.map.addLayer(this.pd);
+   this.pd.onAdd(this.map)
+   this.pd.__events('off');
    
 } 
-   drawPoints(data){
-      // points
-      data.points.forEach(p=>this.addMarker(p.pos.lat, p.pos.lon));
-      // lines
-      data.lines.forEach(l=>{
-        // src
-        this.addMarker(l.pos.src.lat, l.pos.src.lon);
-        // dest
-        this.addMarker(l.pos.dest.lat, l.pos.dest.lon);
-        // line       
-        this.addLine(l.pos.src, l.pos.dest);             
-      });
-   }
 
-    draw(mode: number){
+    draw(mode:number){
       console.log(mode)
-      if(mode === 4){
-        this.deletePolygon()
+      if(mode === 1){
+        console.log("setMode");
+        this.pd.__events('on');
+        this.pd.setMode("add")
+      }
+      else if(mode === 2){
+        
+        this.pd.__events('on');
+        this.pd.setMode("subtract")
       }
       else{
-        console.log("draw: ", this.polygons);
-      this.pd.mode(mode)
+        console.log("draw: ");
+      
     }
     
     }
-
-    deletePolygon(){
-      this.pd.clear();
-    }
-
-   addMarker(lat,lng){
-    let m = L.marker([lat,lng]).addTo(this.map);
-   }
-   addLine(src, dest) {
-         let line = L.polyline(
-                [
-                    [src.lat, src.lon],
-                    [dest.lat, dest.lon]
-                ],
-                {color: 'red'}
-         ).addTo(this.map)
-   }
 }

@@ -10,10 +10,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent  {
   name = 'Angular';
-
+  mode: number = 0;
 
 togglePolyDraw(idx: number): void {
   console.log(idx);
+  this.mode = idx
          
 }
 
