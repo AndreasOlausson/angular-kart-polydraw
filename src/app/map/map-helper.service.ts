@@ -38,8 +38,7 @@ initMap(){
           }).addTo(this.map);
    
    this.map.addLayer(this.pd);
-   this.pd.onAdd(this.map)
-   this.pd.__events('off');
+  //  this.pd.__events('off');
    
 } 
 
@@ -55,10 +54,11 @@ initMap(){
         this.pd.__events('on');
         this.pd.setMode("subtract")
       }
-      else{
-        console.log("draw: ");
-      
-    }
+      else if(mode === 5){
+        
+        this.pd.__events('off');
+        
+      }
     
     }
 }

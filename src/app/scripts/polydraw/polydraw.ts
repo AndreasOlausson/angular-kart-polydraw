@@ -113,11 +113,14 @@ export default class PolyDraw extends FeatureGroup {
     console.log(onoroff);
     if(L.version.substr(0,1 ) === '1'){      
       //Touchevents
-      L.DomEvent[onoroff](this._container, 'touchstart', this.mouseDown, this);      
-    
+      // L.DomEvent[onoroff](this._container, 'touchstart', this.mouseDown.bind(this));      
+      document.addEventListener("touchstart", e => {
+        this.mouseDown(e)})
       this.map[onoroff]('mousedown', this.mouseDown, this);
       this.map[onoroff]('zoomstart', this.zoomMoveStart, this);
     }
+
+    L.DomEvent[ onoff ](document.body, 'mouseleave', this.mouseUpLeave.bind(this));
   }
 
   zoomMoveStart(){
@@ -125,27 +128,17 @@ export default class PolyDraw extends FeatureGroup {
     this.stopDraw()
   }
 
-  mouseDown(event){
-    let rightClick = 2,
-    originalEvent = event.originalEvent; 
-   if(L.Path.CANVAS){
-     console.log("L.Path");
-    this.tracer._leaflet_id = 0;
-    L.stamp(this.tracer);
-    this.map.addLayer(this.tracer)
-   }
-   if(event.touches != null){
+  mouseDown(event){ 
+  
+   if (event.originalEvent != null) {
+    this.tracer.setLatLngs([event.latlng]);
+  }
+  else{
+    // event.stopPropagation()
      let latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY])
+     
      this.tracer.setLatLngs([latlng]);
    }
-   else {
-    this.tracer.setLatLngs([event.latlng]);
-   }
-
-   if(!L.Path.CANVAS){
-     this.tracer.bringToFront();
-   }
-
    this.startDraw()
   }
 
@@ -164,28 +157,31 @@ export default class PolyDraw extends FeatureGroup {
 
   drawStartedEvents(onoff: string){
     let onoroff = onoff || 'on';    
-  
-    //Touchevents
-    L.DomEvent[onoroff](this._container, 'touchmove', this.mouseMove, this);
-    L.DomEvent[onoroff](this._container, 'touchend', this.mouseUpLeave, this);
+    document.addEventListener("touchmove", e => {
+    this.mouseMove(e)
+  })
+    document.addEventListener("touchend", e => {this.mouseUpLeave(e)})
     
+
     this.map[onoroff]('mousemove', this.mouseMove, this);
     this.map[onoroff]('mouseup', this.mouseUpLeave, this);
   }
 
   mouseMove(event){
-    if(event.touches != null){
-      let latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY])
-      this.tracer.addLatLng(latlng);
+    // console.log(event);
+    if (event.originalEvent != null) {
+      this.tracer.addLatLng(event.latlng);
     }
     else {
-     this.tracer.addLatLng(event.latlng);
+      
+      let latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY])
+      // console.log(latlng);
+      this.tracer.addLatLng(latlng);
     }
+    
   }
 
-  mouseUpLeave(){
-    //Hvis denne er utkommentert så kan vi ikke få tegnet ut polygonene slik personen har tegnet dem: 
-    //var latlngs = this.getSimplified( this.tracer.getLatLngs() );
+  mouseUpLeave(events){
     var latlngs = this.tracer.getLatLngs() ;
     this.stopDraw(); 
 
@@ -262,7 +258,7 @@ export default class PolyDraw extends FeatureGroup {
    union = fnc(newJson, siblingjson);
 
    if (union === false) {
-    this.LayerGroup.removeLayer( poly );
+    // this.LayerGroup.removeLayer( poly );
     
        this.map.removeLayer( poly );
        return;
@@ -274,7 +270,7 @@ export default class PolyDraw extends FeatureGroup {
    }
 
    // destroy the old, merge into new
-    
+  //  this.LayerGroup.removeLayer( poly );
        this.map.removeLayer( poly );
    newJson = union;
   });
@@ -292,12 +288,13 @@ export default class PolyDraw extends FeatureGroup {
 
   addLayer(layer, noevent){
     this.LayerGroup = L.LayerGroup.prototype.addLayer.call(this,layer); 
+    console.log(this.LayerGroup);
     this.layers.push(layer)
     
     if(noevent){
       return this; 
     }    
-    
+    console.log(layer);
     this.map.addLayer(layer)
   }
 
@@ -313,7 +310,7 @@ export default class PolyDraw extends FeatureGroup {
     var latLngs = force ? latlngs : this.getSimplified(latlngs);     
 
     if(this.merge_polygons && !nomerge && this.layers.length>0){
-      this.merge(latlngs); 
+      this.merge(latLngs); 
       
     } else {
       this.addLayer(this.getPolygon(latLngs), noevent)
@@ -321,7 +318,7 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   getPolygon(latlngs){
-    if(this.LayerGroup != null)
+    
     var polyoptions = L.extend({}, this.polygonOptions)
     
     
@@ -343,15 +340,15 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   subtract(polygon){
-    
     var polys = this.LayerGroup;
+    
     var newJson = polygon.toGeoJSON(); 
     var fnc = this._tryturf.bind(this, 'difference');
     
     polys.eachLayer(poly => {
-      var    siblingjson = poly.toGeoJSON(),
+      var siblingjson = poly.toGeoJSON(),
           diff = fnc(siblingjson, newJson);
-    
+    console.log("Diff: ",diff);
       if (diff === false) {
           // turf failed
           return;
@@ -359,6 +356,7 @@ export default class PolyDraw extends FeatureGroup {
 
       if (diff === undefined) {
           // poly was removed
+          // this.LayerGroup.removeLayer( poly );
           this.map.removeLayer( poly );
           return;
       }
@@ -366,19 +364,24 @@ export default class PolyDraw extends FeatureGroup {
       if (diff.geometry.type === "MultiPolygon") {
           // poly was split into multi
           // destroy and rebuild
+          this.LayerGroup.removeLayer( poly );
           this.map.removeLayer( poly );
 
           var coords = diff.geometry.coordinates;
-
+          console.log(coords);
           for (var j = 0, lenj = coords.length; j < lenj; j++) {
               var polyjson = turf.polygon( coords[ j ] ),
                   latlngs = this.getLatLngsFromJSON( polyjson );
+              
               this.addPolygon(latlngs, true, true, true);
           }
-      } else {
+      } 
+      else {
+        console.log("Was not split");
           // poly wasn't split: reset latlngs
           poly.setLatLngs( this.getLatLngsFromJSON( diff ) );
       }
+      
   })
   }
 
