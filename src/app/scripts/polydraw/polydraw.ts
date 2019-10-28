@@ -38,6 +38,7 @@ export const edgesKey = Symbol("freedraw/edges"); */
 
 export default class PolyDraw extends FeatureGroup {
   map: L.Map;
+  _container; 
   options: IPolyDrawOptions;
   polyLineOptions = {  
       color:'#5cb85c',
@@ -76,6 +77,7 @@ export default class PolyDraw extends FeatureGroup {
   onAdd(map: L.Map) {
     var _this = this; 
     this.map = map;
+    this._container = this.map._container;
     console.log(this.map);
     this.defaultPreferences = {
       dragging: this.map.dragging._enabled,
@@ -83,7 +85,7 @@ export default class PolyDraw extends FeatureGroup {
       scrollWheelZoom: this.map.scrollWheelZoom._enabled
   }
 
-  this.Polygon = L.Polygon.extend({
+    this.Polygon = L.Polygon.extend({
     getGroup : function () {
         return _this;
     },
@@ -97,7 +99,7 @@ export default class PolyDraw extends FeatureGroup {
     _onClick : function (e) {
         _this.polygonClick(this, e);
     }
-});
+    });
 
     // Set the mouse events.
     // this
@@ -109,10 +111,12 @@ export default class PolyDraw extends FeatureGroup {
   __events(onoff: string){
     let onoroff = onoff || 'on'; 
     console.log(onoroff);
-    if(L.version.substr(0,1 ) === '1'){
-      console.log(this.map);
-      this.map[onoroff]('mousedown touchstart', this.mouseDown, this);
-      this.map[ onoroff ]('zoomstart movestart', this.zoomMoveStart, this);
+    if(L.version.substr(0,1 ) === '1'){      
+      //Touchevents
+      L.DomEvent[onoroff](this._container, 'touchstart', this.mouseDown, this);      
+    
+      this.map[onoroff]('mousedown', this.mouseDown, this);
+      this.map[onoroff]('zoomstart', this.zoomMoveStart, this);
     }
   }
 
@@ -124,15 +128,19 @@ export default class PolyDraw extends FeatureGroup {
   mouseDown(event){
     let rightClick = 2,
     originalEvent = event.originalEvent; 
-    console.log(event);
    if(L.Path.CANVAS){
      console.log("L.Path");
     this.tracer._leaflet_id = 0;
     L.stamp(this.tracer);
     this.map.addLayer(this.tracer)
    }
-
-   this.tracer.setLatLngs([event.latlng]);
+   if(event.touches != null){
+     let latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY])
+     this.tracer.setLatLngs([latlng]);
+   }
+   else {
+    this.tracer.setLatLngs([event.latlng]);
+   }
 
    if(!L.Path.CANVAS){
      this.tracer.bringToFront();
@@ -155,15 +163,24 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   drawStartedEvents(onoff: string){
-    let onoroff = onoff || 'on';
-
-    this.map[onoroff]('mousemove touchmove', this.mouseMove, this);
-    this.map[onoff]('mouseup touchend', this.mouseUpLeave, this);
+    let onoroff = onoff || 'on';    
+  
+    //Touchevents
+    L.DomEvent[onoroff](this._container, 'touchmove', this.mouseMove, this);
+    L.DomEvent[onoroff](this._container, 'touchend', this.mouseUpLeave, this);
+    
+    this.map[onoroff]('mousemove', this.mouseMove, this);
+    this.map[onoroff]('mouseup', this.mouseUpLeave, this);
   }
 
   mouseMove(event){
-    
-    this.tracer.addLatLng(event.latlng)
+    if(event.touches != null){
+      let latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY])
+      this.tracer.addLatLng(latlng);
+    }
+    else {
+     this.tracer.addLatLng(event.latlng);
+    }
   }
 
   mouseUpLeave(){
@@ -196,7 +213,6 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   getLatLngsFromJSON(json) {
-    console.log(json);
     var coords = json.geometry ? json.geometry.coordinates : json;
     return L.GeoJSON.coordsToLatLngs(coords, 1, L.GeoJSON.coordsToLatLng);
   }
@@ -229,11 +245,9 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   merge(latlngs){
-    let newJson = turf.buffer(turf.polygon(this.getCoordsFromLatLngs(latlngs)), 0);
-    console.log(this.LayerGroup);
+    let newJson = turf.buffer(turf.polygon(this.getCoordsFromLatLngs(latlngs)), 0);    
     let polys = this.LayerGroup;
-    
-    console.log("layers: ", this.layers);
+        
     let fnc = this._tryturf.bind(this, 'union')
     polys.eachLayer(poly => {
       let element = poly.toGeoJSON()
@@ -271,20 +285,18 @@ export default class PolyDraw extends FeatureGroup {
   cb (newJson) {
     var _latlngs = []; 
 
-    console.log("newJson: ",newJson);
     _latlngs = this.getLatLngsFromJSON(newJson);
-    console.log("merge",_latlngs);
+
     this.addLayer( this.getPolygon(_latlngs), false );
 }
 
   addLayer(layer, noevent){
     this.LayerGroup = L.LayerGroup.prototype.addLayer.call(this,layer); 
     this.layers.push(layer)
-    console.log(layer);
+    
     if(noevent){
       return this; 
-    }
-    console.log(); 
+    }    
     
     this.map.addLayer(layer)
   }
@@ -298,9 +310,7 @@ export default class PolyDraw extends FeatureGroup {
   }
 
   addPolygon(latlngs,force: boolean, nomerge: boolean = false, noevent:boolean = true){
-    var latLngs = force ? latlngs : this.getSimplified(latlngs); 
-
-    console.log(latLngs, force, nomerge, noevent);
+    var latLngs = force ? latlngs : this.getSimplified(latlngs);     
 
     if(this.merge_polygons && !nomerge && this.layers.length>0){
       this.merge(latlngs); 
@@ -312,11 +322,9 @@ export default class PolyDraw extends FeatureGroup {
 
   getPolygon(latlngs){
     if(this.LayerGroup != null)
-    console.log("layerGroup: ",this.LayerGroup.toGeoJSON());
-    // const marker = 
     var polyoptions = L.extend({}, this.polygonOptions)
-    this.addMarker(latlngs)
-    console.log(new L.Polygon(latlngs,polyoptions));
+    
+    
     return new L.Polygon(latlngs,polyoptions)
   }
 
@@ -343,7 +351,7 @@ export default class PolyDraw extends FeatureGroup {
     polys.eachLayer(poly => {
       var    siblingjson = poly.toGeoJSON(),
           diff = fnc(siblingjson, newJson);
-          console.log(diff);
+    
       if (diff === false) {
           // turf failed
           return;
