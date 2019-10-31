@@ -1,5 +1,6 @@
-import { Component, OnChanges, AfterViewInit, Input } from '@angular/core';
+import { Component, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import {MapHelperService} from './map-helper.service'
+import { DrawMode } from '../scripts/polydraw/polydraw';
 
 
 
@@ -21,6 +22,7 @@ import {MapHelperService} from './map-helper.service'
 export class MapComponent implements OnChanges, AfterViewInit {
   map;
   @Input() mode: number; 
+  @Output() newDrawMode: EventEmitter<number> = new EventEmitter();
   
   constructor(private helper:MapHelperService){
 
@@ -29,14 +31,17 @@ export class MapComponent implements OnChanges, AfterViewInit {
   ngOnChanges(ch) {
     if(ch.mode.currentValue != null){
       console.dir(ch);
-      this.helper.draw(ch.mode.currentValue)
+      this.helper.setDrawMode(ch.mode.currentValue)
+      
     }
-   
-
   }
 
   ngAfterViewInit() {
-    this.helper.initMap();   
+    this.helper.initMap(); 
+    this.helper.drawMode$.subscribe(mode =>{
+      
+      this.newDrawMode.emit(mode)
+    })  
   }
 
 }

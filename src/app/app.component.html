@@ -1,9 +1,10 @@
 
-<map-cmp [mode]="mode"></map-cmp>
+<map-cmp [mode]="mode" (newDrawMode)="setDrawMode($event)"></map-cmp>
 <div class="polydrawbuttons">
-  <div class="button" (click)="togglePolyDraw(15)">ALL</div>
+  
   <div class="button" (click)="togglePolyDraw(1)">DRAW</div>
-  <div class="button" (click)="togglePolyDraw(2)">SUBTRACT</div>
-  <div class="button" (click)="togglePolyDraw(4)">DELETE</div>
-  <div class="button" (click)="togglePolyDraw(5)">NONE</div>
+  
+  <div class="button" (click)="togglePolyDraw(3)">SUBTRACT</div>
+  <div class="button" (click)="togglePolyDraw(6)">DELETE</div>
+  
 </div>

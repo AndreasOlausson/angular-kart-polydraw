@@ -18,4 +18,9 @@ togglePolyDraw(idx: number): void {
          
 }
 
+setDrawMode(drawMode:number){
+  console.log("setDrawMode:", drawMode);
+  this.mode = drawMode
+}
+
 }
