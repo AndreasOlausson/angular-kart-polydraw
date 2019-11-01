@@ -1,8 +1,5 @@
 import { Component, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import {MapHelperService} from './map-helper.service'
-import { DrawMode } from '../scripts/polydraw/polydraw';
-
-
 
 @Component({
   selector: 'map-cmp',
