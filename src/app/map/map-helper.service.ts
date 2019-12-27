@@ -35,7 +35,9 @@ export class MapHelperService {
   };
 
   private mergePolygons: boolean = true;
+  private kinks: boolean = false;
   private arrayOfFeatureGroups = [];
+  private test = []
   private polygonInformationStorage = [];
   private tracer: L.Polyline = L.polyline([[0, 0]], this.polyLineOptions);
   private divIcon = L.divIcon({ className: "polygon-marker" });
@@ -214,7 +216,7 @@ export class MapHelperService {
       default:
         break;
     }
-    this.createPolygonInformationStorage();
+    // this.createPolygonInformationStorage();
     //console.log("------------------------------create trashcans", null);
   }
 
@@ -241,9 +243,9 @@ export class MapHelperService {
   }
 
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
-    //console.log("addPolygon", latlngs, simplify, noMerge);
-
-    if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0) {
+    console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
+    
+    if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
       this.merge(latlngs);
     } else {
       this.addPolygonLayer(latlngs, simplify);
@@ -252,31 +254,19 @@ export class MapHelperService {
 
   private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
     console.log("addPolygonLayer", latlngs, simplify);
-    // let featureGroup: L.FeatureGroup = new L.FeatureGroup();
+    let featureGroup: L.FeatureGroup = new L.FeatureGroup();
     let polygon;
     const latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
     polygon = this.getPolygon(latLngs);
-    console.log(polygon);
-
-    // featureGroup.addLayer(polygon);
-
-    let markerLatlngs = polygon.getLatLngs();
-    console.log(polygon.getLatLngs());
-    /* if (markerLatlngs.length > 1) {
-      markerLatlngs.forEach(marker => {
-        let featureGroup: L.FeatureGroup = new L.FeatureGroup();
-        console.log("markerLatlngs",featureGroup);
-        featureGroup.addLayer(polygon);
-        this.addMarker(marker[0], featureGroup);
-        this.arrayOfFeatureGroups.push(featureGroup);
-      });
-    } else { */
-        let featureGroup: L.FeatureGroup = new L.FeatureGroup();
-        featureGroup.addLayer(polygon);
-      this.addMarker(markerLatlngs[0], featureGroup);
-    //   this.arrayOfFeatureGroups.push(featureGroup);
-    // }
-
+    
+    
+    featureGroup.addLayer(polygon);
+    let markerLatlngs = polygon.getLatLngs()[0];        
+        
+      this.addMarker(markerLatlngs, featureGroup);
+      this.arrayOfFeatureGroups.push(featureGroup);
+    this.test.push(featureGroup);
+    console.log(this.arrayOfFeatureGroups);
     this.setDrawMode(DrawMode.Off);
   }
 
@@ -296,7 +286,7 @@ export class MapHelperService {
     let polyIntersection: boolean = false;
     this.arrayOfFeatureGroups.forEach(featureGroup => {
       polygonLength = featureGroup.getLayers();
-      //console.log(polygonLength[0]);
+      console.log(polygonLength[0]);
       polyIntersection = this.polygonIntersect(polygonLength[0], latlngs);
       if (polyIntersection) {
         newArray.push(featureGroup);
@@ -369,7 +359,6 @@ export class MapHelperService {
   }
 
   private markerDragEnd(FeatureGroup) {
-    console.log("markerDragEnd", FeatureGroup);
     // this.deletePolygonInformationStorage();
     //console.log("------------------------------------delete trashcans", null);
     let featureCollection = FeatureGroup.toGeoJSON();
@@ -377,16 +366,18 @@ export class MapHelperService {
     let kinks = turf.kinks(feature);
     
     if (kinks.features.length > 0) {
+        this.kinks = true;
         let unkink= this.turfHelper.getKinks(feature);
         console.log("unkink: ",unkink);
-    //   this.deletePolygon(this.getLatLngsFromJson(feature));
-      this.removeFeatureGroup(FeatureGroup)
+      this.deletePolygon(this.getLatLngsFromJson(feature));
+    //   this.removeFeatureGroup(FeatureGroup)
       unkink.forEach(polygon => {
         this.addPolygon(polygon, false); 
       })
     //   this.addPolygon(unkink, false);
     } else {
-        this.removeFeatureGroup(FeatureGroup)
+        this.kinks = false;
+        // this.removeFeatureGroup(FeatureGroup)
       this.addPolygon(feature, false);
     }
     // this.createPolygonInformationStorage();
