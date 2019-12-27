@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MapHelperService } from './map/map-helper.service';
 
 @Component({
   selector: 'my-app',
@@ -7,17 +8,21 @@ import { Component } from '@angular/core';
 })
 export class AppComponent  {
   name = 'Angular';
-  mode: number = 0;
 
-togglePolyDraw(idx: number): void {
-  console.log(idx);
-  this.mode = idx
-         
+  constructor(private readonly mapHelperService: MapHelperService){
+
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    
+  }
+
+
+onFreedrawMenuClick(): void { 
+     this.mapHelperService.freedrawMenuClick();             
 }
 
-setDrawMode(drawMode:number){
-  console.log("setDrawMode:", drawMode);
-  this.mode = drawMode
-}
 
 }

@@ -1,5 +1,8 @@
 import { Component, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
-import {MapHelperService} from './map-helper.service'
+
+import * as L from "leaflet"
+import { BehaviorSubject, Observable } from 'rxjs';
+import { MapStateService } from './map-state.service';
 
 @Component({
   selector: 'map-cmp',
@@ -12,33 +15,48 @@ import {MapHelperService} from './map-helper.service'
     width:100%;
     border:1px solid red;
   }
-  ` ],
-  providers:[MapHelperService]
+  ` ]
  
 })
-export class MapComponent implements OnChanges, AfterViewInit {
+export class MapComponent {
   map;
-  @Input() mode: number; 
-  @Output() newDrawMode: EventEmitter<number> = new EventEmitter();
+
+
+ 
+
+  constructor(private mapState: MapStateService){
+
+  }
+
+  ngAfterViewInit(): void {
+    this.initMap();
+  }
+
+  initMap(){
+    this.map = new L.Map("map");
+    this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
+ /*    L.tileLayer(`http://{s}.basemaps.cartocdn.com/hot/{z}/{x}/{y}.png`, {
+            maxZoom: 20,
+           //  minZoom: 3,
+            maxBounds: [
+              [90, -180],
+              [-90, 180]
+              ],
+             noWrap: true,
+            attribution: 'HOT'
+         }).addTo(this.map); */
+
+           L.tileLayer(`https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`, {
+            maxZoom: 20,
+              maxBounds: [
+              [90, -180],
+              [-90, 180]
+              ],
+              noWrap: true,
+            attribution: 'HOT'
+         }).addTo(this.map);
+    this.mapState.updateMapState(this.map)
+  }
   
-  constructor(private helper:MapHelperService){
-
-  }
-
-  ngOnChanges(ch) {
-    if(ch.mode.currentValue != null){
-      console.dir(ch);
-      this.helper.setDrawMode(ch.mode.currentValue)
-      
-    }
-  }
-
-  ngAfterViewInit() {
-    this.helper.initMap(); 
-    this.helper.drawMode$.subscribe(mode =>{
-      
-      this.newDrawMode.emit(mode)
-    })  
-  }
 
 }

@@ -9,3 +9,24 @@ html, body{
   height:100%
 }
 
+.polygon-marker {
+  background-color: #e0f8c5;
+  box-shadow: 0 0 0 2px #50622b, 0 0 10px rgba(0, 0, 0, .35);
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: -6px !important;
+  margin-top: -6px !important;
+  border-radius: 50%;
+  cursor: move;
+  outline: none;
+  transition: background-color .25s;
+
+  
+}
+
+.polygon-marker:hover {
+  width: 18px !important;
+  height: 18px !important;
+  margin-left: -9px !important;
+  margin-top: -9px !important;
+}
