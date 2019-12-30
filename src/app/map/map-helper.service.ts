@@ -7,7 +7,7 @@ import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
-import config from './config.json'
+//import config from './config.json'
 
 @Injectable({
   providedIn: "root"
