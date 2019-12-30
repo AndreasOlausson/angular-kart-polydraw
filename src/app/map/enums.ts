@@ -2,8 +2,9 @@ export enum DrawMode {
     Off = 0,
     Add = 1,
     Edit = 2,
-    Subtract = 3,
-    LoadPredefined = 4
+    Subtract = 4,
+    AppendMarker = 8,
+    LoadPredefined = 16
 }
 export enum MarkerPlacement {
     Center = 0,
