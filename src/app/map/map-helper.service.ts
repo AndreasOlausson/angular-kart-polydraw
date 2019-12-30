@@ -192,6 +192,7 @@ export class MapHelperService {
     }
   }
 
+
   private mouseUpLeave() {
     //console.log("mouseUpLeave", null);
     this.polygonInformation.deletePolygonInformationStorage();
@@ -230,6 +231,7 @@ export class MapHelperService {
 
     this.map[onoroff]("mousemove", this.mouseMove, this);
     this.map[onoroff]("mouseup", this.mouseUpLeave, this);
+    
   }
 
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
@@ -245,7 +247,7 @@ export class MapHelperService {
   private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
     console.log("addPolygonLayer", latlngs, simplify);
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
-    
+
     const latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
     let polygon = this.getPolygon(latlngs);
     console.log(polygon);
@@ -261,6 +263,22 @@ export class MapHelperService {
   }
     this.arrayOfFeatureGroups.push(featureGroup);
     this.setDrawMode(DrawMode.Off);
+
+    featureGroup.on('click', e => {
+      this.polygonClicked(e, polygon);
+    });
+  }
+
+  private polygonClicked(e: Event, poly: any){
+      console.log("User clicked a polygon");
+      console.log("check append-flag")
+      console.log("if yes")
+      console.log("find nearest edge marker")
+      console.log("compare the markers next to the nearest which are the closest")
+      console.log("append the new point from e")
+      console.log("update / delete recreate the polygon with the new point.")
+      console.log("event", e);
+      console.log("polygon", poly);
   }
 
   private getPolygon(latlngs) {   
@@ -295,6 +313,7 @@ export class MapHelperService {
     const onoroff = onoff ? "on" : "off";
 
     this.map[onoroff]("mousedown", this.mouseDown, this);
+
   }
 
   private addMarker(latlngs, FeatureGroup: L.FeatureGroup) {

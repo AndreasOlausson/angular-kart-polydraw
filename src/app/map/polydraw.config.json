@@ -1,0 +1,34 @@
+{
+    "mergePolygons": true,
+    "deleteMarkers": {
+        "isVisible": true,
+        "placement": 0,
+    },
+    "arealMarkers": {
+        "isVisible": true,
+        "placement": 0,
+        "showArea": true,
+        "showCircumference": true,
+        "useMetrics": true
+    },
+    "minimumPolyDrawZoomLevel": 12,
+    "maximumPolyDrawZoomLevel": null,
+    "polyLineOptions": {
+        "color": "#50622b",
+        "opacity": 1,
+        "smoothFactor": 0,
+        "noClip": true,
+        "clickable": false,
+        "weight": 2
+    },
+    "polygonOptions": {
+        "smoothFactor": 0.3,
+        "color": "#50622b",
+        "fillColor": "#b4cd8a",
+        "noClip": true
+    },
+    "simplifyTolerance": {
+        "tolerance": 0.00010, 
+        "highQuality": false
+    }
+}
