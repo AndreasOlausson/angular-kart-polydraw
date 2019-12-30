@@ -10,8 +10,10 @@ export class TurfHelperService {
   constructor() {}
 
   union(poly1, poly2) {
-
+    console.log("poly1: ",poly1);
+    console.log("poly2: ",poly2);
     let union = turf.union(poly1, poly2);
+    console.log(union);
     return union;
   }
 
@@ -20,7 +22,8 @@ export class TurfHelperService {
     let points = turf.explode(feature)
 
     const coordinates = points.features.map(f => f.geometry.coordinates);
-    return turf.polygon([concaveman(coordinates)]);
+    console.log(coordinates);
+    return turf.multiPolygon([[concaveman(coordinates)]]);
   }
 
   getSimplified(latLngs) {
@@ -32,7 +35,7 @@ export class TurfHelperService {
   }
 
   getTurfPolygon(geometry) {
-    return turf.polygon(geometry);
+    return turf.multiPolygon(geometry);
   }
 
   getKinks(feature) {
@@ -53,16 +56,38 @@ export class TurfHelperService {
   }
 
   polygonIntersect(polygon, latlngs: Feature<Polygon | MultiPolygon>): boolean {
-    //console.log("polygonIntersect", polygon, latlngs);
+    
 
-    const oldPolygon = polygon.toGeoJSON();
+    // const oldPolygon = polygon.toGeoJSON();
     let poly;
+    console.log("polygonIntersect", polygon, latlngs);
+    // console.log(oldPolygon.geometry);
+   /*  if(oldPolygon.geometry.coordinates.length > 1 && latlngs.geometry.coordinates.length > 1  ){
+      console.log("old: ",oldPolygon);
+      
+    } */
+
+   /*  if(turf.booleanEqual(oldPolygon, latlngs)){
+      console.log("Helt like");
+      return false
+    } */
+
+    /* else if(oldPolygon.geometry.coordinates.length > 1 && latlngs.geometry.coordinates.length === 1  ){
+      console.log("new: ", latlngs);
+   
+    } */
 
     if (latlngs.geometry.type === "Polygon") {
       poly = latlngs;
     }
-    const intersect = turf.intersect(poly, oldPolygon);
-    return !!intersect;
+
+    
+    let diff = turf.booleanOverlap(polygon,latlngs)
+    console.log("Diff: ",diff);
+    // const intersect = turf.intersect(latlngs, oldPolygon);
+    // return !!intersect;
+    return false
+    
   }
 
   

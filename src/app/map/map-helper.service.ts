@@ -8,6 +8,7 @@ import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
 import config from './config.json'
+import { ILatLng } from "./polygon-helpers";
 
 @Injectable({
   providedIn: "root"
@@ -17,7 +18,6 @@ export class MapHelperService {
   drawMode$: Observable<DrawMode> = this.drawModeSubject.asObservable();
 
   private map: L.Map;
-
 
   private mergePolygons: boolean = true;
   private kinks: boolean = false;
@@ -79,50 +79,67 @@ export class MapHelperService {
   }
 
   addAutoPolygon(geographicBorders: L.LatLng[][]): void {
-    //console.log("addAutoPolygon", geographicBorders);
-    this.removeAllFeatureGroups();
-    const polygons = [];
-    const hulls = [];
-    let intersection;
-    geographicBorders.forEach(p => {
-      const pl = L.polyline(p);
-      const geo = pl.toGeoJSON() as any;
-      polygons.push(geo.geometry.coordinates);
-    });
 
-    if (polygons.length > 1) {
-      for (let i = 0; i < polygons.length - 1; i++) {
-        intersection = turf.intersect(this.turfHelper.getTurfPolygon([polygons[i]]), this.turfHelper.getTurfPolygon([polygons[i + 1]]));
-        hulls.push(intersection);
-      }
+
+    let featureGroup: L.FeatureGroup = new L.FeatureGroup();
+    
+    let polygon2 = turf.multiPolygon([this.convertToCoords(geographicBorders)])
+    console.log(polygon2);
+    let markers2 =this.getMarkers(this.convertToCoords(geographicBorders))
+    console.log(this.convertToCoords(geographicBorders));
+    let polygon = this.getPolygon(polygon2);
+
+    featureGroup.addLayer(polygon);
+    let markerLatlngs = polygon.getLatLngs()[0];
+    console.log(polygon.getLatLngs()[0]);
+    this.addMarker(markerLatlngs[1], featureGroup);
+    this.arrayOfFeatureGroups.push(featureGroup);
+    
+  }
+
+  
+  convertToCoords(latlngs: ILatLng[][]){
+    let coords = []      
+    if(latlngs.length > 1){
+      latlngs.forEach(polygon => {
+        coords.push(L.GeoJSON.latLngsToCoords(polygon))
+      })
     }
+    else {
+      coords.push(L.GeoJSON.latLngsToCoords(latlngs[0]))
+    }
+    return coords
+  }
 
-    if (intersection !== null) {
-      let featuresJoined = polygons[0];
-      if (polygons.length > 1) {
-        if (featuresJoined.geometry.type === "MultiPolygon") {
-          featuresJoined.geometry.coordinates.forEach(element => {
-            const poly = this.turfHelper.getTurfPolygon(element);
-            this.addPolygon(poly, false, true);
-          });
-        } else {
-          this.addPolygon(featuresJoined, false, false);
+  getMarkers(coords){
+    let pos = []    
+    console.log(coords);
+    if(coords.length > 1){
+      for(let i = 0; i < coords.length-1; i++){
+      
+        //Hvis polygon[i+1] ligger inni polygon[i]
+        if(turf.booleanContains(turf.polygon([coords[i]]), turf.polygon([coords[i+1]]))){
+          pos.push(L.GeoJSON.coordsToLatLngs(coords[i]))
         }
-      } else {
-        const poly = this.turfHelper.getTurfPolygon([polygons[0]]);
-        this.addPolygon(poly, false, true);
+        //Hvis polygon[i] ligger inni polygon[i+1]
+        else if(turf.booleanContains(turf.polygon([coords[i+1]]), turf.polygon([coords[i]]))){
+          pos.push(L.GeoJSON.coordsToLatLngs(coords[i+1]))
+        }
+        //Hvis ingen av dem ligger inni hverandre
+        else{
+          pos.push(L.GeoJSON.coordsToLatLngs(coords[i]))
+        }
       }
-    } else {
-      geographicBorders.forEach(p => {
-        const pl = L.polyline(p);
-        const geo = pl.toGeoJSON() as any;
-        const poly = this.turfHelper.getTurfPolygon([geo.geometry.coordinates]);
-        this.addPolygon(poly, false, true);
-      });
+      //Kun for multipolygoner som ikke ligger inni hverandre, f.eks 0253. Så man får med markerne til det siste, 
+      if(!turf.booleanContains(turf.polygon([coords[coords.length-1]]), turf.polygon([coords[coords.length-2]]))){        
+          pos.push(L.GeoJSON.coordsToLatLngs(coords[coords.length-1]))
+      }
     }
-    this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-    // this.polygonDrawStates.activate();
-    // this.polygonDrawStates.setMoveMode();
+    else{      
+      pos.push(L.GeoJSON.coordsToLatLngs(coords[0]))
+    }
+    console.log("pos",pos)
+    return pos
   }
 
   initPolyDraw() {
@@ -183,7 +200,7 @@ export class MapHelperService {
     this.stopDraw();
     switch (this.getDrawMode()) {
       case DrawMode.AddPolygon:
-        this.addPolygon(geoPos, true);
+        this.addPolygon(geoPos, false, true);
         break;
 
       default:
@@ -216,7 +233,7 @@ export class MapHelperService {
   }
 
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
-    // console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
+    console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
 
     if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
       this.merge(latlngs);
@@ -226,38 +243,51 @@ export class MapHelperService {
   }
 
   private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
-    // console.log("addPolygonLayer", latlngs, simplify);
+    console.log("addPolygonLayer", latlngs, simplify);
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
     
     const latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
-    let polygon = this.getPolygon(latLngs);
-
+    let polygon = this.getPolygon(latlngs);
+    console.log(polygon);
     featureGroup.addLayer(polygon);
-    let markerLatlngs = polygon.getLatLngs()[0];
-
+    
+    let markerLatlngs = polygon.getLatLngs();
+    console.log(markerLatlngs);
+    if(markerLatlngs.length > 1){
     this.addMarker(markerLatlngs, featureGroup);
+  }
+  else {
+    this.addMarker(markerLatlngs[0][0], featureGroup);
+  }
     this.arrayOfFeatureGroups.push(featureGroup);
     this.setDrawMode(DrawMode.Off);
   }
 
-  private getPolygon(latlngs) {    
+  private getPolygon(latlngs) {   
+    console.log(latlngs);
     let polygon = L.GeoJSON.geometryToLayer(latlngs);
+    
     polygon.setStyle(config.polygonOptions).addTo(this.map);
     return polygon;
   }
 
   private merge(latlngs: Feature<Polygon | MultiPolygon>) {
+    console.log(latlngs);
     let polygonLength = [];
     const newArray: L.FeatureGroup[] = [];
     let polyIntersection: boolean = false;
     this.arrayOfFeatureGroups.forEach(featureGroup => {
-      polygonLength = featureGroup.getLayers();
-      polyIntersection = this.turfHelper.polygonIntersect(polygonLength[0], latlngs);
+      let featureCollection = featureGroup.toGeoJSON();
+    
+      let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0].geometry.coordinates);
+      polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
       if (polyIntersection) {
         newArray.push(featureGroup);
       }
     });
-    this.unionPolygons(newArray, latlngs);
+    console.log(newArray);
+    if(newArray.length > 0){
+    this.unionPolygons(newArray, latlngs);}
   }
 
   private events(onoff: boolean) {
@@ -268,6 +298,7 @@ export class MapHelperService {
   }
 
   private addMarker(latlngs, FeatureGroup: L.FeatureGroup) {
+    console.log("AddMarker: ", latlngs);
     latlngs.forEach(latlng => {
       const marker = new L.Marker(latlng, { icon: this.divIcon, draggable: true });
 
@@ -284,16 +315,20 @@ export class MapHelperService {
   private markerDrag(FeatureGroup) {
     const newPos = [];
     const layerLength = FeatureGroup.getLayers();
+    let arrays =layerLength[0].getLatLngs() 
+    console.log(FeatureGroup.toGeoJSON().features[0]);
     for (let index = 1; index < layerLength.length; index++) {
       newPos.push(layerLength[index].getLatLng());
     }
-    layerLength[0].setLatLngs(newPos);
+    arrays[arrays.length-1] = newPos;
+    layerLength[0].setLatLngs(arrays);
   }
 
   private markerDragEnd(FeatureGroup) {
     let featureCollection = FeatureGroup.toGeoJSON();
-    let feature = featureCollection.features[0];
-
+    
+    let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0].geometry.coordinates);
+    console.log(feature);
     if (this.turfHelper.hasKinks(feature)) {
       this.kinks = true;
       let unkink = this.turfHelper.getKinks(feature);
@@ -308,7 +343,7 @@ export class MapHelperService {
       this.addPolygon(feature, false);
     }
 
-    this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+    // this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
 
   private getLatLngsFromJson(feature) {
@@ -320,7 +355,7 @@ export class MapHelperService {
 
 
   private unionPolygons(layers, latlngs: Feature<Polygon | MultiPolygon>) {
-    //console.log("unionPolygons", layers, latlngs);
+    console.log("unionPolygons", layers, latlngs);
 
     let addNew = latlngs;
 
@@ -328,9 +363,16 @@ export class MapHelperService {
       const layer = featureGroup.getLayers()[0];
       const geoLayer = layer.toGeoJSON();
       let poly = layer.getLatLngs()[0];
+      let arrayOfPolys = []
       poly.push(layer.getLatLngs()[0][0]);
-      const union = this.turfHelper.union(addNew, geoLayer);
-
+      console.log(addNew.geometry.coordinates.length);
+      console.log(geoLayer);
+      geoLayer.geometry.coordinates.forEach(element => {
+        arrayOfPolys.push([element])
+      });
+      console.log(arrayOfPolys);
+      const union = this.turfHelper.union(addNew, turf.multiPolygon([[geoLayer.geometry.coordinates[0]],[geoLayer.geometry.coordinates[1]]]));
+      console.log(union);
       this.deletePolygonOnMerge(poly);
 
       addNew = union;

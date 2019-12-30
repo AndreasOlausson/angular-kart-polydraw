@@ -47,10 +47,10 @@ export class PolygonInformationService {
 
       createPolygonInformationStorage(arrayOfFeatureGroups) {
         if (arrayOfFeatureGroups.length > 0) {
-          arrayOfFeatureGroups.forEach(featureGroup => {
-            let polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs()[0]);
+         /*  arrayOfFeatureGroups.forEach(featureGroup => {
+            // let polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs()[0]);
             this.polygonInformationStorage.push(polyInfo);
-          });
+          }); */
           this.updatePolygons();
         }
       }
