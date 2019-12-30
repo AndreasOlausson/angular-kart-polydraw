@@ -7,6 +7,7 @@ import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
+import config from './config.json'
 
 @Injectable({
   providedIn: "root"
@@ -17,28 +18,11 @@ export class MapHelperService {
 
   private map: L.Map;
 
-  //TODO Typings
-  private polyLineOptions = {
-    color: "#50622b",
-    opacity: 1,
-    smoothFactor: 0,
-    noClip: true,
-    clickable: false,
-    weight: 2
-  };
-  //TODO Typings
-  private polygonOptions = {
-    smoothFactor: 0.3,
-    color: "#50622b",
-    fillColor: "#b4cd8a",
-    // fillOpacity: 0.3,
-    noClip: true
-  };
 
   private mergePolygons: boolean = true;
   private kinks: boolean = false;
   private arrayOfFeatureGroups = [];
-  private tracer: L.Polyline = L.polyline([[0, 0]], this.polyLineOptions);
+  private tracer: L.Polyline = L.polyline([[0, 0]], config.polyLineOptions);
   private divIcon = L.divIcon({ className: "polygon-marker" });
 
   private readonly polygonDrawStates = null;
@@ -258,7 +242,7 @@ export class MapHelperService {
 
   private getPolygon(latlngs) {    
     let polygon = L.GeoJSON.geometryToLayer(latlngs);
-    polygon.setStyle(this.polygonOptions).addTo(this.map);
+    polygon.setStyle(config.polygonOptions).addTo(this.map);
     return polygon;
   }
 
@@ -464,7 +448,7 @@ export class MapHelperService {
           L.DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
           this.events(true);
           this.tracer.setStyle({
-            color: this.polyLineOptions.color
+            color: config.polyLineOptions.color
           });
           this.setLeafletMapEvents(false, false, false);
           break;

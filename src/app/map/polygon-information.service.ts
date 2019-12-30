@@ -37,8 +37,6 @@ export class PolygonInformationService {
       }
 
       deleteTrashcan(polygon) {
-        //console.log("deleteTrashcan", polygon);
-    
         const idx = this.polygonInformationStorage.findIndex(v => v.polygon === polygon);
         this.polygonInformationStorage.splice(idx, 1);
       }
