@@ -35,8 +35,8 @@ export class MapHelperService {
     });
   }
 
- 
-  
+
+
   closeAndReset(): void {
     //console.log("closeAndReset");
     this.setDrawMode(DrawMode.Off);
@@ -68,7 +68,7 @@ export class MapHelperService {
     });
 
     this.arrayOfFeatureGroups = [];
-    this.polygonInformation.deletePolygonInformationStorage(); 
+    this.polygonInformation.deletePolygonInformationStorage();
     // this.polygonDrawStates.reset();
     this.polygonInformation.updatePolygons();
   }
@@ -214,7 +214,7 @@ export class MapHelperService {
 
     this.map[onoroff]("mousemove", this.mouseMove, this);
     this.map[onoroff]("mouseup", this.mouseUpLeave, this);
-    
+
   }
 
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
@@ -242,23 +242,48 @@ export class MapHelperService {
     this.setDrawMode(DrawMode.Off);
 
     featureGroup.on('click', e => {
-      this.polygonClicked(e, polygon);
+      this.polygonClicked(e, latLngs);
     });
   }
 
-  private polygonClicked(e: Event, poly: any){
-      console.log("User clicked a polygon");
-      console.log("check append-flag")
-      console.log("if yes")
-      console.log("find nearest edge marker")
-      console.log("compare the markers next to the nearest which are the closest")
-      console.log("append the new point from e")
-      console.log("update / delete recreate the polygon with the new point.")
-      console.log("event", e);
-      console.log("polygon", poly);
+  private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
+    
+    const newPoint = e.latlng;
+    let idx = -1;
+    let idx2 = -1;
+    let tmpDistance = Number.MAX_SAFE_INTEGER;
+    if (poly.geometry.type === "Polygon") {
+      poly.geometry.coordinates[0].forEach((v, i) => {
+        const distance = turf.distance([newPoint.lng, newPoint.lat], v);
+        if (tmpDistance >= distance) {
+          idx = i;
+          tmpDistance = distance;
+        }
+      })
+      const l = turf.distance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === 0 ? poly.geometry.coordinates[0].length : idx - 1]);
+      const r = turf.distance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === poly.geometry.coordinates[0].length ? 0 : idx + 1]);
+
+      idx2 = l > r ? (idx === 0 ? poly.geometry.coordinates[0].length : idx - 1) : (idx === poly.geometry.coordinates[0].length ? 0 : idx + 1);
+
+      const injectIdx = idx < idx2 ? idx : idx2;
+
+      poly.geometry.coordinates[0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
+
+    }
+
+    console.log("idx", idx, idx2);
+    console.log("User clicked a polygon");
+    console.log("check append-flag")
+    console.log("if yes")
+    console.log("find nearest edge marker")
+    console.log("compare the markers next to the nearest which are the closest")
+    console.log("append the new point from e")
+    console.log("update / delete recreate the polygon with the new point.")
+    console.log("event", e);
+    console.log("polygon", poly);
   }
 
-  private getPolygon(latlngs) {    
+  private getPolygon(latlngs) {
     let polygon = L.GeoJSON.geometryToLayer(latlngs);
     polygon.setStyle(config.polygonOptions).addTo(this.map);
     return polygon;
@@ -318,7 +343,7 @@ export class MapHelperService {
       let unkink = this.turfHelper.getKinks(feature);
       console.log("unkink: ", unkink);
       this.deletePolygon(this.getLatLngsFromJson(feature));
-      
+
       unkink.forEach(polygon => {
         this.addPolygon(polygon, true);
       });
