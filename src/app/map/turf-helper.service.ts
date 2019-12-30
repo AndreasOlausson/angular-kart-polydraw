@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 
 import * as turf from "@turf/turf";
 import * as concaveman from "concaveman";
-import { FeatureCollection, Point } from "@turf/turf";
+import { FeatureCollection, Point, Feature, Polygon, MultiPolygon } from "@turf/turf";
 
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
@@ -10,14 +10,14 @@ export class TurfHelperService {
   constructor() {}
 
   union(poly1, poly2) {
-    //console.log("union", poly1, poly2);
 
     let union = turf.union(poly1, poly2);
     return union;
   }
 
-  turfConcaveman(points: FeatureCollection<Point>) {
+  turfConcaveman(feature) {
     //console.log("turfConcaveman", points);
+    let points = turf.explode(feature)
 
     const coordinates = points.features.map(f => f.geometry.coordinates);
     return turf.polygon([concaveman(coordinates)]);
@@ -36,7 +36,7 @@ export class TurfHelperService {
   }
 
   getKinks(feature) {
-    const kinks = turf.kinks(feature);
+    
     const unkink = turf.unkinkPolygon(feature);
     let coordinates = []
     turf.featureEach(unkink, (current, i) => {
@@ -45,4 +45,25 @@ export class TurfHelperService {
 
     return coordinates
   }
+
+  hasKinks(feature){
+    const kinks = turf.kinks(feature);
+    return kinks.features.length > 0
+
+  }
+
+  polygonIntersect(polygon, latlngs: Feature<Polygon | MultiPolygon>): boolean {
+    //console.log("polygonIntersect", polygon, latlngs);
+
+    const oldPolygon = polygon.toGeoJSON();
+    let poly;
+
+    if (latlngs.geometry.type === "Polygon") {
+      poly = latlngs;
+    }
+    const intersect = turf.intersect(poly, oldPolygon);
+    return !!intersect;
+  }
+
+  
 }

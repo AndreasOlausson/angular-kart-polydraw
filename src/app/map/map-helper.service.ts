@@ -6,6 +6,7 @@ import { takeUntil, filter, debounceTime } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
+import { PolygonInformationService } from "./polygon-information.service";
 
 @Injectable({
   providedIn: "root"
@@ -37,31 +38,21 @@ export class MapHelperService {
   private mergePolygons: boolean = true;
   private kinks: boolean = false;
   private arrayOfFeatureGroups = [];
-  private test = []
-  private polygonInformationStorage = [];
   private tracer: L.Polyline = L.polyline([[0, 0]], this.polyLineOptions);
   private divIcon = L.divIcon({ className: "polygon-marker" });
 
-  private readonly minimumFreeDrawZoomLevel: number = 12;
   private readonly polygonDrawStates = null;
   private ngUnsubscribe = new Subject();
 
-  constructor(private mapState: MapStateService, private turfHelper: TurfHelperService) {
+  constructor(private mapState: MapStateService, private turfHelper: TurfHelperService, private polygonInformation: PolygonInformationService) {
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
       this.initPolyDraw();
     });
   }
 
-  deletePolygonInformationStorage() {
-    this.polygonInformationStorage = [];
-  }
-  createPolygonInformationStorage() {
-    if (this.arrayOfFeatureGroups.length > 0) {
-      this.arrayOfFeatureGroups.forEach(featureGroup => {});
-      this.updatePolygons();
-    }
-  }
+ 
+  
   closeAndReset(): void {
     //console.log("closeAndReset");
     this.setDrawMode(DrawMode.Off);
@@ -79,8 +70,8 @@ export class MapHelperService {
 
         if (equals) {
           this.removeFeatureGroup(featureGroup);
-          this.deleteTrashcan(polygon);
-          this.updatePolygons();
+          this.polygonInformation.deleteTrashcan(polygon);
+          this.polygonInformation.updatePolygons();
         }
       });
     }
@@ -93,9 +84,9 @@ export class MapHelperService {
     });
 
     this.arrayOfFeatureGroups = [];
-    this.polygonInformationStorage = [];
+    this.polygonInformation.deletePolygonInformationStorage(); 
     // this.polygonDrawStates.reset();
-    this.updatePolygons();
+    this.polygonInformation.updatePolygons();
   }
 
   getDrawMode(): DrawMode {
@@ -118,7 +109,6 @@ export class MapHelperService {
     if (polygons.length > 1) {
       for (let i = 0; i < polygons.length - 1; i++) {
         intersection = turf.intersect(this.turfHelper.getTurfPolygon([polygons[i]]), this.turfHelper.getTurfPolygon([polygons[i + 1]]));
-        var difference = turf.difference(this.turfHelper.getTurfPolygon([polygons[i]]), this.turfHelper.getTurfPolygon([polygons[i + 1]]));
         hulls.push(intersection);
       }
     }
@@ -146,7 +136,7 @@ export class MapHelperService {
         this.addPolygon(poly, false, true);
       });
     }
-    this.createPolygonInformationStorage();
+    this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
     // this.polygonDrawStates.activate();
     // this.polygonDrawStates.setMoveMode();
   }
@@ -203,10 +193,9 @@ export class MapHelperService {
 
   private mouseUpLeave() {
     //console.log("mouseUpLeave", null);
-    this.deletePolygonInformationStorage();
+    this.polygonInformation.deletePolygonInformationStorage();
     //console.log("------------------------------Delete trashcans", null);
-    let geoPos: Feature<Polygon | MultiPolygon> = this.turfHelper.turfConcaveman(turf.explode(this.tracer.toGeoJSON() as any));
-    // let geoPos: Feature<Polygon | MultiPolygon> = turf.lineStringToPolygon(this.tracer.toGeoJSON())
+    let geoPos: Feature<Polygon | MultiPolygon> = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON() as any);
     this.stopDraw();
     switch (this.getDrawMode()) {
       case DrawMode.AddPolygon:
@@ -216,7 +205,7 @@ export class MapHelperService {
       default:
         break;
     }
-    // this.createPolygonInformationStorage();
+    this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
     //console.log("------------------------------create trashcans", null);
   }
 
@@ -243,8 +232,8 @@ export class MapHelperService {
   }
 
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
-    console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
-    
+    // console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
+
     if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
       this.merge(latlngs);
     } else {
@@ -253,41 +242,33 @@ export class MapHelperService {
   }
 
   private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
-    console.log("addPolygonLayer", latlngs, simplify);
+    // console.log("addPolygonLayer", latlngs, simplify);
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
-    let polygon;
+    
     const latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
-    polygon = this.getPolygon(latLngs);
-    
-    
+    let polygon = this.getPolygon(latLngs);
+
     featureGroup.addLayer(polygon);
-    let markerLatlngs = polygon.getLatLngs()[0];        
-        
-      this.addMarker(markerLatlngs, featureGroup);
-      this.arrayOfFeatureGroups.push(featureGroup);
-    this.test.push(featureGroup);
-    console.log(this.arrayOfFeatureGroups);
+    let markerLatlngs = polygon.getLatLngs()[0];
+
+    this.addMarker(markerLatlngs, featureGroup);
+    this.arrayOfFeatureGroups.push(featureGroup);
     this.setDrawMode(DrawMode.Off);
   }
 
-  private getPolygon(latlngs) {
-    console.log("getPolygon", latlngs);
-
-    let polygon;
-    polygon = L.GeoJSON.geometryToLayer(latlngs);
+  private getPolygon(latlngs) {    
+    let polygon = L.GeoJSON.geometryToLayer(latlngs);
     polygon.setStyle(this.polygonOptions).addTo(this.map);
     return polygon;
   }
 
   private merge(latlngs: Feature<Polygon | MultiPolygon>) {
-
     let polygonLength = [];
     const newArray: L.FeatureGroup[] = [];
     let polyIntersection: boolean = false;
     this.arrayOfFeatureGroups.forEach(featureGroup => {
       polygonLength = featureGroup.getLayers();
-      console.log(polygonLength[0]);
-      polyIntersection = this.polygonIntersect(polygonLength[0], latlngs);
+      polyIntersection = this.turfHelper.polygonIntersect(polygonLength[0], latlngs);
       if (polyIntersection) {
         newArray.push(featureGroup);
       }
@@ -295,38 +276,7 @@ export class MapHelperService {
     this.unionPolygons(newArray, latlngs);
   }
 
-  private updatePolygons() {
-    console.log("updatePolygons");
-
-    let polygons = null;
-
-    if (this.polygonInformationStorage.length > 0) {
-      polygons = [];
-      this.polygonInformationStorage.forEach(v => {
-        if (v.polygon[0].toString() !== v.polygon[v.polygon.length - 1].toString()) {
-          v.polygon.push(v.polygon[0]);
-        }
-        polygons.push(v.polygon);
-      });
-
-    } 
-
-    this.saveCurrentState();
-  }
-
-  private onZoomChange(zoomLevel: number): void {
-    //console.log("onZoomChange", zoomLevel);
-
-    if (zoomLevel >= this.minimumFreeDrawZoomLevel) {
-      this.polygonDrawStates.canUsePolyDraw = true;
-    } else {
-      this.polygonDrawStates.canUsePolyDraw = false;
-      this.polygonDrawStates.setMoveMode();
-    }
-    this.saveCurrentState();
-  }
   private events(onoff: boolean) {
-    //console.log("events", onoff);
 
     const onoroff = onoff ? "on" : "off";
 
@@ -334,11 +284,9 @@ export class MapHelperService {
   }
 
   private addMarker(latlngs, FeatureGroup: L.FeatureGroup) {
-
     latlngs.forEach(latlng => {
-      
       const marker = new L.Marker(latlng, { icon: this.divIcon, draggable: true });
-      
+
       FeatureGroup.addLayer(marker).addTo(this.map);
       marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
@@ -359,51 +307,33 @@ export class MapHelperService {
   }
 
   private markerDragEnd(FeatureGroup) {
-    // this.deletePolygonInformationStorage();
-    //console.log("------------------------------------delete trashcans", null);
     let featureCollection = FeatureGroup.toGeoJSON();
     let feature = featureCollection.features[0];
-    let kinks = turf.kinks(feature);
-    
-    if (kinks.features.length > 0) {
-        this.kinks = true;
-        let unkink= this.turfHelper.getKinks(feature);
-        console.log("unkink: ",unkink);
+
+    if (this.turfHelper.hasKinks(feature)) {
+      this.kinks = true;
+      let unkink = this.turfHelper.getKinks(feature);
+      console.log("unkink: ", unkink);
       this.deletePolygon(this.getLatLngsFromJson(feature));
-    //   this.removeFeatureGroup(FeatureGroup)
+      
       unkink.forEach(polygon => {
-        this.addPolygon(polygon, false); 
-      })
-    //   this.addPolygon(unkink, false);
+        this.addPolygon(polygon, true);
+      });
     } else {
-        this.kinks = false;
-        // this.removeFeatureGroup(FeatureGroup)
+      this.kinks = false;
       this.addPolygon(feature, false);
     }
-    // this.createPolygonInformationStorage();
-    //console.log("------------------------------------create trashcans", null);
+
+    this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
 
   private getLatLngsFromJson(feature) {
-    //console.log("getLatLngsFromJson", feature);
 
     let coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0]);
 
     return coord;
   }
 
-  private polygonIntersect(polygon, latlngs: Feature<Polygon | MultiPolygon>): boolean {
-    //console.log("polygonIntersect", polygon, latlngs);
-
-    const oldPolygon = polygon.toGeoJSON();
-    let poly;
-
-    if (latlngs.geometry.type === "Polygon") {
-      poly = latlngs;
-    }
-    const intersect = turf.intersect(poly, oldPolygon);
-    return !!intersect;
-  }
 
   private unionPolygons(layers, latlngs: Feature<Polygon | MultiPolygon>) {
     //console.log("unionPolygons", layers, latlngs);
@@ -445,13 +375,10 @@ export class MapHelperService {
         polygon.push(polygon[0]);
       }
 
-      this.polygonInformationStorage.forEach(v => {
-        //console.log("v", v);
-        //console.log("p", polygon);
+      this.polygonInformation.polygonInformationStorage.forEach(v => {
 
         if (v.polygon.toString() !== polygon.toString() && v.polygon[0].toString() === polygon[0].toString()) {
           v.polygon = polygon;
-          //console.log("ULIKE, men første er lik: ", v);
           newArray.push(v);
         }
 
@@ -459,20 +386,11 @@ export class MapHelperService {
           newArray.push(v);
         }
       });
-      //console.log("New PolygonInfo Array: ", newArray);
-      /////this.polygonInformationStorage = newArray;
     }
     featureGroup.clearLayers();
     this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(featureGroups => featureGroups !== featureGroup);
     // this.updatePolygons();
     this.map.removeLayer(featureGroup);
-  }
-
-  private deleteTrashcan(polygon) {
-    //console.log("deleteTrashcan", polygon);
-
-    const idx = this.polygonInformationStorage.findIndex(v => v.polygon === polygon);
-    this.polygonInformationStorage.splice(idx, 1);
   }
 
   private deletePolygonOnMerge(polygon) {
@@ -492,13 +410,14 @@ export class MapHelperService {
         if (equals) {
           //console.log("EQUALS");
           this.removeFeatureGroupOnMerge(featureGroup);
-          this.deleteTrashcan(polygon);
+          this.polygonInformation.deleteTrashcan(polygon);
           // this.updatePolygons();
         }
       });
     }
   }
 
+  //TODO - legge et annet sted
   private polygonArrayEqualsMerge(poly1: any[], poly2: any[]) {
     //console.log("polygonArrayEqualsMerge", poly1, poly2);
 
@@ -515,9 +434,6 @@ export class MapHelperService {
     }
   }
 
-  private saveCurrentState(): void {
-    console.log("saveCurrentState");
-  }
 
   private setLeafletMapEvents(enableDragging: boolean, enableDoubleClickZoom: boolean, enableScrollWheelZoom: boolean) {
     //console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
@@ -575,14 +491,14 @@ export class MapHelperService {
 
     this.setDrawMode(DrawMode.AddPolygon);
 
-    this.saveCurrentState();
+    this.polygonInformation.saveCurrentState();
   }
 
   freedrawMenuClick(): void {
     //console.log("freedrawMenuClick");
 
     this.setDrawMode(DrawMode.AddPolygon);
-    this.saveCurrentState();
+    this.polygonInformation.saveCurrentState();
   }
 
   resetTracker() {
