@@ -3,6 +3,13 @@
 > PolyDraw is a free-hand drawing tool that allows you to draw shapes which are converted to polygons on your Leaflet-map. The tool supports concaving by default, subtracting (donut polygons) and are fully editable by adding edges, dragging edges.
 PolyDraw was initially heavily inspired by [Leaflet.FreeDraw (Adam Timberlake "Wildhoney")](https://github.com/Wildhoney/Leaflet.FreeDraw) and [leaflet-freehandshapes (Benjamin DeLong "bozdoz")](https://github.com/bozdoz/leaflet-freehandshapes), so a big thank you and kudos for you!
 
+## Getting started
+```javascript
+import * as L from "Leaflet";
+
+const polyDraw = new PolyDraw();
+```
+
 ## Configuration
 > Road to configuration.
 * **Default configuration**
@@ -55,3 +62,9 @@ const polyDraw = new PolyDraw({
   configPath: "path/to/your/location/polydraw.config.json"
 });
 ```
+## Config explained
+
+| Key                    | Default      | Result                               |
+| ---------------------- |------------- | ------------------------------------ |
+| `configPath`                 | `null`        | Path to custom config-file. |
+| `mergePolygons`                 | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
