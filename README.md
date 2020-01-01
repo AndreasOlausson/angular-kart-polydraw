@@ -70,7 +70,7 @@ const polyDraw = new PolyDraw({
 | `mergePolygons`                 | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 **deleteMarkers**
 | `isVisible`                 | `true`        | Show trash-can on every polygons. |
-| `placement`                 | `0 (Far north)`        | [placement enum](#enums).. |
+| `placement`                 | `0 (Center)`        | [MarkerPlacement](#enums).. |
 
 
 ## Enums
