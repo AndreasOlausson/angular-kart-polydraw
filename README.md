@@ -68,7 +68,7 @@ const polyDraw = new PolyDraw({
 | ---------------------- |------------- | ------------------------------------ |
 | `configPath`                 | `null`        | Path to custom config-file. |
 | `mergePolygons`                 | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
-| `**mergePolygons`**                  |
+**deleteMarkers**
 | `isVisible`                 | `true`        | Show trash-can on every polygons. |
 | `placement`                 | `0 (Far north)`        | [placement enum](#enums).. |
 
