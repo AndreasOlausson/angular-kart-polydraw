@@ -137,7 +137,8 @@ const polyDraw = new PolyDraw({
   }
 });
 ```
-This configuration gives the result of the [screenshot](#summary) above.
+This configuration gives this result.
+![PolyDraw](/tmp-marker-placement.jpg)
 
 ```javascript
 MarkerPlacement {
