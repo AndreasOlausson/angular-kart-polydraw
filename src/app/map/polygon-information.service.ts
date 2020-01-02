@@ -46,9 +46,11 @@ export class PolygonInformationService {
       }
 
       createPolygonInformationStorage(arrayOfFeatureGroups) {
+        console.log("Create Info: ",arrayOfFeatureGroups);
         if (arrayOfFeatureGroups.length > 0) {
           arrayOfFeatureGroups.forEach(featureGroup => {
-            let polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs()[0]);
+            console.log(featureGroup.getLayers()[0].getLatLngs());
+            let polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs()[0][0]);
             this.polygonInformationStorage.push(polyInfo);
           });
           this.updatePolygons();
