@@ -66,13 +66,39 @@ const polyDraw = new PolyDraw({
 ```
 ## Config explained
 
-| Key                    | Default      | Result                               |
-| ---------------------- |------------- | ------------------------------------ |
-| `configPath`                 | `null`        | Path to custom config-file. |
-| `mergePolygons`                 | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
+| Key                         | Default      | Result                               |
+| --------------------------- |------------- | ------------------------------------ |
+| `configPath`                | `null`        | Path to custom config-file. |
+| `mergePolygons`             | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
+| `minimumPolyDrawZoomLevel`  | `null`        | Path to custom config-file. |
+| `maximumPolyDrawZoomLevel`  | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 **deleteMarkers**
 | `isVisible`                 | `true`        | Show trash-can on every polygons. |
-| `placement`                 | `0 (Center)`        | [MarkerPlacement](#enums).. |
+| `placement`                 | `0 (Center)`  | Where to place the trash-can marker [MarkerPlacement](#enums).. |
+**areaMarkers**
+| `isVisible`                 | `true`        | Show area info-label on every polygons. |
+| `placement`                 | `0 (Center)`  | Where to place the trash-can marker [MarkerPlacement](#enums).. |
+| `showArea`                  | `true`        | Show area info on the marker icon. |
+| `showPerimeter`             | `true`        | Show perimeter info on the marker icon |
+| `useMetrics`                | `true`        | If false, Imperial units are showed. |
+| `numOfDecimals`             | `0`           | Number of decimals |
+| `areaLabel`                 | `"Area"`      | Text on label. |
+| `perimeterLabel`            | `"Perimeter"` | Text on label. |
+**polyLineOptions**
+| `color`                     | `#50622b`     | Color of the stroke when drawing. |
+| `opacity`                   | `1`           | Opacity 0 - 1 |
+| `smoothFactor`              | `0`           |  |
+| `noClip`                    | `true`        |  |
+| `clickable`                 | `false`       |  |
+| `weight`                    | `2`           | Stroke width |
+**polygonOptions**
+| `color`                     | `#50622b`     | Border color of edge markers. |
+| `fillColor`                 | `#b4cd8a`     | Color of the edge markers |
+| `smoothFactor`              | `0.3`         |  |
+| `noClip`                    | `true`        |  |
+**simplifyTolerance**
+| `tolerance`                 | `0.00010`     | How much the polygon should be simplified. |
+| `highQuality`               | `false`       |  |
 
 
 ## Enums
