@@ -37,15 +37,20 @@ export class TurfHelperService {
   }
 
   getTurfPolygon(polygon) {
-    let turfPolygon;
-    console.log("Get TurfPolygon:", polygon);
-    if (polygon.geometry.type === "Polygon") {
+    let turfPolygon; 
+    console.log("Get TurfPolygon:",polygon);
+    if(polygon.geometry)
+    if(polygon.geometry.type === "Polygon"){
       turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
     }
     else {
       turfPolygon = turf.multiPolygon(polygon.geometry.coordinates);
     }
     return turfPolygon;
+  }
+
+  getMultiPolygon(polygonArray){
+    return turf.multiPolygon(polygonArray)
   }
 
   getKinks(feature) {
@@ -142,36 +147,36 @@ export class TurfHelperService {
     return turf.booleanWithin(turf.polygon([polygon1]), turf.polygon([polygon2]))
   }
 
-  // getBoundingBoxCompassPosition(polygon, markerplacement, useOffset, offsetDirection) {
+  getBoundingBoxCompassPosition(polygon, markerplacement, useOffset, offsetDirection) {
 
-  //   const p = this.getTurfPolygon(polygon);
+    const p = this.getMultiPolygon(polygon);
+    const compass = this.getBoundingBoxCompass(polygon);
 
+    return null;
+  }
+  private getBoundingBoxCompass(polygon): Compass {
 
-  //   return null;
-  // }
-  // private getBoundingBoxCompass(polygon): Compass {
+    const p = this.getMultiPolygon(polygon);
+    const centerOfMass = turf.centerOfMass(p);
+    const b = turf.bbox(p);
+    const minX = b[0];
+    const minY = b[1];
+    const maxX = b[2];
+    const maxY = b[3];
+    const compass = new Compass();
 
-  //   const p = this.getTurfPolygon(polygon);
-  //   const centerOfMass = turf.centerOfMass(p);
-  //   const b = turf.bbox(p);
-  //   const minX = b[0];
-  //   const minY = b[1];
-  //   const maxX = b[2];
-  //   const maxY = b[3];
-  //   const compass = new Compass();
+    compass.N = [(minX + maxX) / 2, maxY];
+    compass.NE = [maxX, maxY];
+    compass.E = [maxX, (minY + maxY) / 2];
+    compass.SE = [maxX, minY];
+    compass.S = [(minX + maxX) / 2, minY];
+    compass.SW = [minX, minY];
+    compass.W = [minX, (minY + maxY) / 2];
+    compass.NW = [minX, maxY];
+    compass.C = centerOfMass.geometry.coordinates[0][0];
 
-  //   compass.N = [(minX + maxX) / 2, maxY];
-  //   compass.NE = [maxX, maxY];
-  //   compass.E = [maxX, (minY + maxY) / 2];
-  //   compass.SE = [maxX, minY];
-  //   compass.S = [(minX + maxX) / 2, minY];
-  //   compass.SW = [minX, minY];
-  //   compass.W = [minX, (minY + maxY) / 2];
-  //   compass.NW = [minX, maxY];
-  //   compass.C = centerOfMass.geometry.coordinates[0][0];
-
-  //   return compass;
-  // }
+    return compass;
+  }
 
 }
 export class Compass {
