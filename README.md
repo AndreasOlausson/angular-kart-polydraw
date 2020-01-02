@@ -123,11 +123,10 @@ const polyDraw = new PolyDraw({
 ## Draw modes
 You can combine draw modes for different behaviour.
 ```javascript
-polyDraw.setDrawMode(DrawMode.Add | DrawMode.Edit)
-}
+polyDraw.setDrawMode(DrawMode.Add | DrawMode.Edit);
 ```
 With this you can add and edit polygons but you can't append edges.
-How ever, you can't add and subtract at the same time, so if combined "Add" overides "Subtract".
+How ever, you can't add and subtract at the same time, so if combined "Add" overrides "Subtract".
 ```javascript
 DrawMode {
     Off = 0,
