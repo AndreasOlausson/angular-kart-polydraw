@@ -65,5 +65,10 @@ export class TurfHelperService {
     return !!intersect;
   }
 
-  
+  getIntersection(poly1, poly2): Feature {
+    return turf.intersect(poly1, poly2);
+  }
+  getDistance(point1, point2): number {
+    return turf.distance(point1, point2);
+  }
 }

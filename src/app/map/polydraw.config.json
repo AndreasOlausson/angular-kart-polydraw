@@ -1,15 +1,23 @@
 {
     "mergePolygons": true,
+    "iconMarkers": {
+        "isVisible": true,
+        "placeBetweenEdgeMarkers": true,
+        "offsetDirection": 0
+
+    },
     "deleteMarkers": {
         "isVisible": true,
-        "placement": 0,
+        "placement": 0
     },
-    "arealMarkers": {
+    "areaMarkers": {
         "isVisible": true,
         "placement": 0,
         "showArea": true,
-        "showCircumference": true,
-        "useMetrics": true
+        "showPerimeter": true,
+        "useMetrics": true,
+        "areaLabel": "Area",
+        "perimeterLabel": "Perimeter"
     },
     "minimumPolyDrawZoomLevel": 12,
     "maximumPolyDrawZoomLevel": null,

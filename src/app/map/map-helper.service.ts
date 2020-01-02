@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import * as L from "leaflet";
-import * as turf from "@turf/turf";
+//import * as turf from "@turf/turf";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { takeUntil, filter, debounceTime } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
@@ -92,7 +92,7 @@ export class MapHelperService {
 
     if (polygons.length > 1) {
       for (let i = 0; i < polygons.length - 1; i++) {
-        intersection = turf.intersect(this.turfHelper.getTurfPolygon([polygons[i]]), this.turfHelper.getTurfPolygon([polygons[i + 1]]));
+        intersection = this.turfHelper.getIntersection(this.turfHelper.getTurfPolygon([polygons[i]]), this.turfHelper.getTurfPolygon([polygons[i + 1]]));
         hulls.push(intersection);
       }
     }
@@ -129,21 +129,22 @@ export class MapHelperService {
     //console.log("initPolyDraw", null);
 
     const container: HTMLElement = this.map.getContainer();
+    const drawMode = this.getDrawMode();
 
     container.addEventListener("touchstart", e => {
-      if (this.getDrawMode() !== DrawMode.Off) {
+      if (drawMode !== DrawMode.Off) {
         this.mouseDown(e);
       }
     });
 
     container.addEventListener("touchend", e => {
-      if (this.getDrawMode() !== DrawMode.Off) {
+      if (drawMode !== DrawMode.Off) {
         this.mouseUpLeave();
       }
     });
 
     container.addEventListener("touchmove", e => {
-      if (this.getDrawMode() !== DrawMode.Off) {
+      if (drawMode !== DrawMode.Off) {
         this.mouseMove(e);
       }
     });
@@ -247,21 +248,21 @@ export class MapHelperService {
   }
 
   private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
-    
+    const  originalPolygon = this.getPolygon(poly);
     const newPoint = e.latlng;
     let idx = -1;
     let idx2 = -1;
     let tmpDistance = Number.MAX_SAFE_INTEGER;
     if (poly.geometry.type === "Polygon") {
       poly.geometry.coordinates[0].forEach((v, i) => {
-        const distance = turf.distance([newPoint.lng, newPoint.lat], v);
+        const distance = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], v);
         if (tmpDistance >= distance) {
           idx = i;
           tmpDistance = distance;
         }
       })
-      const l = turf.distance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === 0 ? poly.geometry.coordinates[0].length : idx - 1]);
-      const r = turf.distance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === poly.geometry.coordinates[0].length ? 0 : idx + 1]);
+      const l = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === 0 ? poly.geometry.coordinates[0].length : idx - 1]);
+      const r = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === poly.geometry.coordinates[0].length ? 0 : idx + 1]);
 
       idx2 = l > r ? (idx === 0 ? poly.geometry.coordinates[0].length : idx - 1) : (idx === poly.geometry.coordinates[0].length ? 0 : idx + 1);
 
@@ -270,17 +271,12 @@ export class MapHelperService {
       poly.geometry.coordinates[0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
 
     }
+    console.log("TODO:");
+    console.log("Delete existing polygon");
+    console.log("Add new polygon");
+    console.log("Update states")
+    //this.deletePolygon(originalPolygon._latlngs);
 
-    console.log("idx", idx, idx2);
-    console.log("User clicked a polygon");
-    console.log("check append-flag")
-    console.log("if yes")
-    console.log("find nearest edge marker")
-    console.log("compare the markers next to the nearest which are the closest")
-    console.log("append the new point from e")
-    console.log("update / delete recreate the polygon with the new point.")
-    console.log("event", e);
-    console.log("polygon", poly);
   }
 
   private getPolygon(latlngs) {
@@ -534,6 +530,7 @@ export class MapHelperService {
 
     this.tracer.setLatLngs([[0, 0]]);
   }
+
 }
 
 export enum DrawMode {
