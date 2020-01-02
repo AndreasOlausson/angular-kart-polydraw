@@ -48,6 +48,7 @@ export class PolygonInfo {
         const perimeter = PolygonUtil.getPerimeter((polygon) as any);
         return perimeter;
     }
+    
 }
 
 export class PolygonDrawStates {

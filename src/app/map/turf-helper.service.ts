@@ -3,18 +3,19 @@ import { Injectable } from "@angular/core";
 import * as turf from "@turf/turf";
 import * as concaveman from "concaveman";
 import { FeatureCollection, Point, Feature, Polygon, MultiPolygon } from "@turf/turf";
+import { CommentStmt } from "@angular/compiler";
 
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
   private simplifyTolerance = { tolerance: 0.0001, highQuality: false };
-  constructor() {}
+  constructor() { }
 
   union(poly1, poly2) {
     console.log("poly1: ", poly1);
     console.log("poly2: ", poly2);
-  
+
     let union = turf.union(poly1, poly2);
-    
+
     return this.getTurfPolygon(union);
   }
 
@@ -36,9 +37,9 @@ export class TurfHelperService {
   }
 
   getTurfPolygon(polygon) {
-    let turfPolygon; 
-    console.log("Get TurfPolygon:",polygon);
-    if(polygon.geometry.type === "Polygon"){
+    let turfPolygon;
+    console.log("Get TurfPolygon:", polygon);
+    if (polygon.geometry.type === "Polygon") {
       turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
     }
     else {
@@ -69,8 +70,8 @@ export class TurfHelperService {
 
     console.log("polygonIntersect", polygon, latlngs);
 
-    turf.featureEach(polygon, function(current, index) {
-      console.log("Current:" ,current);
+    turf.featureEach(polygon, function (current, index) {
+      console.log("Current:", current);
     })
 
     let latlngsCoords = turf.getCoords(latlngs);
@@ -81,14 +82,14 @@ export class TurfHelperService {
       poly.push(feat);
     });
     let polygonCoords = turf.getCoords(polygon);
-   console.log(polygonCoords);
-   console.log(latlngsCoords);
-   polygonCoords.forEach(element => {
-    console.log(element);
-    let feat = { type: "Polygon", coordinates: element };
+    console.log(polygonCoords);
+    console.log(latlngsCoords);
+    polygonCoords.forEach(element => {
+      console.log(element);
+      let feat = { type: "Polygon", coordinates: element };
 
-    poly2.push(feat);
-  });
+      poly2.push(feat);
+    });
     let intersect = false;
     console.log(poly);
     console.log(poly2);
@@ -118,26 +119,84 @@ export class TurfHelperService {
   getDistance(point1, point2): number {
     return turf.distance(point1, point2);
   }
-  findBiggest(element){
+  findBiggest(element) {
     let test = turf.polygon([element[0]]);
     let biggest = turf.polygon([element[0]]);
     let largest = turf.area(test);
     for (let index = 1; index < element.length; index++) {
       test = turf.polygon([element[index]]);
       let large = turf.area(test);
-      if(large > largest){
+      if (large > largest) {
         largest = large
         biggest = turf.polygon([element[index]]);
       }
 
-      
+
     }
     return biggest
   }
 
-  isWithin(polygon1, polygon2){
+  isWithin(polygon1, polygon2) {
     console.log(polygon1);
-    console.log("Ytre: ",polygon2);
+    console.log("Ytre: ", polygon2);
     return turf.booleanWithin(turf.polygon([polygon1]), turf.polygon([polygon2]))
   }
+
+  // getBoundingBoxCompassPosition(polygon, markerplacement, useOffset, offsetDirection) {
+
+  //   const p = this.getTurfPolygon(polygon);
+
+
+  //   return null;
+  // }
+  // private getBoundingBoxCompass(polygon): Compass {
+
+  //   const p = this.getTurfPolygon(polygon);
+  //   const centerOfMass = turf.centerOfMass(p);
+  //   const b = turf.bbox(p);
+  //   const minX = b[0];
+  //   const minY = b[1];
+  //   const maxX = b[2];
+  //   const maxY = b[3];
+  //   const compass = new Compass();
+
+  //   compass.N = [(minX + maxX) / 2, maxY];
+  //   compass.NE = [maxX, maxY];
+  //   compass.E = [maxX, (minY + maxY) / 2];
+  //   compass.SE = [maxX, minY];
+  //   compass.S = [(minX + maxX) / 2, minY];
+  //   compass.SW = [minX, minY];
+  //   compass.W = [minX, (minY + maxY) / 2];
+  //   compass.NW = [minX, maxY];
+  //   compass.C = centerOfMass.geometry.coordinates[0][0];
+
+  //   return compass;
+  // }
+
+}
+export class Compass {
+
+  N: [number, number];
+  NE: [number, number];
+  E: [number, number];
+  SE: [number, number];
+  S: [number, number];
+  SW: [number, number];
+  W: [number, number];
+  NW: [number, number];
+  C: [number, number];
+
+  constructor() {
+    this.N = [0, 0];
+    this.NE = [0, 0];
+    this.E = [0, 0];
+    this.SE = [0, 0];
+    this.S = [0, 0];
+    this.SW = [0, 0];
+    this.W = [0, 0];
+    this.NW = [0, 0];
+    this.C = [0, 0];
+  }
+
+
 }
