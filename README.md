@@ -3,17 +3,36 @@
 > PolyDraw is a free-hand drawing tool that allows you to draw shapes which are converted to polygons on your Leaflet-map. The tool supports concaving by default, subtracting (donut polygons) and are fully editable by adding edges, dragging edges.
 PolyDraw was initially heavily inspired by [Leaflet.FreeDraw (Adam Timberlake "Wildhoney")](https://github.com/Wildhoney/Leaflet.FreeDraw) and [leaflet-freehandshapes (Benjamin DeLong "bozdoz")](https://github.com/bozdoz/leaflet-freehandshapes), so a big thank you and kudos for you!
 
+
+
+## Table of Contents
+
+1. [Summary](#summary)
+2. [Getting started](#getting-started)
+  1. [Configuration](#configuration)
+  2. [Configuration explained](#configuration-explained)
+  3. [Draw modes](#draw-modes)
+  4. [Enums](#enums)
+
+
+## Summary
+> Bla bla bla
 ![Screen shot](/tmp-screenshot.jpg)
 
 ## Getting started
 ```javascript
 import * as L from "Leaflet";
 
+this.map = new L.Map("map");
+this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
+/* Polydraw is initiated with default options, see "Configuration section"*/
 const polyDraw = new PolyDraw();
+polyDraw.setDrawMode(DrawMode.Add);
+
 ```
 
 ## Configuration
-> Road to configuration.
+Road to configuration.
 * **Default configuration**
 ```json
 {
@@ -99,6 +118,9 @@ const polyDraw = new PolyDraw({
 **simplifyTolerance**
 | `tolerance`                 | `0.00010`     | How much the polygon should be simplified. |
 | `highQuality`               | `false`       |  |
+
+
+## Draw modes
 
 
 ## Enums
