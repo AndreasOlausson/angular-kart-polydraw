@@ -123,7 +123,22 @@ const polyDraw = new PolyDraw({
 ## Draw modes
 
 
-## Enums
+## Marker placement
+You can choose where you want to put the delete-marker and area information-marker.
+The area information-marker offsets around the delete marker.
+example:
+```javascript
+const polyDraw = new PolyDraw({
+  deleteMarkers: {
+    placement: MarkerPlacement.North
+  },
+  areaMarkers: {
+    placement: MarkerPlacement.West
+  }
+});
+```
+This configuration gives the result of the [screenshot](#summary) above.
+
 ```javascript
 MarkerPlacement {
     Center = 0,
