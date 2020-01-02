@@ -52,7 +52,7 @@ export class MapHelperService {
         if (latlngs[0] !== latlngs[latlngs.length - 1] && latlngs[0].length == null) {
           latlngs.push(latlngs[0]);
         }
-        
+
         const equals = this.polygonArrayEquals(latlngs, polygon);
 
         if (equals) {
@@ -86,7 +86,7 @@ export class MapHelperService {
 
 
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
-    
+
     let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
     console.log(polygon2);
     let polygon = this.getPolygon(polygon2);
@@ -94,44 +94,44 @@ export class MapHelperService {
     featureGroup.addLayer(polygon);
     let markerLatlngs = polygon.getLatLngs();
     markerLatlngs.forEach(polygon => {
-      this.addMarker(polygon[0], featureGroup);  
+      this.addMarker(polygon[0], featureGroup);
     });
-    
+
     this.arrayOfFeatureGroups.push(featureGroup);
-    
+
   }
 
-  
-  convertToCoords(latlngs: ILatLng[][]){
-    let coords = []      
+
+  convertToCoords(latlngs: ILatLng[][]) {
+    let coords = []
     console.log(latlngs.length);
-    if(latlngs.length > 1 && latlngs.length < 3){
-     let coordinates = []
-      let within = this.turfHelper.isWithin(L.GeoJSON.latLngsToCoords(latlngs[latlngs.length-1]),L.GeoJSON.latLngsToCoords(latlngs[0]))
-      if(within){
+    if (latlngs.length > 1 && latlngs.length < 3) {
+      let coordinates = []
+      let within = this.turfHelper.isWithin(L.GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), L.GeoJSON.latLngsToCoords(latlngs[0]))
+      if (within) {
         latlngs.forEach(polygon => {
           coordinates.push(L.GeoJSON.latLngsToCoords(polygon))
         })
-      }else{
+      } else {
         latlngs.forEach(polygon => {
           coordinates.push([L.GeoJSON.latLngsToCoords(polygon)])
         })
       }
       coords.push(coordinates)
       console.log("Within1 ", within);
-      
+
     }
-    else if(latlngs.length > 2){
+    else if (latlngs.length > 2) {
       let coordinates = []
-      for (let index = 1; index < latlngs.length-1; index++) {
-        let within = this.turfHelper.isWithin(L.GeoJSON.latLngsToCoords(latlngs[index]),L.GeoJSON.latLngsToCoords(latlngs[0]))
+      for (let index = 1; index < latlngs.length - 1; index++) {
+        let within = this.turfHelper.isWithin(L.GeoJSON.latLngsToCoords(latlngs[index]), L.GeoJSON.latLngsToCoords(latlngs[0]))
         console.log("Within ", within);
-        if(within){
+        if (within) {
           latlngs.forEach(polygon => {
             coordinates.push(L.GeoJSON.latLngsToCoords(polygon))
           })
           coords.push(coordinates)
-        }else{
+        } else {
           latlngs.forEach(polygon => {
             coords.push([L.GeoJSON.latLngsToCoords(polygon)])
           })
@@ -251,7 +251,7 @@ export class MapHelperService {
   }
 
   private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
-    
+
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
     const latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
@@ -260,9 +260,9 @@ export class MapHelperService {
     console.log(polygon.getLatLngs());
     let markerLatlngs = polygon.getLatLngs();
     markerLatlngs.forEach(polygon => {
-      this.addMarker(polygon[0], featureGroup);  
+      this.addMarker(polygon[0], featureGroup);
     });
-    
+
     this.arrayOfFeatureGroups.push(featureGroup);
     this.setDrawMode(DrawMode.Off);
 
@@ -272,27 +272,30 @@ export class MapHelperService {
   }
 
   private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
-    const  originalPolygon = this.getPolygon(poly);
+    const originalPolygonFeature = Object.assign(poly);
+    //this.getLatLngsFromJson(feature)
     const newPoint = e.latlng;
     let idx = -1;
     let idx2 = -1;
     let tmpDistance = Number.MAX_SAFE_INTEGER;
-    if (poly.geometry.type === "Polygon") {
-      poly.geometry.coordinates[0].forEach((v, i) => {
+    if (poly.geometry.type === "MultiPolygon") {
+      poly.geometry.coordinates[0][0].forEach((v, i) => {
         const distance = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], v);
         if (tmpDistance >= distance) {
           idx = i;
           tmpDistance = distance;
         }
       })
-      const l = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === 0 ? poly.geometry.coordinates[0].length : idx - 1]);
-      const r = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][idx === poly.geometry.coordinates[0].length ? 0 : idx + 1]);
+      const l = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][0][idx === 0 ? poly.geometry.coordinates[0][0].length : idx - 1]);
+      const r = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][0][idx === poly.geometry.coordinates[0][0].length ? 0 : idx + 1]);
 
-      idx2 = l > r ? (idx === 0 ? poly.geometry.coordinates[0].length : idx - 1) : (idx === poly.geometry.coordinates[0].length ? 0 : idx + 1);
+      idx2 = l > r ? (idx === 0 ? poly.geometry.coordinates[0][0].length : idx - 1) : (idx === poly.geometry.coordinates[0][0].length ? 0 : idx + 1);
 
       const injectIdx = idx < idx2 ? idx : idx2;
 
-      poly.geometry.coordinates[0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
+      poly.geometry.coordinates[0][0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
+
+      this.deletePolygon(this.getLatLngsFromJson(originalPolygonFeature));
 
     }
     console.log("TODO:");
@@ -303,16 +306,16 @@ export class MapHelperService {
 
   }
 
-  private getPolygon(latlngs) {   
+  private getPolygon(latlngs) {
     console.log(latlngs);
     let polygon = L.GeoJSON.geometryToLayer(latlngs);
-    
+
     polygon.setStyle(config.polygonOptions);
     return polygon;
   }
 
   private merge(latlngs: Feature<Polygon | MultiPolygon>) {
-    console.log("merge",latlngs);
+    console.log("merge", latlngs);
     const newArray: L.FeatureGroup[] = [];
     let polyIntersection: boolean = false;
     this.arrayOfFeatureGroups.forEach(featureGroup => {
@@ -323,8 +326,9 @@ export class MapHelperService {
         newArray.push(featureGroup);
       }
     });
-    if(newArray.length > 0){
-    this.unionPolygons(newArray, latlngs);}
+    if (newArray.length > 0) {
+      this.unionPolygons(newArray, latlngs);
+    }
   }
 
   private events(onoff: boolean) {
@@ -352,18 +356,18 @@ export class MapHelperService {
   private markerDrag(FeatureGroup) {
     const newPos = [];
     const layerLength = FeatureGroup.getLayers();
-    let arrays =layerLength[0].getLatLngs() 
+    let arrays = layerLength[0].getLatLngs()
     for (let index = 1; index < layerLength.length; index++) {
       newPos.push(layerLength[index].getLatLng());
     }
-    arrays[arrays.length-1] = newPos;
+    arrays[arrays.length - 1] = newPos;
     layerLength[0].setLatLngs(arrays);
   }
 
   private markerDragEnd(FeatureGroup) {
     console.log("Markerdragend");
     let featureCollection = FeatureGroup.toGeoJSON();
-    
+
     let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
     if (this.turfHelper.hasKinks(feature)) {
       this.kinks = true;
@@ -383,14 +387,16 @@ export class MapHelperService {
   }
 
   private getLatLngsFromJson(feature) {
-    console.log("getLatLngsFromJson: ",feature);
+    console.log("getLatLngsFromJson: ", feature);
     let coord
-    if(feature){
-    if(feature.geometry.coordinates[0].length>1){
-     coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);}
-    else {
-     coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
-    }}
+    if (feature) {
+      if (feature.geometry.coordinates[0].length > 1) {
+        coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
+      }
+      else {
+        coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
+      }
+    }
 
     return coord;
   }
@@ -445,7 +451,7 @@ export class MapHelperService {
     let newArray = [];
     if (featureGroup.getLayers()[0]) {
       let polygon = featureGroup.getLayers()[0].getLatLngs()[0];
-      
+
       /* if (!polygon[0][0].equals(polygon[0][polygon.length - 1])) {
         polygon[0].push(polygon[0][0]);
       } */
@@ -464,20 +470,20 @@ export class MapHelperService {
       });
       console.log(this.polygonInformation.polygonInformationStorage);
       console.log(newArray);
-    featureGroup.clearLayers();
-    console.log(this.arrayOfFeatureGroups);
-    this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(featureGroups => featureGroups !== featureGroup);
-    console.log(this.arrayOfFeatureGroups);
-    this.arrayOfFeatureGroups.forEach(featureGroups => {
-      if(featureGroups === featureGroup){
-        
-        console.log("Remove: ",featureGroup);
-      this.map.removeLayer(featureGroups);
+      featureGroup.clearLayers();
+      console.log(this.arrayOfFeatureGroups);
+      this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(featureGroups => featureGroups !== featureGroup);
+      console.log(this.arrayOfFeatureGroups);
+      this.arrayOfFeatureGroups.forEach(featureGroups => {
+        if (featureGroups === featureGroup) {
+
+          console.log("Remove: ", featureGroup);
+          this.map.removeLayer(featureGroups);
+        }
+      });
+      this.map.removeLayer(featureGroup);
     }
-    });
-    this.map.removeLayer(featureGroup);
-    }
-    
+
   }
 
   private deletePolygonOnMerge(polygon) {
