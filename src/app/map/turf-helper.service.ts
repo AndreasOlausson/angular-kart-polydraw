@@ -13,8 +13,8 @@ export class TurfHelperService {
     console.log("poly1: ",poly1);
     console.log("poly2: ",poly2);
     let union = turf.union(poly1, poly2);
-    console.log(union);
-    return union;
+    console.log(this.getTurfPolygon(union.geometry.coordinates));
+    return this.getTurfPolygon([union.geometry.coordinates]);
   }
 
   turfConcaveman(feature) {
@@ -59,34 +59,56 @@ export class TurfHelperService {
     
 
     // const oldPolygon = polygon.toGeoJSON();
-    let poly;
+    let poly = [];
+    let poly2 = [];
+    console.log();
+    
     console.log("polygonIntersect", polygon, latlngs);
-    // console.log(oldPolygon.geometry);
-   /*  if(oldPolygon.geometry.coordinates.length > 1 && latlngs.geometry.coordinates.length > 1  ){
-      console.log("old: ",oldPolygon);
+    
+
+    let latlngsCoords = turf.getCoords(latlngs);
+    latlngsCoords.forEach(element => {
+      console.log(element);
+      let 
+         feat={'type':'Polygon','coordinates':element};
       
-    } */
-
-   /*  if(turf.booleanEqual(oldPolygon, latlngs)){
-      console.log("Helt like");
-      return false
-    } */
-
-    /* else if(oldPolygon.geometry.coordinates.length > 1 && latlngs.geometry.coordinates.length === 1  ){
-      console.log("new: ", latlngs);
+      poly.push(feat)
+    });
+    let polygonCoords = turf.getCoords(polygon);
+    polygonCoords.forEach(element => {
+      console.log(element);
+      let 
+         feat={'type':'Polygon','coordinates':element};
+      
+      
+      poly2.push(feat)
    
-    } */
+    });
 
-    if (latlngs.geometry.type === "Polygon") {
-      poly = latlngs;
+    let intersect = false
+console.log(poly);
+console.log(poly2);
+loop1:
+for(let i = 0; i< poly.length; i++){
+  console.log(poly[i]);
+  for(let j = 0; j<poly2.length; j++){
+    console.log(poly2[j].coordinates.length);
+     intersect = !!turf.intersect(poly[i], poly2[j]);
+    
+    if(intersect){
+      console.log("Intersection",intersect);
+      break loop1; 
     }
+    
+  }
+}
 
     
-    let diff = turf.booleanOverlap(polygon,latlngs)
-    console.log("Diff: ",diff);
+    // let diff = turf.booleanOverlap(polygon,latlngs)
+    // console.log("Diff: ",diff);
     // const intersect = turf.intersect(latlngs, oldPolygon);
     // return !!intersect;
-    return false
+    return intersect
     
   }
 
