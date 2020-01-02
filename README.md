@@ -89,14 +89,14 @@ const polyDraw = new PolyDraw({
 | --------------------------- |------------- | ------------------------------------ |
 | `configPath`                | `null`        | Path to custom config-file. |
 | `mergePolygons`             | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
-| `minimumPolyDrawZoomLevel`  | `null`        | Path to custom config-file. |
-| `maximumPolyDrawZoomLevel`  | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
+| `minimumPolyDrawZoomLevel`  | `null`        | Can be used to disallow PolyDraw on sertain zoom levels |
+| `maximumPolyDrawZoomLevel`  | `null`        | Can be used to disallow PolyDraw on sertain zoom levels |
 **deleteMarkers**
 | `isVisible`                 | `true`        | Show trash-can on every polygons. |
 | `placement`                 | `0 (Center)`  | Where to place the trash-can marker [MarkerPlacement](#enums).. |
 **areaMarkers**
 | `isVisible`                 | `true`        | Show area info-label on every polygons. |
-| `placement`                 | `0 (Center)`  | Where to place the trash-can marker [MarkerPlacement](#enums).. |
+| `placement`                 | `0 (Center)`  | Where to place the area info marker [MarkerPlacement](#enums).. (Offsets to delete marker if present) |
 | `showArea`                  | `true`        | Show area info on the marker icon. |
 | `showPerimeter`             | `true`        | Show perimeter info on the marker icon |
 | `useMetrics`                | `true`        | If false, Imperial units are showed. |
