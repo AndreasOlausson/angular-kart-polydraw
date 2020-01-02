@@ -121,7 +121,23 @@ const polyDraw = new PolyDraw({
 
 
 ## Draw modes
-
+You can combine draw modes for different behaviour.
+```javascript
+polyDraw.setDrawMode(DrawMode.Add | DrawMode.Edit)
+}
+```
+With this you can add and edit polygons but you can't append edges.
+How ever, you can't add and subtract at the same time, so if combined "Add" overides "Subtract".
+```javascript
+DrawMode {
+    Off = 0,
+    Add = 1,
+    Edit = 2,
+    Subtract = 4,
+    AppendMarker = 8,
+    LoadPredefined = 16
+}
+```
 
 ## Marker placement
 You can choose where you want to put the delete-marker and area information-marker.
@@ -138,6 +154,7 @@ const polyDraw = new PolyDraw({
 });
 ```
 This configuration gives this result.
+
 ![PolyDraw](/tmp-marker-placement.jpg)
 
 ```javascript
