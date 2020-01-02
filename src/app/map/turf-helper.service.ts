@@ -38,6 +38,7 @@ export class TurfHelperService {
   getTurfPolygon(polygon) {
     let turfPolygon; 
     console.log("Get TurfPolygon:",polygon);
+    if(polygon.geometry)
     if(polygon.geometry.type === "Polygon"){
       turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
     }
@@ -45,6 +46,10 @@ export class TurfHelperService {
       turfPolygon = turf.multiPolygon(polygon.geometry.coordinates);
     }
     return turfPolygon;
+  }
+
+  getMultiPolygon(polygonArray){
+    return turf.multiPolygon(polygonArray)
   }
 
   getKinks(feature) {

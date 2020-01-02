@@ -87,7 +87,7 @@ export class MapHelperService {
 
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
     
-    let polygon2 = this.turfHelper.getTurfPolygon(this.convertToCoords(geographicBorders));
+    let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
     console.log(polygon2);
     let polygon = this.getPolygon(polygon2);
 
