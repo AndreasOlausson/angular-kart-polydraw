@@ -364,19 +364,13 @@ export class MapHelperService {
   }
 
   private events(onoff: boolean) {
-
     const onoroff = onoff ? "on" : "off";
-
     this.map[onoroff]("mousedown", this.mouseDown, this);
-
   }
 
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
-    
-    console.log("addMarker", latlngs, FeatureGroup.getLayers()[0].getLatLngs()[0][0],  FeatureGroup.getLayers()[0].getLatLngs()[0][0].length);
     latlngs.forEach(latlng => {
       const marker = new L.Marker(latlng, { icon: this.divIcon, draggable: true });
-
       FeatureGroup.addLayer(marker).addTo(this.map);
       marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
@@ -400,7 +394,6 @@ export class MapHelperService {
   private markerDragEnd(FeatureGroup:L.FeatureGroup) {
     console.log("Markerdragend");
     let featureCollection = FeatureGroup.toGeoJSON();
-
     let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
     if (this.turfHelper.hasKinks(feature)) {
       this.kinks = true;
@@ -411,11 +404,9 @@ export class MapHelperService {
         this.addPolygon(this.turfHelper.getTurfPolygon( polygon), true);
       });
     } else {
-      // this.deletePolygon(this.getLatLngsFromJson(feature));
       this.kinks = false;
       this.addPolygon(feature, false);
     }
-
     // this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
 
@@ -439,7 +430,6 @@ export class MapHelperService {
     console.log("unionPolygons", layers, latlngs);
 
     let addNew = latlngs;
-
     layers.forEach(featureGroup => {
       let featureCollection = featureGroup.toGeoJSON()
       const layer = featureCollection.features[0];
@@ -471,11 +461,7 @@ export class MapHelperService {
     let newArray = [];
     if (featureGroup.getLayers()[0]) {
       let polygon = featureGroup.getLayers()[0].getLatLngs()[0];
-
-      console.log(this.polygonInformation.polygonInformationStorage);
       this.polygonInformation.polygonInformationStorage.forEach(v => {
-        console.log(v.polygon);
-        console.log(polygon[0]);
         if (v.polygon.toString() !== polygon[0].toString() && v.polygon[0].toString() === polygon[0][0].toString()) {
           v.polygon = polygon;
           newArray.push(v);
@@ -485,19 +471,9 @@ export class MapHelperService {
           newArray.push(v);
         }
       });
-      console.log(this.polygonInformation.polygonInformationStorage);
-      console.log(newArray);
       featureGroup.clearLayers();
-      console.log(this.arrayOfFeatureGroups);
       this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(featureGroups => featureGroups !== featureGroup);
-      console.log(this.arrayOfFeatureGroups);
-      this.arrayOfFeatureGroups.forEach(featureGroups => {
-        if (featureGroups === featureGroup) {
-
-          console.log("Remove: ", featureGroup);
-          this.map.removeLayer(featureGroups);
-        }
-      });
+     
       this.map.removeLayer(featureGroup);
     }
 
@@ -527,13 +503,12 @@ export class MapHelperService {
   }
 
   //TODO - legge et annet sted
-  private polygonArrayEqualsMerge(poly1: any[], poly2: any[]) {
-
+  private polygonArrayEqualsMerge(poly1: any[], poly2: any[]):boolean {
     return poly1.toString() === poly2.toString();
   }
 
-  private polygonArrayEquals(poly1: any[], poly2: any[]) {
-    console.log("polygonArrayEquals", poly1, poly2);
+  private polygonArrayEquals(poly1: any[], poly2: any[]):boolean {
+    // console.log("polygonArrayEquals", poly1, poly2);
 
     if (poly1.length !== poly2.length) return false;
     if (!poly1[0].equals(poly2[0])) return false;
@@ -541,7 +516,6 @@ export class MapHelperService {
       return true;
     }
   }
-
 
   private setLeafletMapEvents(enableDragging: boolean, enableDoubleClickZoom: boolean, enableScrollWheelZoom: boolean) {
     //console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
@@ -585,41 +559,26 @@ export class MapHelperService {
           this.setLeafletMapEvents(false, false, false);
           break;
       }
-
-      /*     if (isActiveDrawMode) {
-                this.polygonDrawStates.setFreeDrawMode();
-            } else {
-                this.polygonDrawStates.setMoveMode();
-            } */
     }
   }
 
   drawModeClick(): void {
-    //console.log("drawModeClick");
-
     this.setDrawMode(DrawMode.AddPolygon);
-
     this.polygonInformation.saveCurrentState();
   }
 
   freedrawMenuClick(): void {
-    //console.log("freedrawMenuClick");
-
     this.setDrawMode(DrawMode.AddPolygon);
     this.polygonInformation.saveCurrentState();
   }
 
   
   subtractClick(): void {
-    //console.log("freedrawMenuClick");
-
     this.setDrawMode(DrawMode.SubtractPolygon);
     this.polygonInformation.saveCurrentState();
   }
 
   resetTracker() {
-    //console.log("resetTracker");
-
     this.tracer.setLatLngs([[0, 0]]);
   }
 
