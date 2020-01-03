@@ -145,4 +145,10 @@ export class TurfHelperService {
     console.log("Ytre: ",polygon2);
     return turf.booleanWithin(turf.polygon([polygon1]), turf.polygon([polygon2]))
   }
+
+  polygonDifference(polygon1, polygon2){
+    let diff = turf.difference(polygon1,polygon2)
+    console.log(diff);
+    return this.getTurfPolygon(diff)
+  }
 }

@@ -3,7 +3,7 @@ import * as L from "leaflet";
 //import * as turf from "@turf/turf";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { takeUntil, filter, debounceTime } from "rxjs/operators";
-import { Feature, Polygon, MultiPolygon } from "@turf/turf";
+import { Feature, Polygon, MultiPolygon, difference } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
@@ -209,7 +209,10 @@ export class MapHelperService {
       case DrawMode.AddPolygon:
         this.addPolygon(geoPos, false, true);
         break;
-
+        case DrawMode.SubtractPolygon:
+          this.subtractPolygon(geoPos, false, true);
+          break;
+  
       default:
         break;
     }
@@ -238,6 +241,10 @@ export class MapHelperService {
     this.map[onoroff]("mousemove", this.mouseMove, this);
     this.map[onoroff]("mouseup", this.mouseUpLeave, this);
 
+  }
+
+  private subtractPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false){
+    this.subtract(latlngs)
   }
 
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
@@ -327,6 +334,31 @@ export class MapHelperService {
     this.unionPolygons(newArray, latlngs);}
   }
 
+  private subtract(latlngs: Feature<Polygon | MultiPolygon>){
+    let addHole = latlngs
+    this.arrayOfFeatureGroups.forEach(featureGroup => {
+      let featureCollection = featureGroup.toGeoJSON();
+      const layer = featureCollection.features[0];
+      let poly = this.getLatLngsFromJson(layer);
+      let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
+      let newPolygon = this.turfHelper.polygonDifference(feature, addHole);
+      // this.addPolygonLayer(newPolygon,true);
+      this.deletePolygon(poly);
+      this.removeFeatureGroupOnMerge(featureGroup);
+      console.log(this.arrayOfFeatureGroups);
+      addHole = newPolygon
+      // this.deletePolygon(poly);
+    });
+
+    const newLatlngs: Feature<Polygon | MultiPolygon> = addHole;
+    newLatlngs.geometry.coordinates.forEach(polygon => {
+      console.log();
+      this.addPolygonLayer(this.turfHelper.getMultiPolygon([polygon]), true);
+    })
+    console.log(newLatlngs.geometry.coordinates.length);
+    
+  }
+
   private events(onoff: boolean) {
 
     const onoroff = onoff ? "on" : "off";
@@ -336,6 +368,9 @@ export class MapHelperService {
   }
 
   private addMarker(latlngs, FeatureGroup: L.FeatureGroup) {
+    
+    let featureCollection = FeatureGroup.toGeoJSON();
+    const layer = featureCollection.features[0];
     latlngs.forEach(latlng => {
       const marker = new L.Marker(latlng, { icon: this.divIcon, draggable: true });
 
@@ -371,10 +406,10 @@ export class MapHelperService {
       this.deletePolygon(this.getLatLngsFromJson(feature));
 
       unkink.forEach(polygon => {
-        this.addPolygon(polygon, true);
+        this.addPolygon(this.turfHelper.getTurfPolygon( polygon), true);
       });
     } else {
-      this.deletePolygon(this.getLatLngsFromJson(feature));
+      // this.deletePolygon(this.getLatLngsFromJson(feature));
       this.kinks = false;
       this.addPolygon(feature, false);
     }
@@ -386,8 +421,10 @@ export class MapHelperService {
     console.log("getLatLngsFromJson: ",feature);
     let coord
     if(feature){
-    if(feature.geometry.coordinates[0].length>1){
+    if(feature.geometry.coordinates[0].length>1 && feature.geometry.type ==="MultiPolygon"){
      coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);}
+    else if(feature.geometry.coordinates[0].length>1 && feature.geometry.type ==="Polygon"){
+      coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0]);}
     else {
      coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
     }}
@@ -557,7 +594,7 @@ export class MapHelperService {
           L.DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
           this.events(true);
           this.tracer.setStyle({
-            color: "#9534f"
+            color:  "#D9460F"
           });
           this.setLeafletMapEvents(false, false, false);
           break;
@@ -583,6 +620,14 @@ export class MapHelperService {
     //console.log("freedrawMenuClick");
 
     this.setDrawMode(DrawMode.AddPolygon);
+    this.polygonInformation.saveCurrentState();
+  }
+
+  
+  subtractClick(): void {
+    //console.log("freedrawMenuClick");
+
+    this.setDrawMode(DrawMode.SubtractPolygon);
     this.polygonInformation.saveCurrentState();
   }
 

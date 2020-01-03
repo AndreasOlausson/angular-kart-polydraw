@@ -102,6 +102,9 @@ export class AppComponent  {
 onFreedrawMenuClick(): void { 
      this.mapHelperService.freedrawMenuClick();             
 }
+onSubtractClick(): void { 
+  this.mapHelperService.subtractClick();             
+}
 
 add0254(){
   this.mapHelperService.addAutoPolygon(this.pn0254)
