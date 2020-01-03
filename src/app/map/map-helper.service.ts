@@ -48,12 +48,14 @@ export class MapHelperService {
       this.arrayOfFeatureGroups.forEach(featureGroup => {
         let layer = featureGroup.getLayers()[0];
         let latlngs = layer._latlngs[0];
-        console.log("Equals: ", latlngs[0].length);
-        if (latlngs[0] !== latlngs[latlngs.length - 1] && latlngs[0].length == null) {
-          latlngs.push(latlngs[0]);
+        console.log("Equals: ", latlngs[0][0] === latlngs[0][latlngs[0].length - 1]);
+        console.log("Equals: ", latlngs[0][latlngs[0].length - 1]);
+        if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
+          latlngs[0].push(latlngs[0][0]);
         }
+        console.log("Equals: ", latlngs[0]);
 
-        const equals = this.polygonArrayEquals(latlngs, polygon);
+        const equals = this.polygonArrayEquals(latlngs[0], polygon);
 
         if (equals) {
           console.log("Remove from map:", featureGroup, latlngs);
@@ -102,7 +104,7 @@ export class MapHelperService {
   }
 
 
-  convertToCoords(latlngs: ILatLng[][]){
+  private convertToCoords(latlngs: ILatLng[][]){
     let coords = []
     console.log(latlngs.length);
     if(latlngs.length > 1 && latlngs.length < 3){
@@ -304,7 +306,8 @@ export class MapHelperService {
       poly.geometry.coordinates[0][0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
       console.log("before delete orig, new length: ", imutableClone, poly);
       this.deletePolygon(this.getLatLngsFromJson(imutableClone));
-
+      
+      this.addPolygonLayer(poly, false)
     }
     console.log("TODO:");
     console.log("Delete existing polygon");
@@ -530,7 +533,7 @@ export class MapHelperService {
   }
 
   private polygonArrayEquals(poly1: any[], poly2: any[]) {
-    //console.log("polygonArrayEquals", poly1, poly2);
+    console.log("polygonArrayEquals", poly1, poly2);
 
     if (poly1.length !== poly2.length) return false;
     if (!poly1[0].equals(poly2[0])) return false;
