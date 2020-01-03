@@ -272,7 +272,8 @@ export class MapHelperService {
   }
 
   private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
-    const originalPolygonFeature = Object.assign(poly);
+    const imutableClone = (JSON.parse(JSON.stringify(poly)));
+
     //this.getLatLngsFromJson(feature)
     const newPoint = e.latlng;
     let idx = -1;
@@ -294,8 +295,8 @@ export class MapHelperService {
       const injectIdx = idx < idx2 ? idx : idx2;
 
       poly.geometry.coordinates[0][0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
-
-      this.deletePolygon(this.getLatLngsFromJson(originalPolygonFeature));
+      console.log("before delete orig, new length: ", imutableClone, poly);
+      this.deletePolygon(this.getLatLngsFromJson(imutableClone));
 
     }
     console.log("TODO:");
