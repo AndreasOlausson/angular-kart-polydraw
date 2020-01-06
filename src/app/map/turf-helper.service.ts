@@ -118,49 +118,58 @@ export class TurfHelperService {
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
 
+  //TODO -cleanup
   injectPointToPolygon(polygon, point) {
     let coords = turf.getCoords(polygon)
     let newPolygon
     console.log("polygon: ", polygon);
     if(coords.length < 2){
-    const polygonPoints = turf.explode(polygon);
-    console.log(polygonPoints);
-    let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
-    let last = polygonPoints.features.pop(); 
-    // const l = this.getDistance(turf.point(point), polygonPoints.features[index-1]);
-    // const r = this.getDistance(turf.point(point), polygonPoints.features[index+1]);
-    polygonPoints.features.splice((index), 0, turf.point(point));
-    polygonPoints.features.push(last)
-    const coordinates = polygonPoints.features.map(f => f.geometry.coordinates);
-     newPolygon = turf.multiPolygon([[coordinates]])
-  }
-  else {
-    let pos = []
-    let coordinates = []
-    coords.forEach((element) => {
-      let polygon = turf.polygon(element)
-      // turf.booleanPointInPolygon(point, polygon)
-      console.log(turf.booleanPointInPolygon(point, polygon));
-      if(turf.booleanPointInPolygon(point, polygon)){
-        const polygonPoints = turf.explode(polygon);
-    console.log(polygonPoints);
-    let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
-    let last = polygonPoints.features.pop(); 
-    // const l = this.getDistance(turf.point(point), polygonPoints.features[index-1]);
-    // const r = this.getDistance(turf.point(point), polygonPoints.features[index+1]);
-    polygonPoints.features.splice((index), 0, turf.point(point));
-    polygonPoints.features.push(last)
-    coordinates = polygonPoints.features.map(f => f.geometry.coordinates);
-     
-      }
-      else {
-        pos.push(element)
-      }
-    });
-    pos.push([coordinates])
-    newPolygon = turf.multiPolygon(pos)
-  }
-  console.log("new: ", newPolygon);
+      const polygonPoints = turf.explode(polygon);
+      console.log(turf.nearestPoint(point, polygonPoints));
+      let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex      
+      const test = turf.coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
+        if(index === i){
+          return [
+            ...accumulator, 
+            oldPoint, 
+            point
+          ]
+        }
+        return [...accumulator, oldPoint]
+      }, [])
+      console.log("test", test);
+      newPolygon = turf.multiPolygon([[test]])
+    }
+    else {
+      let pos = []
+      let coordinates = []
+      coords.forEach((element) => {
+        let polygon = turf.polygon(element)
+        // turf.booleanPointInPolygon(point, polygon)
+        if(turf.booleanPointInPolygon(point, polygon)){
+          const polygonPoints = turf.explode(polygon);
+          let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
+          coordinates = turf.coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
+            if(index === i){
+              return [
+                ...accumulator, 
+                oldPoint, 
+                point
+              ]
+            }
+            return [...accumulator, oldPoint]
+          }, [])
+          console.log("coordinates", coordinates);
+          
+      
+        }
+        else {
+          pos.push(element)
+        }
+      });
+      pos.push([coordinates])
+      newPolygon = turf.multiPolygon(pos)
+    }
     return newPolygon
   }
 
