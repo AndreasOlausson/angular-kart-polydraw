@@ -118,6 +118,20 @@ export class TurfHelperService {
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
 
+  injectPointToPolygon(polygon, point) {
+    const polygonPoints = turf.explode(polygon);
+    
+    let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
+    let last = polygonPoints.features.pop(); 
+    // const l = this.getDistance(turf.point(point), polygonPoints.features[index-1]);
+    // const r = this.getDistance(turf.point(point), polygonPoints.features[index+1]);
+    polygonPoints.features.splice((index), 0, turf.point(point));
+    polygonPoints.features.push(last)
+    const coordinates = polygonPoints.features.map(f => f.geometry.coordinates);
+    const newPolygon = turf.multiPolygon([[coordinates]])
+    return newPolygon
+  }
+
   polygonDifference(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
     let diff = turf.difference(polygon1, polygon2);
     console.log(diff);

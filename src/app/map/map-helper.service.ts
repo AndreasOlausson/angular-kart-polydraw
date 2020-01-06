@@ -292,7 +292,8 @@ export class MapHelperService {
     let idx2 = -1;
     let tmpDistance = Number.MAX_SAFE_INTEGER;
     if (poly.geometry.type === "MultiPolygon") {
-      poly.geometry.coordinates[0][0].forEach((v, i) => {
+     let newPolygon=  this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat])
+  /*     poly.geometry.coordinates[0][0].forEach((v, i) => {
         const distance = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], v);
         if (tmpDistance >= distance) {
           idx = i;
@@ -309,8 +310,9 @@ export class MapHelperService {
       poly.geometry.coordinates[0][0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
       console.log("before delete orig, new length: ", imutableClone, poly);
       this.deletePolygon(this.getLatLngsFromJson(imutableClone));
-      
-      this.addPolygonLayer(poly, false)
+       */
+      this.deletePolygon(this.getLatLngsFromJson(poly));
+      this.addPolygonLayer(newPolygon, false)
     }
     console.log("TODO:");
     console.log("Delete existing polygon");
