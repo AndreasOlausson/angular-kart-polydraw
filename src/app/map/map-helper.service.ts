@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core";
 import * as L from "leaflet";
 //import * as turf from "@turf/turf";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
-import { takeUntil, filter, debounceTime } from "rxjs/operators";
-import { Feature, Polygon, MultiPolygon, difference } from "@turf/turf";
+import { filter } from "rxjs/operators";
+import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
@@ -35,27 +35,34 @@ export class MapHelperService {
     });
   }
 
-
-
   closeAndReset(): void {
     //console.log("closeAndReset");
     this.setDrawMode(DrawMode.Off);
     this.removeAllFeatureGroups();
   }
+
   deletePolygon(polygon) {
     console.log("deletePolygon: ", polygon);
     if (this.arrayOfFeatureGroups.length > 0) {
       this.arrayOfFeatureGroups.forEach(featureGroup => {
         let layer = featureGroup.getLayers()[0];
         let latlngs = layer._latlngs[0];
-        console.log("Equals: ", latlngs[0][0] === latlngs[0][latlngs[0].length - 1]);
-        console.log("Equals: ", latlngs[0][latlngs[0].length - 1]);
+        let polygon2; 
+        if(latlngs[0][0]){
         if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
           latlngs[0].push(latlngs[0][0]);
         }
-        console.log("Equals: ", latlngs[0]);
+        polygon2 = latlngs[0]
+      } else{
+        if (latlngs[0] !== latlngs[latlngs[0].length - 1]) {
+          latlngs.push(latlngs[0]);
+        }
+        polygon2 = latlngs
+      }
 
-        const equals = this.polygonArrayEquals(latlngs[0], polygon);
+        console.log(latlngs);
+
+        const equals = this.polygonArrayEquals(polygon2, polygon);
 
         if (equals) {
           console.log("Remove from map:", featureGroup, latlngs);
@@ -85,8 +92,6 @@ export class MapHelperService {
   }
 
   addAutoPolygon(geographicBorders: L.LatLng[][]): void {
-
-
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
     let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
@@ -95,12 +100,12 @@ export class MapHelperService {
 
     featureGroup.addLayer(polygon);
     let markerLatlngs = polygon.getLatLngs();
+    console.log("markers: ", markerLatlngs);
     markerLatlngs.forEach(polygon => {
       this.addMarker(polygon[0], featureGroup);
     });
 
     this.arrayOfFeatureGroups.push(featureGroup);
-
   }
 
 
@@ -127,7 +132,6 @@ export class MapHelperService {
       let coordinates = []
       for (let index = 1; index < latlngs.length - 1; index++) {
         let within = this.turfHelper.isWithin(L.GeoJSON.latLngsToCoords(latlngs[index]), L.GeoJSON.latLngsToCoords(latlngs[0]))
-        console.log("Within ", within);
         if (within) {
           latlngs.forEach(polygon => {
             coordinates.push(L.GeoJSON.latLngsToCoords(polygon))
@@ -138,7 +142,6 @@ export class MapHelperService {
             coords.push([L.GeoJSON.latLngsToCoords(polygon)])
           })
         }
-        console.log(coordinates);
       }
     }
     else {
@@ -275,9 +278,9 @@ export class MapHelperService {
     this.arrayOfFeatureGroups.push(featureGroup);
     this.setDrawMode(DrawMode.Off);
 
-    featureGroup.on('click', e => {
+ /*    featureGroup.on('click', e => {
       this.polygonClicked(e, latLngs);
-    });
+    }); */
   }
 
   private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
@@ -372,6 +375,7 @@ export class MapHelperService {
     latlngs.forEach(latlng => {
       const marker = new L.Marker(latlng, { icon: this.divIcon, draggable: true });
       FeatureGroup.addLayer(marker).addTo(this.map);
+      console.log(FeatureGroup.getLayers()[0]);
       marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
       });
@@ -381,14 +385,35 @@ export class MapHelperService {
     });
   }
 
+  //TODO: Cleanup
   private markerDrag(FeatureGroup:L.FeatureGroup) {
     const newPos = [];
+    let testarray = []
     const layerLength = FeatureGroup.getLayers();
-    
-    for (let index = 1; index < layerLength.length; index++) {
-      newPos.push(layerLength[index].getLatLng());
+    let posarrays = FeatureGroup.getLayers()[0].getLatLngs()
+    let length = 0;
+    for (let index = 0; index < posarrays.length; index++) {
+      
+      testarray = []
+      if(index === 0){
+        for (let j = 0; j < posarrays[index][0].length; j++) {
+          testarray.push(layerLength[j+1].getLatLng());        
+        }
+        newPos.push([testarray])
+      } else {
+        length += posarrays[index-1][0].length
+        console.log("Fra: ", posarrays[index-1][0].length);
+        console.log("Fra?: ", length);
+        console.log("Til: ", posarrays[index][0].length+posarrays[index-1][0].length);
+        for (let j = length; j < posarrays[index][0].length+length; j++) {
+          testarray.push(layerLength[j+1].getLatLng());        
+        }
+        newPos.push([testarray])
+      }
     }
+    console.log("Nye posisjoner i arrayet:",newPos);
     layerLength[0].setLatLngs(newPos);
+    console.log("Nye polygoner:",layerLength[0]);
   }
 
   private markerDragEnd(FeatureGroup:L.FeatureGroup) {
