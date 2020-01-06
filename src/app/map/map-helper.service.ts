@@ -212,7 +212,7 @@ export class MapHelperService {
     this.stopDraw();
     switch (this.getDrawMode()) {
       case DrawMode.AddPolygon:
-        this.addPolygon(geoPos, false, true);
+        this.addPolygon(geoPos, true, true);
         break;
         case DrawMode.SubtractPolygon:
           this.subtractPolygon(geoPos);
@@ -392,8 +392,8 @@ export class MapHelperService {
     const layerLength = FeatureGroup.getLayers();
     let posarrays = FeatureGroup.getLayers()[0].getLatLngs()
     let length = 0;
+    if(posarrays.length > 1){
     for (let index = 0; index < posarrays.length; index++) {
-      
       testarray = []
       if(index === 0){
         for (let j = 0; j < posarrays[index][0].length; j++) {
@@ -408,6 +408,12 @@ export class MapHelperService {
         newPos.push([testarray])
       }
     }
+  }
+  else {
+    for (let index = 1; index < layerLength.length; index++) {
+      newPos.push(layerLength[index].getLatLng());
+  }
+  }
     console.log("Nye posisjoner i arrayet:",newPos);
     layerLength[0].setLatLngs(newPos);
     console.log("Nye polygoner:",layerLength[0]);
@@ -423,7 +429,7 @@ export class MapHelperService {
       this.deletePolygon(this.getLatLngsFromJson(feature));
 
       unkink.forEach(polygon => {
-        this.addPolygon(this.turfHelper.getTurfPolygon( polygon), true);
+        this.addPolygon(this.turfHelper.getTurfPolygon( polygon), false);
       });
     } else {
       this.kinks = false;
