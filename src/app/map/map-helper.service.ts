@@ -278,9 +278,9 @@ export class MapHelperService {
     this.arrayOfFeatureGroups.push(featureGroup);
     this.setDrawMode(DrawMode.Off);
 
- /*    featureGroup.on('click', e => {
+    featureGroup.on('click', e => {
       this.polygonClicked(e, latLngs);
-    }); */
+    });
   }
 
   private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
@@ -402,9 +402,6 @@ export class MapHelperService {
         newPos.push([testarray])
       } else {
         length += posarrays[index-1][0].length
-        console.log("Fra: ", posarrays[index-1][0].length);
-        console.log("Fra?: ", length);
-        console.log("Til: ", posarrays[index][0].length+posarrays[index-1][0].length);
         for (let j = length; j < posarrays[index][0].length+length; j++) {
           testarray.push(layerLength[j+1].getLatLng());        
         }
