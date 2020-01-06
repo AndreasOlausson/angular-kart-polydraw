@@ -119,8 +119,12 @@ export class TurfHelperService {
   }
 
   injectPointToPolygon(polygon, point) {
+    let coords = turf.getCoords(polygon)
+    let newPolygon
+    console.log("polygon: ", polygon);
+    if(coords.length < 2){
     const polygonPoints = turf.explode(polygon);
-    
+    console.log(polygonPoints);
     let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
     let last = polygonPoints.features.pop(); 
     // const l = this.getDistance(turf.point(point), polygonPoints.features[index-1]);
@@ -128,7 +132,35 @@ export class TurfHelperService {
     polygonPoints.features.splice((index), 0, turf.point(point));
     polygonPoints.features.push(last)
     const coordinates = polygonPoints.features.map(f => f.geometry.coordinates);
-    const newPolygon = turf.multiPolygon([[coordinates]])
+     newPolygon = turf.multiPolygon([[coordinates]])
+  }
+  else {
+    let pos = []
+    let coordinates = []
+    coords.forEach((element) => {
+      let polygon = turf.polygon(element)
+      // turf.booleanPointInPolygon(point, polygon)
+      console.log(turf.booleanPointInPolygon(point, polygon));
+      if(turf.booleanPointInPolygon(point, polygon)){
+        const polygonPoints = turf.explode(polygon);
+    console.log(polygonPoints);
+    let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
+    let last = polygonPoints.features.pop(); 
+    // const l = this.getDistance(turf.point(point), polygonPoints.features[index-1]);
+    // const r = this.getDistance(turf.point(point), polygonPoints.features[index+1]);
+    polygonPoints.features.splice((index), 0, turf.point(point));
+    polygonPoints.features.push(last)
+    coordinates = polygonPoints.features.map(f => f.geometry.coordinates);
+     
+      }
+      else {
+        pos.push(element)
+      }
+    });
+    pos.push([coordinates])
+    newPolygon = turf.multiPolygon(pos)
+  }
+  console.log("new: ", newPolygon);
     return newPolygon
   }
 

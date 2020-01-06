@@ -395,27 +395,27 @@ export class MapHelperService {
     let posarrays = FeatureGroup.getLayers()[0].getLatLngs()
     let length = 0;
     if(posarrays.length > 1){
-    for (let index = 0; index < posarrays.length; index++) {
-      testarray = []
-      if(index === 0){
-        for (let j = 0; j < posarrays[index][0].length; j++) {
-          testarray.push(layerLength[j+1].getLatLng());        
+      for (let index = 0; index < posarrays.length; index++) {
+        testarray = []
+        if(index === 0){
+          for (let j = 0; j < posarrays[index][0].length; j++) {
+            testarray.push(layerLength[j+1].getLatLng());        
+          }
+          newPos.push([testarray])
+        } else {
+          length += posarrays[index-1][0].length
+          for (let j = length; j < posarrays[index][0].length+length; j++) {
+            testarray.push(layerLength[j+1].getLatLng());        
+          }
+          newPos.push([testarray])
         }
-        newPos.push([testarray])
-      } else {
-        length += posarrays[index-1][0].length
-        for (let j = length; j < posarrays[index][0].length+length; j++) {
-          testarray.push(layerLength[j+1].getLatLng());        
-        }
-        newPos.push([testarray])
       }
     }
-  }
-  else {
-    for (let index = 1; index < layerLength.length; index++) {
-      newPos.push(layerLength[index].getLatLng());
-  }
-  }
+    else {
+      for (let index = 1; index < layerLength.length; index++) {
+        newPos.push(layerLength[index].getLatLng());
+      }
+    }
     console.log("Nye posisjoner i arrayet:",newPos);
     layerLength[0].setLatLngs(newPos);
     console.log("Nye polygoner:",layerLength[0]);
