@@ -13,6 +13,7 @@ import { ILatLng } from "./polygon-helpers";
 @Injectable({
   providedIn: "root"
 })
+//export class MapHelperService extends L.Layer
 export class MapHelperService {
   drawModeSubject: BehaviorSubject<DrawMode> = new BehaviorSubject<DrawMode>(DrawMode.Off);
   drawMode$: Observable<DrawMode> = this.drawModeSubject.asObservable();
@@ -28,13 +29,20 @@ export class MapHelperService {
   private readonly polygonDrawStates = null;
   private ngUnsubscribe = new Subject();
 
+  
+  // possible? constructor with optional config/options (opt = {...conf, ...defaultConf}
   constructor(private mapState: MapStateService, private turfHelper: TurfHelperService, private polygonInformation: PolygonInformationService) {
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
       this.initPolyDraw();
     });
   }
-
+  // if not possible with config in constuctor
+  // config(config):void {
+  // this.config = {...config, ...defaultConfig}
+  //}
+  
+  
   closeAndReset(): void {
     //console.log("closeAndReset");
     this.setDrawMode(DrawMode.Off);
@@ -321,7 +329,7 @@ export class MapHelperService {
     //this.deletePolygon(originalPolygon._latlngs);
 
   }
-
+  // ensure multiPolygon return
   private getPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
     console.log(latlngs);
     let polygon = L.GeoJSON.geometryToLayer(latlngs);
@@ -555,6 +563,7 @@ export class MapHelperService {
     enableScrollWheelZoom ? this.map.scrollWheelZoom.enable() : this.map.scrollWheelZoom.disable();
   }
 
+  //TODO Refactor to bit-modes so we can have combinations
   setDrawMode(mode: DrawMode) {
     console.log("setDrawMode", this.map);
 
@@ -596,18 +605,23 @@ export class MapHelperService {
     this.setDrawMode(DrawMode.AddPolygon);
     this.polygonInformation.saveCurrentState();
   }
-
+  //TODO remove, the above does the same thing, and we don't want to use the word freedraw
   freedrawMenuClick(): void {
     this.setDrawMode(DrawMode.AddPolygon);
     this.polygonInformation.saveCurrentState();
   }
-
-  
   subtractClick(): void {
     this.setDrawMode(DrawMode.SubtractPolygon);
     this.polygonInformation.saveCurrentState();
   }
-
+  // Combine the click to...
+  //modeChange(mode: DrawMode): void {
+  //  this.setDrawMode(mode);
+  //  this.polygonInformation.saveCurrentState();
+  //}
+  
+  
+  
   resetTracker() {
     this.tracer.setLatLngs([[0, 0]]);
   }
