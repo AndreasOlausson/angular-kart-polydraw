@@ -1,5 +1,16 @@
 {
   "touchSupport": true,
+  "mergePolygons": true,
+  "kinks": false,
+  "markers": {
+    "menu": true,
+    "markerIcon":{
+      "styleClasses": ["polygon-marker"]
+    },
+    "markerMenuIcon":{
+      "styleClasses": ["polygon-marker, menu"]
+    }
+  },
   "polyLineOptions": {
     "color": "#50622b",
     "opacity": 1,

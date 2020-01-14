@@ -21,13 +21,12 @@ export class MapHelperService {
 
 
   private map: L.Map;
+
+  private mergePolygons: boolean;
+  private kinks: boolean;
   //add to config
-  private mergePolygons: boolean = true;
-  private kinks: boolean = false;
   private arrayOfFeatureGroups: L.FeatureGroup<L.Layer>[] = [];
   private tracer: L.Polyline = {};
-  private divIcon = L.divIcon({ className: "polygon-marker" });
-  private menuDivIcon = L.divIcon({ className: "polygon-marker menu" });
   private readonly polygonDrawStates = null;
   //end add to config
 
@@ -52,7 +51,10 @@ export class MapHelperService {
   //new
   configurate(config: Object): void {
     //TODO if config is path...
-    this.config = { ...config, ...defaultConfig };
+    this.config = { ...defaultConfig, ...config };
+
+    this.mergePolygons = this.config.mergePolygons;
+    this.kinks = this.config.kinks;
   }
 
   //fine
@@ -174,7 +176,7 @@ export class MapHelperService {
     return coords
   }
 
-//fine
+  //fine
   private initPolyDraw() {
     //console.log("initPolyDraw", null);
 
@@ -203,7 +205,7 @@ export class MapHelperService {
     this.map.addLayer(this.tracer);
     this.setDrawMode(DrawMode.Off);
   }
-//Test L.MouseEvent
+  //Test L.MouseEvent
   private mouseDown(event) {
     console.log("mouseDown", event);
 
@@ -228,7 +230,7 @@ export class MapHelperService {
     }
   }
 
-//fine
+  //fine
   private mouseUpLeave() {
     //console.log("mouseUpLeave", null);
     this.polygonInformation.deletePolygonInformationStorage();
@@ -249,20 +251,20 @@ export class MapHelperService {
     // this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
     //console.log("------------------------------create trashcans", null);
   }
-//fine
+  //fine
   private startDraw() {
     //console.log("startDraw", null);
 
     this.drawStartedEvents(true);
   }
-//fine
+  //fine
   private stopDraw() {
     //console.log("stopDraw", null);
 
     this.resetTracker();
     this.drawStartedEvents(false);
   }
-//fine
+  //fine
   private drawStartedEvents(onoff: boolean) {
     //console.log("drawStartedEvents", onoff);
 
@@ -272,11 +274,11 @@ export class MapHelperService {
     this.map[onoroff]("mouseup", this.mouseUpLeave, this);
 
   }
-//On hold
+  //On hold
   private subtractPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
     this.subtract(latlngs)
   }
-//fine
+  //fine
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
     console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
 
@@ -286,7 +288,7 @@ export class MapHelperService {
       this.addPolygonLayer(latlngs, simplify);
     }
   }
-//fine
+  //fine
   private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
 
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
@@ -307,7 +309,7 @@ export class MapHelperService {
       this.polygonClicked(e, latLngs);
     });
   }
-//clean up the mess
+  //clean up the mess
   private polygonClicked(e: L.MouseEvent, poly: Feature<Polygon | MultiPolygon>) {
     const imutableClone = (JSON.parse(JSON.stringify(poly)));
 
@@ -346,7 +348,7 @@ export class MapHelperService {
     //this.deletePolygon(originalPolygon._latlngs);
 
   }
-//fine
+  //fine
   private getPolygon(latlngs: Feature<Polygon | MultiPolygon>): L.Layer {
     console.log(latlngs);
     let polygon = L.GeoJSON.geometryToLayer(latlngs);
@@ -354,7 +356,7 @@ export class MapHelperService {
     polygon.setStyle(this.config.polygonOptions);
     return polygon;
   }
-//fine
+  //fine
   private merge(latlngs: Feature<Polygon | MultiPolygon>) {
     console.log("merge", latlngs);
     const newArray: L.FeatureGroup[] = [];
@@ -373,7 +375,7 @@ export class MapHelperService {
       this.unionPolygons(newArray, latlngs);
     }
   }
-//next
+  //next
   private subtract(latlngs: Feature<Polygon | MultiPolygon>) {
     let addHole = latlngs
     this.arrayOfFeatureGroups.forEach(featureGroup => {
@@ -394,15 +396,21 @@ export class MapHelperService {
     })
 
   }
-//fine
+  //fine
   private events(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
     this.map[onoroff]("mousedown", this.mouseDown, this);
   }
-//fine - get this.divIcon from config
+  //fine
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
     latlngs.forEach((latlng, i) => {
-      const marker = new L.Marker(latlng, { icon: i === 0 ? this.menuDivIcon: this.divIcon, draggable: true, title: i });
+
+      let iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+      if (i === 0 && this.config.markers.menu) {
+        iconClasses = this.config.markers.markerIcon.styleClasses;
+      }
+
+      const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i });
       FeatureGroup.addLayer(marker).addTo(this.map);
       console.log(FeatureGroup.getLayers()[0]);
       marker.on("drag", e => {
@@ -411,14 +419,18 @@ export class MapHelperService {
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
       });
-      if (i === 0) {
+      if (i === 0 && this.config.markers.menu) {
         marker.on("click", e => {
           this.toggleMarkerMenu();
         })
       }
     });
   }
-  
+  private createDivIcon(classNames: string[]): L.divIcon {
+    const classes = classNames.join(", ");
+    const icon = L.divIcon({ className: classes });
+    return icon;
+  }
   //TODO: Cleanup
   private markerDrag(FeatureGroup: L.FeatureGroup) {
     const newPos = [];
@@ -452,7 +464,7 @@ export class MapHelperService {
     layerLength[0].setLatLngs(newPos);
     console.log("Nye polygoner:", layerLength[0]);
   }
-// check this
+  // check this
   private markerDragEnd(FeatureGroup: L.FeatureGroup) {
     console.log("Markerdragend");
     let featureCollection = FeatureGroup.toGeoJSON();
@@ -471,7 +483,7 @@ export class MapHelperService {
     }
     // this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
-//fine, check the returned type
+  //fine, check the returned type
   private getLatLngsFromJson(feature: Feature<Polygon | MultiPolygon>): number[] {
     console.log("getLatLngsFromJson: ", feature);
     let coord
@@ -490,7 +502,7 @@ export class MapHelperService {
     return coord;
   }
 
-//fine
+  //fine
   private unionPolygons(layers, latlngs: Feature<Polygon | MultiPolygon>) {
     console.log("unionPolygons", layers, latlngs);
 
@@ -502,7 +514,7 @@ export class MapHelperService {
       let poly = this.getLatLngsFromJson(layer);
       const union = this.turfHelper.union(addNew, geoLayer); //Check for multipolygons
       //Needs a cleanup for the new version
-      this.deletePolygonOnMerge(poly); 
+      this.deletePolygonOnMerge(poly);
       this.removeFeatureGroup(featureGroup)
 
       addNew = union;
@@ -511,7 +523,7 @@ export class MapHelperService {
     const newLatlngs: Feature<Polygon | MultiPolygon> = addNew; //Trenger kanskje this.turfHelper.getTurfPolygon( addNew);
     this.addPolygonLayer(newLatlngs, true);
   }
-//fine
+  //fine
   private removeFeatureGroup(featureGroup: L.FeatureGroup) {
     console.log("removeFeatureGroup", featureGroup);
 
@@ -520,7 +532,7 @@ export class MapHelperService {
     // this.updatePolygons();
     this.map.removeLayer(featureGroup);
   }
-//fine until refactoring
+  //fine until refactoring
   private removeFeatureGroupOnMerge(featureGroup: L.FeatureGroup) {
     console.log("removeFeatureGroupOnMerge", featureGroup);
 
@@ -544,7 +556,7 @@ export class MapHelperService {
     }
 
   }
-//fine until refactoring
+  //fine until refactoring
   private deletePolygonOnMerge(polygon) {
     console.log("deletePolygonOnMerge", polygon);
 
@@ -572,7 +584,7 @@ export class MapHelperService {
   private polygonArrayEqualsMerge(poly1: any[], poly2: any[]): boolean {
     return poly1.toString() === poly2.toString();
   }
-//TODO - legge et annet sted
+  //TODO - legge et annet sted
   private polygonArrayEquals(poly1: any[], poly2: any[]): boolean {
     // console.log("polygonArrayEquals", poly1, poly2);
 
@@ -582,7 +594,7 @@ export class MapHelperService {
       return true;
     }
   }
-//fine
+  //fine
   private setLeafletMapEvents(enableDragging: boolean, enableDoubleClickZoom: boolean, enableScrollWheelZoom: boolean) {
     //console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
 
@@ -590,7 +602,7 @@ export class MapHelperService {
     enableDoubleClickZoom ? this.map.doubleClickZoom.enable() : this.map.doubleClickZoom.disable();
     enableScrollWheelZoom ? this.map.scrollWheelZoom.enable() : this.map.scrollWheelZoom.disable();
   }
-//fine
+  //fine
   setDrawMode(mode: DrawMode) {
     console.log("setDrawMode", this.map);
 
@@ -628,7 +640,7 @@ export class MapHelperService {
     }
   }
 
-  modeChange(mode: DrawMode):void {
+  modeChange(mode: DrawMode): void {
     this.setDrawMode(mode);
     this.polygonInformation.saveCurrentState();
   }
@@ -637,25 +649,25 @@ export class MapHelperService {
     this.setDrawMode(DrawMode.AddPolygon);
     this.polygonInformation.saveCurrentState();
   }
-//remove, use modeChange
+  //remove, use modeChange
   freedrawMenuClick(): void {
     this.setDrawMode(DrawMode.AddPolygon);
     this.polygonInformation.saveCurrentState();
   }
 
-//remove, use modeChange
+  //remove, use modeChange
   subtractClick(): void {
     this.setDrawMode(DrawMode.SubtractPolygon);
     this.polygonInformation.saveCurrentState();
   }
-//fine
+  //fine
   private resetTracker() {
     this.tracer.setLatLngs([[0, 0]]);
   }
 
 
 
-  toggleMarkerMenu():void {
+  toggleMarkerMenu(): void {
     alert("open menu");
   }
 
