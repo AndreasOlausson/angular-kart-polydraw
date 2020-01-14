@@ -27,6 +27,7 @@ export class MapHelperService {
   private arrayOfFeatureGroups: L.FeatureGroup<L.Layer>[] = [];
   private tracer: L.Polyline = {};
   private divIcon = L.divIcon({ className: "polygon-marker" });
+  private menuDivIcon = L.divIcon({ className: "polygon-marker menu" });
   private readonly polygonDrawStates = null;
   //end add to config
 
@@ -400,8 +401,8 @@ export class MapHelperService {
   }
 //fine - get this.divIcon from config
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
-    latlngs.forEach(latlng => {
-      const marker = new L.Marker(latlng, { icon: this.divIcon, draggable: true });
+    latlngs.forEach((latlng, i) => {
+      const marker = new L.Marker(latlng, { icon: i === 0 ? this.menuDivIcon: this.divIcon, draggable: true, title: i });
       FeatureGroup.addLayer(marker).addTo(this.map);
       console.log(FeatureGroup.getLayers()[0]);
       marker.on("drag", e => {
@@ -410,9 +411,14 @@ export class MapHelperService {
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
       });
+      if (i === 0) {
+        marker.on("click", e => {
+          this.toggleMarkerMenu();
+        })
+      }
     });
   }
-
+  
   //TODO: Cleanup
   private markerDrag(FeatureGroup: L.FeatureGroup) {
     const newPos = [];
@@ -645,6 +651,12 @@ export class MapHelperService {
 //fine
   private resetTracker() {
     this.tracer.setLatLngs([[0, 0]]);
+  }
+
+
+
+  toggleMarkerMenu():void {
+    alert("open menu");
   }
 
 }

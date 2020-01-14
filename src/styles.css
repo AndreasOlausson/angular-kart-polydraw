@@ -20,13 +20,24 @@ html, body{
   cursor: move;
   outline: none;
   transition: background-color .25s;
-
+ 
   
 }
-
+.polygon-marker.menu{
+  background-color: red;
+  width: 24px!important;
+  height: 24px!important;
+  z-index: 10000;
+}
 .polygon-marker:hover {
   width: 18px !important;
   height: 18px !important;
   margin-left: -9px !important;
   margin-top: -9px !important;
+}
+.polygon-marker.menu:hover{
+  background-color: red;
+  width: 24px!important;
+  height: 24px!important;
+  z-index: 10000;
 }
