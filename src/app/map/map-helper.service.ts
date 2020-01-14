@@ -40,7 +40,9 @@ export class MapHelperService {
       this.map = map;
 
       this.config = defaultConfig;
+      console.log("this.config", this.config);
       this.configurate({});
+      console.log("after this.config", this.config);
       this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
 
       this.initPolyDraw();
