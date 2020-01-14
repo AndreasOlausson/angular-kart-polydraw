@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import * as turf from "@turf/turf";
 import * as concaveman from "concaveman";
 import {  Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
+import { MarkerPlacement } from "./enums";
+import { ICompass } from "./interface";
 
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
@@ -118,6 +120,15 @@ export class TurfHelperService {
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
 
+  convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
+    const bbox = turf.bbox(polygon);
+    const bboxPolygon = turf.bboxPolygon(bbox);
+    return bboxPolygon;
+  }
+  polygonToMultiPolygon(poly: Feature<Polygon>): Feature<MultiPolygon> {
+    const multi = turf.multiPolygon([poly.geometry.coordinates])
+    return multi;
+  }
   //TODO -cleanup
   injectPointToPolygon(polygon, point) {
     let coords = turf.getCoords(polygon)
@@ -178,9 +189,11 @@ export class TurfHelperService {
     console.log(diff);
     return this.getTurfPolygon(diff);
   }
-  getBoundingBoxCompassPosition(polygon, markerplacement, useOffset, offsetDirection) {
+  getBoundingBoxCompassPosition(polygon, markerplacement: ICompass, useOffset, offsetDirection) {
     const p = this.getMultiPolygon(polygon);
     const compass = this.getBoundingBoxCompass(polygon);
+    const polygonPoints = turf.explode(polygon);
+    const nearestPoint = turf.nearestPoint(compass.C, polygonPoints)
 
     return null;
   }
@@ -208,6 +221,9 @@ export class TurfHelperService {
   }
 }
 export class Compass {
+
+  s: ICompass;
+
   N: [number, number];
   NE: [number, number];
   E: [number, number];
@@ -219,6 +235,7 @@ export class Compass {
   C: [number, number];
 
   constructor() {
+
     this.N = [0, 0];
     this.NE = [0, 0];
     this.E = [0, 0];

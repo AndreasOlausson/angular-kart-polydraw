@@ -1,4 +1,5 @@
 {
+  "touchSupport": true,
   "polyLineOptions": {
     "color": "#50622b",
     "opacity": 1,
