@@ -422,9 +422,10 @@ export class MapHelperService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === 0 && this.config.markers.menu) {
-        marker.on("click", e => {
-          this.toggleMarkerMenu();
-        })
+        marker.bindPopup('<p>Configure polygon!<br />Simplify | BoundingBox |</p>');
+        // marker.on("click", e => {
+        //   this.toggleMarkerMenu();
+        // })
       }
     });
   }
