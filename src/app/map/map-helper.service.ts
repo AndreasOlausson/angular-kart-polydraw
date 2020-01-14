@@ -38,7 +38,7 @@ export class MapHelperService {
     private polygonInformation: PolygonInformationService) {
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
-
+      console.log("pre this.config", this.config);
       this.config = defaultConfig;
       console.log("this.config", this.config);
       this.configurate({});
@@ -282,7 +282,7 @@ export class MapHelperService {
   }
   //fine
   private addPolygon(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, noMerge: boolean = false) {
-    console.log("addPolygon", latlngs, simplify, noMerge, this.kinks);
+    console.log("addPolygon", latlngs, simplify, noMerge, this.kinks, this.config);
 
     if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
       this.merge(latlngs);
@@ -407,9 +407,9 @@ export class MapHelperService {
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
     latlngs.forEach((latlng, i) => {
 
-      let iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+      let iconClasses = this.config.markers.markerIcon.styleClasses;
       if (i === 0 && this.config.markers.menu) {
-        iconClasses = this.config.markers.markerIcon.styleClasses;
+        iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
 
       const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i });
@@ -429,7 +429,7 @@ export class MapHelperService {
     });
   }
   private createDivIcon(classNames: string[]): L.divIcon {
-    const classes = classNames.join(", ");
+    const classes = classNames.join(" ");
     const icon = L.divIcon({ className: classes });
     return icon;
   }
@@ -607,7 +607,6 @@ export class MapHelperService {
   //fine
   setDrawMode(mode: DrawMode) {
     console.log("setDrawMode", this.map);
-
     this.drawModeSubject.next(mode);
     if (!!this.map) {
       let isActiveDrawMode = true;
