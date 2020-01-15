@@ -422,7 +422,7 @@ export class MapHelperService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === 0 && this.config.markers.menu) {
-        marker.bindPopup('<p>Configure polygon!<br />Simplify | BoundingBox |</p>');
+        marker.bindPopup(this.getHtmlContent());
         // marker.on("click", e => {
         //   this.toggleMarkerMenu();
         // })
@@ -671,6 +671,36 @@ export class MapHelperService {
 
   toggleMarkerMenu(): void {
     alert("open menu");
+  }
+  private getHtmlContent():HTMLElement {
+
+    const wrapper: HTMLDivElement = document.createElement("div");
+    const header: HTMLDivElement = document.createElement("div");
+    const content: HTMLDivElement = document.createElement("div");
+    const simplify: HTMLDivElement = document.createElement("div");
+    const bbox: HTMLDivElement = document.createElement("div");
+    const buttonSeparator: HTMLDivElement = document.createElement("div");
+
+    wrapper.classList.add("marker-menu-inner-wrapper");
+    header.classList.add("marker-menu-header");
+    content.classList.add("marker-menu-content");
+    simplify.classList.add("marker-menu-button");
+    simplify.classList.add("simplyfy");
+    bbox.classList.add("marker-menu-button");
+    bbox.classList.add("bbox");
+    buttonSeparator.classList.add("marker-menu-separator");
+    header.innerText = "Alter polygon";
+    simplify.innerHTML = "Simplify";
+    bbox.innerHTML = "bbox";
+
+    wrapper.appendChild(header);
+    wrapper.appendChild(content);
+    content.appendChild(simplify);
+    content.appendChild(buttonSeparator);
+    content.appendChild(bbox);
+
+    return wrapper;
+
   }
 
 }

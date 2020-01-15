@@ -41,3 +41,22 @@ html, body{
   height: 24px!important;
   z-index: 10000;
 }
+
+.marker-menu-inner-wrapper{
+  display: flex;
+  flex-direction: column;
+}
+.marker-menu-header {
+  font-weight: 600;
+}
+.marker-menu-content {
+  display: flex;
+  justify-content: space-between;
+}
+.marker-menu-button {
+  padding: 4px;;
+  border: 1px solid #aaaaaa;
+}
+.marker-menu-separator {
+  padding: 4px;;
+}
