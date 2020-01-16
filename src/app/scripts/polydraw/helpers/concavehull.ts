@@ -1,4 +1,4 @@
-import * as L from 'leaflet';
+/* import * as L from 'leaflet';
 
 export class ConcaveHull {
 
@@ -66,10 +66,6 @@ export class ConcaveHull {
 
         var next, count = 0;
 
-        /**
-         * @method sortPoints
-         * @type {Function}
-         */
         let sortPoints = function(a: L.Point, b: L.Point) {
             return this.getAngle(current, previous, b) - this.getAngle(current, previous, a);
         }.bind(this);
@@ -220,4 +216,4 @@ export class ConcaveHull {
         return 180.0 - angle;
 
     }
-}
+} */

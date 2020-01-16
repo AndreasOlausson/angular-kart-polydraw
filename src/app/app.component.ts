@@ -135,11 +135,11 @@ onSubtractClick(): void {
 }
 
 add0254(){
-  this.mapHelperService.addAutoPolygon(this.pn0252)
+  this.mapHelperService.addAutoPolygon(this.pn0252 as any)
 }
 
 add0253(){
-  this.mapHelperService.addAutoPolygon(this.pn0253)
+  this.mapHelperService.addAutoPolygon(this.pn0253 as any)
 }
 
 }
