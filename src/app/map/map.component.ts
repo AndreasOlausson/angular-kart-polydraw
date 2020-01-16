@@ -34,7 +34,7 @@ export class MapComponent {
 
   initMap(){
     this.map = new L.Map("map");
-    this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
+    this.map.setView(new L.LatLng(59.913491, 10.723933), 16);
  /*    L.tileLayer(`http://{s}.basemaps.cartocdn.com/hot/{z}/{x}/{y}.png`, {
             maxZoom: 20,
            //  minZoom: 3,
