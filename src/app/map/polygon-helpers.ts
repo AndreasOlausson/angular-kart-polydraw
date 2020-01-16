@@ -1,18 +1,22 @@
 import { PolygonUtil } from "./polygon.util";
 
 export class PolygonInfo {
-    polygon: ILatLng[];
-    trashcanPoint: ILatLng;
-    sqmArea: number;
-    perimeter: number;
-    constructor(polygon: ILatLng[]) {
-        this.polygon = polygon;
-        this.trashcanPoint = this.getTrashcanPoint(polygon);
-        this.sqmArea = this.calculatePolygonArea(polygon);
-        this.perimeter = this.calculatePolygonPerimeter(polygon);
+    polygon: ILatLng[][][] = [];
+    trashcanPoint: ILatLng[] = [];
+    sqmArea: number[] = [];
+    perimeter: number[] = [];
+    constructor(polygon) {
+        console.log("PolygonInfo: ", polygon);
+        polygon.forEach((polygons, i) => { this.trashcanPoint[i] = this.getTrashcanPoint(polygons[0]);
+            this.sqmArea[i] = this.calculatePolygonArea(polygons[0]);
+            this.perimeter[i] = this.calculatePolygonPerimeter(polygons[0]);
+            console.log(polygons[0]);
+            this.polygon[i] = polygons
+        })
+        
     }
     setSqmArea(area: number): void {
-        this.sqmArea = area;
+        this.sqmArea[0] = area;
     }
     private getTrashcanPoint(polygon: ILatLng[]): ILatLng {
 

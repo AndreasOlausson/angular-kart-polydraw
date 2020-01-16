@@ -1,7 +1,6 @@
 import { Component, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 
 import * as L from "leaflet"
-import { BehaviorSubject, Observable } from 'rxjs';
 import { MapStateService } from './map-state.service';
 
 @Component({
@@ -54,7 +53,7 @@ export class MapComponent {
               ],
               noWrap: true,
             attribution: 'HOT'
-         }).addTo(this.map);
+         } as any).addTo(this.map);
     this.mapState.updateMapState(this.map)
   }
   

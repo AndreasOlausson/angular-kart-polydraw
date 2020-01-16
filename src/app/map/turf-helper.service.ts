@@ -37,7 +37,7 @@ export class TurfHelperService {
   getTurfPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
     let turfPolygon;
     console.log("Get TurfPolygon:", polygon);
-    if (polygon.geometry)
+    // if (polygon.geometry)
       if (polygon.geometry.type === "Polygon") {
         turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
       } else {
@@ -111,7 +111,7 @@ export class TurfHelperService {
   isWithin(polygon1: Position[], polygon2: Position[]): boolean {
     console.log(polygon1);
     console.log("Ytre: ", polygon2);
-    return turf.booleanWithin(turf.polygon([polygon1]), turf.polygon([polygon2]));
+    return turf.booleanWithin(turf.polygon([polygon2]), turf.polygon([polygon1]));
   }
 
   equalPolygons(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>) {

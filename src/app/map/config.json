@@ -4,11 +4,15 @@
   "kinks": false,
   "markers": {
     "menu": true,
+    "delete": true,
     "markerIcon":{
       "styleClasses": ["polygon-marker"]
     },
     "markerMenuIcon":{
       "styleClasses": ["polygon-marker", "menu"]
+    },
+    "markerDeleteIcon":{
+      "styleClasses": ["polygon-marker", "delete"]
     }
   },
   "polyLineOptions": {
