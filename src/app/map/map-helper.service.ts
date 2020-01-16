@@ -9,6 +9,7 @@ import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
 import defaultConfig from './config.json'
 import { ILatLng } from "./polygon-helpers";
+import { ComponentGeneraterService } from "./component-generater.service";
 
 @Injectable({
   providedIn: "root"
@@ -34,6 +35,7 @@ export class MapHelperService {
   private config: typeof defaultConfig = null;
 
   constructor(private mapState: MapStateService,
+    private popupGenerator: ComponentGeneraterService,
     private turfHelper: TurfHelperService,
     private polygonInformation: PolygonInformationService) {
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
@@ -674,37 +676,19 @@ export class MapHelperService {
   toggleMarkerMenu(): void {
     alert("open menu");
   }
-  private getHtmlContent(callBack:Function):HTMLElement {
+  private getHtmlContent(callBack: Function): HTMLElement {
+   
+    const comp = this.popupGenerator.generateAlterPopup();
+    comp.instance.bboxClicked.subscribe((e) => {
+      console.log("bbox clicked", e);
+      callBack(e);
+    });
+    comp.instance.simplyfiClicked.subscribe((e) => {
+      console.log("simplyfi clicked", e);
+      callBack(e);
+    });
+    return comp.location.nativeElement;
 
-    const wrapper: HTMLDivElement = document.createElement("div");
-    const header: HTMLDivElement = document.createElement("div");
-    const content: HTMLDivElement = document.createElement("div");
-    const simplify: HTMLDivElement = document.createElement("div");
-    const bbox: HTMLDivElement = document.createElement("div");
-    const buttonSeparator: HTMLDivElement = document.createElement("div");
-
-    wrapper.classList.add("marker-menu-inner-wrapper");
-    header.classList.add("marker-menu-header");
-    content.classList.add("marker-menu-content");
-    simplify.classList.add("marker-menu-button");
-    simplify.classList.add("simplyfy");
-    bbox.classList.add("marker-menu-button");
-    bbox.classList.add("bbox");
-    buttonSeparator.classList.add("marker-menu-separator");
-    header.innerText = "Alter polygon";
-    simplify.innerHTML = "Simplify";
-    bbox.innerHTML = "bbox";
-
-    wrapper.appendChild(header);
-    wrapper.appendChild(content);
-    content.appendChild(simplify);
-    content.appendChild(buttonSeparator);
-    content.appendChild(bbox);
-
-    bbox.onclick = (e) => callBack(e); 
-    simplify.onclick = (e) => callBack(e);
-
-    return wrapper;
 
   }
 
