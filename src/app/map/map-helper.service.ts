@@ -434,7 +434,9 @@ export class MapHelperService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === 0 && this.config.markers.menu) {
-        marker.bindPopup(this.getHtmlContent());
+        marker.bindPopup(this.getHtmlContent((e) => {
+          console.log("clicked on", e.target);
+        }));
         // marker.on("click", e => {
         //   this.toggleMarkerMenu();
         // })
@@ -692,7 +694,8 @@ export class MapHelperService {
   toggleMarkerMenu(): void {
     alert("open menu");
   }
-  private getHtmlContent(): HTMLElement {
+  private getHtmlContent(callBack:Function):HTMLElement {
+
     const wrapper: HTMLDivElement = document.createElement("div");
     const header: HTMLDivElement = document.createElement("div");
     const content: HTMLDivElement = document.createElement("div");
@@ -717,6 +720,9 @@ export class MapHelperService {
     content.appendChild(simplify);
     content.appendChild(buttonSeparator);
     content.appendChild(bbox);
+
+    bbox.onclick = (e) => callBack(e); 
+    simplify.onclick = (e) => callBack(e);
 
     return wrapper;
   }
