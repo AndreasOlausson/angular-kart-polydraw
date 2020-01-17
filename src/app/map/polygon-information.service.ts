@@ -22,7 +22,6 @@ export class PolygonInformationService {
       
       
       this.polygonInformationStorage.forEach(v => {
-        console.log(v.polygon);
         let test = []
         v.polygon.forEach((poly,i) => {
               
