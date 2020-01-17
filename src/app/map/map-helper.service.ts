@@ -395,20 +395,33 @@ export class MapHelperService {
   //fine
   private merge(latlngs: Feature<Polygon | MultiPolygon>) {
     console.log("merge", latlngs);
-    let polygonLength = [];
+    let polygonFeature = [];
     const newArray: L.FeatureGroup[] = [];
     let polyIntersection: boolean = false;
     this.arrayOfFeatureGroups.forEach(featureGroup => {
       let featureCollection = featureGroup.toGeoJSON() as any;
+      if(featureCollection.features[0].geometry.coordinates.length > 1){
+      featureCollection.features[0].geometry.coordinates.forEach(element => {
+        let feature = this.turfHelper.getMultiPolygon([element]);
+        polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
+      if (polyIntersection) {
+        newArray.push(featureGroup);
+        polygonFeature.push(feature)
+      }
+      })  
+    } else {
       let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
       polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
       if (polyIntersection) {
         newArray.push(featureGroup);
+        polygonFeature.push(feature)
       }
+    }
+      
     });
     console.log(newArray);
     if (newArray.length > 0) {
-      this.unionPolygons(newArray, latlngs);
+      this.unionPolygons(newArray, latlngs, polygonFeature);
     } else {
         this.addPolygonLayer(latlngs, true)
     }
@@ -479,6 +492,8 @@ export class MapHelperService {
      /*  if (i === 0 && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
+
+      //TODO- legg til fill icon
       if (i === latlngs.length - 1 && this.config.markers.delete) {
         iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
       } */
@@ -550,20 +565,45 @@ export class MapHelperService {
     
     // this.polygonInformation.deletePolygonInformationStorage();
     let featureCollection = FeatureGroup.toGeoJSON() as any;
-    let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
-    console.log("Markerdragend: ", feature);
-    if (this.turfHelper.hasKinks(feature)) {
-      this.kinks = true;
-      let unkink = this.turfHelper.getKinks(feature);
-      // this.deletePolygon(this.getLatLngsFromJson(feature));
-      this.removeFeatureGroup(FeatureGroup)
-      console.log("Unkink: ", unkink);
-      unkink.forEach(polygon => {
-        this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false,true);
+    console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
+    if(featureCollection.features[0].geometry.coordinates.length > 1){
+      featureCollection.features[0].geometry.coordinates.forEach(element => {
+        let feature = this.turfHelper.getMultiPolygon([element]);
+        console.log("Nytt polygon :", this.turfHelper.getMultiPolygon([element]));
+      
+      
+        console.log("Markerdragend: ", feature);
+        if (this.turfHelper.hasKinks(feature)) {
+          this.kinks = true;
+          let unkink = this.turfHelper.getKinks(feature);
+          // this.deletePolygon(this.getLatLngsFromJson(feature));
+          this.removeFeatureGroup(FeatureGroup)
+          console.log("Unkink: ", unkink);
+          unkink.forEach(polygon => {
+            this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false,true);
+          });
+        } else {
+          this.kinks = false;
+          this.addPolygon(feature, false);
+        }
       });
-    } else {
-      this.kinks = false;
-      this.addPolygon(feature, false);
+    }
+    else {
+      let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
+      console.log("Markerdragend: ", feature);
+      if (this.turfHelper.hasKinks(feature)) {
+        this.kinks = true;
+        let unkink = this.turfHelper.getKinks(feature);
+        // this.deletePolygon(this.getLatLngsFromJson(feature));
+        this.removeFeatureGroup(FeatureGroup)
+        console.log("Unkink: ", unkink);
+        unkink.forEach(polygon => {
+          this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false,true);
+        });
+      } else {
+        this.kinks = false;
+        this.addPolygon(feature, false);
+      }  
     }
     this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
@@ -585,16 +625,16 @@ export class MapHelperService {
   }
 
   //fine
-  private unionPolygons(layers, latlngs: Feature<Polygon | MultiPolygon>) {
-    console.log("unionPolygons", layers, latlngs);
+  private unionPolygons(layers, latlngs: Feature<Polygon | MultiPolygon>, polygonFeature) {
+    console.log("unionPolygons", layers, latlngs, polygonFeature);
 
     let addNew = latlngs;
-    layers.forEach(featureGroup => {
+    layers.forEach((featureGroup, i) => {
       let featureCollection = featureGroup.toGeoJSON();
       const layer = featureCollection.features[0];
       const geoLayer = featureCollection.features[0];
       let poly = this.getLatLngsFromJson(layer);
-      const union = this.turfHelper.union(addNew, geoLayer); //Check for multipolygons
+      const union = this.turfHelper.union(addNew, polygonFeature[i]); //Check for multipolygons
       //Needs a cleanup for the new version
       this.deletePolygonOnMerge(poly);
       this.removeFeatureGroup(featureGroup);
