@@ -9,7 +9,7 @@ import { Compass } from "./utils";
 
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
-  private simplifyTolerance = { tolerance: 0.000001, highQuality: false };
+  private simplifyTolerance = { tolerance: 0.0001, highQuality: false };
   constructor() { }
 
   union(poly1, poly2): Feature<Polygon | MultiPolygon> {

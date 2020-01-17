@@ -496,7 +496,7 @@ export class MapHelperService {
 
   private addHoleMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
     latlngs.forEach((latlng, i) => {
-      let iconClasses = this.config.markers.holeIcon.styleClasses;
+      let iconClasses = this.config.markers.markerIcon.styleClasses;
       /*  if (i === 0 && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
@@ -508,12 +508,12 @@ export class MapHelperService {
       const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
       FeatureGroup.addLayer(marker).addTo(this.map);
 
-      /* marker.on("drag", e => {
+      marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
       });
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
-      }); */
+      });
       /*   if (i === 0 && this.config.markers.menu) {
         marker.bindPopup(this.getHtmlContent((e) => {
           console.log("clicked on", e.target);
