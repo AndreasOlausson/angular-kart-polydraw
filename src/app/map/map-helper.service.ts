@@ -10,6 +10,8 @@ import { PolygonInformationService } from "./polygon-information.service";
 import defaultConfig from "./config.json";
 import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneraterService } from "./component-generater.service";
+import { Compass, PolyDrawUtil } from "./utils";
+import { MarkerPlacement } from "./enums";
 
 @Injectable({
   providedIn: "root"
@@ -453,9 +455,27 @@ export class MapHelperService {
   }
   //fine
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
+
+    console.log("addMarker", latlngs, FeatureGroup);
+
+    const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs);
+    console.log("bounds", bounds);
+    const compass = new Compass(bounds._southWest.lat, bounds._southWest.lng, bounds._northEast.lat, bounds._northEast.lng);
+    console.log("compass", compass);
+    const latLngPoint: ILatLng = {
+       lat: compass.direction.East[1],
+       lng: compass.direction.East[0]
+    }
+    const targetPoint = this.turfHelper.getCoord(latLngPoint);
+  const fc = this.turfHelper.getFeaturePointCollection(latlngs);
+
+    
+
+    const nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc as any) 
+
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-      if (i === 0 && this.config.markers.menu) {
+      if (i === nearestPointIdx && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
       if (i === latlngs.length - 1 && this.config.markers.delete) {

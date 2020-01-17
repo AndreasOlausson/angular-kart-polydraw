@@ -6,6 +6,7 @@ import { Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
 import { MarkerPlacement } from "./enums";
 import { ICompass } from "./interface";
 import { Compass } from "./utils";
+import { ILatLng } from "./polygon-helpers";
 
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
@@ -210,6 +211,29 @@ export class TurfHelperService {
     compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
 
     return compass;
+  }
+
+  getNearestPointIndex(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number {
+
+    let index = turf.nearestPoint(targetPoint, points).properties.featureIndex;
+    return index;
+
+  }
+  getCoord(point: ILatLng): turf.Coord {
+    const coord = turf.getCoord([point.lng, point.lat])
+    return coord;
+  }
+  getFeaturePointCollection(points: ILatLng[]): turf.FeatureCollection {
+
+    const pts = [];
+    points.forEach(v => {
+      const p = turf.point([v.lng, v.lat], {});
+      pts.push(p);
+    }); 
+
+    const fc = turf.featureCollection(pts);
+
+    return fc;
   }
 }
 

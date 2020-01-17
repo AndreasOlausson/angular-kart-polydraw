@@ -12,9 +12,11 @@
       "styleClasses": ["polygon-marker", "hole"]
     },
     "markerMenuIcon":{
+      "position": 2,
       "styleClasses": ["polygon-marker", "menu"]
     },
     "markerDeleteIcon":{
+      "position": 4,
       "styleClasses": ["polygon-marker", "delete"]
     }
   },
