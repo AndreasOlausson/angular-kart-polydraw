@@ -8,6 +8,9 @@
     "markerIcon":{
       "styleClasses": ["polygon-marker"]
     },
+    "holeIcon":{
+      "styleClasses": ["polygon-marker", "hole"]
+    },
     "markerMenuIcon":{
       "styleClasses": ["polygon-marker", "menu"]
     },

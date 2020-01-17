@@ -83,11 +83,19 @@ export class MapHelperService {
           let polygon3;
 
           console.log(latlng);
-
-          if (latlng[0] !== latlng[latlng.length - 1]) {
-            latlng.push(latlng[0]);
+          if(latlng.length > 1){
+            if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
+              latlng[0].push(latlng[0][0]);
+              }
+              polygon3 = [latlng[0]]
           }
-          polygon3 = latlng;
+          else{
+              if (latlng[0] !== latlng[latlng.length - 1]) {
+              latlng.push(latlng[0]);
+              }
+              polygon3 = latlng;
+          }
+          
 
           console.log("Test: ", polygon3);
 
@@ -128,6 +136,11 @@ export class MapHelperService {
     //console.log("getDrawMode", null);
     return this.drawModeSubject.value;
   }
+
+  addViken(polygon){
+    this.addPolygonLayer(polygon, true)
+  }
+
   //check this
   addAutoPolygon(geographicBorders: L.LatLng[][]): void {
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
@@ -140,7 +153,17 @@ export class MapHelperService {
     let markerLatlngs = polygon.getLatLngs();
     console.log("markers: ", markerLatlngs);
     markerLatlngs.forEach(polygon => {
-      this.addMarker(polygon[0], featureGroup);
+      polygon.forEach((polyElement,i) => {
+        if(i === 0){
+          this.addMarker(polyElement, featureGroup);  
+        }
+        else{
+          this.addHoleMarker(polyElement, featureGroup);  
+          console.log("Hull: ", polyElement);
+        }
+      });
+      // this.addMarker(polygon[0], featureGroup);
+      //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
     });
 
     this.arrayOfFeatureGroups.push(featureGroup);
@@ -426,7 +449,7 @@ export class MapHelperService {
       }
       const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
       FeatureGroup.addLayer(marker).addTo(this.map);
-
+      // console.log("FeatureGroup: ", FeatureGroup);
       marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
       });
@@ -446,6 +469,40 @@ export class MapHelperService {
           this.deletePolygon([latlngs]);
         });
       }
+    });
+  }
+
+  private addHoleMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
+    latlngs.forEach((latlng, i) => {
+      let iconClasses = this.config.markers.holeIcon.styleClasses;
+     /*  if (i === 0 && this.config.markers.menu) {
+        iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+      }
+      if (i === latlngs.length - 1 && this.config.markers.delete) {
+        iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+      } */
+      const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+      FeatureGroup.addLayer(marker).addTo(this.map);
+
+      /* marker.on("drag", e => {
+        this.markerDrag(FeatureGroup);
+      });
+      marker.on("dragend", e => {
+        this.markerDragEnd(FeatureGroup);
+      }); */
+    /*   if (i === 0 && this.config.markers.menu) {
+        marker.bindPopup(this.getHtmlContent((e) => {
+          console.log("clicked on", e.target);
+        }));
+        // marker.on("click", e => {
+        //   this.toggleMarkerMenu();
+        // })
+      }
+      if (i === latlngs.length - 1 && this.config.markers.delete) {
+        marker.on("click", e => {
+          this.deletePolygon([latlngs]);
+        });
+      } */
     });
   }
   private createDivIcon(classNames: string[]): L.DivIcon {

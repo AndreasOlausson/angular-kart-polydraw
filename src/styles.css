@@ -55,6 +55,19 @@ html, body{
   z-index: 10000;
 }
 
+.polygon-marker.hole{
+  background-color: rgb(118, 160, 216);
+  width: 12px!important;
+  height: 12px!important;
+  z-index: 10000;
+}
+.polygon-marker.hole:hover{
+  background-color: rgb(118, 160, 216);
+  width: 12px!important;
+  height: 12px!important;
+  z-index: 10000;
+}
+
 .marker-menu-inner-wrapper{
   display: flex;
   flex-direction: column;
