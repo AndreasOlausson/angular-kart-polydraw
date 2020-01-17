@@ -5,6 +5,7 @@ import * as concaveman from "concaveman";
 import { Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
 import { MarkerPlacement } from "./enums";
 import { ICompass } from "./interface";
+import { Compass } from "./utils";
 
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
@@ -206,26 +207,10 @@ export class TurfHelperService {
     const maxX = b[2];
     const maxY = b[3];
     const compass = new Compass(minX, minY, maxX, maxY);
-    compass.direction.Center = centerOfMass.geometry.coordinates[0][0];
+    compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
 
     return compass;
   }
 }
 
-export class Compass {
 
-  direction: ICompass;
-
-  constructor(minX: number = 0, minY: number = 0, maxX: number = 0, maxY: number = 0) {
-
-    this.direction.North = [(minX + maxX) / 2, maxY];
-    this.direction.NorthEast = [maxX, maxY];
-    this.direction.East = [maxX, (minY + maxY) / 2];
-    this.direction.SouthEast = [maxX, minY];
-    this.direction.South = [(minX + maxX) / 2, minY];
-    this.direction.SouthWest = [minX, minY];
-    this.direction.West = [minX, (minY + maxY) / 2];
-    this.direction.NorthWest = [minX, maxY];
-    this.direction.Center = [0, 0];
-  }
-}

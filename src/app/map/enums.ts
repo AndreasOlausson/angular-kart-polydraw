@@ -7,7 +7,7 @@ export enum DrawMode {
     LoadPredefined = 16
 }
 export enum MarkerPlacement {
-    Center = 0,
+    CenterOfMass = 0,
     North = 1,
     East = 2,
     South = 3,
@@ -15,7 +15,8 @@ export enum MarkerPlacement {
     NorthEast = 5,
     NorthWest = 6,
     SouthEast = 7,
-    SouthWest = 8
+    SouthWest = 8,
+    BoundingBoxCenter = 9
 }
 
 
