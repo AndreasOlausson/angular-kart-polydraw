@@ -1,5 +1,5 @@
 export interface ICompass {
-    Center: [number, number],
+    CenterOfMass: [number, number],
     North: [number, number],
     East: [number, number],
     South: [number, number],
@@ -7,5 +7,6 @@ export interface ICompass {
     NorthEast: [number, number],
     NorthWest: [number, number],
     SouthEast: [number, number],
-    SouthWest: [number, number]
+    SouthWest: [number, number],
+    BoundingBoxCenter: [number, number]
 }
