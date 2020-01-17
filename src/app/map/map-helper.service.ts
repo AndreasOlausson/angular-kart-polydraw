@@ -35,7 +35,8 @@ export class MapHelperService {
   private ngUnsubscribe = new Subject();
   private config: typeof defaultConfig = null;
 
-  constructor(private mapState: MapStateService,
+  constructor(
+    private mapState: MapStateService,
     private popupGenerator: ComponentGeneraterService,
     private turfHelper: TurfHelperService,
     private polygonInformation: PolygonInformationService
@@ -86,19 +87,17 @@ export class MapHelperService {
           let polygon3;
 
           console.log(latlng);
-          if(latlng.length > 1){
+          if (latlng.length > 1) {
             if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
               latlng[0].push(latlng[0][0]);
-              }
-              polygon3 = [latlng[0]]
-          }
-          else{
-              if (latlng[0] !== latlng[latlng.length - 1]) {
+            }
+            polygon3 = [latlng[0]];
+          } else {
+            if (latlng[0] !== latlng[latlng.length - 1]) {
               latlng.push(latlng[0]);
-              }
-              polygon3 = latlng;
+            }
+            polygon3 = latlng;
           }
-          
 
           console.log("Test: ", polygon3);
 
@@ -140,8 +139,8 @@ export class MapHelperService {
     return this.drawModeSubject.value;
   }
 
-  addViken(polygon){
-    this.addPolygonLayer(polygon, true)
+  addViken(polygon) {
+    this.addPolygonLayer(polygon, true);
   }
 
   //check this
@@ -156,12 +155,11 @@ export class MapHelperService {
     let markerLatlngs = polygon.getLatLngs();
     console.log("markers: ", markerLatlngs);
     markerLatlngs.forEach(polygon => {
-      polygon.forEach((polyElement,i) => {
-        if(i === 0){
-          this.addMarker(polyElement, featureGroup);  
-        }
-        else{
-          this.addHoleMarker(polyElement, featureGroup);  
+      polygon.forEach((polyElement, i) => {
+        if (i === 0) {
+          this.addMarker(polyElement, featureGroup);
+        } else {
+          this.addHoleMarker(polyElement, featureGroup);
           console.log("Hull: ", polyElement);
         }
       });
@@ -338,7 +336,16 @@ export class MapHelperService {
     console.log(polygon);
     let markerLatlngs = polygon.getLatLngs();
     markerLatlngs.forEach(polygon => {
-      this.addMarker(polygon[0], featureGroup);
+      polygon.forEach((polyElement, i) => {
+        if (i === 0) {
+          this.addMarker(polyElement, featureGroup);
+        } else {
+          this.addHoleMarker(polyElement, featureGroup);
+          console.log("Hull: ", polyElement);
+        }
+      });
+      // this.addMarker(polygon[0], featureGroup);
+      //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
     });
 
     this.arrayOfFeatureGroups.push(featureGroup);
@@ -388,7 +395,7 @@ export class MapHelperService {
   }
   //fine
   private getPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
-    console.log("getPolygons: ",latlngs);
+    console.log("getPolygons: ", latlngs);
     let polygon = L.GeoJSON.geometryToLayer(latlngs) as any;
 
     polygon.setStyle(this.config.polygonOptions);
@@ -402,30 +409,29 @@ export class MapHelperService {
     let polyIntersection: boolean = false;
     this.arrayOfFeatureGroups.forEach(featureGroup => {
       let featureCollection = featureGroup.toGeoJSON() as any;
-      if(featureCollection.features[0].geometry.coordinates.length > 1){
-      featureCollection.features[0].geometry.coordinates.forEach(element => {
-        let feature = this.turfHelper.getMultiPolygon([element]);
+      if (featureCollection.features[0].geometry.coordinates.length > 1) {
+        featureCollection.features[0].geometry.coordinates.forEach(element => {
+          let feature = this.turfHelper.getMultiPolygon([element]);
+          polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
+          if (polyIntersection) {
+            newArray.push(featureGroup);
+            polygonFeature.push(feature);
+          }
+        });
+      } else {
+        let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
         polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
-      if (polyIntersection) {
-        newArray.push(featureGroup);
-        polygonFeature.push(feature)
+        if (polyIntersection) {
+          newArray.push(featureGroup);
+          polygonFeature.push(feature);
+        }
       }
-      })  
-    } else {
-      let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
-      polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
-      if (polyIntersection) {
-        newArray.push(featureGroup);
-        polygonFeature.push(feature)
-      }
-    }
-      
     });
     console.log(newArray);
     if (newArray.length > 0) {
       this.unionPolygons(newArray, latlngs, polygonFeature);
     } else {
-        this.addPolygonLayer(latlngs, true)
+      this.addPolygonLayer(latlngs, true);
     }
   }
   //next
@@ -491,9 +497,11 @@ export class MapHelperService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === 0 && this.config.markers.menu) {
-        marker.bindPopup(this.getHtmlContent((e) => {
-          console.log("clicked on", e.target);
-        }));
+        marker.bindPopup(
+          this.getHtmlContent(e => {
+            console.log("clicked on", e.target);
+          })
+        );
         // marker.on("click", e => {
         //   this.toggleMarkerMenu();
         // })
@@ -508,8 +516,8 @@ export class MapHelperService {
 
   private addHoleMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
     latlngs.forEach((latlng, i) => {
-      let iconClasses = this.config.markers.holeIcon.styleClasses;
-     /*  if (i === 0 && this.config.markers.menu) {
+      let iconClasses = this.config.markers.markerIcon.styleClasses;
+      /*  if (i === 0 && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
 
@@ -520,13 +528,13 @@ export class MapHelperService {
       const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
       FeatureGroup.addLayer(marker).addTo(this.map);
 
-      /* marker.on("drag", e => {
+      marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
       });
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
-      }); */
-    /*   if (i === 0 && this.config.markers.menu) {
+      });
+      /*   if (i === 0 && this.config.markers.menu) {
         marker.bindPopup(this.getHtmlContent((e) => {
           console.log("clicked on", e.target);
         }));
@@ -550,80 +558,101 @@ export class MapHelperService {
   private markerDrag(FeatureGroup: L.FeatureGroup) {
     const newPos = [];
     let testarray = [];
+    let hole = [];
     const layerLength = FeatureGroup.getLayers() as any;
     let posarrays = layerLength[0].getLatLngs();
+    console.log(posarrays);
     let length = 0;
-    if(posarrays.length > 1){
+    if (posarrays.length > 1) {
       for (let index = 0; index < posarrays.length; index++) {
-        testarray = []
-        if(index === 0){
-          for (let j = 0; j < posarrays[index][0].length; j++) {
-            testarray.push(layerLength[j+1].getLatLng());        
+        testarray = [];
+        hole = [];
+        if (index === 0) {
+          for (let i = 0; index < posarrays[index].length; i++) {
+            for (let j = 0; j < posarrays[index][i].length; j++) {
+              testarray.push(layerLength[j + 1].getLatLng());
+            }
+            hole.push(testarray);
           }
-          newPos.push([testarray])
+          console.log("Hole: ", hole);
+          newPos.push(hole);
         } else {
-          length += posarrays[index-1][0].length
+          length += posarrays[index - 1][0].length;
           console.log("STart index: ", length);
-          for (let j = length; j < posarrays[index][0].length+length; j++) {
-            testarray.push((layerLength[j+1]as any).getLatLng());        
+          for (let j = length; j < posarrays[index][0].length + length; j++) {
+            testarray.push((layerLength[j + 1] as any).getLatLng());
           }
-          newPos.push([testarray])
+          newPos.push([testarray]);
         }
       }
-    }
-    else {
-      for (let index = 1; index < layerLength.length; index++) {
-        newPos.push(layerLength[index].getLatLng());
+    } else {
+      // testarray = []
+      hole = [];
+      let length2 = 0;
+      for (let index = 0; index < posarrays[0].length; index++) {
+        testarray = [];
+        console.log("Polygon drag: ", posarrays[0][index]);
+        if (index === 0) {
+          for (let j = 0; j < posarrays[0][index].length; j++) {
+            testarray.push(layerLength[j + 1].getLatLng());
+          }
+        } else {
+          length2 += posarrays[0][index - 1].length;
+          
+          for (let j = length2; j < posarrays[0][index].length+length2; j++) {
+            
+            testarray.push(layerLength[j + 1].getLatLng());
+          }
+        }
+        hole.push(testarray);
       }
+      newPos.push(hole);
+      console.log("Hole 2: ", hole);
     }
-    
+    console.log("Nye posisjoner: ", newPos);
     layerLength[0].setLatLngs(newPos);
-    
   }
   // check this
   private markerDragEnd(FeatureGroup: L.FeatureGroup) {
-    
     // this.polygonInformation.deletePolygonInformationStorage();
     let featureCollection = FeatureGroup.toGeoJSON() as any;
     console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
-    if(featureCollection.features[0].geometry.coordinates.length > 1){
+    if (featureCollection.features[0].geometry.coordinates.length > 1) {
       featureCollection.features[0].geometry.coordinates.forEach(element => {
         let feature = this.turfHelper.getMultiPolygon([element]);
         console.log("Nytt polygon :", this.turfHelper.getMultiPolygon([element]));
-      
-      
+
         console.log("Markerdragend: ", feature);
         if (this.turfHelper.hasKinks(feature)) {
           this.kinks = true;
           let unkink = this.turfHelper.getKinks(feature);
           // this.deletePolygon(this.getLatLngsFromJson(feature));
-          this.removeFeatureGroup(FeatureGroup)
+          this.removeFeatureGroup(FeatureGroup);
           console.log("Unkink: ", unkink);
           unkink.forEach(polygon => {
-            this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false,true);
+            this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
           });
         } else {
           this.kinks = false;
           this.addPolygon(feature, false);
         }
       });
-    }
-    else {
-      let feature = this.turfHelper.getTurfPolygon(featureCollection.features[0]);
+    } else {
+      let feature = this.turfHelper.getMultiPolygon(featureCollection.features[0].geometry.coordinates);
       console.log("Markerdragend: ", feature);
       if (this.turfHelper.hasKinks(feature)) {
         this.kinks = true;
         let unkink = this.turfHelper.getKinks(feature);
         // this.deletePolygon(this.getLatLngsFromJson(feature));
-        this.removeFeatureGroup(FeatureGroup)
+        this.removeFeatureGroup(FeatureGroup);
         console.log("Unkink: ", unkink);
         unkink.forEach(polygon => {
-          this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false,true);
+          this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
         });
       } else {
         this.kinks = false;
         this.addPolygon(feature, false);
-      }  
+      }
     }
     this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
@@ -813,19 +842,16 @@ export class MapHelperService {
     alert("open menu");
   }
   private getHtmlContent(callBack: Function): HTMLElement {
-   
     const comp = this.popupGenerator.generateAlterPopup();
-    comp.instance.bboxClicked.subscribe((e) => {
+    comp.instance.bboxClicked.subscribe(e => {
       console.log("bbox clicked", e);
       callBack(e);
     });
-    comp.instance.simplyfiClicked.subscribe((e) => {
+    comp.instance.simplyfiClicked.subscribe(e => {
       console.log("simplyfi clicked", e);
       callBack(e);
     });
     return comp.location.nativeElement;
-
-
   }
 }
 //flytt til enum.ts
