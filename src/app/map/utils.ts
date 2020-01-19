@@ -3,8 +3,9 @@ import * as L from "leaflet";
 import { ILatLng } from "./polygon-helpers";
 import { MarkerPlacement } from "./enums";
 import { TurfHelperService } from "./turf-helper.service"
+
 export class PolyDrawUtil {
-    static getBounds(polygon: ILatLng[]): L.LatLngBounds {
+    static getBounds(polygon: ILatLng[], padding: number = 0): L.LatLngBounds {
         const tmpLatLng: L.LatLng[] = [];
         polygon.forEach(ll => {
             if (isNaN(ll.lat) || isNaN(ll.lng)) {
@@ -13,35 +14,25 @@ export class PolyDrawUtil {
         });
         const polyLine: L.Polyline = new L.Polyline(tmpLatLng);
         const bounds = polyLine.getBounds();
+        if (padding !== 0){
+            return bounds.pad(padding);
+        }
         return bounds;
     }
 
 
 
     static getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
-
-
-        console.log("position", position);
-
-
         const turfService = new TurfHelperService();
-
-        const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs);
-        console.log("bounds", bounds);
+        const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
         const compass = new Compass(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
-        console.log("compass", compass);
         const compassDirection = compass.getDirection(position);
         const latLngPoint: ILatLng = {
             lat: compassDirection[1],
             lng: compassDirection[0]
         }
-        console.log("latLngPoints", latLngPoint);
         const targetPoint = turfService.getCoord(latLngPoint);
-
         const fc = turfService.getFeaturePointCollection(latlngs);
-
-
-
         const nearestPointIdx = turfService.getNearestPointIndex(targetPoint, fc as any)
 
         return nearestPointIdx;
@@ -49,7 +40,7 @@ export class PolyDrawUtil {
 
 
 }
-
+//TODO make compass ILatLng
 export class Compass {
 
     public direction: ICompass = {
@@ -66,8 +57,6 @@ export class Compass {
     };
 
     constructor(minLat: number = 0, minLng: number = 0, maxLat: number = 0, maxLng: number = 0) {
-
-
          this.direction.North = [(minLat + maxLat) / 2, maxLng];
          this.direction.NorthEast = [maxLat, maxLng];
          this.direction.East = [maxLat, (minLng + maxLng) / 2];
@@ -79,6 +68,7 @@ export class Compass {
          this.direction.CenterOfMass = [0, 0];
          this.direction.BoundingBoxCenter = [(minLat + maxLat) / 2, (minLng + maxLng) / 2];
     }
+    //TODO default return.
     getDirection(direction: MarkerPlacement) {
         switch (direction) {
             case MarkerPlacement.CenterOfMass:
@@ -101,10 +91,8 @@ export class Compass {
                 return this.direction.NorthWest;
             case MarkerPlacement.BoundingBoxCenter:
                 return this.direction.BoundingBoxCenter;
-
             default:
-                break;
+                return this.direction.North;
         }
     }
-
 }

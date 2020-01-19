@@ -459,17 +459,11 @@ export class MapHelperService {
     const onoroff = onoff ? "on" : "off";
     this.map[onoroff]("mousedown", this.mouseDown, this);
   }
-  //fine
+  //fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
-
-console.log("getIdx:")
 
     const menuMarkerIdx = PolyDrawUtil.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
     const deleteMarkerIdx = PolyDrawUtil.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
-
-    console.log("menu:", menuMarkerIdx);
-    console.log("delete:", deleteMarkerIdx);
-
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
