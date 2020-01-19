@@ -462,29 +462,21 @@ export class MapHelperService {
   //fine
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
 
-    console.log("addMarker", latlngs, FeatureGroup);
+console.log("getIdx:")
 
-    const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs);
-    console.log("bounds", bounds);
-    const compass = new Compass(bounds._southWest.lat, bounds._southWest.lng, bounds._northEast.lat, bounds._northEast.lng);
-    console.log("compass", compass);
-    const latLngPoint: ILatLng = {
-       lat: compass.direction.East[1],
-       lng: compass.direction.East[0]
-    }
-    const targetPoint = this.turfHelper.getCoord(latLngPoint);
-  const fc = this.turfHelper.getFeaturePointCollection(latlngs);
+    const menuMarkerIdx = PolyDrawUtil.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
+    const deleteMarkerIdx = PolyDrawUtil.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
 
-    
+    console.log("menu:", menuMarkerIdx);
+    console.log("delete:", deleteMarkerIdx);
 
-    const nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc as any) 
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-      if (i === nearestPointIdx && this.config.markers.menu) {
+      if (i === menuMarkerIdx && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
-      if (i === latlngs.length - 1 && this.config.markers.delete) {
+      if (i === deleteMarkerIdx && this.config.markers.delete) {
         iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
       }
       const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
@@ -496,7 +488,7 @@ export class MapHelperService {
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
       });
-      if (i === 0 && this.config.markers.menu) {
+      if (i === menuMarkerIdx && this.config.markers.menu) {
         marker.bindPopup(
           this.getHtmlContent(e => {
             console.log("clicked on", e.target);
@@ -506,7 +498,7 @@ export class MapHelperService {
         //   this.toggleMarkerMenu();
         // })
       }
-      if (i === latlngs.length - 1 && this.config.markers.delete) {
+      if (i === deleteMarkerIdx && this.config.markers.delete) {
         marker.on("click", e => {
           this.deletePolygon([latlngs]);
         });
