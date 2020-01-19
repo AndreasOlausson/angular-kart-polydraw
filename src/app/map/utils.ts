@@ -22,21 +22,7 @@ export class PolyDrawUtil {
 
 
 
-    static getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
-        const turfService = new TurfHelperService();
-        const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
-        const compass = new Compass(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
-        const compassDirection = compass.getDirection(position);
-        const latLngPoint: ILatLng = {
-            lat: compassDirection[1],
-            lng: compassDirection[0]
-        }
-        const targetPoint = turfService.getCoord(latLngPoint);
-        const fc = turfService.getFeaturePointCollection(latlngs);
-        const nearestPointIdx = turfService.getNearestPointIndex(targetPoint, fc as any)
 
-        return nearestPointIdx;
-    }
 
 
 }

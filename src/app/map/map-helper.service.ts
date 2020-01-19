@@ -462,8 +462,8 @@ export class MapHelperService {
   //fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
 
-    const menuMarkerIdx = PolyDrawUtil.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
-    const deleteMarkerIdx = PolyDrawUtil.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
+    const menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
+    const deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
@@ -839,6 +839,24 @@ export class MapHelperService {
     });
     return comp.location.nativeElement;
   }
+
+  private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
+    const turfService = new TurfHelperService();
+    const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
+    const compass = new Compass(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
+    const compassDirection = compass.getDirection(position);
+    const latLngPoint: ILatLng = {
+        lat: compassDirection[1],
+        lng: compassDirection[0]
+    }
+    const targetPoint = turfService.getCoord(latLngPoint);
+    const fc = turfService.getFeaturePointCollection(latlngs);
+    const nearestPointIdx = turfService.getNearestPointIndex(targetPoint, fc as any)
+
+    return nearestPointIdx;
+}
+
+
 }
 //flytt til enum.ts
 export enum DrawMode {
