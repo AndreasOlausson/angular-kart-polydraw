@@ -15,6 +15,7 @@ export {PolyDrawService} from "./map/polydraw.service"
   bootstrap:    [  ],
   entryComponents:[
     AlterPolygonComponent
-  ]
+  ], 
+  exports: [AlterPolygonComponent]
 })
 export class MainModule { }
