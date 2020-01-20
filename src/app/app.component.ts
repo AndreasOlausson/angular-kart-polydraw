@@ -660,6 +660,17 @@ export class AppComponent {
       
     
   };
+  
+  debug: ILatLng[][] = [
+    [
+      { lat: 59.80, lng: 10.70 },
+      { lat: 59.90, lng: 10.70 },
+      { lat: 59.90, lng: 10.60 },
+      { lat: 59.80, lng: 10.60 },
+      { lat: 59.80, lng: 10.70 }
+    ]
+  ];
+ 
 
   constructor(private readonly mapHelperService: MapHelperService) {}
 
@@ -695,4 +706,8 @@ export class AppComponent {
   addViken(){
     this.mapHelperService.addViken(this.viken);
   }
+  addDebug(){
+    this.mapHelperService.addViken(this.debug);
+  }
+  
 }
