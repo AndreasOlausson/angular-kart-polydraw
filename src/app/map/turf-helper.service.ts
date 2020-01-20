@@ -8,7 +8,7 @@ import { ICompass } from "./interface";
 import { Compass } from "./utils";
 import { ILatLng } from "./polygon-helpers";
 
-@Injectable({ providedIn: "root" })
+// @Injectable({ providedIn: "root" })
 export class TurfHelperService {
   private simplifyTolerance = { tolerance: 0.0001, highQuality: false };
   constructor() {}
