@@ -195,7 +195,8 @@ export class TurfHelperService {
     const p = this.getMultiPolygon(polygon);
     const compass = this.getBoundingBoxCompass(polygon);
     const polygonPoints = turf.explode(polygon);
-    const nearestPoint = turf.nearestPoint(compass.direction.North, polygonPoints)
+    const coord = this.getCoord(compass.direction.North);
+    const nearestPoint = turf.nearestPoint(coord, polygonPoints);
 
     return null;
   }

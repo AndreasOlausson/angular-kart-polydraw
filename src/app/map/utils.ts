@@ -14,7 +14,7 @@ export class PolyDrawUtil {
         });
         const polyLine: L.Polyline = new L.Polyline(tmpLatLng);
         const bounds = polyLine.getBounds();
-        if (padding !== 0){
+        if (padding !== 0) {
             return bounds.pad(padding);
         }
         return bounds;
@@ -24,29 +24,30 @@ export class PolyDrawUtil {
 export class Compass {
 
     public direction: ICompass = {
-        BoundingBoxCenter: [0, 0],
-        CenterOfMass: [0, 0],
-        East: [0, 0],
-        North: [0, 0],
-        NorthEast: [0, 0],
-        NorthWest: [0, 0],
-        South: [0, 0],
-        SouthEast: [0, 0],
-        SouthWest: [0, 0],
-        West: [0, 0]
+        BoundingBoxCenter: { lat: 0, lng: 0 },
+        CenterOfMass: { lat: 0, lng: 0 },
+        East: { lat: 0, lng: 0 },
+        North: { lat: 0, lng: 0 },
+        NorthEast: { lat: 0, lng: 0 },
+        NorthWest: { lat: 0, lng: 0 },
+        South: { lat: 0, lng: 0 },
+        SouthEast: { lat: 0, lng: 0 },
+        SouthWest: { lat: 0, lng: 0 },
+        West: { lat: 0, lng: 0 }
     };
 
     constructor(minLat: number = 0, minLng: number = 0, maxLat: number = 0, maxLng: number = 0) {
-         this.direction.North = [(minLat + maxLat) / 2, maxLng];
-         this.direction.NorthEast = [maxLat, maxLng];
-         this.direction.East = [maxLat, (minLng + maxLng) / 2];
-         this.direction.SouthEast = [maxLat, minLng];
-         this.direction.South = [(minLat + maxLat) / 2, minLng];
-         this.direction.SouthWest = [minLat, minLng];
-         this.direction.West = [minLat, (minLng + maxLng) / 2];
-         this.direction.NorthWest = [minLat, maxLng];
-         this.direction.CenterOfMass = [0, 0];
-         this.direction.BoundingBoxCenter = [(minLat + maxLat) / 2, (minLng + maxLng) / 2];
+        
+        this.direction.North = {lat: maxLat, lng: (minLng + maxLng) / 2};
+        this.direction.NorthEast = {lat: maxLat, lng: maxLng};
+        this.direction.East = {lat: (minLat + maxLat) / 2, lng: maxLng};
+        this.direction.SouthEast = {lat: minLat, lng: maxLng};
+        this.direction.South = {lat: minLat, lng: (minLng + maxLng) / 2};
+        this.direction.SouthWest = {lat: minLat, lng: minLng};
+        this.direction.West = {lat:(minLat + maxLat) / 2, lng: minLng};
+        this.direction.NorthWest = {lat: maxLat, lng: minLng};
+        this.direction.CenterOfMass = { lat: 0, lng: 0 };
+        this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
     }
     //TODO default return.
     getDirection(direction: MarkerPlacement) {

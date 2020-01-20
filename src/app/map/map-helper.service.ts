@@ -456,16 +456,16 @@ export class MapHelperService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === menuMarkerIdx && this.config.markers.menu) {
-        
+
 
         // marker.bindPopup(
         //   this.getHtmlContent(e => {
         //     console.log("clicked on", e.target);
         //   })
         // );
-        // marker.on("click", e => {
-        //   this.convertToBoundsPolygon(e, latlngs)
-        // })
+        marker.on("click", (e: Event) => {
+          this.convertToBoundsPolygon(latlngs)
+        })
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
         marker.on("click", e => {
@@ -559,9 +559,9 @@ export class MapHelperService {
           }
         } else {
           length2 += posarrays[0][index - 1].length;
-          
-          for (let j = length2; j < posarrays[0][index].length+length2; j++) {
-            
+
+          for (let j = length2; j < posarrays[0][index].length + length2; j++) {
+
             testarray.push(layerLength[j + 1].getLatLng());
           }
         }
@@ -817,7 +817,8 @@ export class MapHelperService {
   private convertToBoundsPolygon(latlngs: ILatLng[]) {
 
     const lPoly = this.leafletHelper.createPolygon(latlngs);
-    
+    console.log("to delete", latlngs);
+    this.deletePolygon(latlngs);
 
     // const coords = this.convertToCoords([latlngs]);
     // const p = this.getPolygon()
@@ -830,18 +831,18 @@ export class MapHelperService {
   }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
-    const compass = new Compass(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
+    const compass = new Compass(bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast());
     const compassDirection = compass.getDirection(position);
     const latLngPoint: ILatLng = {
-        lat: compassDirection[1],
-        lng: compassDirection[0]
+      lat: compassDirection.lat,
+      lng: compassDirection.lng
     }
     const targetPoint = this.turfHelper.getCoord(latLngPoint);
     const fc = this.turfHelper.getFeaturePointCollection(latlngs);
     const nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc as any)
-
+    console.log("ne", nearestPointIdx);
     return nearestPointIdx;
-}
+  }
 
 
 }
