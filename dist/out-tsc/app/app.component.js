@@ -8,7 +8,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component } from "@angular/core";
-import { MapHelperService } from "./map/map-helper.service";
+import { PolyDrawService } from "./map/polydraw.service";
 var AppComponent = /** @class */ (function () {
     function AppComponent(mapHelperService) {
         this.mapHelperService = mapHelperService;
@@ -702,7 +702,7 @@ var AppComponent = /** @class */ (function () {
             templateUrl: "./app.component.html",
             styleUrls: ["./app.component.css"]
         }),
-        __metadata("design:paramtypes", [MapHelperService])
+        __metadata("design:paramtypes", [PolyDrawService])
     ], AppComponent);
     return AppComponent;
 }());
