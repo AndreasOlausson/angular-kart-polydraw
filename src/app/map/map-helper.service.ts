@@ -547,9 +547,19 @@ export class MapHelperService {
       for (let index = 0; index < posarrays.length; index++) {
         testarray = [];
         hole = [];
+        console.log("Posisjoner: ", posarrays[index]);
         if (index === 0) {
-          for (let i = 0; index < posarrays[index].length; i++) {
-            for (let j = 0; j < posarrays[index][i].length; j++) {
+          if (posarrays[0].length > 1) {
+            for (let i = 0; index < posarrays[0].length; i++) {
+              console.log("Posisjoner 2: ", posarrays[index][i]);
+
+              for (let j = 0; j < posarrays[0][i].length; j++) {
+                testarray.push(layerLength[j + 1].getLatLng());
+              }
+              hole.push(testarray);
+            }
+          } else {
+            for (let j = 0; j < posarrays[0][0].length; j++) {
               testarray.push(layerLength[j + 1].getLatLng());
             }
             hole.push(testarray);
@@ -562,7 +572,8 @@ export class MapHelperService {
           for (let j = length; j < posarrays[index][0].length + length; j++) {
             testarray.push((layerLength[j + 1] as any).getLatLng());
           }
-          newPos.push([testarray]);
+          hole.push(testarray);
+          newPos.push(hole);
         }
       }
     } else {
@@ -573,14 +584,19 @@ export class MapHelperService {
         testarray = [];
         console.log("Polygon drag: ", posarrays[0][index]);
         if (index === 0) {
-          for (let j = 0; j < posarrays[0][index].length; j++) {
-            testarray.push(layerLength[j + 1].getLatLng());
+          if (posarrays[0][index].length > 1) {
+            for (let j = 0; j < posarrays[0][index].length; j++) {
+              testarray.push(layerLength[j + 1].getLatLng());
+            }
+          } else {
+            for (let j = 0; j < posarrays[0][0].length; j++) {
+              testarray.push(layerLength[j + 1].getLatLng());
+            }
           }
         } else {
           length2 += posarrays[0][index - 1].length;
-          
-          for (let j = length2; j < posarrays[0][index].length+length2; j++) {
-            
+
+          for (let j = length2; j < posarrays[0][index].length + length2; j++) {
             testarray.push(layerLength[j + 1].getLatLng());
           }
         }
