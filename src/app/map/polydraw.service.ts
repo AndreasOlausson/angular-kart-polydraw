@@ -14,9 +14,9 @@ import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPlacement } from "./enums";
 import { LeafletHelperService } from "./leaflet-helper.service";
 
-/* @Injectable({
+@Injectable({
   providedIn: "root"
-}) */
+})
 //Rename - PolyDrawService
 export class PolyDrawService {
   //DrawModes, determine UI buttons etc...
