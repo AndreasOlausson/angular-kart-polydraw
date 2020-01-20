@@ -1,0 +1,45 @@
+{
+    "touchSupport": true,
+    "mergePolygons": true,
+    "kinks": false,
+    "markers": {
+        "menu": true,
+        "delete": true,
+        "markerIcon": {
+            "styleClasses": ["polygon-marker"]
+        },
+        "holeIcon": {
+            "styleClasses": ["polygon-marker", "hole"]
+        },
+        "markerMenuIcon": {
+            "position": 4,
+            "styleClasses": ["polygon-marker", "menu"]
+        },
+        "markerDeleteIcon": {
+            "position": 1,
+            "styleClasses": ["polygon-marker", "delete"]
+        }
+    },
+    "polyLineOptions": {
+        "color": "#50622b",
+        "opacity": 1,
+        "smoothFactor": 0,
+        "noClip": true,
+        "clickable": false,
+        "weight": 2
+    },
+    "subtractLineOptions": {
+        "color": "#50622b",
+        "opacity": 1,
+        "smoothFactor": 0,
+        "noClip": true,
+        "clickable": false,
+        "weight": 2
+    },
+    "polygonOptions": {
+        "smoothFactor": 0.3,
+        "color": "#50622b",
+        "fillColor": "#b4cd8a",
+        "noClip": true
+    }
+}
