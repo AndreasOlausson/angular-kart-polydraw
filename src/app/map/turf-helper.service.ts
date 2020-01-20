@@ -11,7 +11,7 @@ import { ILatLng } from "./polygon-helpers";
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
   private simplifyTolerance = { tolerance: 0.0001, highQuality: false };
-  constructor() { }
+  constructor() {}
 
   union(poly1, poly2): Feature<Polygon | MultiPolygon> {
     console.log("poly1: ", poly1);
@@ -40,11 +40,11 @@ export class TurfHelperService {
     let turfPolygon;
     console.log("Get TurfPolygon:", polygon);
     // if (polygon.geometry)
-      if (polygon.geometry.type === "Polygon") {
-        turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
-      } else {
-        turfPolygon = turf.multiPolygon(polygon.geometry.coordinates);
-      }
+    if (polygon.geometry.type === "Polygon") {
+      turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
+    } else {
+      turfPolygon = turf.multiPolygon(polygon.geometry.coordinates);
+    }
     return turfPolygon;
   }
 
@@ -63,7 +63,7 @@ export class TurfHelperService {
   }
 
   getCoords(feature: Feature<Polygon | MultiPolygon>) {
-    return turf.getCoords(feature)
+    return turf.getCoords(feature);
   }
 
   hasKinks(feature: Feature<Polygon | MultiPolygon>) {
@@ -80,22 +80,26 @@ export class TurfHelperService {
 
     let latlngsCoords = turf.getCoords(latlngs);
     latlngsCoords.forEach(element => {
-      let feat = { type: "Polygon", coordinates: element };
+      let feat = { type: "Polygon", coordinates: [element[0]] };
 
       poly.push(feat);
     });
     let polygonCoords = turf.getCoords(polygon);
     polygonCoords.forEach(element => {
-      let feat = { type: "Polygon", coordinates: element };
+      let feat = { type: "Polygon", coordinates: [element[0]] };
 
       poly2.push(feat);
     });
     let intersect = false;
     loop1: for (let i = 0; i < poly.length; i++) {
-      for (let j = 0; j < poly2.length; j++) {
-        intersect = !!turf.intersect(poly[i], poly2[j]);
-        if (intersect) {
-          break loop1;
+      if (this.getKinks(poly[i]).length < 2) {
+        for (let j = 0; j < poly2.length; j++) {
+          if (this.getKinks(poly2[j]).length < 2) {
+            intersect = !!turf.intersect(poly[i], poly2[j]);
+            if (intersect) {
+              break loop1;
+            }
+          }
         }
       }
     }
@@ -128,62 +132,58 @@ export class TurfHelperService {
     return bboxPolygon;
   }
   polygonToMultiPolygon(poly: Feature<Polygon>): Feature<MultiPolygon> {
-    const multi = turf.multiPolygon([poly.geometry.coordinates])
+    const multi = turf.multiPolygon([poly.geometry.coordinates]);
     return multi;
   }
   //TODO -cleanup
   injectPointToPolygon(polygon, point) {
-    let coords = turf.getCoords(polygon)
-    let newPolygon
+    let coords = turf.getCoords(polygon);
+    let newPolygon;
     console.log("polygon: ", polygon);
     if (coords.length < 2) {
       const polygonPoints = turf.explode(polygon);
       console.log(turf.nearestPoint(point, polygonPoints));
-      let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
-      const test = turf.coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
-        if (index === i) {
-          return [
-            ...accumulator,
-            oldPoint,
-            point
-          ]
-        }
-        return [...accumulator, oldPoint]
-      }, [])
+      let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex;
+      const test = turf.coordReduce(
+        polygonPoints,
+        function(accumulator, oldPoint, i) {
+          if (index === i) {
+            return [...accumulator, oldPoint, point];
+          }
+          return [...accumulator, oldPoint];
+        },
+        []
+      );
       console.log("test", test);
-      newPolygon = turf.multiPolygon([[test]])
-    }
-    else {
-      let pos = []
-      let coordinates = []
-      coords.forEach((element) => {
-        let polygon = turf.polygon(element)
+      newPolygon = turf.multiPolygon([[test]]);
+    } else {
+      let pos = [];
+      let coordinates = [];
+      coords.forEach(element => {
+        let polygon = turf.polygon(element);
         // turf.booleanPointInPolygon(point, polygon)
         if (turf.booleanPointInPolygon(point, polygon)) {
           const polygonPoints = turf.explode(polygon);
-          let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex
-          coordinates = turf.coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
-            if (index === i) {
-              return [
-                ...accumulator,
-                oldPoint,
-                point
-              ]
-            }
-            return [...accumulator, oldPoint]
-          }, [])
+          let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex;
+          coordinates = turf.coordReduce(
+            polygonPoints,
+            function(accumulator, oldPoint, i) {
+              if (index === i) {
+                return [...accumulator, oldPoint, point];
+              }
+              return [...accumulator, oldPoint];
+            },
+            []
+          );
           console.log("coordinates", coordinates);
-
-
-        }
-        else {
-          pos.push(element)
+        } else {
+          pos.push(element);
         }
       });
-      pos.push([coordinates])
-      newPolygon = turf.multiPolygon(pos)
+      pos.push([coordinates]);
+      newPolygon = turf.multiPolygon(pos);
     }
-    return newPolygon
+    return newPolygon;
   }
 
   polygonDifference(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
@@ -215,27 +215,22 @@ export class TurfHelperService {
   }
 
   getNearestPointIndex(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number {
-
     let index = turf.nearestPoint(targetPoint, points).properties.featureIndex;
     return index;
-
   }
   getCoord(point: ILatLng): turf.Coord {
-    const coord = turf.getCoord([point.lng, point.lat])
+    const coord = turf.getCoord([point.lng, point.lat]);
     return coord;
   }
   getFeaturePointCollection(points: ILatLng[]): turf.FeatureCollection {
-
     const pts = [];
     points.forEach(v => {
       const p = turf.point([v.lng, v.lat], {});
       pts.push(p);
-    }); 
+    });
 
     const fc = turf.featureCollection(pts);
 
     return fc;
   }
 }
-
-

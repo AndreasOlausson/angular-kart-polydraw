@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as L from "leaflet"
+import { ILatLng } from './polygon-helpers';
 
 @Injectable({
     providedIn: 'root'
@@ -15,5 +16,9 @@ export class MapStateService {
 
     updateMapState(map: L.Map){
         this.mapSubject.next(map)
+    }
+
+    updatePolygons(polygons: ILatLng[][][]):void{
+        console.log("map-state",polygons);
     }
 }

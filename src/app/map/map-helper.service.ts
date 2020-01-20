@@ -78,27 +78,29 @@ export class MapHelperService {
   }
 
   //make readable
-  deletePolygon(polygon) {
+  deletePolygon(polygon: ILatLng[][]) {
     console.log("deletePolygon: ", polygon);
     if (this.arrayOfFeatureGroups.length > 0) {
       this.arrayOfFeatureGroups.forEach(featureGroup => {
         let layer = featureGroup.getLayers()[0] as any;
         let latlngs = layer.getLatLngs();
         let length = latlngs.length;
+        //  = []
         latlngs.forEach((latlng, index) => {
           let polygon3;
+          let test = [...latlng]
 
           console.log(latlng);
           if (latlng.length > 1) {
             if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
-              latlng[0].push(latlng[0][0]);
+              test[0].push(latlng[0][0]);
             }
-            polygon3 = [latlng[0]];
+            polygon3 = [test[0]];
           } else {
             if (latlng[0] !== latlng[latlng.length - 1]) {
-              latlng.push(latlng[0]);
+              test.push(latlng[0]);
             }
-            polygon3 = latlng;
+            polygon3 = test;
           }
 
           console.log("Test: ", polygon3);
@@ -113,7 +115,7 @@ export class MapHelperService {
             this.removeFeatureGroup(featureGroup);
             console.log(featureGroup.getLayers());
           } else if (equals && length > 1) {
-            this.polygonInformation.deleteTrashCanOnMulti(polygon);
+            this.polygonInformation.deleteTrashCanOnMulti([polygon]);
             latlngs.splice(index, 1);
             layer.setLatLngs(latlngs);
             this.removeFeatureGroup(featureGroup);
@@ -351,6 +353,7 @@ export class MapHelperService {
     });
 
     this.arrayOfFeatureGroups.push(featureGroup);
+    console.log("Array: ", this.arrayOfFeatureGroups);
     this.setDrawMode(DrawMode.Off);
 
     featureGroup.on("click", e => {
@@ -528,9 +531,19 @@ export class MapHelperService {
       for (let index = 0; index < posarrays.length; index++) {
         testarray = [];
         hole = [];
+        console.log("Posisjoner: ", posarrays[index]);
         if (index === 0) {
-          for (let i = 0; index < posarrays[index].length; i++) {
-            for (let j = 0; j < posarrays[index][i].length; j++) {
+          if (posarrays[0].length > 1) {
+            for (let i = 0; index < posarrays[0].length; i++) {
+              console.log("Posisjoner 2: ", posarrays[index][i]);
+
+              for (let j = 0; j < posarrays[0][i].length; j++) {
+                testarray.push(layerLength[j + 1].getLatLng());
+              }
+              hole.push(testarray);
+            }
+          } else {
+            for (let j = 0; j < posarrays[0][0].length; j++) {
               testarray.push(layerLength[j + 1].getLatLng());
             }
             hole.push(testarray);
@@ -543,7 +556,8 @@ export class MapHelperService {
           for (let j = length; j < posarrays[index][0].length + length; j++) {
             testarray.push((layerLength[j + 1] as any).getLatLng());
           }
-          newPos.push([testarray]);
+          hole.push(testarray);
+          newPos.push(hole);
         }
       }
     } else {
@@ -554,14 +568,19 @@ export class MapHelperService {
         testarray = [];
         console.log("Polygon drag: ", posarrays[0][index]);
         if (index === 0) {
-          for (let j = 0; j < posarrays[0][index].length; j++) {
-            testarray.push(layerLength[j + 1].getLatLng());
+          if (posarrays[0][index].length > 1) {
+            for (let j = 0; j < posarrays[0][index].length; j++) {
+              testarray.push(layerLength[j + 1].getLatLng());
+            }
+          } else {
+            for (let j = 0; j < posarrays[0][0].length; j++) {
+              testarray.push(layerLength[j + 1].getLatLng());
+            }
           }
         } else {
           length2 += posarrays[0][index - 1].length;
 
           for (let j = length2; j < posarrays[0][index].length + length2; j++) {
-
             testarray.push(layerLength[j + 1].getLatLng());
           }
         }
@@ -575,13 +594,13 @@ export class MapHelperService {
   }
   // check this
   private markerDragEnd(FeatureGroup: L.FeatureGroup) {
-    // this.polygonInformation.deletePolygonInformationStorage();
+    this.polygonInformation.deletePolygonInformationStorage();
     let featureCollection = FeatureGroup.toGeoJSON() as any;
     console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
     if (featureCollection.features[0].geometry.coordinates.length > 1) {
       featureCollection.features[0].geometry.coordinates.forEach(element => {
         let feature = this.turfHelper.getMultiPolygon([element]);
-        console.log("Nytt polygon :", this.turfHelper.getMultiPolygon([element]));
+        
 
         console.log("Markerdragend: ", feature);
         if (this.turfHelper.hasKinks(feature)) {
@@ -611,6 +630,7 @@ export class MapHelperService {
           this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
         });
       } else {
+        // this.deletePolygon(this.getLatLngsFromJson(feature));
         this.kinks = false;
         this.addPolygon(feature, false);
       }
@@ -618,7 +638,7 @@ export class MapHelperService {
     this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
   }
   //fine, check the returned type
-  private getLatLngsFromJson(feature: Feature<Polygon | MultiPolygon>): ILatLng[][][] {
+  private getLatLngsFromJson(feature: Feature<Polygon | MultiPolygon>): ILatLng[][] {
     console.log("getLatLngsFromJson: ", feature);
     let coord;
     if (feature) {
@@ -642,7 +662,6 @@ export class MapHelperService {
     layers.forEach((featureGroup, i) => {
       let featureCollection = featureGroup.toGeoJSON();
       const layer = featureCollection.features[0];
-      const geoLayer = featureCollection.features[0];
       let poly = this.getLatLngsFromJson(layer);
       const union = this.turfHelper.union(addNew, polygonFeature[i]); //Check for multipolygons
       //Needs a cleanup for the new version
@@ -690,15 +709,16 @@ export class MapHelperService {
   //fine until refactoring
   private deletePolygonOnMerge(polygon) {
     console.log("deletePolygonOnMerge", polygon);
-
+    let polygon2 = []
     if (this.arrayOfFeatureGroups.length > 0) {
       this.arrayOfFeatureGroups.forEach(featureGroup => {
         let layer = featureGroup.getLayers()[0] as any;
         let latlngs = layer.getLatLngs()[0];
+        polygon2 = [...latlngs[0]]
         if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
-          latlngs[0].push(latlngs[0][0]);
+          polygon2.push(latlngs[0][0]);
         }
-        const equals = this.polygonArrayEqualsMerge(latlngs, polygon);
+        const equals = this.polygonArrayEqualsMerge(polygon2, polygon);
 
         if (equals) {
           console.log("EQUALS", polygon);
@@ -818,7 +838,7 @@ export class MapHelperService {
 
     const lPoly = this.leafletHelper.createPolygon(latlngs);
     console.log("to delete", latlngs);
-    this.deletePolygon(latlngs);
+    this.deletePolygon([latlngs]);
 
     // const coords = this.convertToCoords([latlngs]);
     // const p = this.getPolygon()
