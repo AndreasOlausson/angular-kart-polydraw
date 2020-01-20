@@ -50,8 +50,8 @@ html, body{
 .polygon-marker.delete{
   background-color: rgb(100, 93, 93);
   background-image: url("app/images/icons/icon-trash-white.svg");
-  -ms-background-size: 22px 22px;
-  background-size: 22px 22px;
+  -ms-background-size: 24px 24px;
+  background-size: 24px 24px;
   background-repeat: no-repeat;
   background-position: center;
   width: 24px!important;
