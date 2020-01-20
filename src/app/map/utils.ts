@@ -19,12 +19,6 @@ export class PolyDrawUtil {
         }
         return bounds;
     }
-
-
-
-
-
-
 }
 //TODO make compass ILatLng
 export class Compass {

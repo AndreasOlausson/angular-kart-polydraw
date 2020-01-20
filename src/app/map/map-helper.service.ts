@@ -12,6 +12,7 @@ import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneraterService } from "./component-generater.service";
 import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPlacement } from "./enums";
+import { LeafletHelperService } from "./leaflet-helper.service";
 
 @Injectable({
   providedIn: "root"
@@ -39,7 +40,8 @@ export class MapHelperService {
     private mapState: MapStateService,
     private popupGenerator: ComponentGeneraterService,
     private turfHelper: TurfHelperService,
-    private polygonInformation: PolygonInformationService
+    private polygonInformation: PolygonInformationService,
+    private leafletHelper: LeafletHelperService
   ) {
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
@@ -336,7 +338,7 @@ export class MapHelperService {
     console.log(polygon);
     let markerLatlngs = polygon.getLatLngs();
     markerLatlngs.forEach(polygon => {
-      polygon.forEach((polyElement, i) => {
+      polygon.forEach((polyElement: ILatLng[], i: number) => {
         if (i === 0) {
           this.addMarker(polyElement, featureGroup);
         } else {
@@ -355,43 +357,14 @@ export class MapHelperService {
       this.polygonClicked(e, latLngs);
     });
   }
-  //clean up the mess
+  //fine
   private polygonClicked(e: any, poly: Feature<Polygon | MultiPolygon>) {
-    const imutableClone = JSON.parse(JSON.stringify(poly));
-
-    //this.getLatLngsFromJson(feature)
     const newPoint = e.latlng;
-    let idx = -1;
-    let idx2 = -1;
-    let tmpDistance = Number.MAX_SAFE_INTEGER;
     if (poly.geometry.type === "MultiPolygon") {
       let newPolygon = this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat]);
-      /*     poly.geometry.coordinates[0][0].forEach((v, i) => {
-            const distance = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], v);
-            if (tmpDistance >= distance) {
-              idx = i;
-              tmpDistance = distance;
-            }
-          })
-          const l = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][0][idx === 0 ? poly.geometry.coordinates[0][0].length : idx - 1]);
-          const r = this.turfHelper.getDistance([newPoint.lng, newPoint.lat], poly.geometry.coordinates[0][0][idx === poly.geometry.coordinates[0][0].length ? 0 : idx + 1]);
-    
-          idx2 = l > r ? (idx === 0 ? poly.geometry.coordinates[0][0].length : idx - 1) : (idx === poly.geometry.coordinates[0][0].length ? 0 : idx + 1);
-    
-          const injectIdx = idx < idx2 ? idx : idx2;
-    
-          poly.geometry.coordinates[0][0].splice((injectIdx), 0, [newPoint.lng, newPoint.lat]);
-          console.log("before delete orig, new length: ", imutableClone, poly);
-          this.deletePolygon(this.getLatLngsFromJson(imutableClone));
-           */
       this.deletePolygon(this.getLatLngsFromJson(poly));
       this.addPolygonLayer(newPolygon, false);
     }
-    console.log("TODO:");
-    console.log("Delete existing polygon");
-    console.log("Add new polygon");
-    console.log("Update states");
-    //this.deletePolygon(originalPolygon._latlngs);
   }
   //fine
   private getPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
@@ -483,13 +456,15 @@ export class MapHelperService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === menuMarkerIdx && this.config.markers.menu) {
-        marker.bindPopup(
-          this.getHtmlContent(e => {
-            console.log("clicked on", e.target);
-          })
-        );
+        
+
+        // marker.bindPopup(
+        //   this.getHtmlContent(e => {
+        //     console.log("clicked on", e.target);
+        //   })
+        // );
         // marker.on("click", e => {
-        //   this.toggleMarkerMenu();
+        //   this.convertToBoundsPolygon(e, latlngs)
         // })
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
@@ -839,7 +814,20 @@ export class MapHelperService {
     });
     return comp.location.nativeElement;
   }
+  private convertToBoundsPolygon(latlngs: ILatLng[]) {
 
+    const lPoly = this.leafletHelper.createPolygon(latlngs);
+    
+
+    // const coords = this.convertToCoords([latlngs]);
+    // const p = this.getPolygon()
+
+    // if (poly.geometry.type === "MultiPolygon") {
+    //   let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(poly);
+    //   this.deletePolygon(this.getLatLngsFromJson(poly));
+    //   this.addPolygonLayer(newPolygon, false);
+    // }
+  }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
     const compass = new Compass(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
