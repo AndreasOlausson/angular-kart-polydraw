@@ -14,4 +14,4 @@ export {MapStateService} from "./map/map-state.service"
     AlterPolygonComponent
   ]
 })
-export class AppModule { }
+export class MainModule { }
