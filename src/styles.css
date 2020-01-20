@@ -45,6 +45,8 @@ html, body{
   width: 24px!important;
   height: 24px!important;
   z-index: 10000;
+  margin-left: -6px !important;
+  margin-top: -6px !important;
 }
 
 .polygon-marker.delete{
@@ -64,6 +66,8 @@ html, body{
   width: 24px!important;
   height: 24px!important;
   z-index: 10000;
+  margin-left: -6px !important;
+  margin-top: -6px !important;
 }
 
 .polygon-marker.hole{
