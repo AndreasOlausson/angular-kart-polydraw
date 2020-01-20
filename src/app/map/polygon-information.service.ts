@@ -1,18 +1,25 @@
 import { Injectable } from "@angular/core";
-import { Subject, Observable } from "rxjs";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
-import { MapHelperService } from "./map-helper.service";
 import { MapStateService } from "./map-state.service";
 
 @Injectable({ providedIn: "root" })
 export class PolygonInformationService {
   polygonInformationSubject: Subject<PolygonInfo[]> = new Subject<PolygonInfo[]>();
   polygonInformation$: Observable<PolygonInfo[]> = this.polygonInformationSubject.asObservable();
+  
   polygonDrawStatesSubject: Subject<PolygonDrawStates> = new Subject<PolygonDrawStates>();
   polygonDrawStates$: Observable<PolygonDrawStates> = this.polygonDrawStatesSubject.asObservable();
 
+  polygonsSubject$: BehaviorSubject<ILatLng[][][]> = new BehaviorSubject<ILatLng[][][]>(null)
+  polygons$: Observable<ILatLng[][][]> = this.polygonsSubject$.asObservable();
+
   polygonInformationStorage = [];
-  constructor(private mapStateService: MapStateService) {}
+
+  private readonly polygonDrawStates: PolygonDrawStates = null;
+  constructor() {
+    this.polygonDrawStates = new PolygonDrawStates();
+  }
 
   updatePolygons() {
     console.log("updatePolygons: ", this.polygonInformationStorage);
@@ -41,16 +48,17 @@ export class PolygonInformationService {
             newPolygons.push(test)
         });
 
-      // this.polygonDrawStates.hasPolygons = true;
+      this.polygonDrawStates.hasPolygons = true;
     } else {
-      // this.polygonDrawStates.reset();
-      // this.polygonDrawStates.hasPolygons = false;
+      this.reset();
+      this.polygonDrawStates.hasPolygons = false;
     }
-    this.mapStateService.updatePolygons(newPolygons);
+    this.polygonsSubject$.next(newPolygons)
     this.saveCurrentState();
   }
 
   saveCurrentState(): void {
+    this.polygonDrawStatesSubject.next(this.polygonDrawStates);
     this.polygonInformationSubject.next(this.polygonInformationStorage);
     console.log("saveCurrentState: ", this.polygonInformationStorage);
   }
@@ -102,5 +110,19 @@ export class PolygonInformationService {
       });
       this.updatePolygons();
     }
+  }
+
+  setFreeDrawMode(){
+    this.polygonDrawStates.setFreeDrawMode()
+  }
+  setMoveMode(){
+    this.polygonDrawStates.setMoveMode()
+  }
+  activate(){
+    this.polygonDrawStates.activate();
+  }
+
+  reset(){
+    this.polygonDrawStates.reset();
   }
 }

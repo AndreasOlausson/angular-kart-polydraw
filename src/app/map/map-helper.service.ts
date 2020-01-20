@@ -55,7 +55,7 @@ export class MapHelperService {
       this.initPolyDraw();
     });
 
-    this.polygonInformation.polygonInformation$.subscribe(k => {
+    this.polygonInformation.polygons$.subscribe(k => {
       console.log("PolyInfo start: ", k);
     });
 
@@ -790,6 +790,11 @@ export class MapHelperService {
           });
           this.setLeafletMapEvents(false, false, false);
           break;
+      }
+      if (isActiveDrawMode) {
+        this.polygonInformation.setFreeDrawMode();
+      } else {
+        this.polygonInformation.setMoveMode();
       }
     }
   }
