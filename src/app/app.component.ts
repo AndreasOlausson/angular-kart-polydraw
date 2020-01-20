@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { MapHelperService } from "./map/map-helper.service";
+import { PolyDrawService } from "./map/polydraw.service";
 import { ILatLng } from "./map/polygon-helpers";
 
 @Component({
@@ -672,7 +672,7 @@ export class AppComponent {
   ];
  
 
-  constructor(private readonly mapHelperService: MapHelperService) {}
+  constructor(private readonly mapHelperService: PolyDrawService) {}
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.

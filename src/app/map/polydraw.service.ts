@@ -14,11 +14,9 @@ import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPlacement } from "./enums";
 import { LeafletHelperService } from "./leaflet-helper.service";
 
-@Injectable({
-  providedIn: "root"
-})
+
 //Rename - PolyDrawService
-export class MapHelperService {
+export class PolyDrawService {
   //DrawModes, determine UI buttons etc...
   drawModeSubject: BehaviorSubject<DrawMode> = new BehaviorSubject<DrawMode>(DrawMode.Off);
   drawMode$: Observable<DrawMode> = this.drawModeSubject.asObservable();
