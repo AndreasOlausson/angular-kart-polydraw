@@ -92,7 +92,6 @@ export class TurfHelperService {
     });
     let intersect = false;
     loop1: for (let i = 0; i < poly.length; i++) {
-      console.log(this.getKinks(poly[i]));
       if (this.getKinks(poly[i]).length < 2) {
         for (let j = 0; j < poly2.length; j++) {
           if (this.getKinks(poly2[j]).length < 2) {

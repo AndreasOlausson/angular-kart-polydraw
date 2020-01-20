@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
 import { MapHelperService } from "./map-helper.service";
+import { MapStateService } from "./map-state.service";
 
 @Injectable({ providedIn: "root" })
 export class PolygonInformationService {
@@ -11,7 +12,7 @@ export class PolygonInformationService {
   polygonDrawStates$: Observable<PolygonDrawStates> = this.polygonDrawStatesSubject.asObservable();
 
   polygonInformationStorage = [];
-  constructor() {}
+  constructor(private mapStateService: MapStateService) {}
 
   updatePolygons() {
     console.log("updatePolygons: ", this.polygonInformationStorage);
@@ -23,28 +24,35 @@ export class PolygonInformationService {
       
       this.polygonInformationStorage.forEach(v => {
         let test = []
-        v.polygon.forEach((poly,i) => {
-              
-            test = [...poly[0]]
-            if (poly[0][0].toString() !== poly[0][poly[0].length - 1].toString()) {
-                test.push(poly[0][0]);             
-            }
-            newPolygons.push([test])
+        v.polygon.forEach((poly) => {
+          let test2 = []
+            
+            poly.forEach(polygon => {
+              test2 = [...polygon]
+              if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
+                test2.push(polygon[0]);             
+            }  
+            test.push(test2)
+            });
+            
+            
+            });
+           
+            newPolygons.push(test)
         });
-      });
 
       // this.polygonDrawStates.hasPolygons = true;
     } else {
       // this.polygonDrawStates.reset();
       // this.polygonDrawStates.hasPolygons = false;
     }
-
+    this.mapStateService.updatePolygons(newPolygons);
     this.saveCurrentState();
   }
 
   saveCurrentState(): void {
     this.polygonInformationSubject.next(this.polygonInformationStorage);
-    console.log("saveCurrentState");
+    console.log("saveCurrentState: ", this.polygonInformationStorage);
   }
 
   deleteTrashcan(polygon) {
@@ -53,7 +61,7 @@ export class PolygonInformationService {
     this.updatePolygons();
   }
 
-  deleteTrashCanOnMulti(polygon: ILatLng[][]) {
+  deleteTrashCanOnMulti(polygon: ILatLng[][][]) {
     let index = 0;
     console.log("DeleteTrashCan: ", polygon);
     console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
