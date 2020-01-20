@@ -24,8 +24,8 @@ export class PolyDrawUtil {
 export class Compass {
 
     public direction: ICompass = {
-        BoundingBoxCenter: { lat: 0, lng: 0 },
-        CenterOfMass: { lat: 0, lng: 0 },
+        // BoundingBoxCenter: { lat: 0, lng: 0 },
+        // CenterOfMass: { lat: 0, lng: 0 },
         East: { lat: 0, lng: 0 },
         North: { lat: 0, lng: 0 },
         NorthEast: { lat: 0, lng: 0 },
@@ -46,14 +46,14 @@ export class Compass {
         this.direction.SouthWest = {lat: minLat, lng: minLng};
         this.direction.West = {lat:(minLat + maxLat) / 2, lng: minLng};
         this.direction.NorthWest = {lat: maxLat, lng: minLng};
-        this.direction.CenterOfMass = { lat: 0, lng: 0 };
-        this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
+        // this.direction.CenterOfMass = { lat: 0, lng: 0 };
+        // this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
     }
     //TODO default return.
     getDirection(direction: MarkerPlacement) {
         switch (direction) {
-            case MarkerPlacement.CenterOfMass:
-                return this.direction.CenterOfMass;
+            // case MarkerPlacement.CenterOfMass:
+            //     return this.direction.CenterOfMass;
             case MarkerPlacement.North:
                 return this.direction.North;
             case MarkerPlacement.NorthEast:
@@ -70,8 +70,8 @@ export class Compass {
                 return this.direction.West;
             case MarkerPlacement.NorthWest:
                 return this.direction.NorthWest;
-            case MarkerPlacement.BoundingBoxCenter:
-                return this.direction.BoundingBoxCenter;
+            // case MarkerPlacement.BoundingBoxCenter:
+            //     return this.direction.BoundingBoxCenter;
             default:
                 return this.direction.North;
         }
