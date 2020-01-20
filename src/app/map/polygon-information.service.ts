@@ -3,7 +3,7 @@ import { Subject, Observable, BehaviorSubject } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
 import { MapStateService } from "./map-state.service";
 
-@Injectable({ providedIn: "root" })
+// @Injectable({ providedIn: "root" })
 export class PolygonInformationService {
   polygonInformationSubject: Subject<PolygonInfo[]> = new Subject<PolygonInfo[]>();
   polygonInformation$: Observable<PolygonInfo[]> = this.polygonInformationSubject.asObservable();

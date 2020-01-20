@@ -3,9 +3,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import * as L from "leaflet"
 import { ILatLng } from './polygon-helpers';
 
-@Injectable({
+/* @Injectable({
     providedIn: 'root'
-})
+}) */
 export class MapStateService {
     constructor() { }
     
