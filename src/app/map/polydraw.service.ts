@@ -38,7 +38,7 @@ export class PolyDrawService {
 
   constructor(
     private mapState: MapStateService,
-    private popupGenerator: ComponentGeneraterService,
+    // private popupGenerator: ComponentGeneraterService,
     private turfHelper: TurfHelperService,
     private polygonInformation: PolygonInformationService,
     private leafletHelper: LeafletHelperService
@@ -827,18 +827,7 @@ export class PolyDrawService {
   toggleMarkerMenu(): void {
     alert("open menu");
   }
-  private getHtmlContent(callBack: Function): HTMLElement {
-    const comp = this.popupGenerator.generateAlterPopup();
-    comp.instance.bboxClicked.subscribe(e => {
-      console.log("bbox clicked", e);
-      callBack(e);
-    });
-    comp.instance.simplyfiClicked.subscribe(e => {
-      console.log("simplyfi clicked", e);
-      callBack(e);
-    });
-    return comp.location.nativeElement;
-  }
+  
   private convertToBoundsPolygon(latlngs: ILatLng[]) {
 
     const lPoly = this.leafletHelper.createPolygon(latlngs);
