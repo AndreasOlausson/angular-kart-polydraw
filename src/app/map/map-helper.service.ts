@@ -351,6 +351,7 @@ export class MapHelperService {
     });
 
     this.arrayOfFeatureGroups.push(featureGroup);
+    console.log("Array: ", this.arrayOfFeatureGroups);
     this.setDrawMode(DrawMode.Off);
 
     featureGroup.on("click", e => {
@@ -597,7 +598,7 @@ export class MapHelperService {
     if (featureCollection.features[0].geometry.coordinates.length > 1) {
       featureCollection.features[0].geometry.coordinates.forEach(element => {
         let feature = this.turfHelper.getMultiPolygon([element]);
-        console.log("Nytt polygon :", this.turfHelper.getMultiPolygon([element]));
+        
 
         console.log("Markerdragend: ", feature);
         if (this.turfHelper.hasKinks(feature)) {
@@ -706,15 +707,16 @@ export class MapHelperService {
   //fine until refactoring
   private deletePolygonOnMerge(polygon) {
     console.log("deletePolygonOnMerge", polygon);
-
+    let polygon2 = []
     if (this.arrayOfFeatureGroups.length > 0) {
       this.arrayOfFeatureGroups.forEach(featureGroup => {
         let layer = featureGroup.getLayers()[0] as any;
         let latlngs = layer.getLatLngs()[0];
+        polygon2 = [...latlngs[0]]
         if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
-          latlngs[0].push(latlngs[0][0]);
+          polygon2.push(latlngs[0][0]);
         }
-        const equals = this.polygonArrayEqualsMerge(latlngs, polygon);
+        const equals = this.polygonArrayEqualsMerge(polygon2, polygon);
 
         if (equals) {
           console.log("EQUALS", polygon);
