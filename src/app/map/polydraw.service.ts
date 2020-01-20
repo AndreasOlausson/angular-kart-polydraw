@@ -51,8 +51,9 @@ export class PolyDrawService {
       this.configurate({});
       console.log("after this.config", this.config);
       this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
-
-      this.initPolyDraw();
+      if(this.tracer != null){
+        this.initPolyDraw();
+      }
     });
 
     this.polygonInformation.polygons$.subscribe(k => {
