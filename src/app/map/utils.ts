@@ -36,15 +36,15 @@ export class Compass {
     };
 
     constructor(minLat: number = 0, minLng: number = 0, maxLat: number = 0, maxLng: number = 0) {
-        
-        this.direction.North = {lat: maxLat, lng: (minLng + maxLng) / 2};
-        this.direction.NorthEast = {lat: maxLat, lng: maxLng};
-        this.direction.East = {lat: (minLat + maxLat) / 2, lng: maxLng};
-        this.direction.SouthEast = {lat: minLat, lng: maxLng};
-        this.direction.South = {lat: minLat, lng: (minLng + maxLng) / 2};
-        this.direction.SouthWest = {lat: minLat, lng: minLng};
-        this.direction.West = {lat:(minLat + maxLat) / 2, lng: minLng};
-        this.direction.NorthWest = {lat: maxLat, lng: minLng};
+
+        this.direction.North = { lat: maxLat, lng: (minLng + maxLng) / 2 };
+        this.direction.NorthEast = { lat: maxLat, lng: maxLng };
+        this.direction.East = { lat: (minLat + maxLat) / 2, lng: maxLng };
+        this.direction.SouthEast = { lat: minLat, lng: maxLng };
+        this.direction.South = { lat: minLat, lng: (minLng + maxLng) / 2 };
+        this.direction.SouthWest = { lat: minLat, lng: minLng };
+        this.direction.West = { lat: (minLat + maxLat) / 2, lng: minLng };
+        this.direction.NorthWest = { lat: maxLat, lng: minLng };
         // this.direction.CenterOfMass = { lat: 0, lng: 0 };
         // this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
     }
@@ -74,5 +74,27 @@ export class Compass {
             default:
                 return this.direction.North;
         }
+    }
+    //TODO startNode, go clockwise or not
+    getPositions(startNode: MarkerPlacement = MarkerPlacement.SouthWest, clockwise: boolean = false, addClosingNode: boolean = true): number[][] {
+
+        let positions: number[][] = [];
+
+        positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        positions.push([this.direction.South.lng, this.direction.South.lat]);
+        positions.push([this.direction.SouthEast.lng, this.direction.SouthEast.lat]);
+        positions.push([this.direction.East.lng, this.direction.East.lat]);
+        positions.push([this.direction.NorthEast.lng, this.direction.NorthEast.lat]);
+        positions.push([this.direction.North.lng, this.direction.North.lat]);
+        positions.push([this.direction.NorthWest.lng, this.direction.NorthWest.lat]);
+        positions.push([this.direction.West.lng, this.direction.West.lat]);
+        if (addClosingNode) {
+            positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        }
+
+
+
+        return positions;
     }
 }

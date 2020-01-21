@@ -135,7 +135,10 @@ export class TurfHelperService {
 
     const compass = new Compass(bbox[1], bbox[0], bbox[3], bbox[2]);
 
+    const compassPositions = compass.getPositions();
 
+    bboxPolygon.geometry.coordinates = [];
+    bboxPolygon.geometry.coordinates = [compassPositions];
 
     return bboxPolygon;
   }

@@ -468,7 +468,7 @@ export class PolyDrawService {
         // );
         marker.on("click", e => {
           this.convertToBoundsPolygon(latlngs, true);
-          this.convertToSimplifiedPolygon(latlngs);
+          //this.convertToSimplifiedPolygon(latlngs);
         })
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
