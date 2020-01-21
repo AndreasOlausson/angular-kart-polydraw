@@ -467,7 +467,8 @@ export class MapHelperService {
         //   })
         // );
         marker.on("click", (e: Event) => {
-          this.convertToBoundsPolygon(latlngs)
+          //this.convertToBoundsPolygon(latlngs);
+          this.convertToSimplifiedPolygon(latlngs);
         })
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
@@ -854,7 +855,12 @@ export class MapHelperService {
     console.log("ne", nearestPointIdx);
     return nearestPointIdx;
   }
+  private convertToSimplifiedPolygon(latlngs: ILatLng[]) {
+    this.deletePolygon([latlngs]);
+    let newPolygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true);
 
+  }
 
 }
 //flytt til enum.ts

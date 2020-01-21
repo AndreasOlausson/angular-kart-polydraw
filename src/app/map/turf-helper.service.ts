@@ -30,6 +30,8 @@ export class TurfHelperService {
     return turf.multiPolygon([[concaveman(coordinates)]]);
   }
 
+
+  //TODO add some sort of dynamic tolerance
   getSimplified(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
     const tolerance = this.simplifyTolerance;
     const simplified = turf.simplify(polygon, tolerance);
@@ -125,7 +127,7 @@ export class TurfHelperService {
     console.log(polygon2);
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
-
+  //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
   convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
     const bbox = turf.bbox(polygon.geometry);
     const bboxPolygon = turf.bboxPolygon(bbox);
