@@ -467,7 +467,7 @@ export class PolyDrawService {
         //   })
         // );
         marker.on("click", e => {
-          this.convertToBoundsPolygon(latlngs);
+          this.convertToBoundsPolygon(latlngs, true);
           this.convertToSimplifiedPolygon(latlngs);
         })
       }
@@ -835,10 +835,12 @@ export class PolyDrawService {
     });
     return comp.location.nativeElement;
   }
-  private convertToBoundsPolygon(latlngs: ILatLng[]) {
+  private convertToBoundsPolygon(latlngs: ILatLng[], addMidpointMarkers: boolean = false) {
     this.deletePolygon([latlngs]);
     let polygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
-    let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(polygon);
+    let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(polygon, addMidpointMarkers);
+
+
     this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), false);
   }
   private convertToSimplifiedPolygon(latlngs: ILatLng[]) {

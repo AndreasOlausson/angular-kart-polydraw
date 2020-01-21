@@ -2,7 +2,6 @@ import { ICompass } from "./interface";
 import * as L from "leaflet";
 import { ILatLng } from "./polygon-helpers";
 import { MarkerPlacement } from "./enums";
-import { TurfHelperService } from "./turf-helper.service"
 
 export class PolyDrawUtil {
     static getBounds(polygon: ILatLng[], padding: number = 0): L.LatLngBounds {

@@ -128,9 +128,15 @@ export class TurfHelperService {
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
   //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
-  convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
+  convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>, addMidpointMarkers: boolean = false): Feature<Polygon> {
     const bbox = turf.bbox(polygon.geometry);
     const bboxPolygon = turf.bboxPolygon(bbox);
+
+
+    const compass = new Compass(bbox[1], bbox[0], bbox[3], bbox[2]);
+
+
+
     return bboxPolygon;
   }
   polygonToMultiPolygon(poly: Feature<Polygon>): Feature<MultiPolygon> {
