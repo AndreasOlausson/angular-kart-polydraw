@@ -849,11 +849,11 @@ export class PolyDrawService {
   }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
-    const compass = new Compass(bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
+    const compass = new Compass(bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast());
     const compassDirection = compass.getDirection(position);
     const latLngPoint: ILatLng = {
-        lat: compassDirection[1],
-        lng: compassDirection[0]
+        lat: compassDirection.lat,
+        lng: compassDirection.lng
     }
     const targetPoint = this.turfHelper.getCoord(latLngPoint);
     const fc = this.turfHelper.getFeaturePointCollection(latlngs);
