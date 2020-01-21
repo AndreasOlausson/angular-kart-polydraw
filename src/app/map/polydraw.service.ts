@@ -466,9 +466,10 @@ export class PolyDrawService {
         //     console.log("clicked on", e.target);
         //   })
         // );
-        // marker.on("click", e => {
-        //   this.convertToBoundsPolygon(e, latlngs)
-        // })
+        marker.on("click", e => {
+          this.convertToBoundsPolygon(latlngs);
+          this.convertToSimplifiedPolygon(latlngs);
+        })
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
         marker.on("click", e => {
@@ -835,18 +836,16 @@ export class PolyDrawService {
     return comp.location.nativeElement;
   }
   private convertToBoundsPolygon(latlngs: ILatLng[]) {
+    this.deletePolygon([latlngs]);
+    let polygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
+    let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(polygon);
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), false);
+  }
+  private convertToSimplifiedPolygon(latlngs: ILatLng[]) {
+    this.deletePolygon([latlngs]);
+    let newPolygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true);
 
-    const lPoly = this.leafletHelper.createPolygon(latlngs);
-    
-
-    // const coords = this.convertToCoords([latlngs]);
-    // const p = this.getPolygon()
-
-    // if (poly.geometry.type === "MultiPolygon") {
-    //   let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(poly);
-    //   this.deletePolygon(this.getLatLngsFromJson(poly));
-    //   this.addPolygonLayer(newPolygon, false);
-    // }
   }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
