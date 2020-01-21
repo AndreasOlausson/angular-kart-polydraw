@@ -10678,6 +10678,2030 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var __values =
 
 /***/ }),
 
+/***/ "./projects/lib/src/assets/polyInfo.json":
+/*!***********************************************!*\
+  !*** ./projects/lib/src/assets/polyInfo.json ***!
+  \***********************************************/
+/*! exports provided: touchSupport, mergePolygons, kinks, markers, polyLineOptions, subtractLineOptions, polygonOptions, default */
+/***/ (function(module) {
+
+module.exports = {"touchSupport":true,"mergePolygons":true,"kinks":false,"markers":{"menu":true,"delete":true,"markerIcon":{"styleClasses":["polygon-marker"]},"holeIcon":{"styleClasses":["polygon-marker","hole"]},"markerMenuIcon":{"position":4,"styleClasses":["polygon-marker","menu"]},"markerDeleteIcon":{"position":1,"styleClasses":["polygon-marker","delete"]}},"polyLineOptions":{"color":"#50622b","opacity":1,"smoothFactor":0,"noClip":true,"clickable":false,"weight":2},"subtractLineOptions":{"color":"#50622b","opacity":1,"smoothFactor":0,"noClip":true,"clickable":false,"weight":2},"polygonOptions":{"smoothFactor":0.3,"color":"#50622b","fillColor":"#b4cd8a","noClip":true}};
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/component-generater.service.ts":
+/*!*************************************************************!*\
+  !*** ./projects/lib/src/lib/component-generater.service.ts ***!
+  \*************************************************************/
+/*! exports provided: ComponentGeneraterService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComponentGeneraterService", function() { return ComponentGeneraterService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./popups/alter-polygon/alter-polygon.component */ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ComponentGeneraterService = /** @class */ (function () {
+    function ComponentGeneraterService(cfr, injector) {
+        this.cfr = cfr;
+        this.injector = injector;
+        this.clusterPopuprefs = [];
+    }
+    ComponentGeneraterService.prototype.ngOnDestroy = function () {
+        this.destroyAngularPopupComponents();
+    };
+    ComponentGeneraterService.prototype.generateAlterPopup = function () {
+        var cmpFactory = this.cfr.resolveComponentFactory(_popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_1__["AlterPolygonComponent"]);
+        var popupComponentRef = cmpFactory.create(this.injector);
+        this.clusterPopuprefs.push(popupComponentRef);
+        return popupComponentRef;
+    };
+    ComponentGeneraterService.prototype.destroyAngularPopupComponents = function () {
+        this.clusterPopuprefs.forEach(function (cref) {
+            if (cref) {
+                cref.destroy();
+            }
+        });
+        this.clusterPopuprefs = [];
+    };
+    ComponentGeneraterService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"],
+            _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"]])
+    ], ComponentGeneraterService);
+    return ComponentGeneraterService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/enums.ts":
+/*!***************************************!*\
+  !*** ./projects/lib/src/lib/enums.ts ***!
+  \***************************************/
+/*! exports provided: DrawMode, MarkerPlacement */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DrawMode", function() { return DrawMode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarkerPlacement", function() { return MarkerPlacement; });
+var DrawMode;
+(function (DrawMode) {
+    DrawMode[DrawMode["Off"] = 0] = "Off";
+    DrawMode[DrawMode["Add"] = 1] = "Add";
+    DrawMode[DrawMode["Edit"] = 2] = "Edit";
+    DrawMode[DrawMode["Subtract"] = 4] = "Subtract";
+    DrawMode[DrawMode["AppendMarker"] = 8] = "AppendMarker";
+    DrawMode[DrawMode["LoadPredefined"] = 16] = "LoadPredefined";
+})(DrawMode || (DrawMode = {}));
+var MarkerPlacement;
+(function (MarkerPlacement) {
+    // CenterOfMass = 0,
+    MarkerPlacement[MarkerPlacement["North"] = 1] = "North";
+    MarkerPlacement[MarkerPlacement["East"] = 2] = "East";
+    MarkerPlacement[MarkerPlacement["South"] = 3] = "South";
+    MarkerPlacement[MarkerPlacement["West"] = 4] = "West";
+    MarkerPlacement[MarkerPlacement["NorthEast"] = 5] = "NorthEast";
+    MarkerPlacement[MarkerPlacement["NorthWest"] = 6] = "NorthWest";
+    MarkerPlacement[MarkerPlacement["SouthEast"] = 7] = "SouthEast";
+    MarkerPlacement[MarkerPlacement["SouthWest"] = 8] = "SouthWest";
+    // BoundingBoxCenter = 9
+})(MarkerPlacement || (MarkerPlacement = {}));
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/leaflet-helper.service.ts":
+/*!********************************************************!*\
+  !*** ./projects/lib/src/lib/leaflet-helper.service.ts ***!
+  \********************************************************/
+/*! exports provided: LeafletHelperService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LeafletHelperService", function() { return LeafletHelperService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var LeafletHelperService = /** @class */ (function () {
+    function LeafletHelperService() {
+    }
+    LeafletHelperService.prototype.createPolygon = function (latLngs) {
+        var p = leaflet__WEBPACK_IMPORTED_MODULE_1__["polygon"](latLngs);
+        return p;
+    };
+    LeafletHelperService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: "root" }),
+        __metadata("design:paramtypes", [])
+    ], LeafletHelperService);
+    return LeafletHelperService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/lib.component.ts":
+/*!***********************************************!*\
+  !*** ./projects/lib/src/lib/lib.component.ts ***!
+  \***********************************************/
+/*! exports provided: LibComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LibComponent", function() { return LibComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var LibComponent = /** @class */ (function () {
+    function LibComponent() {
+    }
+    LibComponent.prototype.ngOnInit = function () {
+    };
+    LibComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'enl-lib',
+            template: "\n    <p>\n      lib works!\n    </p>\n  ",
+            styles: []
+        }),
+        __metadata("design:paramtypes", [])
+    ], LibComponent);
+    return LibComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/lib.module.ts":
+/*!********************************************!*\
+  !*** ./projects/lib/src/lib/lib.module.ts ***!
+  \********************************************/
+/*! exports provided: LibModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LibModule", function() { return LibModule; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _lib_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib.component */ "./projects/lib/src/lib/lib.component.ts");
+/* harmony import */ var _popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./popups/alter-polygon/alter-polygon.component */ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+
+var LibModule = /** @class */ (function () {
+    function LibModule() {
+    }
+    LibModule = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
+            declarations: [_lib_component__WEBPACK_IMPORTED_MODULE_1__["LibComponent"], _popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_2__["AlterPolygonComponent"]],
+            imports: [],
+            exports: [_lib_component__WEBPACK_IMPORTED_MODULE_1__["LibComponent"], _popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_2__["AlterPolygonComponent"]]
+        })
+    ], LibModule);
+    return LibModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/lib.service.ts":
+/*!*********************************************!*\
+  !*** ./projects/lib/src/lib/lib.service.ts ***!
+  \*********************************************/
+/*! exports provided: LibService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LibService", function() { return LibService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var LibService = /** @class */ (function () {
+    function LibService() {
+    }
+    LibService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [])
+    ], LibService);
+    return LibService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/map-state.service.ts":
+/*!***************************************************!*\
+  !*** ./projects/lib/src/lib/map-state.service.ts ***!
+  \***************************************************/
+/*! exports provided: MapStateService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MapStateService", function() { return MapStateService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var MapStateService = /** @class */ (function () {
+    function MapStateService() {
+        this.mapSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](null);
+        this.map$ = this.mapSubject.asObservable();
+    }
+    MapStateService.prototype.updateMapState = function (map) {
+        this.mapSubject.next(map);
+    };
+    MapStateService.prototype.updatePolygons = function (polygons) {
+        console.log("map-state", polygons);
+    };
+    MapStateService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [])
+    ], MapStateService);
+    return MapStateService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/polydraw.service.ts":
+/*!**************************************************!*\
+  !*** ./projects/lib/src/lib/polydraw.service.ts ***!
+  \**************************************************/
+/*! exports provided: PolyDrawService, DrawMode */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolyDrawService", function() { return PolyDrawService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DrawMode", function() { return DrawMode; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _map_state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./map-state.service */ "./projects/lib/src/lib/map-state.service.ts");
+/* harmony import */ var _turf_helper_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./turf-helper.service */ "./projects/lib/src/lib/turf-helper.service.ts");
+/* harmony import */ var _polygon_information_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./polygon-information.service */ "./projects/lib/src/lib/polygon-information.service.ts");
+/* harmony import */ var _assets_polyInfo_json__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../assets/polyInfo.json */ "./projects/lib/src/assets/polyInfo.json");
+var _assets_polyInfo_json__WEBPACK_IMPORTED_MODULE_7___namespace = /*#__PURE__*/__webpack_require__.t(/*! ./../assets/polyInfo.json */ "./projects/lib/src/assets/polyInfo.json", 1);
+/* harmony import */ var _component_generater_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./component-generater.service */ "./projects/lib/src/lib/component-generater.service.ts");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils */ "./projects/lib/src/lib/utils.ts");
+/* harmony import */ var _leaflet_helper_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./leaflet-helper.service */ "./projects/lib/src/lib/leaflet-helper.service.ts");
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+//import * as turf from "@turf/turf";
+
+
+
+
+
+
+
+
+
+var PolyDrawService = /** @class */ (function () {
+    function PolyDrawService(mapState, popupGenerator, turfHelper, polygonInformation, leafletHelper) {
+        var _this = this;
+        this.mapState = mapState;
+        this.popupGenerator = popupGenerator;
+        this.turfHelper = turfHelper;
+        this.polygonInformation = polygonInformation;
+        this.leafletHelper = leafletHelper;
+        //DrawModes, determine UI buttons etc...
+        this.drawModeSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](DrawMode.Off);
+        this.drawMode$ = this.drawModeSubject.asObservable();
+        //add to config
+        this.arrayOfFeatureGroups = [];
+        this.tracer = {};
+        this.polygonDrawStates = null;
+        //end add to config
+        this.ngUnsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+        this.config = null;
+        this.mapState.map$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (m) { return m !== null; })).subscribe(function (map) {
+            _this.map = map;
+            console.log("pre this.config", _this.config);
+            _this.config = _assets_polyInfo_json__WEBPACK_IMPORTED_MODULE_7__;
+            console.log("this.config", _this.config);
+            _this.configurate({});
+            console.log("after this.config", _this.config);
+            _this.tracer = leaflet__WEBPACK_IMPORTED_MODULE_1__["polyline"]([[0, 0]], _this.config.polyLineOptions);
+            _this.initPolyDraw();
+        });
+        this.polygonInformation.polygonInformation$.subscribe(function (k) {
+            console.log("PolyInfo start: ", k);
+        });
+        //TODO - lage en config observable i mapState og oppdater this.config med den
+    }
+    //new
+    PolyDrawService.prototype.configurate = function (config) {
+        //TODO if config is path...
+        this.config = __assign({}, _assets_polyInfo_json__WEBPACK_IMPORTED_MODULE_7__, config);
+        this.mergePolygons = this.config.mergePolygons;
+        this.kinks = this.config.kinks;
+    };
+    //fine
+    PolyDrawService.prototype.closeAndReset = function () {
+        //console.log("closeAndReset");
+        this.setDrawMode(DrawMode.Off);
+        this.removeAllFeatureGroups();
+    };
+    //make readable
+    PolyDrawService.prototype.deletePolygon = function (polygon) {
+        var _this = this;
+        console.log("deletePolygon: ", polygon);
+        if (this.arrayOfFeatureGroups.length > 0) {
+            this.arrayOfFeatureGroups.forEach(function (featureGroup) {
+                var layer = featureGroup.getLayers()[0];
+                var latlngs = layer.getLatLngs();
+                var length = latlngs.length;
+                //  = []
+                latlngs.forEach(function (latlng, index) {
+                    var polygon3;
+                    var test = latlng.slice();
+                    console.log(latlng);
+                    if (latlng.length > 1) {
+                        if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
+                            test[0].push(latlng[0][0]);
+                        }
+                        polygon3 = [test[0]];
+                    }
+                    else {
+                        if (latlng[0] !== latlng[latlng.length - 1]) {
+                            test.push(latlng[0]);
+                        }
+                        polygon3 = test;
+                    }
+                    console.log("Test: ", polygon3);
+                    console.log(polygon);
+                    var equals = _this.polygonArrayEquals(polygon3, polygon);
+                    console.log("equals: ", equals, " length: ", length);
+                    if (equals && length === 1) {
+                        _this.polygonInformation.deleteTrashcan(polygon);
+                        _this.removeFeatureGroup(featureGroup);
+                        console.log(featureGroup.getLayers());
+                    }
+                    else if (equals && length > 1) {
+                        _this.polygonInformation.deleteTrashCanOnMulti([polygon]);
+                        latlngs.splice(index, 1);
+                        layer.setLatLngs(latlngs);
+                        _this.removeFeatureGroup(featureGroup);
+                        _this.addPolygonLayer(layer.toGeoJSON(), false);
+                    }
+                });
+            });
+        }
+    };
+    //fine
+    PolyDrawService.prototype.removeAllFeatureGroups = function () {
+        var _this = this;
+        //console.log("removeAllFeatureGroups", null);
+        this.arrayOfFeatureGroups.forEach(function (featureGroups) {
+            _this.map.removeLayer(featureGroups);
+        });
+        this.arrayOfFeatureGroups = [];
+        this.polygonInformation.deletePolygonInformationStorage();
+        // this.polygonDrawStates.reset();
+        this.polygonInformation.updatePolygons();
+    };
+    //fine
+    PolyDrawService.prototype.getDrawMode = function () {
+        //console.log("getDrawMode", null);
+        return this.drawModeSubject.value;
+    };
+    PolyDrawService.prototype.addViken = function (polygon) {
+        this.addPolygonLayer(polygon, true);
+    };
+    //check this
+    PolyDrawService.prototype.addAutoPolygon = function (geographicBorders) {
+        var _this = this;
+        var featureGroup = new leaflet__WEBPACK_IMPORTED_MODULE_1__["FeatureGroup"]();
+        var polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
+        console.log(polygon2);
+        var polygon = this.getPolygon(polygon2);
+        featureGroup.addLayer(polygon);
+        var markerLatlngs = polygon.getLatLngs();
+        console.log("markers: ", markerLatlngs);
+        markerLatlngs.forEach(function (polygon) {
+            polygon.forEach(function (polyElement, i) {
+                if (i === 0) {
+                    _this.addMarker(polyElement, featureGroup);
+                }
+                else {
+                    _this.addHoleMarker(polyElement, featureGroup);
+                    console.log("Hull: ", polyElement);
+                }
+            });
+            // this.addMarker(polygon[0], featureGroup);
+            //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
+        });
+        this.arrayOfFeatureGroups.push(featureGroup);
+        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+    };
+    //innehåll i if'ar flytta till egna metoder
+    PolyDrawService.prototype.convertToCoords = function (latlngs) {
+        var coords = [];
+        console.log(latlngs.length, latlngs);
+        if (latlngs.length > 1 && latlngs.length < 3) {
+            var coordinates_1 = [];
+            console.log(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[latlngs.length - 1]), latlngs[latlngs.length - 1].length);
+            var within = this.turfHelper.isWithin(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[latlngs.length - 1]), leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[0]));
+            if (within) {
+                latlngs.forEach(function (polygon) {
+                    coordinates_1.push(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon));
+                });
+            }
+            else {
+                latlngs.forEach(function (polygon) {
+                    coords.push([leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon)]);
+                });
+            }
+            if (coordinates_1.length >= 1) {
+                coords.push(coordinates_1);
+            }
+            console.log("Within1 ", within);
+        }
+        else if (latlngs.length > 2) {
+            var coordinates_2 = [];
+            for (var index = 1; index < latlngs.length - 1; index++) {
+                var within = this.turfHelper.isWithin(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[index]), leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[0]));
+                if (within) {
+                    latlngs.forEach(function (polygon) {
+                        coordinates_2.push(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon));
+                    });
+                    coords.push(coordinates_2);
+                }
+                else {
+                    latlngs.forEach(function (polygon) {
+                        coords.push([leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon)]);
+                    });
+                }
+            }
+        }
+        else {
+            coords.push([leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[0])]);
+        }
+        console.log(coords);
+        return coords;
+    };
+    //fine
+    PolyDrawService.prototype.initPolyDraw = function () {
+        //console.log("initPolyDraw", null);
+        var _this = this;
+        var container = this.map.getContainer();
+        var drawMode = this.getDrawMode();
+        if (this.config.touchSupport) {
+            container.addEventListener("touchstart", function (e) {
+                if (drawMode !== DrawMode.Off) {
+                    _this.mouseDown(e);
+                }
+            });
+            container.addEventListener("touchend", function (e) {
+                if (drawMode !== DrawMode.Off) {
+                    _this.mouseUpLeave();
+                }
+            });
+            container.addEventListener("touchmove", function (e) {
+                if (drawMode !== DrawMode.Off) {
+                    _this.mouseMove(e);
+                }
+            });
+        }
+        this.map.addLayer(this.tracer);
+        this.setDrawMode(DrawMode.Off);
+    };
+    //Test L.MouseEvent
+    PolyDrawService.prototype.mouseDown = function (event) {
+        console.log("mouseDown", event);
+        if (event.originalEvent != null) {
+            this.tracer.setLatLngs([event.latlng]);
+        }
+        else {
+            var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+            this.tracer.setLatLngs([latlng]);
+        }
+        this.startDraw();
+    };
+    //TODO event type, create containerPointToLatLng-method
+    PolyDrawService.prototype.mouseMove = function (event) {
+        //console.log("mouseMove", event);
+        if (event.originalEvent != null) {
+            this.tracer.addLatLng(event.latlng);
+        }
+        else {
+            var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+            this.tracer.addLatLng(latlng);
+        }
+    };
+    //fine
+    PolyDrawService.prototype.mouseUpLeave = function () {
+        //console.log("mouseUpLeave", null);
+        this.polygonInformation.deletePolygonInformationStorage();
+        //console.log("------------------------------Delete trashcans", null);
+        var geoPos = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON());
+        this.stopDraw();
+        switch (this.getDrawMode()) {
+            case DrawMode.AddPolygon:
+                this.addPolygon(geoPos, true);
+                break;
+            case DrawMode.SubtractPolygon:
+                this.subtractPolygon(geoPos);
+                break;
+            default:
+                break;
+        }
+        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+        //console.log("------------------------------create trashcans", null);
+    };
+    //fine
+    PolyDrawService.prototype.startDraw = function () {
+        //console.log("startDraw", null);
+        this.drawStartedEvents(true);
+    };
+    //fine
+    PolyDrawService.prototype.stopDraw = function () {
+        //console.log("stopDraw", null);
+        this.resetTracker();
+        this.drawStartedEvents(false);
+    };
+    //fine
+    PolyDrawService.prototype.drawStartedEvents = function (onoff) {
+        //console.log("drawStartedEvents", onoff);
+        var onoroff = onoff ? "on" : "off";
+        this.map[onoroff]("mousemove", this.mouseMove, this);
+        this.map[onoroff]("mouseup", this.mouseUpLeave, this);
+    };
+    //On hold
+    PolyDrawService.prototype.subtractPolygon = function (latlngs) {
+        this.subtract(latlngs);
+    };
+    //fine
+    PolyDrawService.prototype.addPolygon = function (latlngs, simplify, noMerge) {
+        if (noMerge === void 0) { noMerge = false; }
+        console.log("addPolygon", latlngs, simplify, noMerge, this.kinks, this.config);
+        if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
+            this.merge(latlngs);
+        }
+        else {
+            this.addPolygonLayer(latlngs, simplify);
+        }
+    };
+    //fine
+    PolyDrawService.prototype.addPolygonLayer = function (latlngs, simplify) {
+        var _this = this;
+        var featureGroup = new leaflet__WEBPACK_IMPORTED_MODULE_1__["FeatureGroup"]();
+        var latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
+        console.log("AddPolygonLayer: ", latLngs);
+        var polygon = this.getPolygon(latLngs);
+        featureGroup.addLayer(polygon);
+        console.log(polygon);
+        var markerLatlngs = polygon.getLatLngs();
+        markerLatlngs.forEach(function (polygon) {
+            polygon.forEach(function (polyElement, i) {
+                if (i === 0) {
+                    _this.addMarker(polyElement, featureGroup);
+                }
+                else {
+                    _this.addHoleMarker(polyElement, featureGroup);
+                    console.log("Hull: ", polyElement);
+                }
+            });
+            // this.addMarker(polygon[0], featureGroup);
+            //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
+        });
+        this.arrayOfFeatureGroups.push(featureGroup);
+        console.log("Array: ", this.arrayOfFeatureGroups);
+        this.setDrawMode(DrawMode.Off);
+        featureGroup.on("click", function (e) {
+            _this.polygonClicked(e, latLngs);
+        });
+    };
+    //fine
+    PolyDrawService.prototype.polygonClicked = function (e, poly) {
+        var newPoint = e.latlng;
+        if (poly.geometry.type === "MultiPolygon") {
+            var newPolygon = this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat]);
+            this.deletePolygon(this.getLatLngsFromJson(poly));
+            this.addPolygonLayer(newPolygon, false);
+        }
+    };
+    //fine
+    PolyDrawService.prototype.getPolygon = function (latlngs) {
+        console.log("getPolygons: ", latlngs);
+        var polygon = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].geometryToLayer(latlngs);
+        polygon.setStyle(this.config.polygonOptions);
+        return polygon;
+    };
+    //fine
+    PolyDrawService.prototype.merge = function (latlngs) {
+        var _this = this;
+        console.log("merge", latlngs);
+        var polygonFeature = [];
+        var newArray = [];
+        var polyIntersection = false;
+        this.arrayOfFeatureGroups.forEach(function (featureGroup) {
+            var featureCollection = featureGroup.toGeoJSON();
+            if (featureCollection.features[0].geometry.coordinates.length > 1) {
+                featureCollection.features[0].geometry.coordinates.forEach(function (element) {
+                    var feature = _this.turfHelper.getMultiPolygon([element]);
+                    polyIntersection = _this.turfHelper.polygonIntersect(feature, latlngs);
+                    if (polyIntersection) {
+                        newArray.push(featureGroup);
+                        polygonFeature.push(feature);
+                    }
+                });
+            }
+            else {
+                var feature = _this.turfHelper.getTurfPolygon(featureCollection.features[0]);
+                polyIntersection = _this.turfHelper.polygonIntersect(feature, latlngs);
+                if (polyIntersection) {
+                    newArray.push(featureGroup);
+                    polygonFeature.push(feature);
+                }
+            }
+        });
+        console.log(newArray);
+        if (newArray.length > 0) {
+            this.unionPolygons(newArray, latlngs, polygonFeature);
+        }
+        else {
+            this.addPolygonLayer(latlngs, true);
+        }
+    };
+    //next
+    PolyDrawService.prototype.subtract = function (latlngs) {
+        var _this = this;
+        var addHole = latlngs;
+        this.arrayOfFeatureGroups.forEach(function (featureGroup) {
+            var featureCollection = featureGroup.toGeoJSON();
+            var layer = featureCollection.features[0];
+            var poly = _this.getLatLngsFromJson(layer);
+            var feature = _this.turfHelper.getTurfPolygon(featureCollection.features[0]);
+            var newPolygon = _this.turfHelper.polygonDifference(feature, addHole);
+            _this.deletePolygon(poly);
+            _this.removeFeatureGroupOnMerge(featureGroup);
+            addHole = newPolygon;
+        });
+        var newLatlngs = addHole;
+        var coords = this.turfHelper.getCoords(newLatlngs);
+        coords.forEach(function (value) {
+            _this.addPolygonLayer(_this.turfHelper.getMultiPolygon([value]), true);
+        });
+    };
+    //fine
+    PolyDrawService.prototype.events = function (onoff) {
+        var onoroff = onoff ? "on" : "off";
+        this.map[onoroff]("mousedown", this.mouseDown, this);
+    };
+    //fine, TODO: if special markers
+    PolyDrawService.prototype.addMarker = function (latlngs, FeatureGroup) {
+        var _this = this;
+        var menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
+        var deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
+        latlngs.forEach(function (latlng, i) {
+            var iconClasses = _this.config.markers.markerIcon.styleClasses;
+            if (i === menuMarkerIdx && _this.config.markers.menu) {
+                iconClasses = _this.config.markers.markerMenuIcon.styleClasses;
+            }
+            if (i === deleteMarkerIdx && _this.config.markers.delete) {
+                iconClasses = _this.config.markers.markerDeleteIcon.styleClasses;
+            }
+            var marker = new leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"](latlng, { icon: _this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+            FeatureGroup.addLayer(marker).addTo(_this.map);
+            // console.log("FeatureGroup: ", FeatureGroup);
+            marker.on("drag", function (e) {
+                _this.markerDrag(FeatureGroup);
+            });
+            marker.on("dragend", function (e) {
+                _this.markerDragEnd(FeatureGroup);
+            });
+            if (i === menuMarkerIdx && _this.config.markers.menu) {
+                // marker.bindPopup(
+                //   this.getHtmlContent(e => {
+                //     console.log("clicked on", e.target);
+                //   })
+                // );
+                // marker.on("click", e => {
+                //   this.convertToBoundsPolygon(e, latlngs)
+                // })
+            }
+            if (i === deleteMarkerIdx && _this.config.markers.delete) {
+                marker.on("click", function (e) {
+                    _this.deletePolygon([latlngs]);
+                });
+            }
+        });
+    };
+    PolyDrawService.prototype.addHoleMarker = function (latlngs, FeatureGroup) {
+        var _this = this;
+        latlngs.forEach(function (latlng, i) {
+            var iconClasses = _this.config.markers.markerIcon.styleClasses;
+            /*  if (i === 0 && this.config.markers.menu) {
+              iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+            }
+      
+            //TODO- legg til fill icon
+            if (i === latlngs.length - 1 && this.config.markers.delete) {
+              iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+            } */
+            var marker = new leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"](latlng, { icon: _this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+            FeatureGroup.addLayer(marker).addTo(_this.map);
+            marker.on("drag", function (e) {
+                _this.markerDrag(FeatureGroup);
+            });
+            marker.on("dragend", function (e) {
+                _this.markerDragEnd(FeatureGroup);
+            });
+            /*   if (i === 0 && this.config.markers.menu) {
+              marker.bindPopup(this.getHtmlContent((e) => {
+                console.log("clicked on", e.target);
+              }));
+              // marker.on("click", e => {
+              //   this.toggleMarkerMenu();
+              // })
+            }
+            if (i === latlngs.length - 1 && this.config.markers.delete) {
+              marker.on("click", e => {
+                this.deletePolygon([latlngs]);
+              });
+            } */
+        });
+    };
+    PolyDrawService.prototype.createDivIcon = function (classNames) {
+        var classes = classNames.join(" ");
+        var icon = leaflet__WEBPACK_IMPORTED_MODULE_1__["divIcon"]({ className: classes });
+        return icon;
+    };
+    //TODO: Cleanup
+    PolyDrawService.prototype.markerDrag = function (FeatureGroup) {
+        var newPos = [];
+        var testarray = [];
+        var hole = [];
+        var layerLength = FeatureGroup.getLayers();
+        var posarrays = layerLength[0].getLatLngs();
+        console.log(posarrays);
+        var length = 0;
+        if (posarrays.length > 1) {
+            for (var index = 0; index < posarrays.length; index++) {
+                testarray = [];
+                hole = [];
+                console.log("Posisjoner: ", posarrays[index]);
+                if (index === 0) {
+                    if (posarrays[0].length > 1) {
+                        for (var i = 0; index < posarrays[0].length; i++) {
+                            console.log("Posisjoner 2: ", posarrays[index][i]);
+                            for (var j = 0; j < posarrays[0][i].length; j++) {
+                                testarray.push(layerLength[j + 1].getLatLng());
+                            }
+                            hole.push(testarray);
+                        }
+                    }
+                    else {
+                        for (var j = 0; j < posarrays[0][0].length; j++) {
+                            testarray.push(layerLength[j + 1].getLatLng());
+                        }
+                        hole.push(testarray);
+                    }
+                    console.log("Hole: ", hole);
+                    newPos.push(hole);
+                }
+                else {
+                    length += posarrays[index - 1][0].length;
+                    console.log("STart index: ", length);
+                    for (var j = length; j < posarrays[index][0].length + length; j++) {
+                        testarray.push(layerLength[j + 1].getLatLng());
+                    }
+                    hole.push(testarray);
+                    newPos.push(hole);
+                }
+            }
+        }
+        else {
+            // testarray = []
+            hole = [];
+            var length2 = 0;
+            for (var index = 0; index < posarrays[0].length; index++) {
+                testarray = [];
+                console.log("Polygon drag: ", posarrays[0][index]);
+                if (index === 0) {
+                    if (posarrays[0][index].length > 1) {
+                        for (var j = 0; j < posarrays[0][index].length; j++) {
+                            testarray.push(layerLength[j + 1].getLatLng());
+                        }
+                    }
+                    else {
+                        for (var j = 0; j < posarrays[0][0].length; j++) {
+                            testarray.push(layerLength[j + 1].getLatLng());
+                        }
+                    }
+                }
+                else {
+                    length2 += posarrays[0][index - 1].length;
+                    for (var j = length2; j < posarrays[0][index].length + length2; j++) {
+                        testarray.push(layerLength[j + 1].getLatLng());
+                    }
+                }
+                hole.push(testarray);
+            }
+            newPos.push(hole);
+            console.log("Hole 2: ", hole);
+        }
+        console.log("Nye posisjoner: ", newPos);
+        layerLength[0].setLatLngs(newPos);
+    };
+    // check this
+    PolyDrawService.prototype.markerDragEnd = function (FeatureGroup) {
+        var _this = this;
+        this.polygonInformation.deletePolygonInformationStorage();
+        var featureCollection = FeatureGroup.toGeoJSON();
+        console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
+        if (featureCollection.features[0].geometry.coordinates.length > 1) {
+            featureCollection.features[0].geometry.coordinates.forEach(function (element) {
+                var feature = _this.turfHelper.getMultiPolygon([element]);
+                console.log("Markerdragend: ", feature);
+                if (_this.turfHelper.hasKinks(feature)) {
+                    _this.kinks = true;
+                    var unkink = _this.turfHelper.getKinks(feature);
+                    // this.deletePolygon(this.getLatLngsFromJson(feature));
+                    _this.removeFeatureGroup(FeatureGroup);
+                    console.log("Unkink: ", unkink);
+                    unkink.forEach(function (polygon) {
+                        _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
+                    });
+                }
+                else {
+                    _this.kinks = false;
+                    _this.addPolygon(feature, false);
+                }
+            });
+        }
+        else {
+            var feature = this.turfHelper.getMultiPolygon(featureCollection.features[0].geometry.coordinates);
+            console.log("Markerdragend: ", feature);
+            if (this.turfHelper.hasKinks(feature)) {
+                this.kinks = true;
+                var unkink = this.turfHelper.getKinks(feature);
+                // this.deletePolygon(this.getLatLngsFromJson(feature));
+                this.removeFeatureGroup(FeatureGroup);
+                console.log("Unkink: ", unkink);
+                unkink.forEach(function (polygon) {
+                    _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
+                });
+            }
+            else {
+                // this.deletePolygon(this.getLatLngsFromJson(feature));
+                this.kinks = false;
+                this.addPolygon(feature, false);
+            }
+        }
+        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+    };
+    //fine, check the returned type
+    PolyDrawService.prototype.getLatLngsFromJson = function (feature) {
+        console.log("getLatLngsFromJson: ", feature);
+        var coord;
+        if (feature) {
+            if (feature.geometry.coordinates.length > 1 && feature.geometry.type === "MultiPolygon") {
+                coord = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].coordsToLatLngs(feature.geometry.coordinates[0][0]);
+            }
+            else if (feature.geometry.coordinates[0].length > 1 && feature.geometry.type === "Polygon") {
+                coord = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].coordsToLatLngs(feature.geometry.coordinates[0]);
+            }
+            else {
+                coord = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].coordsToLatLngs(feature.geometry.coordinates[0][0]);
+            }
+        }
+        return coord;
+    };
+    //fine
+    PolyDrawService.prototype.unionPolygons = function (layers, latlngs, polygonFeature) {
+        var _this = this;
+        console.log("unionPolygons", layers, latlngs, polygonFeature);
+        var addNew = latlngs;
+        layers.forEach(function (featureGroup, i) {
+            var featureCollection = featureGroup.toGeoJSON();
+            var layer = featureCollection.features[0];
+            var poly = _this.getLatLngsFromJson(layer);
+            var union = _this.turfHelper.union(addNew, polygonFeature[i]); //Check for multipolygons
+            //Needs a cleanup for the new version
+            _this.deletePolygonOnMerge(poly);
+            _this.removeFeatureGroup(featureGroup);
+            addNew = union;
+        });
+        var newLatlngs = addNew; //Trenger kanskje this.turfHelper.getTurfPolygon( addNew);
+        this.addPolygonLayer(newLatlngs, true);
+    };
+    //fine
+    PolyDrawService.prototype.removeFeatureGroup = function (featureGroup) {
+        console.log("removeFeatureGroup", featureGroup);
+        featureGroup.clearLayers();
+        this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(function (featureGroups) { return featureGroups !== featureGroup; });
+        // this.updatePolygons();
+        this.map.removeLayer(featureGroup);
+    };
+    //fine until refactoring
+    PolyDrawService.prototype.removeFeatureGroupOnMerge = function (featureGroup) {
+        console.log("removeFeatureGroupOnMerge", featureGroup);
+        var newArray = [];
+        if (featureGroup.getLayers()[0]) {
+            var polygon_1 = featureGroup.getLayers()[0].getLatLngs()[0];
+            this.polygonInformation.polygonInformationStorage.forEach(function (v) {
+                if (v.polygon.toString() !== polygon_1[0].toString() && v.polygon[0].toString() === polygon_1[0][0].toString()) {
+                    v.polygon = polygon_1;
+                    newArray.push(v);
+                }
+                if (v.polygon.toString() !== polygon_1[0].toString() && v.polygon[0].toString() !== polygon_1[0][0].toString()) {
+                    newArray.push(v);
+                }
+            });
+            featureGroup.clearLayers();
+            this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(function (featureGroups) { return featureGroups !== featureGroup; });
+            this.map.removeLayer(featureGroup);
+        }
+    };
+    //fine until refactoring
+    PolyDrawService.prototype.deletePolygonOnMerge = function (polygon) {
+        var _this = this;
+        console.log("deletePolygonOnMerge", polygon);
+        var polygon2 = [];
+        if (this.arrayOfFeatureGroups.length > 0) {
+            this.arrayOfFeatureGroups.forEach(function (featureGroup) {
+                var layer = featureGroup.getLayers()[0];
+                var latlngs = layer.getLatLngs()[0];
+                polygon2 = latlngs[0].slice();
+                if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
+                    polygon2.push(latlngs[0][0]);
+                }
+                var equals = _this.polygonArrayEqualsMerge(polygon2, polygon);
+                if (equals) {
+                    console.log("EQUALS", polygon);
+                    _this.removeFeatureGroupOnMerge(featureGroup);
+                    _this.deletePolygon(polygon);
+                    _this.polygonInformation.deleteTrashcan(polygon);
+                    // this.updatePolygons();
+                }
+            });
+        }
+    };
+    //TODO - legge et annet sted
+    PolyDrawService.prototype.polygonArrayEqualsMerge = function (poly1, poly2) {
+        return poly1.toString() === poly2.toString();
+    };
+    //TODO - legge et annet sted
+    PolyDrawService.prototype.polygonArrayEquals = function (poly1, poly2) {
+        // console.log("polygonArrayEquals", poly1, poly2);
+        if (poly1[0][0]) {
+            if (!poly1[0][0].equals(poly2[0][0]))
+                return false;
+        }
+        else {
+            if (!poly1[0].equals(poly2[0]))
+                return false;
+        }
+        if (poly1.length !== poly2.length)
+            return false;
+        else {
+            return true;
+        }
+    };
+    //fine
+    PolyDrawService.prototype.setLeafletMapEvents = function (enableDragging, enableDoubleClickZoom, enableScrollWheelZoom) {
+        //console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
+        enableDragging ? this.map.dragging.enable() : this.map.dragging.disable();
+        enableDoubleClickZoom ? this.map.doubleClickZoom.enable() : this.map.doubleClickZoom.disable();
+        enableScrollWheelZoom ? this.map.scrollWheelZoom.enable() : this.map.scrollWheelZoom.disable();
+    };
+    //fine
+    PolyDrawService.prototype.setDrawMode = function (mode) {
+        console.log("setDrawMode", this.map);
+        this.drawModeSubject.next(mode);
+        if (!!this.map) {
+            var isActiveDrawMode = true;
+            switch (mode) {
+                case DrawMode.Off:
+                    leaflet__WEBPACK_IMPORTED_MODULE_1__["DomUtil"].removeClass(this.map.getContainer(), "crosshair-cursor-enabled");
+                    this.events(false);
+                    this.stopDraw();
+                    this.tracer.setStyle({
+                        color: ""
+                    });
+                    this.setLeafletMapEvents(true, true, true);
+                    isActiveDrawMode = false;
+                    break;
+                case DrawMode.AddPolygon:
+                    leaflet__WEBPACK_IMPORTED_MODULE_1__["DomUtil"].addClass(this.map.getContainer(), "crosshair-cursor-enabled");
+                    this.events(true);
+                    this.tracer.setStyle({
+                        color: _assets_polyInfo_json__WEBPACK_IMPORTED_MODULE_7__.polyLineOptions.color
+                    });
+                    this.setLeafletMapEvents(false, false, false);
+                    break;
+                case DrawMode.SubtractPolygon:
+                    leaflet__WEBPACK_IMPORTED_MODULE_1__["DomUtil"].addClass(this.map.getContainer(), "crosshair-cursor-enabled");
+                    this.events(true);
+                    this.tracer.setStyle({
+                        color: "#D9460F"
+                    });
+                    this.setLeafletMapEvents(false, false, false);
+                    break;
+            }
+        }
+    };
+    PolyDrawService.prototype.modeChange = function (mode) {
+        this.setDrawMode(mode);
+        this.polygonInformation.saveCurrentState();
+    };
+    //remove, use modeChange
+    PolyDrawService.prototype.drawModeClick = function () {
+        this.setDrawMode(DrawMode.AddPolygon);
+        this.polygonInformation.saveCurrentState();
+    };
+    //remove, use modeChange
+    PolyDrawService.prototype.freedrawMenuClick = function () {
+        this.setDrawMode(DrawMode.AddPolygon);
+        this.polygonInformation.saveCurrentState();
+    };
+    //remove, use modeChange
+    PolyDrawService.prototype.subtractClick = function () {
+        this.setDrawMode(DrawMode.SubtractPolygon);
+        this.polygonInformation.saveCurrentState();
+    };
+    //fine
+    PolyDrawService.prototype.resetTracker = function () {
+        this.tracer.setLatLngs([[0, 0]]);
+    };
+    PolyDrawService.prototype.toggleMarkerMenu = function () {
+        alert("open menu");
+    };
+    PolyDrawService.prototype.getHtmlContent = function (callBack) {
+        var comp = this.popupGenerator.generateAlterPopup();
+        comp.instance.bboxClicked.subscribe(function (e) {
+            console.log("bbox clicked", e);
+            callBack(e);
+        });
+        comp.instance.simplyfiClicked.subscribe(function (e) {
+            console.log("simplyfi clicked", e);
+            callBack(e);
+        });
+        return comp.location.nativeElement;
+    };
+    PolyDrawService.prototype.convertToBoundsPolygon = function (latlngs) {
+        var lPoly = this.leafletHelper.createPolygon(latlngs);
+        // const coords = this.convertToCoords([latlngs]);
+        // const p = this.getPolygon()
+        // if (poly.geometry.type === "MultiPolygon") {
+        //   let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(poly);
+        //   this.deletePolygon(this.getLatLngsFromJson(poly));
+        //   this.addPolygonLayer(newPolygon, false);
+        // }
+    };
+    PolyDrawService.prototype.getMarkerIndex = function (latlngs, position) {
+        var bounds = _utils__WEBPACK_IMPORTED_MODULE_9__["PolyDrawUtil"].getBounds(latlngs, (Math.sqrt(2) / 2));
+        var compass = new _utils__WEBPACK_IMPORTED_MODULE_9__["Compass"](bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
+        var compassDirection = compass.getDirection(position);
+        var latLngPoint = {
+            lat: compassDirection[1],
+            lng: compassDirection[0]
+        };
+        var targetPoint = this.turfHelper.getCoord(latLngPoint);
+        var fc = this.turfHelper.getFeaturePointCollection(latlngs);
+        var nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc);
+        return nearestPointIdx;
+    };
+    PolyDrawService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: "root"
+        })
+        //Rename - PolyDrawService
+        ,
+        __metadata("design:paramtypes", [_map_state_service__WEBPACK_IMPORTED_MODULE_4__["MapStateService"],
+            _component_generater_service__WEBPACK_IMPORTED_MODULE_8__["ComponentGeneraterService"],
+            _turf_helper_service__WEBPACK_IMPORTED_MODULE_5__["TurfHelperService"],
+            _polygon_information_service__WEBPACK_IMPORTED_MODULE_6__["PolygonInformationService"],
+            _leaflet_helper_service__WEBPACK_IMPORTED_MODULE_10__["LeafletHelperService"]])
+    ], PolyDrawService);
+    return PolyDrawService;
+}());
+
+//flytt til enum.ts
+var DrawMode;
+(function (DrawMode) {
+    DrawMode[DrawMode["Off"] = 0] = "Off";
+    DrawMode[DrawMode["AddPolygon"] = 1] = "AddPolygon";
+    DrawMode[DrawMode["EditPolygon"] = 2] = "EditPolygon";
+    DrawMode[DrawMode["SubtractPolygon"] = 3] = "SubtractPolygon";
+    DrawMode[DrawMode["LoadPolygon"] = 4] = "LoadPolygon";
+})(DrawMode || (DrawMode = {}));
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/polygon-helpers.ts":
+/*!*************************************************!*\
+  !*** ./projects/lib/src/lib/polygon-helpers.ts ***!
+  \*************************************************/
+/*! exports provided: PolygonInfo, PolygonDrawStates */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonInfo", function() { return PolygonInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonDrawStates", function() { return PolygonDrawStates; });
+/* harmony import */ var _polygon_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./polygon.util */ "./projects/lib/src/lib/polygon.util.ts");
+
+var PolygonInfo = /** @class */ (function () {
+    function PolygonInfo(polygon) {
+        var _this = this;
+        this.polygon = [];
+        this.trashcanPoint = [];
+        this.sqmArea = [];
+        this.perimeter = [];
+        console.log("PolygonInfo: ", polygon);
+        polygon.forEach(function (polygons, i) {
+            _this.trashcanPoint[i] = _this.getTrashcanPoint(polygons[0]);
+            _this.sqmArea[i] = _this.calculatePolygonArea(polygons[0]);
+            _this.perimeter[i] = _this.calculatePolygonPerimeter(polygons[0]);
+            console.log(polygons[0]);
+            _this.polygon[i] = polygons;
+        });
+    }
+    PolygonInfo.prototype.setSqmArea = function (area) {
+        this.sqmArea[0] = area;
+    };
+    PolygonInfo.prototype.getTrashcanPoint = function (polygon) {
+        var res = Math.max.apply(Math, polygon.map(function (o) { return o.lat; }));
+        var idx = polygon.findIndex(function (o) { return o.lat === res; });
+        var previousPoint;
+        var nextPoint;
+        if (idx > 0) {
+            previousPoint = polygon[idx - 1];
+            if (idx < polygon.length - 1) {
+                nextPoint = polygon[idx + 1];
+            }
+            else {
+                nextPoint = polygon[0];
+            }
+        }
+        else {
+            previousPoint = polygon[polygon.length - 1];
+            nextPoint = polygon[idx + 1];
+        }
+        var secondPoint = (previousPoint.lng < nextPoint.lng) ? previousPoint : nextPoint;
+        var midpoint = _polygon_util__WEBPACK_IMPORTED_MODULE_0__["PolygonUtil"].getMidPoint(polygon[idx], secondPoint);
+        return midpoint;
+    };
+    PolygonInfo.prototype.calculatePolygonArea = function (polygon) {
+        var area = _polygon_util__WEBPACK_IMPORTED_MODULE_0__["PolygonUtil"].getSqmArea((polygon));
+        return area;
+    };
+    PolygonInfo.prototype.calculatePolygonPerimeter = function (polygon) {
+        var perimeter = _polygon_util__WEBPACK_IMPORTED_MODULE_0__["PolygonUtil"].getPerimeter((polygon));
+        return perimeter;
+    };
+    return PolygonInfo;
+}());
+
+var PolygonDrawStates = /** @class */ (function () {
+    function PolygonDrawStates() {
+        this.canUsePolyDraw = false;
+        this.reset();
+    }
+    PolygonDrawStates.prototype.activate = function () {
+        this.reset();
+        this.isActivated = true;
+    };
+    PolygonDrawStates.prototype.reset = function () {
+        this.isActivated = false;
+        this.hasPolygons = false;
+        this.canRevert = false;
+        this.isAuto = false;
+        this.resetDrawModes();
+    };
+    PolygonDrawStates.prototype.resetDrawModes = function () {
+        this.isFreeDrawMode = false;
+        this.isMoveMode = false;
+    };
+    PolygonDrawStates.prototype.setFreeDrawMode = function (isAuto) {
+        if (isAuto === void 0) { isAuto = false; }
+        if (isAuto) {
+            this.isActivated = true;
+        }
+        if (this.isActivated) {
+            this.resetDrawModes();
+            this.isFreeDrawMode = true;
+            if (isAuto) {
+                this.isAuto = true;
+            }
+        }
+    };
+    PolygonDrawStates.prototype.setMoveMode = function () {
+        if (this.isActivated) {
+            this.resetDrawModes();
+            this.isMoveMode = true;
+        }
+    };
+    PolygonDrawStates.prototype.forceCanUseFreeDraw = function () {
+        this.canUsePolyDraw = true;
+    };
+    return PolygonDrawStates;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/polygon-information.service.ts":
+/*!*************************************************************!*\
+  !*** ./projects/lib/src/lib/polygon-information.service.ts ***!
+  \*************************************************************/
+/*! exports provided: PolygonInformationService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonInformationService", function() { return PolygonInformationService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _polygon_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./polygon-helpers */ "./projects/lib/src/lib/polygon-helpers.ts");
+/* harmony import */ var _map_state_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./map-state.service */ "./projects/lib/src/lib/map-state.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var PolygonInformationService = /** @class */ (function () {
+    function PolygonInformationService(mapStateService) {
+        this.mapStateService = mapStateService;
+        this.polygonInformationSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+        this.polygonInformation$ = this.polygonInformationSubject.asObservable();
+        this.polygonDrawStatesSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
+        this.polygonDrawStates$ = this.polygonDrawStatesSubject.asObservable();
+        this.polygonInformationStorage = [];
+    }
+    PolygonInformationService.prototype.updatePolygons = function () {
+        console.log("updatePolygons: ", this.polygonInformationStorage);
+        var newPolygons = null;
+        if (this.polygonInformationStorage.length > 0) {
+            newPolygons = [];
+            this.polygonInformationStorage.forEach(function (v) {
+                var test = [];
+                v.polygon.forEach(function (poly) {
+                    var test2 = [];
+                    poly.forEach(function (polygon) {
+                        test2 = polygon.slice();
+                        if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
+                            test2.push(polygon[0]);
+                        }
+                        test.push(test2);
+                    });
+                });
+                newPolygons.push(test);
+            });
+            // this.polygonDrawStates.hasPolygons = true;
+        }
+        else {
+            // this.polygonDrawStates.reset();
+            // this.polygonDrawStates.hasPolygons = false;
+        }
+        this.mapStateService.updatePolygons(newPolygons);
+        this.saveCurrentState();
+    };
+    PolygonInformationService.prototype.saveCurrentState = function () {
+        this.polygonInformationSubject.next(this.polygonInformationStorage);
+        console.log("saveCurrentState: ", this.polygonInformationStorage);
+    };
+    PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
+        var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
+        this.polygonInformationStorage.splice(idx, 1);
+        this.updatePolygons();
+    };
+    PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
+        var index = 0;
+        console.log("DeleteTrashCan: ", polygon);
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+        // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
+        this.polygonInformationStorage.forEach(function (v, i) {
+            console.log(v.polygon);
+            var id = v.polygon.findIndex(function (poly) { return poly.toString() === polygon.toString(); });
+            if (id >= 0) {
+                index = i;
+                v.trashcanPoint.splice(id, 1);
+                v.sqmArea.splice(id, 1);
+                v.perimeter.splice(id, 1);
+                v.polygon.splice(id, 1);
+                console.log(v.polygon);
+            }
+            console.log("ID: ", id);
+        });
+        this.updatePolygons();
+        console.log("Index: ", index);
+        if (this.polygonInformationStorage.length > 1) {
+            this.polygonInformationStorage.splice(index, 1);
+        }
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+    };
+    PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
+        this.polygonInformationStorage = [];
+    };
+    PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
+        var _this = this;
+        console.log("Create Info: ", arrayOfFeatureGroups);
+        if (arrayOfFeatureGroups.length > 0) {
+            arrayOfFeatureGroups.forEach(function (featureGroup) {
+                console.log(featureGroup.getLayers()[0].getLatLngs());
+                var polyInfo = new _polygon_helpers__WEBPACK_IMPORTED_MODULE_2__["PolygonInfo"](featureGroup.getLayers()[0].getLatLngs());
+                _this.polygonInformationStorage.push(polyInfo);
+            });
+            this.updatePolygons();
+        }
+    };
+    PolygonInformationService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: "root" }),
+        __metadata("design:paramtypes", [_map_state_service__WEBPACK_IMPORTED_MODULE_3__["MapStateService"]])
+    ], PolygonInformationService);
+    return PolygonInformationService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/polygon.util.ts":
+/*!**********************************************!*\
+  !*** ./projects/lib/src/lib/polygon.util.ts ***!
+  \**********************************************/
+/*! exports provided: PolygonUtil */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonUtil", function() { return PolygonUtil; });
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @turf/turf */ "./node_modules/@turf/turf/turf.min.js");
+/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_turf_turf__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var PolygonUtil = /** @class */ (function () {
+    function PolygonUtil() {
+    }
+    PolygonUtil.getCenter = function (polygon) {
+        var pi = Math.PI;
+        var x = 0;
+        var y = 0;
+        var z = 0;
+        polygon.forEach(function (v) {
+            var lat1 = v.lat;
+            var lon1 = v.lng;
+            lat1 = lat1 * pi / 180;
+            lon1 = lon1 * pi / 180;
+            x += Math.cos(lat1) * Math.cos(lon1);
+            y += Math.cos(lat1) * Math.sin(lon1);
+            z += Math.sin(lat1);
+        });
+        var lng = Math.atan2(y, x);
+        var hyp = Math.sqrt(x * x + y * y);
+        var lat = Math.atan2(z, hyp);
+        lat = lat * 180 / pi;
+        lng = lng * 180 / pi;
+        var center = { lat: lat, lng: lng };
+        return center;
+    };
+    PolygonUtil.getSouthWest = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorthWest();
+    };
+    PolygonUtil.getNorthEast = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorthEast();
+    };
+    PolygonUtil.getNorthWest = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorthWest();
+    };
+    PolygonUtil.getSouthEast = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getSouthEast();
+    };
+    PolygonUtil.getNorth = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorth();
+    };
+    PolygonUtil.getSouth = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getSouth();
+    };
+    PolygonUtil.getWest = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getWest();
+    };
+    PolygonUtil.getEast = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getEast();
+    };
+    PolygonUtil.getSqmArea = function (polygon) {
+        var poly = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polygon"](polygon);
+        var geoJsonPoly = poly.toGeoJSON();
+        var area = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["area"]((geoJsonPoly));
+        return area;
+    };
+    PolygonUtil.getPerimeter = function (polygon) {
+        var poly = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polygon"](polygon);
+        var geoJsonPoly = poly.toGeoJSON();
+        var perimeter = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["length"]((geoJsonPoly), { units: "meters" });
+        return perimeter;
+    };
+    PolygonUtil.getPolygonChecksum = function (polygon) {
+        var uniqueLatLngs = polygon.filter(function (v, i, a) {
+            return a.indexOf(a.find(function (x) { return x.lat === v.lat && x.lng === v.lng; })) === i;
+        });
+        return uniqueLatLngs.reduce(function (a, b) { return +a + +b.lat; }, 0) * uniqueLatLngs.reduce(function (a, b) { return +a + +b.lng; }, 0);
+    };
+    PolygonUtil.getMidPoint = function (point1, point2) {
+        var p1 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["point"]([point1.lng, point1.lat]);
+        var p2 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["point"]([point2.lng, point2.lat]);
+        var midpoint = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["midpoint"](p1, p2);
+        var returnPoint = {
+            lat: midpoint.geometry.coordinates[1],
+            lng: midpoint.geometry.coordinates[0]
+        };
+        return returnPoint;
+    };
+    PolygonUtil.getBounds = function (polygon) {
+        var tmpLatLng = [];
+        polygon.forEach(function (ll) {
+            if (isNaN(ll.lat) || isNaN(ll.lng)) {
+            }
+            tmpLatLng.push(ll);
+        });
+        var polyLine = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polyline"](tmpLatLng);
+        var bounds = polyLine.getBounds();
+        return bounds;
+    };
+    return PolygonUtil;
+}());
+
+//export class FreedrawSubtract extends L.FreeDraw {
+//    constructor() {
+//        //this will become L.FreeDraw
+//        super(null);
+//        //call methods in freedraw by this
+//        const foo = this.size();
+//        this.consoleLogNumberOfPolygons(foo);
+//    }
+//    consoleLogNumberOfPolygons(size: number): void {
+//        console.log("Number of polygons: ", size);
+//    }
+//}
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.css":
+/*!*******************************************************************************!*\
+  !*** ./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.css ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJwcm9qZWN0cy9saWIvc3JjL2xpYi9wb3B1cHMvYWx0ZXItcG9seWdvbi9hbHRlci1wb2x5Z29uLmNvbXBvbmVudC5jc3MifQ== */"
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.html":
+/*!********************************************************************************!*\
+  !*** ./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.html ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>"
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.ts":
+/*!******************************************************************************!*\
+  !*** ./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.ts ***!
+  \******************************************************************************/
+/*! exports provided: AlterPolygonComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AlterPolygonComponent", function() { return AlterPolygonComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AlterPolygonComponent = /** @class */ (function () {
+    function AlterPolygonComponent() {
+        this.simplyfiClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+        this.bboxClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
+    }
+    AlterPolygonComponent.prototype.onSimplify = function ($event) {
+        this.simplyfiClicked.emit($event);
+    };
+    AlterPolygonComponent.prototype.onBbox = function ($event) {
+        this.bboxClicked.emit($event);
+    };
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
+    ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
+    __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
+        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
+    ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
+    AlterPolygonComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-alter-polygon',
+            template: __webpack_require__(/*! ./alter-polygon.component.html */ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.html"),
+            styles: [__webpack_require__(/*! ./alter-polygon.component.css */ "./projects/lib/src/lib/popups/alter-polygon/alter-polygon.component.css")]
+        })
+    ], AlterPolygonComponent);
+    return AlterPolygonComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/turf-helper.service.ts":
+/*!*****************************************************!*\
+  !*** ./projects/lib/src/lib/turf-helper.service.ts ***!
+  \*****************************************************/
+/*! exports provided: TurfHelperService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurfHelperService", function() { return TurfHelperService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @turf/turf */ "./node_modules/@turf/turf/turf.min.js");
+/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_turf_turf__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var concaveman__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! concaveman */ "./node_modules/concaveman/index.js");
+/* harmony import */ var concaveman__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(concaveman__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils */ "./projects/lib/src/lib/utils.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var TurfHelperService = /** @class */ (function () {
+    function TurfHelperService() {
+        this.simplifyTolerance = { tolerance: 0.0001, highQuality: false };
+    }
+    TurfHelperService.prototype.union = function (poly1, poly2) {
+        console.log("poly1: ", poly1);
+        console.log("poly2: ", poly2);
+        var union = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["union"](poly1, poly2);
+        return this.getTurfPolygon(union);
+    };
+    TurfHelperService.prototype.turfConcaveman = function (feature) {
+        //console.log("turfConcaveman", points);
+        var points = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](feature);
+        var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
+        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([[concaveman__WEBPACK_IMPORTED_MODULE_2___default()(coordinates)]]);
+    };
+    //TODO add some sort of dynamic tolerance
+    TurfHelperService.prototype.getSimplified = function (polygon) {
+        var tolerance = this.simplifyTolerance;
+        var simplified = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["simplify"](polygon, tolerance);
+        return simplified;
+    };
+    TurfHelperService.prototype.getTurfPolygon = function (polygon) {
+        var turfPolygon;
+        console.log("Get TurfPolygon:", polygon);
+        // if (polygon.geometry)
+        if (polygon.geometry.type === "Polygon") {
+            turfPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([polygon.geometry.coordinates]);
+        }
+        else {
+            turfPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"](polygon.geometry.coordinates);
+        }
+        return turfPolygon;
+    };
+    TurfHelperService.prototype.getMultiPolygon = function (polygonArray) {
+        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"](polygonArray);
+    };
+    TurfHelperService.prototype.getKinks = function (feature) {
+        var unkink = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["unkinkPolygon"](feature);
+        var coordinates = [];
+        _turf_turf__WEBPACK_IMPORTED_MODULE_1__["featureEach"](unkink, function (current) {
+            coordinates.push(current);
+        });
+        return coordinates;
+    };
+    TurfHelperService.prototype.getCoords = function (feature) {
+        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](feature);
+    };
+    TurfHelperService.prototype.hasKinks = function (feature) {
+        var kinks = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["kinks"](feature);
+        return kinks.features.length > 0;
+    };
+    TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
+        // const oldPolygon = polygon.toGeoJSON();
+        var poly = [];
+        var poly2 = [];
+        console.log("polygonIntersect", polygon, latlngs);
+        var latlngsCoords = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](latlngs);
+        latlngsCoords.forEach(function (element) {
+            var feat = { type: "Polygon", coordinates: [element[0]] };
+            poly.push(feat);
+        });
+        var polygonCoords = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](polygon);
+        polygonCoords.forEach(function (element) {
+            var feat = { type: "Polygon", coordinates: [element[0]] };
+            poly2.push(feat);
+        });
+        var intersect = false;
+        loop1: for (var i = 0; i < poly.length; i++) {
+            if (this.getKinks(poly[i]).length < 2) {
+                for (var j = 0; j < poly2.length; j++) {
+                    if (this.getKinks(poly2[j]).length < 2) {
+                        intersect = !!_turf_turf__WEBPACK_IMPORTED_MODULE_1__["intersect"](poly[i], poly2[j]);
+                        if (intersect) {
+                            break loop1;
+                        }
+                    }
+                }
+            }
+        }
+        return intersect;
+    };
+    TurfHelperService.prototype.getIntersection = function (poly1, poly2) {
+        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["intersect"](poly1, poly2);
+    };
+    TurfHelperService.prototype.getDistance = function (point1, point2) {
+        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["distance"](point1, point2);
+    };
+    TurfHelperService.prototype.isWithin = function (polygon1, polygon2) {
+        console.log(polygon1);
+        console.log("Ytre: ", polygon2);
+        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["booleanWithin"](_turf_turf__WEBPACK_IMPORTED_MODULE_1__["polygon"]([polygon1]), _turf_turf__WEBPACK_IMPORTED_MODULE_1__["polygon"]([polygon2]));
+    };
+    TurfHelperService.prototype.equalPolygons = function (polygon1, polygon2) {
+        console.log(polygon1);
+        console.log(polygon2);
+        console.log(_turf_turf__WEBPACK_IMPORTED_MODULE_1__["booleanEqual"](polygon1, polygon2));
+    };
+    //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
+    TurfHelperService.prototype.convertToBoundingBoxPolygon = function (polygon) {
+        var bbox = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["bbox"](polygon.geometry);
+        var bboxPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["bboxPolygon"](bbox);
+        return bboxPolygon;
+    };
+    TurfHelperService.prototype.polygonToMultiPolygon = function (poly) {
+        var multi = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([poly.geometry.coordinates]);
+        return multi;
+    };
+    //TODO -cleanup
+    TurfHelperService.prototype.injectPointToPolygon = function (polygon, point) {
+        var coords = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](polygon);
+        var newPolygon;
+        console.log("polygon: ", polygon);
+        if (coords.length < 2) {
+            var polygonPoints = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](polygon);
+            console.log(_turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](point, polygonPoints));
+            var index_1 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](point, polygonPoints).properties.featureIndex;
+            var test = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["coordReduce"](polygonPoints, function (accumulator, oldPoint, i) {
+                if (index_1 === i) {
+                    return accumulator.concat([oldPoint, point]);
+                }
+                return accumulator.concat([oldPoint]);
+            }, []);
+            console.log("test", test);
+            newPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([[test]]);
+        }
+        else {
+            var pos_1 = [];
+            var coordinates_1 = [];
+            coords.forEach(function (element) {
+                var polygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["polygon"](element);
+                // turf.booleanPointInPolygon(point, polygon)
+                if (_turf_turf__WEBPACK_IMPORTED_MODULE_1__["booleanPointInPolygon"](point, polygon)) {
+                    var polygonPoints = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](polygon);
+                    var index_2 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](point, polygonPoints).properties.featureIndex;
+                    coordinates_1 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["coordReduce"](polygonPoints, function (accumulator, oldPoint, i) {
+                        if (index_2 === i) {
+                            return accumulator.concat([oldPoint, point]);
+                        }
+                        return accumulator.concat([oldPoint]);
+                    }, []);
+                    console.log("coordinates", coordinates_1);
+                }
+                else {
+                    pos_1.push(element);
+                }
+            });
+            pos_1.push([coordinates_1]);
+            newPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"](pos_1);
+        }
+        return newPolygon;
+    };
+    TurfHelperService.prototype.polygonDifference = function (polygon1, polygon2) {
+        var diff = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["difference"](polygon1, polygon2);
+        console.log(diff);
+        return this.getTurfPolygon(diff);
+    };
+    TurfHelperService.prototype.getBoundingBoxCompassPosition = function (polygon, markerplacement, useOffset, offsetDirection) {
+        var p = this.getMultiPolygon(polygon);
+        var compass = this.getBoundingBoxCompass(polygon);
+        var polygonPoints = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](polygon);
+        var coord = this.getCoord(compass.direction.North);
+        var nearestPoint = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](coord, polygonPoints);
+        return null;
+    };
+    TurfHelperService.prototype.getBoundingBoxCompass = function (polygon) {
+        var p = this.getMultiPolygon(polygon);
+        var centerOfMass = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["centerOfMass"](p);
+        var b = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["bbox"](p);
+        var minX = b[0];
+        var minY = b[1];
+        var maxX = b[2];
+        var maxY = b[3];
+        var compass = new _utils__WEBPACK_IMPORTED_MODULE_3__["Compass"](minX, minY, maxX, maxY);
+        // compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
+        return compass;
+    };
+    TurfHelperService.prototype.getNearestPointIndex = function (targetPoint, points) {
+        var index = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](targetPoint, points).properties.featureIndex;
+        return index;
+    };
+    TurfHelperService.prototype.getCoord = function (point) {
+        var coord = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoord"]([point.lng, point.lat]);
+        return coord;
+    };
+    TurfHelperService.prototype.getFeaturePointCollection = function (points) {
+        var pts = [];
+        points.forEach(function (v) {
+            var p = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["point"]([v.lng, v.lat], {});
+            pts.push(p);
+        });
+        var fc = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["featureCollection"](pts);
+        return fc;
+    };
+    TurfHelperService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: "root" }),
+        __metadata("design:paramtypes", [])
+    ], TurfHelperService);
+    return TurfHelperService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/lib/utils.ts":
+/*!***************************************!*\
+  !*** ./projects/lib/src/lib/utils.ts ***!
+  \***************************************/
+/*! exports provided: PolyDrawUtil, Compass */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolyDrawUtil", function() { return PolyDrawUtil; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Compass", function() { return Compass; });
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enums */ "./projects/lib/src/lib/enums.ts");
+
+
+var PolyDrawUtil = /** @class */ (function () {
+    function PolyDrawUtil() {
+    }
+    PolyDrawUtil.getBounds = function (polygon, padding) {
+        if (padding === void 0) { padding = 0; }
+        var tmpLatLng = [];
+        polygon.forEach(function (ll) {
+            if (isNaN(ll.lat) || isNaN(ll.lng)) {
+            }
+            tmpLatLng.push(ll);
+        });
+        var polyLine = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polyline"](tmpLatLng);
+        var bounds = polyLine.getBounds();
+        if (padding !== 0) {
+            return bounds.pad(padding);
+        }
+        return bounds;
+    };
+    return PolyDrawUtil;
+}());
+
+//TODO make compass ILatLng
+var Compass = /** @class */ (function () {
+    function Compass(minLat, minLng, maxLat, maxLng) {
+        if (minLat === void 0) { minLat = 0; }
+        if (minLng === void 0) { minLng = 0; }
+        if (maxLat === void 0) { maxLat = 0; }
+        if (maxLng === void 0) { maxLng = 0; }
+        this.direction = {
+            // BoundingBoxCenter: { lat: 0, lng: 0 },
+            // CenterOfMass: { lat: 0, lng: 0 },
+            East: { lat: 0, lng: 0 },
+            North: { lat: 0, lng: 0 },
+            NorthEast: { lat: 0, lng: 0 },
+            NorthWest: { lat: 0, lng: 0 },
+            South: { lat: 0, lng: 0 },
+            SouthEast: { lat: 0, lng: 0 },
+            SouthWest: { lat: 0, lng: 0 },
+            West: { lat: 0, lng: 0 }
+        };
+        this.direction.North = { lat: maxLat, lng: (minLng + maxLng) / 2 };
+        this.direction.NorthEast = { lat: maxLat, lng: maxLng };
+        this.direction.East = { lat: (minLat + maxLat) / 2, lng: maxLng };
+        this.direction.SouthEast = { lat: minLat, lng: maxLng };
+        this.direction.South = { lat: minLat, lng: (minLng + maxLng) / 2 };
+        this.direction.SouthWest = { lat: minLat, lng: minLng };
+        this.direction.West = { lat: (minLat + maxLat) / 2, lng: minLng };
+        this.direction.NorthWest = { lat: maxLat, lng: minLng };
+        // this.direction.CenterOfMass = { lat: 0, lng: 0 };
+        // this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
+    }
+    //TODO default return.
+    Compass.prototype.getDirection = function (direction) {
+        switch (direction) {
+            // case MarkerPlacement.CenterOfMass:
+            //     return this.direction.CenterOfMass;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].North:
+                return this.direction.North;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].NorthEast:
+                return this.direction.NorthEast;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].East:
+                return this.direction.East;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].SouthEast:
+                return this.direction.SouthEast;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].South:
+                return this.direction.South;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].SouthWest:
+                return this.direction.SouthWest;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].West:
+                return this.direction.West;
+            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].NorthWest:
+                return this.direction.NorthWest;
+            // case MarkerPlacement.BoundingBoxCenter:
+            //     return this.direction.BoundingBoxCenter;
+            default:
+                return this.direction.North;
+        }
+    };
+    return Compass;
+}());
+
+
+
+/***/ }),
+
+/***/ "./projects/lib/src/public_api.ts":
+/*!****************************************!*\
+  !*** ./projects/lib/src/public_api.ts ***!
+  \****************************************/
+/*! exports provided: LibService, PolyDrawService, DrawMode, MapStateService, LibComponent, LibModule */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _lib_lib_service__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib.service */ "./projects/lib/src/lib/lib.service.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LibService", function() { return _lib_lib_service__WEBPACK_IMPORTED_MODULE_0__["LibService"]; });
+
+/* harmony import */ var _lib_polydraw_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lib/polydraw.service */ "./projects/lib/src/lib/polydraw.service.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PolyDrawService", function() { return _lib_polydraw_service__WEBPACK_IMPORTED_MODULE_1__["PolyDrawService"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "DrawMode", function() { return _lib_polydraw_service__WEBPACK_IMPORTED_MODULE_1__["DrawMode"]; });
+
+/* harmony import */ var _lib_map_state_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lib/map-state.service */ "./projects/lib/src/lib/map-state.service.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MapStateService", function() { return _lib_map_state_service__WEBPACK_IMPORTED_MODULE_2__["MapStateService"]; });
+
+/* harmony import */ var _lib_lib_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./lib/lib.component */ "./projects/lib/src/lib/lib.component.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LibComponent", function() { return _lib_lib_component__WEBPACK_IMPORTED_MODULE_3__["LibComponent"]; });
+
+/* harmony import */ var _lib_lib_module__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lib/lib.module */ "./projects/lib/src/lib/lib.module.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "LibModule", function() { return _lib_lib_module__WEBPACK_IMPORTED_MODULE_4__["LibModule"]; });
+
+/*
+ * Public API Surface of lib
+ */
+
+
+
+
+
+
+
+/***/ }),
+
 /***/ "./src/$$_lazy_route_resource lazy recursive":
 /*!**********************************************************!*\
   !*** ./src/$$_lazy_route_resource lazy namespace object ***!
@@ -10719,7 +12743,7 @@ module.exports = "\r\np {\r\n  font-family: Lato;\r\n}\r\n.polydrawbuttons {\r\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\r\n<map-cmp ></map-cmp>\r\n<div class=\"polydrawbuttons\">\r\n  \r\n  <div class=\"button\" (click)=\"onFreedrawMenuClick()\">DRAW</div>\r\n  <div class=\"button\" (click)=\"onSubtractClick()\">Subtract</div>\r\n  <div class=\"button\" (click)=\"add0254()\">0254</div>\r\n  <div class=\"button\" (click)=\"add0253()\">0253</div>\r\n  <div class=\"button\" (click)=\"add0252()\">0252</div>\r\n  <div class=\"button\" (click)=\"addHomansbyen()\">Homansbyen</div>\r\n  <div class=\"button\" (click)=\"addViken()\">Viken</div>\r\n  <div class=\"button\" (click)=\"addDebug()\">Debug</div>\r\n  \r\n  \r\n</div>"
+module.exports = "\r\n<map-cmp ></map-cmp>\r\n<div class=\"polydrawbuttons\">\r\n  \r\n  <div class=\"button\" (click)=\"onFreedrawMenuClick()\">DRAW</div>\r\n  <div class=\"button\" (click)=\"onSubtractClick()\">Subtract</div>\r\n  <div class=\"button\" (click)=\"add0254()\">0254</div>\r\n  <div class=\"button\" (click)=\"add0253()\">0253</div>\r\n  <div class=\"button\" (click)=\"add0252()\">0252</div>\r\n  <div class=\"button\" (click)=\"addHomansbyen()\">Homansbyen</div>\r\n  <div class=\"button\" (click)=\"addViken()\">Viken</div>\r\n  \r\n  \r\n</div>"
 
 /***/ }),
 
@@ -10734,7 +12758,7 @@ module.exports = "\r\n<map-cmp ></map-cmp>\r\n<div class=\"polydrawbuttons\">\r\
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _map_map_helper_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./map/map-helper.service */ "./src/app/map/map-helper.service.ts");
+/* harmony import */ var projects_lib_src_public_api__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! projects/lib/src/public_api */ "./projects/lib/src/public_api.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11395,15 +13419,6 @@ var AppComponent = /** @class */ (function () {
                 ]
             }
         };
-        this.debug = [
-            [
-                { lat: 59.80, lng: 10.70 },
-                { lat: 59.90, lng: 10.70 },
-                { lat: 59.90, lng: 10.60 },
-                { lat: 59.80, lng: 10.60 },
-                { lat: 59.80, lng: 10.70 }
-            ]
-        ];
     }
     AppComponent.prototype.ngOnInit = function () {
         //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -11430,16 +13445,13 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.addViken = function () {
         this.mapHelperService.addViken(this.viken);
     };
-    AppComponent.prototype.addDebug = function () {
-        this.mapHelperService.addViken(this.debug);
-    };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: "my-app",
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
         }),
-        __metadata("design:paramtypes", [_map_map_helper_service__WEBPACK_IMPORTED_MODULE_1__["MapHelperService"]])
+        __metadata("design:paramtypes", [projects_lib_src_public_api__WEBPACK_IMPORTED_MODULE_1__["PolyDrawService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -11464,7 +13476,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 /* harmony import */ var _hello_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./hello.component */ "./src/app/hello.component.ts");
 /* harmony import */ var _map_map_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./map/map.component */ "./src/app/map/map.component.ts");
-/* harmony import */ var _map_popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./map/popups/alter-polygon/alter-polygon.component */ "./src/app/map/popups/alter-polygon/alter-polygon.component.ts");
+/* harmony import */ var projects_lib_src_public_api__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! projects/lib/src/public_api */ "./projects/lib/src/public_api.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11483,14 +13495,10 @@ var AppModule = /** @class */ (function () {
     }
     AppModule = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["NgModule"])({
-            imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"]],
+            imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormsModule"], projects_lib_src_public_api__WEBPACK_IMPORTED_MODULE_6__["LibModule"]],
             declarations: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"], _hello_component__WEBPACK_IMPORTED_MODULE_4__["HelloComponent"],
-                _map_map_component__WEBPACK_IMPORTED_MODULE_5__["MapComponent"],
-                _map_popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_6__["AlterPolygonComponent"]],
+                _map_map_component__WEBPACK_IMPORTED_MODULE_5__["MapComponent"],],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_3__["AppComponent"]],
-            entryComponents: [
-                _map_popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_6__["AlterPolygonComponent"]
-            ]
         })
     ], AppModule);
     return AppModule;
@@ -11542,1095 +13550,6 @@ var HelloComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/map/component-generater.service.ts":
-/*!****************************************************!*\
-  !*** ./src/app/map/component-generater.service.ts ***!
-  \****************************************************/
-/*! exports provided: ComponentGeneraterService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComponentGeneraterService", function() { return ComponentGeneraterService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./popups/alter-polygon/alter-polygon.component */ "./src/app/map/popups/alter-polygon/alter-polygon.component.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var ComponentGeneraterService = /** @class */ (function () {
-    function ComponentGeneraterService(cfr, injector) {
-        this.cfr = cfr;
-        this.injector = injector;
-        this.clusterPopuprefs = [];
-    }
-    ComponentGeneraterService.prototype.ngOnDestroy = function () {
-        this.destroyAngularPopupComponents();
-    };
-    ComponentGeneraterService.prototype.generateAlterPopup = function () {
-        var cmpFactory = this.cfr.resolveComponentFactory(_popups_alter_polygon_alter_polygon_component__WEBPACK_IMPORTED_MODULE_1__["AlterPolygonComponent"]);
-        var popupComponentRef = cmpFactory.create(this.injector);
-        this.clusterPopuprefs.push(popupComponentRef);
-        return popupComponentRef;
-    };
-    ComponentGeneraterService.prototype.destroyAngularPopupComponents = function () {
-        this.clusterPopuprefs.forEach(function (cref) {
-            if (cref) {
-                cref.destroy();
-            }
-        });
-        this.clusterPopuprefs = [];
-    };
-    ComponentGeneraterService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [_angular_core__WEBPACK_IMPORTED_MODULE_0__["ComponentFactoryResolver"],
-            _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injector"]])
-    ], ComponentGeneraterService);
-    return ComponentGeneraterService;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/config.json":
-/*!*********************************!*\
-  !*** ./src/app/map/config.json ***!
-  \*********************************/
-/*! exports provided: touchSupport, mergePolygons, kinks, markers, polyLineOptions, subtractLineOptions, polygonOptions, default */
-/***/ (function(module) {
-
-module.exports = {"touchSupport":true,"mergePolygons":true,"kinks":false,"markers":{"menu":true,"delete":true,"markerIcon":{"styleClasses":["polygon-marker"]},"holeIcon":{"styleClasses":["polygon-marker","hole"]},"markerMenuIcon":{"position":4,"styleClasses":["polygon-marker","menu"]},"markerDeleteIcon":{"position":1,"styleClasses":["polygon-marker","delete"]}},"polyLineOptions":{"color":"#50622b","opacity":1,"smoothFactor":0,"noClip":true,"clickable":false,"weight":2},"subtractLineOptions":{"color":"#50622b","opacity":1,"smoothFactor":0,"noClip":true,"clickable":false,"weight":2},"polygonOptions":{"smoothFactor":0.3,"color":"#50622b","fillColor":"#b4cd8a","noClip":true}};
-
-/***/ }),
-
-/***/ "./src/app/map/enums.ts":
-/*!******************************!*\
-  !*** ./src/app/map/enums.ts ***!
-  \******************************/
-/*! exports provided: DrawMode, MarkerPlacement */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DrawMode", function() { return DrawMode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarkerPlacement", function() { return MarkerPlacement; });
-var DrawMode;
-(function (DrawMode) {
-    DrawMode[DrawMode["Off"] = 0] = "Off";
-    DrawMode[DrawMode["Add"] = 1] = "Add";
-    DrawMode[DrawMode["Edit"] = 2] = "Edit";
-    DrawMode[DrawMode["Subtract"] = 4] = "Subtract";
-    DrawMode[DrawMode["AppendMarker"] = 8] = "AppendMarker";
-    DrawMode[DrawMode["LoadPredefined"] = 16] = "LoadPredefined";
-})(DrawMode || (DrawMode = {}));
-var MarkerPlacement;
-(function (MarkerPlacement) {
-    MarkerPlacement[MarkerPlacement["CenterOfMass"] = 0] = "CenterOfMass";
-    MarkerPlacement[MarkerPlacement["North"] = 1] = "North";
-    MarkerPlacement[MarkerPlacement["East"] = 2] = "East";
-    MarkerPlacement[MarkerPlacement["South"] = 3] = "South";
-    MarkerPlacement[MarkerPlacement["West"] = 4] = "West";
-    MarkerPlacement[MarkerPlacement["NorthEast"] = 5] = "NorthEast";
-    MarkerPlacement[MarkerPlacement["NorthWest"] = 6] = "NorthWest";
-    MarkerPlacement[MarkerPlacement["SouthEast"] = 7] = "SouthEast";
-    MarkerPlacement[MarkerPlacement["SouthWest"] = 8] = "SouthWest";
-    MarkerPlacement[MarkerPlacement["BoundingBoxCenter"] = 9] = "BoundingBoxCenter";
-})(MarkerPlacement || (MarkerPlacement = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/map/leaflet-helper.service.ts":
-/*!***********************************************!*\
-  !*** ./src/app/map/leaflet-helper.service.ts ***!
-  \***********************************************/
-/*! exports provided: LeafletHelperService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LeafletHelperService", function() { return LeafletHelperService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var LeafletHelperService = /** @class */ (function () {
-    function LeafletHelperService() {
-    }
-    LeafletHelperService.prototype.createPolygon = function (latLngs) {
-        var p = leaflet__WEBPACK_IMPORTED_MODULE_1__["polygon"](latLngs);
-        return p;
-    };
-    LeafletHelperService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: "root" }),
-        __metadata("design:paramtypes", [])
-    ], LeafletHelperService);
-    return LeafletHelperService;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/map-helper.service.ts":
-/*!*******************************************!*\
-  !*** ./src/app/map/map-helper.service.ts ***!
-  \*******************************************/
-/*! exports provided: MapHelperService, DrawMode */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MapHelperService", function() { return MapHelperService; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DrawMode", function() { return DrawMode; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
-/* harmony import */ var _map_state_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./map-state.service */ "./src/app/map/map-state.service.ts");
-/* harmony import */ var _turf_helper_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./turf-helper.service */ "./src/app/map/turf-helper.service.ts");
-/* harmony import */ var _polygon_information_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./polygon-information.service */ "./src/app/map/polygon-information.service.ts");
-/* harmony import */ var _config_json__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./config.json */ "./src/app/map/config.json");
-var _config_json__WEBPACK_IMPORTED_MODULE_7___namespace = /*#__PURE__*/__webpack_require__.t(/*! ./config.json */ "./src/app/map/config.json", 1);
-/* harmony import */ var _component_generater_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./component-generater.service */ "./src/app/map/component-generater.service.ts");
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./utils */ "./src/app/map/utils.ts");
-/* harmony import */ var _leaflet_helper_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./leaflet-helper.service */ "./src/app/map/leaflet-helper.service.ts");
-var __assign = (undefined && undefined.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-//import * as turf from "@turf/turf";
-
-
-
-
-
-
-
-
-
-var MapHelperService = /** @class */ (function () {
-    function MapHelperService(mapState, popupGenerator, turfHelper, polygonInformation, leafletHelper) {
-        var _this = this;
-        this.mapState = mapState;
-        this.popupGenerator = popupGenerator;
-        this.turfHelper = turfHelper;
-        this.polygonInformation = polygonInformation;
-        this.leafletHelper = leafletHelper;
-        //DrawModes, determine UI buttons etc...
-        this.drawModeSubject = new rxjs__WEBPACK_IMPORTED_MODULE_2__["BehaviorSubject"](DrawMode.Off);
-        this.drawMode$ = this.drawModeSubject.asObservable();
-        //add to config
-        this.arrayOfFeatureGroups = [];
-        this.tracer = {};
-        this.polygonDrawStates = null;
-        //end add to config
-        this.ngUnsubscribe = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
-        this.config = null;
-        this.mapState.map$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(function (m) { return m !== null; })).subscribe(function (map) {
-            _this.map = map;
-            console.log("pre this.config", _this.config);
-            _this.config = _config_json__WEBPACK_IMPORTED_MODULE_7__;
-            console.log("this.config", _this.config);
-            _this.configurate({});
-            console.log("after this.config", _this.config);
-            _this.tracer = leaflet__WEBPACK_IMPORTED_MODULE_1__["polyline"]([[0, 0]], _this.config.polyLineOptions);
-            _this.initPolyDraw();
-        });
-        this.polygonInformation.polygonInformation$.subscribe(function (k) {
-            console.log("PolyInfo start: ", k);
-        });
-        //TODO - lage en config observable i mapState og oppdater this.config med den
-    }
-    //new
-    MapHelperService.prototype.configurate = function (config) {
-        //TODO if config is path...
-        this.config = __assign({}, _config_json__WEBPACK_IMPORTED_MODULE_7__, config);
-        this.mergePolygons = this.config.mergePolygons;
-        this.kinks = this.config.kinks;
-    };
-    //fine
-    MapHelperService.prototype.closeAndReset = function () {
-        //console.log("closeAndReset");
-        this.setDrawMode(DrawMode.Off);
-        this.removeAllFeatureGroups();
-    };
-    //make readable
-    MapHelperService.prototype.deletePolygon = function (polygon) {
-        var _this = this;
-        console.log("deletePolygon: ", polygon);
-        if (this.arrayOfFeatureGroups.length > 0) {
-            this.arrayOfFeatureGroups.forEach(function (featureGroup) {
-                var layer = featureGroup.getLayers()[0];
-                var latlngs = layer.getLatLngs();
-                var length = latlngs.length;
-                //  = []
-                latlngs.forEach(function (latlng, index) {
-                    var polygon3;
-                    var test = latlng.slice();
-                    console.log(latlng);
-                    if (latlng.length > 1) {
-                        if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
-                            test[0].push(latlng[0][0]);
-                        }
-                        polygon3 = [test[0]];
-                    }
-                    else {
-                        if (latlng[0] !== latlng[latlng.length - 1]) {
-                            test.push(latlng[0]);
-                        }
-                        polygon3 = test;
-                    }
-                    console.log("Test: ", polygon3);
-                    console.log(polygon);
-                    var equals = _this.polygonArrayEquals(polygon3, polygon);
-                    console.log("equals: ", equals, " length: ", length);
-                    if (equals && length === 1) {
-                        _this.polygonInformation.deleteTrashcan(polygon);
-                        _this.removeFeatureGroup(featureGroup);
-                        console.log(featureGroup.getLayers());
-                    }
-                    else if (equals && length > 1) {
-                        _this.polygonInformation.deleteTrashCanOnMulti([polygon]);
-                        latlngs.splice(index, 1);
-                        layer.setLatLngs(latlngs);
-                        _this.removeFeatureGroup(featureGroup);
-                        _this.addPolygonLayer(layer.toGeoJSON(), false);
-                    }
-                });
-            });
-        }
-    };
-    //fine
-    MapHelperService.prototype.removeAllFeatureGroups = function () {
-        var _this = this;
-        //console.log("removeAllFeatureGroups", null);
-        this.arrayOfFeatureGroups.forEach(function (featureGroups) {
-            _this.map.removeLayer(featureGroups);
-        });
-        this.arrayOfFeatureGroups = [];
-        this.polygonInformation.deletePolygonInformationStorage();
-        // this.polygonDrawStates.reset();
-        this.polygonInformation.updatePolygons();
-    };
-    //fine
-    MapHelperService.prototype.getDrawMode = function () {
-        //console.log("getDrawMode", null);
-        return this.drawModeSubject.value;
-    };
-    MapHelperService.prototype.addViken = function (polygon) {
-        this.addPolygonLayer(polygon, true);
-    };
-    //check this
-    MapHelperService.prototype.addAutoPolygon = function (geographicBorders) {
-        var _this = this;
-        var featureGroup = new leaflet__WEBPACK_IMPORTED_MODULE_1__["FeatureGroup"]();
-        var polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
-        console.log(polygon2);
-        var polygon = this.getPolygon(polygon2);
-        featureGroup.addLayer(polygon);
-        var markerLatlngs = polygon.getLatLngs();
-        console.log("markers: ", markerLatlngs);
-        markerLatlngs.forEach(function (polygon) {
-            polygon.forEach(function (polyElement, i) {
-                if (i === 0) {
-                    _this.addMarker(polyElement, featureGroup);
-                }
-                else {
-                    _this.addHoleMarker(polyElement, featureGroup);
-                    console.log("Hull: ", polyElement);
-                }
-            });
-            // this.addMarker(polygon[0], featureGroup);
-            //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
-        });
-        this.arrayOfFeatureGroups.push(featureGroup);
-        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-    };
-    //innehåll i if'ar flytta till egna metoder
-    MapHelperService.prototype.convertToCoords = function (latlngs) {
-        var coords = [];
-        console.log(latlngs.length, latlngs);
-        if (latlngs.length > 1 && latlngs.length < 3) {
-            var coordinates_1 = [];
-            console.log(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[latlngs.length - 1]), latlngs[latlngs.length - 1].length);
-            var within = this.turfHelper.isWithin(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[latlngs.length - 1]), leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[0]));
-            if (within) {
-                latlngs.forEach(function (polygon) {
-                    coordinates_1.push(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon));
-                });
-            }
-            else {
-                latlngs.forEach(function (polygon) {
-                    coords.push([leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon)]);
-                });
-            }
-            if (coordinates_1.length >= 1) {
-                coords.push(coordinates_1);
-            }
-            console.log("Within1 ", within);
-        }
-        else if (latlngs.length > 2) {
-            var coordinates_2 = [];
-            for (var index = 1; index < latlngs.length - 1; index++) {
-                var within = this.turfHelper.isWithin(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[index]), leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[0]));
-                if (within) {
-                    latlngs.forEach(function (polygon) {
-                        coordinates_2.push(leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon));
-                    });
-                    coords.push(coordinates_2);
-                }
-                else {
-                    latlngs.forEach(function (polygon) {
-                        coords.push([leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(polygon)]);
-                    });
-                }
-            }
-        }
-        else {
-            coords.push([leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].latLngsToCoords(latlngs[0])]);
-        }
-        console.log(coords);
-        return coords;
-    };
-    //fine
-    MapHelperService.prototype.initPolyDraw = function () {
-        //console.log("initPolyDraw", null);
-        var _this = this;
-        var container = this.map.getContainer();
-        var drawMode = this.getDrawMode();
-        if (this.config.touchSupport) {
-            container.addEventListener("touchstart", function (e) {
-                if (drawMode !== DrawMode.Off) {
-                    _this.mouseDown(e);
-                }
-            });
-            container.addEventListener("touchend", function (e) {
-                if (drawMode !== DrawMode.Off) {
-                    _this.mouseUpLeave();
-                }
-            });
-            container.addEventListener("touchmove", function (e) {
-                if (drawMode !== DrawMode.Off) {
-                    _this.mouseMove(e);
-                }
-            });
-        }
-        this.map.addLayer(this.tracer);
-        this.setDrawMode(DrawMode.Off);
-    };
-    //Test L.MouseEvent
-    MapHelperService.prototype.mouseDown = function (event) {
-        console.log("mouseDown", event);
-        if (event.originalEvent != null) {
-            this.tracer.setLatLngs([event.latlng]);
-        }
-        else {
-            var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-            this.tracer.setLatLngs([latlng]);
-        }
-        this.startDraw();
-    };
-    //TODO event type, create containerPointToLatLng-method
-    MapHelperService.prototype.mouseMove = function (event) {
-        //console.log("mouseMove", event);
-        if (event.originalEvent != null) {
-            this.tracer.addLatLng(event.latlng);
-        }
-        else {
-            var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-            this.tracer.addLatLng(latlng);
-        }
-    };
-    //fine
-    MapHelperService.prototype.mouseUpLeave = function () {
-        //console.log("mouseUpLeave", null);
-        this.polygonInformation.deletePolygonInformationStorage();
-        //console.log("------------------------------Delete trashcans", null);
-        var geoPos = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON());
-        this.stopDraw();
-        switch (this.getDrawMode()) {
-            case DrawMode.AddPolygon:
-                this.addPolygon(geoPos, true);
-                break;
-            case DrawMode.SubtractPolygon:
-                this.subtractPolygon(geoPos);
-                break;
-            default:
-                break;
-        }
-        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-        //console.log("------------------------------create trashcans", null);
-    };
-    //fine
-    MapHelperService.prototype.startDraw = function () {
-        //console.log("startDraw", null);
-        this.drawStartedEvents(true);
-    };
-    //fine
-    MapHelperService.prototype.stopDraw = function () {
-        //console.log("stopDraw", null);
-        this.resetTracker();
-        this.drawStartedEvents(false);
-    };
-    //fine
-    MapHelperService.prototype.drawStartedEvents = function (onoff) {
-        //console.log("drawStartedEvents", onoff);
-        var onoroff = onoff ? "on" : "off";
-        this.map[onoroff]("mousemove", this.mouseMove, this);
-        this.map[onoroff]("mouseup", this.mouseUpLeave, this);
-    };
-    //On hold
-    MapHelperService.prototype.subtractPolygon = function (latlngs) {
-        this.subtract(latlngs);
-    };
-    //fine
-    MapHelperService.prototype.addPolygon = function (latlngs, simplify, noMerge) {
-        if (noMerge === void 0) { noMerge = false; }
-        console.log("addPolygon", latlngs, simplify, noMerge, this.kinks, this.config);
-        if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
-            this.merge(latlngs);
-        }
-        else {
-            this.addPolygonLayer(latlngs, simplify);
-        }
-    };
-    //fine
-    MapHelperService.prototype.addPolygonLayer = function (latlngs, simplify) {
-        var _this = this;
-        var featureGroup = new leaflet__WEBPACK_IMPORTED_MODULE_1__["FeatureGroup"]();
-        var latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
-        console.log("AddPolygonLayer: ", latLngs);
-        var polygon = this.getPolygon(latLngs);
-        featureGroup.addLayer(polygon);
-        console.log(polygon);
-        var markerLatlngs = polygon.getLatLngs();
-        markerLatlngs.forEach(function (polygon) {
-            polygon.forEach(function (polyElement, i) {
-                if (i === 0) {
-                    _this.addMarker(polyElement, featureGroup);
-                }
-                else {
-                    _this.addHoleMarker(polyElement, featureGroup);
-                    console.log("Hull: ", polyElement);
-                }
-            });
-            // this.addMarker(polygon[0], featureGroup);
-            //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
-        });
-        this.arrayOfFeatureGroups.push(featureGroup);
-        console.log("Array: ", this.arrayOfFeatureGroups);
-        this.setDrawMode(DrawMode.Off);
-        featureGroup.on("click", function (e) {
-            _this.polygonClicked(e, latLngs);
-        });
-    };
-    //fine
-    MapHelperService.prototype.polygonClicked = function (e, poly) {
-        var newPoint = e.latlng;
-        if (poly.geometry.type === "MultiPolygon") {
-            var newPolygon = this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat]);
-            this.deletePolygon(this.getLatLngsFromJson(poly));
-            this.addPolygonLayer(newPolygon, false);
-        }
-    };
-    //fine
-    MapHelperService.prototype.getPolygon = function (latlngs) {
-        console.log("getPolygons: ", latlngs);
-        var polygon = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].geometryToLayer(latlngs);
-        polygon.setStyle(this.config.polygonOptions);
-        return polygon;
-    };
-    //fine
-    MapHelperService.prototype.merge = function (latlngs) {
-        var _this = this;
-        console.log("merge", latlngs);
-        var polygonFeature = [];
-        var newArray = [];
-        var polyIntersection = false;
-        this.arrayOfFeatureGroups.forEach(function (featureGroup) {
-            var featureCollection = featureGroup.toGeoJSON();
-            if (featureCollection.features[0].geometry.coordinates.length > 1) {
-                featureCollection.features[0].geometry.coordinates.forEach(function (element) {
-                    var feature = _this.turfHelper.getMultiPolygon([element]);
-                    polyIntersection = _this.turfHelper.polygonIntersect(feature, latlngs);
-                    if (polyIntersection) {
-                        newArray.push(featureGroup);
-                        polygonFeature.push(feature);
-                    }
-                });
-            }
-            else {
-                var feature = _this.turfHelper.getTurfPolygon(featureCollection.features[0]);
-                polyIntersection = _this.turfHelper.polygonIntersect(feature, latlngs);
-                if (polyIntersection) {
-                    newArray.push(featureGroup);
-                    polygonFeature.push(feature);
-                }
-            }
-        });
-        console.log(newArray);
-        if (newArray.length > 0) {
-            this.unionPolygons(newArray, latlngs, polygonFeature);
-        }
-        else {
-            this.addPolygonLayer(latlngs, true);
-        }
-    };
-    //next
-    MapHelperService.prototype.subtract = function (latlngs) {
-        var _this = this;
-        var addHole = latlngs;
-        this.arrayOfFeatureGroups.forEach(function (featureGroup) {
-            var featureCollection = featureGroup.toGeoJSON();
-            var layer = featureCollection.features[0];
-            var poly = _this.getLatLngsFromJson(layer);
-            var feature = _this.turfHelper.getTurfPolygon(featureCollection.features[0]);
-            var newPolygon = _this.turfHelper.polygonDifference(feature, addHole);
-            _this.deletePolygon(poly);
-            _this.removeFeatureGroupOnMerge(featureGroup);
-            addHole = newPolygon;
-        });
-        var newLatlngs = addHole;
-        var coords = this.turfHelper.getCoords(newLatlngs);
-        coords.forEach(function (value) {
-            _this.addPolygonLayer(_this.turfHelper.getMultiPolygon([value]), true);
-        });
-    };
-    //fine
-    MapHelperService.prototype.events = function (onoff) {
-        var onoroff = onoff ? "on" : "off";
-        this.map[onoroff]("mousedown", this.mouseDown, this);
-    };
-    //fine, TODO: if special markers
-    MapHelperService.prototype.addMarker = function (latlngs, FeatureGroup) {
-        var _this = this;
-        var menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
-        var deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
-        latlngs.forEach(function (latlng, i) {
-            var iconClasses = _this.config.markers.markerIcon.styleClasses;
-            if (i === menuMarkerIdx && _this.config.markers.menu) {
-                iconClasses = _this.config.markers.markerMenuIcon.styleClasses;
-            }
-            if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                iconClasses = _this.config.markers.markerDeleteIcon.styleClasses;
-            }
-            var marker = new leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"](latlng, { icon: _this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
-            FeatureGroup.addLayer(marker).addTo(_this.map);
-            // console.log("FeatureGroup: ", FeatureGroup);
-            marker.on("drag", function (e) {
-                _this.markerDrag(FeatureGroup);
-            });
-            marker.on("dragend", function (e) {
-                _this.markerDragEnd(FeatureGroup);
-            });
-            if (i === menuMarkerIdx && _this.config.markers.menu) {
-                // marker.bindPopup(
-                //   this.getHtmlContent(e => {
-                //     console.log("clicked on", e.target);
-                //   })
-                // );
-                // marker.on("click", e => {
-                //   this.convertToBoundsPolygon(e, latlngs)
-                // })
-            }
-            if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                marker.on("click", function (e) {
-                    _this.deletePolygon([latlngs]);
-                });
-            }
-        });
-    };
-    MapHelperService.prototype.addHoleMarker = function (latlngs, FeatureGroup) {
-        var _this = this;
-        latlngs.forEach(function (latlng, i) {
-            var iconClasses = _this.config.markers.markerIcon.styleClasses;
-            /*  if (i === 0 && this.config.markers.menu) {
-              iconClasses = this.config.markers.markerMenuIcon.styleClasses;
-            }
-      
-            //TODO- legg til fill icon
-            if (i === latlngs.length - 1 && this.config.markers.delete) {
-              iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-            } */
-            var marker = new leaflet__WEBPACK_IMPORTED_MODULE_1__["Marker"](latlng, { icon: _this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
-            FeatureGroup.addLayer(marker).addTo(_this.map);
-            marker.on("drag", function (e) {
-                _this.markerDrag(FeatureGroup);
-            });
-            marker.on("dragend", function (e) {
-                _this.markerDragEnd(FeatureGroup);
-            });
-            /*   if (i === 0 && this.config.markers.menu) {
-              marker.bindPopup(this.getHtmlContent((e) => {
-                console.log("clicked on", e.target);
-              }));
-              // marker.on("click", e => {
-              //   this.toggleMarkerMenu();
-              // })
-            }
-            if (i === latlngs.length - 1 && this.config.markers.delete) {
-              marker.on("click", e => {
-                this.deletePolygon([latlngs]);
-              });
-            } */
-        });
-    };
-    MapHelperService.prototype.createDivIcon = function (classNames) {
-        var classes = classNames.join(" ");
-        var icon = leaflet__WEBPACK_IMPORTED_MODULE_1__["divIcon"]({ className: classes });
-        return icon;
-    };
-    //TODO: Cleanup
-    MapHelperService.prototype.markerDrag = function (FeatureGroup) {
-        var newPos = [];
-        var testarray = [];
-        var hole = [];
-        var layerLength = FeatureGroup.getLayers();
-        var posarrays = layerLength[0].getLatLngs();
-        console.log(posarrays);
-        var length = 0;
-        if (posarrays.length > 1) {
-            for (var index = 0; index < posarrays.length; index++) {
-                testarray = [];
-                hole = [];
-                console.log("Posisjoner: ", posarrays[index]);
-                if (index === 0) {
-                    if (posarrays[0].length > 1) {
-                        for (var i = 0; index < posarrays[0].length; i++) {
-                            console.log("Posisjoner 2: ", posarrays[index][i]);
-                            for (var j = 0; j < posarrays[0][i].length; j++) {
-                                testarray.push(layerLength[j + 1].getLatLng());
-                            }
-                            hole.push(testarray);
-                        }
-                    }
-                    else {
-                        for (var j = 0; j < posarrays[0][0].length; j++) {
-                            testarray.push(layerLength[j + 1].getLatLng());
-                        }
-                        hole.push(testarray);
-                    }
-                    console.log("Hole: ", hole);
-                    newPos.push(hole);
-                }
-                else {
-                    length += posarrays[index - 1][0].length;
-                    console.log("STart index: ", length);
-                    for (var j = length; j < posarrays[index][0].length + length; j++) {
-                        testarray.push(layerLength[j + 1].getLatLng());
-                    }
-                    hole.push(testarray);
-                    newPos.push(hole);
-                }
-            }
-        }
-        else {
-            // testarray = []
-            hole = [];
-            var length2 = 0;
-            for (var index = 0; index < posarrays[0].length; index++) {
-                testarray = [];
-                console.log("Polygon drag: ", posarrays[0][index]);
-                if (index === 0) {
-                    if (posarrays[0][index].length > 1) {
-                        for (var j = 0; j < posarrays[0][index].length; j++) {
-                            testarray.push(layerLength[j + 1].getLatLng());
-                        }
-                    }
-                    else {
-                        for (var j = 0; j < posarrays[0][0].length; j++) {
-                            testarray.push(layerLength[j + 1].getLatLng());
-                        }
-                    }
-                }
-                else {
-                    length2 += posarrays[0][index - 1].length;
-                    for (var j = length2; j < posarrays[0][index].length + length2; j++) {
-                        testarray.push(layerLength[j + 1].getLatLng());
-                    }
-                }
-                hole.push(testarray);
-            }
-            newPos.push(hole);
-            console.log("Hole 2: ", hole);
-        }
-        console.log("Nye posisjoner: ", newPos);
-        layerLength[0].setLatLngs(newPos);
-    };
-    // check this
-    MapHelperService.prototype.markerDragEnd = function (FeatureGroup) {
-        var _this = this;
-        this.polygonInformation.deletePolygonInformationStorage();
-        var featureCollection = FeatureGroup.toGeoJSON();
-        console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
-        if (featureCollection.features[0].geometry.coordinates.length > 1) {
-            featureCollection.features[0].geometry.coordinates.forEach(function (element) {
-                var feature = _this.turfHelper.getMultiPolygon([element]);
-                console.log("Markerdragend: ", feature);
-                if (_this.turfHelper.hasKinks(feature)) {
-                    _this.kinks = true;
-                    var unkink = _this.turfHelper.getKinks(feature);
-                    // this.deletePolygon(this.getLatLngsFromJson(feature));
-                    _this.removeFeatureGroup(FeatureGroup);
-                    console.log("Unkink: ", unkink);
-                    unkink.forEach(function (polygon) {
-                        _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
-                    });
-                }
-                else {
-                    _this.kinks = false;
-                    _this.addPolygon(feature, false);
-                }
-            });
-        }
-        else {
-            var feature = this.turfHelper.getMultiPolygon(featureCollection.features[0].geometry.coordinates);
-            console.log("Markerdragend: ", feature);
-            if (this.turfHelper.hasKinks(feature)) {
-                this.kinks = true;
-                var unkink = this.turfHelper.getKinks(feature);
-                // this.deletePolygon(this.getLatLngsFromJson(feature));
-                this.removeFeatureGroup(FeatureGroup);
-                console.log("Unkink: ", unkink);
-                unkink.forEach(function (polygon) {
-                    _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
-                });
-            }
-            else {
-                // this.deletePolygon(this.getLatLngsFromJson(feature));
-                this.kinks = false;
-                this.addPolygon(feature, false);
-            }
-        }
-        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-    };
-    //fine, check the returned type
-    MapHelperService.prototype.getLatLngsFromJson = function (feature) {
-        console.log("getLatLngsFromJson: ", feature);
-        var coord;
-        if (feature) {
-            if (feature.geometry.coordinates.length > 1 && feature.geometry.type === "MultiPolygon") {
-                coord = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].coordsToLatLngs(feature.geometry.coordinates[0][0]);
-            }
-            else if (feature.geometry.coordinates[0].length > 1 && feature.geometry.type === "Polygon") {
-                coord = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].coordsToLatLngs(feature.geometry.coordinates[0]);
-            }
-            else {
-                coord = leaflet__WEBPACK_IMPORTED_MODULE_1__["GeoJSON"].coordsToLatLngs(feature.geometry.coordinates[0][0]);
-            }
-        }
-        return coord;
-    };
-    //fine
-    MapHelperService.prototype.unionPolygons = function (layers, latlngs, polygonFeature) {
-        var _this = this;
-        console.log("unionPolygons", layers, latlngs, polygonFeature);
-        var addNew = latlngs;
-        layers.forEach(function (featureGroup, i) {
-            var featureCollection = featureGroup.toGeoJSON();
-            var layer = featureCollection.features[0];
-            var poly = _this.getLatLngsFromJson(layer);
-            var union = _this.turfHelper.union(addNew, polygonFeature[i]); //Check for multipolygons
-            //Needs a cleanup for the new version
-            _this.deletePolygonOnMerge(poly);
-            _this.removeFeatureGroup(featureGroup);
-            addNew = union;
-        });
-        var newLatlngs = addNew; //Trenger kanskje this.turfHelper.getTurfPolygon( addNew);
-        this.addPolygonLayer(newLatlngs, true);
-    };
-    //fine
-    MapHelperService.prototype.removeFeatureGroup = function (featureGroup) {
-        console.log("removeFeatureGroup", featureGroup);
-        featureGroup.clearLayers();
-        this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(function (featureGroups) { return featureGroups !== featureGroup; });
-        // this.updatePolygons();
-        this.map.removeLayer(featureGroup);
-    };
-    //fine until refactoring
-    MapHelperService.prototype.removeFeatureGroupOnMerge = function (featureGroup) {
-        console.log("removeFeatureGroupOnMerge", featureGroup);
-        var newArray = [];
-        if (featureGroup.getLayers()[0]) {
-            var polygon_1 = featureGroup.getLayers()[0].getLatLngs()[0];
-            this.polygonInformation.polygonInformationStorage.forEach(function (v) {
-                if (v.polygon.toString() !== polygon_1[0].toString() && v.polygon[0].toString() === polygon_1[0][0].toString()) {
-                    v.polygon = polygon_1;
-                    newArray.push(v);
-                }
-                if (v.polygon.toString() !== polygon_1[0].toString() && v.polygon[0].toString() !== polygon_1[0][0].toString()) {
-                    newArray.push(v);
-                }
-            });
-            featureGroup.clearLayers();
-            this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(function (featureGroups) { return featureGroups !== featureGroup; });
-            this.map.removeLayer(featureGroup);
-        }
-    };
-    //fine until refactoring
-    MapHelperService.prototype.deletePolygonOnMerge = function (polygon) {
-        var _this = this;
-        console.log("deletePolygonOnMerge", polygon);
-        var polygon2 = [];
-        if (this.arrayOfFeatureGroups.length > 0) {
-            this.arrayOfFeatureGroups.forEach(function (featureGroup) {
-                var layer = featureGroup.getLayers()[0];
-                var latlngs = layer.getLatLngs()[0];
-                polygon2 = latlngs[0].slice();
-                if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
-                    polygon2.push(latlngs[0][0]);
-                }
-                var equals = _this.polygonArrayEqualsMerge(polygon2, polygon);
-                if (equals) {
-                    console.log("EQUALS", polygon);
-                    _this.removeFeatureGroupOnMerge(featureGroup);
-                    _this.deletePolygon(polygon);
-                    _this.polygonInformation.deleteTrashcan(polygon);
-                    // this.updatePolygons();
-                }
-            });
-        }
-    };
-    //TODO - legge et annet sted
-    MapHelperService.prototype.polygonArrayEqualsMerge = function (poly1, poly2) {
-        return poly1.toString() === poly2.toString();
-    };
-    //TODO - legge et annet sted
-    MapHelperService.prototype.polygonArrayEquals = function (poly1, poly2) {
-        // console.log("polygonArrayEquals", poly1, poly2);
-        if (poly1[0][0]) {
-            if (!poly1[0][0].equals(poly2[0][0]))
-                return false;
-        }
-        else {
-            if (!poly1[0].equals(poly2[0]))
-                return false;
-        }
-        if (poly1.length !== poly2.length)
-            return false;
-        else {
-            return true;
-        }
-    };
-    //fine
-    MapHelperService.prototype.setLeafletMapEvents = function (enableDragging, enableDoubleClickZoom, enableScrollWheelZoom) {
-        //console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
-        enableDragging ? this.map.dragging.enable() : this.map.dragging.disable();
-        enableDoubleClickZoom ? this.map.doubleClickZoom.enable() : this.map.doubleClickZoom.disable();
-        enableScrollWheelZoom ? this.map.scrollWheelZoom.enable() : this.map.scrollWheelZoom.disable();
-    };
-    //fine
-    MapHelperService.prototype.setDrawMode = function (mode) {
-        console.log("setDrawMode", this.map);
-        this.drawModeSubject.next(mode);
-        if (!!this.map) {
-            var isActiveDrawMode = true;
-            switch (mode) {
-                case DrawMode.Off:
-                    leaflet__WEBPACK_IMPORTED_MODULE_1__["DomUtil"].removeClass(this.map.getContainer(), "crosshair-cursor-enabled");
-                    this.events(false);
-                    this.stopDraw();
-                    this.tracer.setStyle({
-                        color: ""
-                    });
-                    this.setLeafletMapEvents(true, true, true);
-                    isActiveDrawMode = false;
-                    break;
-                case DrawMode.AddPolygon:
-                    leaflet__WEBPACK_IMPORTED_MODULE_1__["DomUtil"].addClass(this.map.getContainer(), "crosshair-cursor-enabled");
-                    this.events(true);
-                    this.tracer.setStyle({
-                        color: _config_json__WEBPACK_IMPORTED_MODULE_7__.polyLineOptions.color
-                    });
-                    this.setLeafletMapEvents(false, false, false);
-                    break;
-                case DrawMode.SubtractPolygon:
-                    leaflet__WEBPACK_IMPORTED_MODULE_1__["DomUtil"].addClass(this.map.getContainer(), "crosshair-cursor-enabled");
-                    this.events(true);
-                    this.tracer.setStyle({
-                        color: "#D9460F"
-                    });
-                    this.setLeafletMapEvents(false, false, false);
-                    break;
-            }
-        }
-    };
-    MapHelperService.prototype.modeChange = function (mode) {
-        this.setDrawMode(mode);
-        this.polygonInformation.saveCurrentState();
-    };
-    //remove, use modeChange
-    MapHelperService.prototype.drawModeClick = function () {
-        this.setDrawMode(DrawMode.AddPolygon);
-        this.polygonInformation.saveCurrentState();
-    };
-    //remove, use modeChange
-    MapHelperService.prototype.freedrawMenuClick = function () {
-        this.setDrawMode(DrawMode.AddPolygon);
-        this.polygonInformation.saveCurrentState();
-    };
-    //remove, use modeChange
-    MapHelperService.prototype.subtractClick = function () {
-        this.setDrawMode(DrawMode.SubtractPolygon);
-        this.polygonInformation.saveCurrentState();
-    };
-    //fine
-    MapHelperService.prototype.resetTracker = function () {
-        this.tracer.setLatLngs([[0, 0]]);
-    };
-    MapHelperService.prototype.toggleMarkerMenu = function () {
-        alert("open menu");
-    };
-    MapHelperService.prototype.getHtmlContent = function (callBack) {
-        var comp = this.popupGenerator.generateAlterPopup();
-        comp.instance.bboxClicked.subscribe(function (e) {
-            console.log("bbox clicked", e);
-            callBack(e);
-        });
-        comp.instance.simplyfiClicked.subscribe(function (e) {
-            console.log("simplyfi clicked", e);
-            callBack(e);
-        });
-        return comp.location.nativeElement;
-    };
-    MapHelperService.prototype.convertToBoundsPolygon = function (latlngs) {
-        var lPoly = this.leafletHelper.createPolygon(latlngs);
-        // const coords = this.convertToCoords([latlngs]);
-        // const p = this.getPolygon()
-        // if (poly.geometry.type === "MultiPolygon") {
-        //   let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(poly);
-        //   this.deletePolygon(this.getLatLngsFromJson(poly));
-        //   this.addPolygonLayer(newPolygon, false);
-        // }
-    };
-    MapHelperService.prototype.getMarkerIndex = function (latlngs, position) {
-        var bounds = _utils__WEBPACK_IMPORTED_MODULE_9__["PolyDrawUtil"].getBounds(latlngs, (Math.sqrt(2) / 2));
-        var compass = new _utils__WEBPACK_IMPORTED_MODULE_9__["Compass"](bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth());
-        var compassDirection = compass.getDirection(position);
-        var latLngPoint = {
-            lat: compassDirection[1],
-            lng: compassDirection[0]
-        };
-        var targetPoint = this.turfHelper.getCoord(latLngPoint);
-        var fc = this.turfHelper.getFeaturePointCollection(latlngs);
-        var nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc);
-        return nearestPointIdx;
-    };
-    MapHelperService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
-            providedIn: "root"
-        })
-        //Rename - PolyDrawService
-        ,
-        __metadata("design:paramtypes", [_map_state_service__WEBPACK_IMPORTED_MODULE_4__["MapStateService"],
-            _component_generater_service__WEBPACK_IMPORTED_MODULE_8__["ComponentGeneraterService"],
-            _turf_helper_service__WEBPACK_IMPORTED_MODULE_5__["TurfHelperService"],
-            _polygon_information_service__WEBPACK_IMPORTED_MODULE_6__["PolygonInformationService"],
-            _leaflet_helper_service__WEBPACK_IMPORTED_MODULE_10__["LeafletHelperService"]])
-    ], MapHelperService);
-    return MapHelperService;
-}());
-
-//flytt til enum.ts
-var DrawMode;
-(function (DrawMode) {
-    DrawMode[DrawMode["Off"] = 0] = "Off";
-    DrawMode[DrawMode["AddPolygon"] = 1] = "AddPolygon";
-    DrawMode[DrawMode["EditPolygon"] = 2] = "EditPolygon";
-    DrawMode[DrawMode["SubtractPolygon"] = 3] = "SubtractPolygon";
-    DrawMode[DrawMode["LoadPolygon"] = 4] = "LoadPolygon";
-})(DrawMode || (DrawMode = {}));
-
-
-/***/ }),
-
-/***/ "./src/app/map/map-state.service.ts":
-/*!******************************************!*\
-  !*** ./src/app/map/map-state.service.ts ***!
-  \******************************************/
-/*! exports provided: MapStateService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MapStateService", function() { return MapStateService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-var MapStateService = /** @class */ (function () {
-    function MapStateService() {
-        this.mapSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["BehaviorSubject"](null);
-        this.map$ = this.mapSubject.asObservable();
-    }
-    MapStateService.prototype.updateMapState = function (map) {
-        this.mapSubject.next(map);
-    };
-    MapStateService.prototype.updatePolygons = function (polygons) {
-        console.log("map-state", polygons);
-    };
-    MapStateService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [])
-    ], MapStateService);
-    return MapStateService;
-}());
-
-
-
-/***/ }),
-
 /***/ "./src/app/map/map.component.ts":
 /*!**************************************!*\
   !*** ./src/app/map/map.component.ts ***!
@@ -12644,7 +13563,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
 /* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _map_state_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./map-state.service */ "./src/app/map/map-state.service.ts");
+/* harmony import */ var projects_lib_src_public_api__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! projects/lib/src/public_api */ "./projects/lib/src/public_api.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12694,786 +13613,9 @@ var MapComponent = /** @class */ (function () {
             template: "\n  <div id=\"map\">map</div>\n  ",
             styles: ["\n  #map{\n    height:100%;\n    width:100%;\n    border:1px solid red;\n  }\n  "]
         }),
-        __metadata("design:paramtypes", [_map_state_service__WEBPACK_IMPORTED_MODULE_2__["MapStateService"]])
+        __metadata("design:paramtypes", [projects_lib_src_public_api__WEBPACK_IMPORTED_MODULE_2__["MapStateService"]])
     ], MapComponent);
     return MapComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/polygon-helpers.ts":
-/*!****************************************!*\
-  !*** ./src/app/map/polygon-helpers.ts ***!
-  \****************************************/
-/*! exports provided: PolygonInfo, PolygonDrawStates */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonInfo", function() { return PolygonInfo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonDrawStates", function() { return PolygonDrawStates; });
-/* harmony import */ var _polygon_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./polygon.util */ "./src/app/map/polygon.util.ts");
-
-var PolygonInfo = /** @class */ (function () {
-    function PolygonInfo(polygon) {
-        var _this = this;
-        this.polygon = [];
-        this.trashcanPoint = [];
-        this.sqmArea = [];
-        this.perimeter = [];
-        console.log("PolygonInfo: ", polygon);
-        polygon.forEach(function (polygons, i) {
-            _this.trashcanPoint[i] = _this.getTrashcanPoint(polygons[0]);
-            _this.sqmArea[i] = _this.calculatePolygonArea(polygons[0]);
-            _this.perimeter[i] = _this.calculatePolygonPerimeter(polygons[0]);
-            console.log(polygons[0]);
-            _this.polygon[i] = polygons;
-        });
-    }
-    PolygonInfo.prototype.setSqmArea = function (area) {
-        this.sqmArea[0] = area;
-    };
-    PolygonInfo.prototype.getTrashcanPoint = function (polygon) {
-        var res = Math.max.apply(Math, polygon.map(function (o) { return o.lat; }));
-        var idx = polygon.findIndex(function (o) { return o.lat === res; });
-        var previousPoint;
-        var nextPoint;
-        if (idx > 0) {
-            previousPoint = polygon[idx - 1];
-            if (idx < polygon.length - 1) {
-                nextPoint = polygon[idx + 1];
-            }
-            else {
-                nextPoint = polygon[0];
-            }
-        }
-        else {
-            previousPoint = polygon[polygon.length - 1];
-            nextPoint = polygon[idx + 1];
-        }
-        var secondPoint = (previousPoint.lng < nextPoint.lng) ? previousPoint : nextPoint;
-        var midpoint = _polygon_util__WEBPACK_IMPORTED_MODULE_0__["PolygonUtil"].getMidPoint(polygon[idx], secondPoint);
-        return midpoint;
-    };
-    PolygonInfo.prototype.calculatePolygonArea = function (polygon) {
-        var area = _polygon_util__WEBPACK_IMPORTED_MODULE_0__["PolygonUtil"].getSqmArea((polygon));
-        return area;
-    };
-    PolygonInfo.prototype.calculatePolygonPerimeter = function (polygon) {
-        var perimeter = _polygon_util__WEBPACK_IMPORTED_MODULE_0__["PolygonUtil"].getPerimeter((polygon));
-        return perimeter;
-    };
-    return PolygonInfo;
-}());
-
-var PolygonDrawStates = /** @class */ (function () {
-    function PolygonDrawStates() {
-        this.canUsePolyDraw = false;
-        this.reset();
-    }
-    PolygonDrawStates.prototype.activate = function () {
-        this.reset();
-        this.isActivated = true;
-    };
-    PolygonDrawStates.prototype.reset = function () {
-        this.isActivated = false;
-        this.hasPolygons = false;
-        this.canRevert = false;
-        this.isAuto = false;
-        this.resetDrawModes();
-    };
-    PolygonDrawStates.prototype.resetDrawModes = function () {
-        this.isFreeDrawMode = false;
-        this.isMoveMode = false;
-    };
-    PolygonDrawStates.prototype.setFreeDrawMode = function (isAuto) {
-        if (isAuto === void 0) { isAuto = false; }
-        if (isAuto) {
-            this.isActivated = true;
-        }
-        if (this.isActivated) {
-            this.resetDrawModes();
-            this.isFreeDrawMode = true;
-            if (isAuto) {
-                this.isAuto = true;
-            }
-        }
-    };
-    PolygonDrawStates.prototype.setMoveMode = function () {
-        if (this.isActivated) {
-            this.resetDrawModes();
-            this.isMoveMode = true;
-        }
-    };
-    PolygonDrawStates.prototype.forceCanUseFreeDraw = function () {
-        this.canUsePolyDraw = true;
-    };
-    return PolygonDrawStates;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/polygon-information.service.ts":
-/*!****************************************************!*\
-  !*** ./src/app/map/polygon-information.service.ts ***!
-  \****************************************************/
-/*! exports provided: PolygonInformationService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonInformationService", function() { return PolygonInformationService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _polygon_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./polygon-helpers */ "./src/app/map/polygon-helpers.ts");
-/* harmony import */ var _map_state_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./map-state.service */ "./src/app/map/map-state.service.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var PolygonInformationService = /** @class */ (function () {
-    function PolygonInformationService(mapStateService) {
-        this.mapStateService = mapStateService;
-        this.polygonInformationSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
-        this.polygonInformation$ = this.polygonInformationSubject.asObservable();
-        this.polygonDrawStatesSubject = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
-        this.polygonDrawStates$ = this.polygonDrawStatesSubject.asObservable();
-        this.polygonInformationStorage = [];
-    }
-    PolygonInformationService.prototype.updatePolygons = function () {
-        console.log("updatePolygons: ", this.polygonInformationStorage);
-        var newPolygons = null;
-        if (this.polygonInformationStorage.length > 0) {
-            newPolygons = [];
-            this.polygonInformationStorage.forEach(function (v) {
-                var test = [];
-                v.polygon.forEach(function (poly) {
-                    var test2 = [];
-                    poly.forEach(function (polygon) {
-                        test2 = polygon.slice();
-                        if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
-                            test2.push(polygon[0]);
-                        }
-                        test.push(test2);
-                    });
-                });
-                newPolygons.push(test);
-            });
-            // this.polygonDrawStates.hasPolygons = true;
-        }
-        else {
-            // this.polygonDrawStates.reset();
-            // this.polygonDrawStates.hasPolygons = false;
-        }
-        this.mapStateService.updatePolygons(newPolygons);
-        this.saveCurrentState();
-    };
-    PolygonInformationService.prototype.saveCurrentState = function () {
-        this.polygonInformationSubject.next(this.polygonInformationStorage);
-        console.log("saveCurrentState: ", this.polygonInformationStorage);
-    };
-    PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
-        var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
-        this.polygonInformationStorage.splice(idx, 1);
-        this.updatePolygons();
-    };
-    PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
-        var index = 0;
-        console.log("DeleteTrashCan: ", polygon);
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
-        // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
-        this.polygonInformationStorage.forEach(function (v, i) {
-            console.log(v.polygon);
-            var id = v.polygon.findIndex(function (poly) { return poly.toString() === polygon.toString(); });
-            if (id >= 0) {
-                index = i;
-                v.trashcanPoint.splice(id, 1);
-                v.sqmArea.splice(id, 1);
-                v.perimeter.splice(id, 1);
-                v.polygon.splice(id, 1);
-                console.log(v.polygon);
-            }
-            console.log("ID: ", id);
-        });
-        this.updatePolygons();
-        console.log("Index: ", index);
-        if (this.polygonInformationStorage.length > 1) {
-            this.polygonInformationStorage.splice(index, 1);
-        }
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
-    };
-    PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
-        this.polygonInformationStorage = [];
-    };
-    PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
-        var _this = this;
-        console.log("Create Info: ", arrayOfFeatureGroups);
-        if (arrayOfFeatureGroups.length > 0) {
-            arrayOfFeatureGroups.forEach(function (featureGroup) {
-                console.log(featureGroup.getLayers()[0].getLatLngs());
-                var polyInfo = new _polygon_helpers__WEBPACK_IMPORTED_MODULE_2__["PolygonInfo"](featureGroup.getLayers()[0].getLatLngs());
-                _this.polygonInformationStorage.push(polyInfo);
-            });
-            this.updatePolygons();
-        }
-    };
-    PolygonInformationService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: "root" }),
-        __metadata("design:paramtypes", [_map_state_service__WEBPACK_IMPORTED_MODULE_3__["MapStateService"]])
-    ], PolygonInformationService);
-    return PolygonInformationService;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/polygon.util.ts":
-/*!*************************************!*\
-  !*** ./src/app/map/polygon.util.ts ***!
-  \*************************************/
-/*! exports provided: PolygonUtil */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolygonUtil", function() { return PolygonUtil; });
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @turf/turf */ "./node_modules/@turf/turf/turf.min.js");
-/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_turf_turf__WEBPACK_IMPORTED_MODULE_1__);
-
-
-var PolygonUtil = /** @class */ (function () {
-    function PolygonUtil() {
-    }
-    PolygonUtil.getCenter = function (polygon) {
-        var pi = Math.PI;
-        var x = 0;
-        var y = 0;
-        var z = 0;
-        polygon.forEach(function (v) {
-            var lat1 = v.lat;
-            var lon1 = v.lng;
-            lat1 = lat1 * pi / 180;
-            lon1 = lon1 * pi / 180;
-            x += Math.cos(lat1) * Math.cos(lon1);
-            y += Math.cos(lat1) * Math.sin(lon1);
-            z += Math.sin(lat1);
-        });
-        var lng = Math.atan2(y, x);
-        var hyp = Math.sqrt(x * x + y * y);
-        var lat = Math.atan2(z, hyp);
-        lat = lat * 180 / pi;
-        lng = lng * 180 / pi;
-        var center = { lat: lat, lng: lng };
-        return center;
-    };
-    PolygonUtil.getSouthWest = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorthWest();
-    };
-    PolygonUtil.getNorthEast = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorthEast();
-    };
-    PolygonUtil.getNorthWest = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorthWest();
-    };
-    PolygonUtil.getSouthEast = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getSouthEast();
-    };
-    PolygonUtil.getNorth = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorth();
-    };
-    PolygonUtil.getSouth = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getSouth();
-    };
-    PolygonUtil.getWest = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getWest();
-    };
-    PolygonUtil.getEast = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getEast();
-    };
-    PolygonUtil.getSqmArea = function (polygon) {
-        var poly = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polygon"](polygon);
-        var geoJsonPoly = poly.toGeoJSON();
-        var area = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["area"]((geoJsonPoly));
-        return area;
-    };
-    PolygonUtil.getPerimeter = function (polygon) {
-        var poly = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polygon"](polygon);
-        var geoJsonPoly = poly.toGeoJSON();
-        var perimeter = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["length"]((geoJsonPoly), { units: "meters" });
-        return perimeter;
-    };
-    PolygonUtil.getPolygonChecksum = function (polygon) {
-        var uniqueLatLngs = polygon.filter(function (v, i, a) {
-            return a.indexOf(a.find(function (x) { return x.lat === v.lat && x.lng === v.lng; })) === i;
-        });
-        return uniqueLatLngs.reduce(function (a, b) { return +a + +b.lat; }, 0) * uniqueLatLngs.reduce(function (a, b) { return +a + +b.lng; }, 0);
-    };
-    PolygonUtil.getMidPoint = function (point1, point2) {
-        var p1 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["point"]([point1.lng, point1.lat]);
-        var p2 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["point"]([point2.lng, point2.lat]);
-        var midpoint = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["midpoint"](p1, p2);
-        var returnPoint = {
-            lat: midpoint.geometry.coordinates[1],
-            lng: midpoint.geometry.coordinates[0]
-        };
-        return returnPoint;
-    };
-    PolygonUtil.getBounds = function (polygon) {
-        var tmpLatLng = [];
-        polygon.forEach(function (ll) {
-            if (isNaN(ll.lat) || isNaN(ll.lng)) {
-            }
-            tmpLatLng.push(ll);
-        });
-        var polyLine = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polyline"](tmpLatLng);
-        var bounds = polyLine.getBounds();
-        return bounds;
-    };
-    return PolygonUtil;
-}());
-
-//export class FreedrawSubtract extends L.FreeDraw {
-//    constructor() {
-//        //this will become L.FreeDraw
-//        super(null);
-//        //call methods in freedraw by this
-//        const foo = this.size();
-//        this.consoleLogNumberOfPolygons(foo);
-//    }
-//    consoleLogNumberOfPolygons(size: number): void {
-//        console.log("Number of polygons: ", size);
-//    }
-//}
-
-
-/***/ }),
-
-/***/ "./src/app/map/popups/alter-polygon/alter-polygon.component.css":
-/*!**********************************************************************!*\
-  !*** ./src/app/map/popups/alter-polygon/alter-polygon.component.css ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21hcC9wb3B1cHMvYWx0ZXItcG9seWdvbi9hbHRlci1wb2x5Z29uLmNvbXBvbmVudC5jc3MifQ== */"
-
-/***/ }),
-
-/***/ "./src/app/map/popups/alter-polygon/alter-polygon.component.html":
-/*!***********************************************************************!*\
-  !*** ./src/app/map/popups/alter-polygon/alter-polygon.component.html ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplyfy\" (click)=\"onSimplify($event)\" >Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>"
-
-/***/ }),
-
-/***/ "./src/app/map/popups/alter-polygon/alter-polygon.component.ts":
-/*!*********************************************************************!*\
-  !*** ./src/app/map/popups/alter-polygon/alter-polygon.component.ts ***!
-  \*********************************************************************/
-/*! exports provided: AlterPolygonComponent */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AlterPolygonComponent", function() { return AlterPolygonComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-var AlterPolygonComponent = /** @class */ (function () {
-    function AlterPolygonComponent() {
-        this.simplyfiClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-        this.bboxClicked = new _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"]();
-    }
-    AlterPolygonComponent.prototype.onSimplify = function ($event) {
-        this.simplyfiClicked.emit($event);
-    };
-    AlterPolygonComponent.prototype.onBbox = function ($event) {
-        this.bboxClicked.emit($event);
-    };
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
-        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
-    ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
-    __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Output"])(),
-        __metadata("design:type", _angular_core__WEBPACK_IMPORTED_MODULE_0__["EventEmitter"])
-    ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
-    AlterPolygonComponent = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
-            selector: 'app-alter-polygon',
-            template: __webpack_require__(/*! ./alter-polygon.component.html */ "./src/app/map/popups/alter-polygon/alter-polygon.component.html"),
-            styles: [__webpack_require__(/*! ./alter-polygon.component.css */ "./src/app/map/popups/alter-polygon/alter-polygon.component.css")]
-        })
-    ], AlterPolygonComponent);
-    return AlterPolygonComponent;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/turf-helper.service.ts":
-/*!********************************************!*\
-  !*** ./src/app/map/turf-helper.service.ts ***!
-  \********************************************/
-/*! exports provided: TurfHelperService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TurfHelperService", function() { return TurfHelperService; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @turf/turf */ "./node_modules/@turf/turf/turf.min.js");
-/* harmony import */ var _turf_turf__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_turf_turf__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var concaveman__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! concaveman */ "./node_modules/concaveman/index.js");
-/* harmony import */ var concaveman__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(concaveman__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils */ "./src/app/map/utils.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var TurfHelperService = /** @class */ (function () {
-    function TurfHelperService() {
-        this.simplifyTolerance = { tolerance: 0.0001, highQuality: false };
-    }
-    TurfHelperService.prototype.union = function (poly1, poly2) {
-        console.log("poly1: ", poly1);
-        console.log("poly2: ", poly2);
-        var union = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["union"](poly1, poly2);
-        return this.getTurfPolygon(union);
-    };
-    TurfHelperService.prototype.turfConcaveman = function (feature) {
-        //console.log("turfConcaveman", points);
-        var points = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](feature);
-        var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
-        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([[concaveman__WEBPACK_IMPORTED_MODULE_2__(coordinates)]]);
-    };
-    TurfHelperService.prototype.getSimplified = function (polygon) {
-        var tolerance = this.simplifyTolerance;
-        var simplified = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["simplify"](polygon, tolerance);
-        return simplified;
-    };
-    TurfHelperService.prototype.getTurfPolygon = function (polygon) {
-        var turfPolygon;
-        console.log("Get TurfPolygon:", polygon);
-        // if (polygon.geometry)
-        if (polygon.geometry.type === "Polygon") {
-            turfPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([polygon.geometry.coordinates]);
-        }
-        else {
-            turfPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"](polygon.geometry.coordinates);
-        }
-        return turfPolygon;
-    };
-    TurfHelperService.prototype.getMultiPolygon = function (polygonArray) {
-        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"](polygonArray);
-    };
-    TurfHelperService.prototype.getKinks = function (feature) {
-        var unkink = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["unkinkPolygon"](feature);
-        var coordinates = [];
-        _turf_turf__WEBPACK_IMPORTED_MODULE_1__["featureEach"](unkink, function (current) {
-            coordinates.push(current);
-        });
-        return coordinates;
-    };
-    TurfHelperService.prototype.getCoords = function (feature) {
-        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](feature);
-    };
-    TurfHelperService.prototype.hasKinks = function (feature) {
-        var kinks = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["kinks"](feature);
-        return kinks.features.length > 0;
-    };
-    TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
-        // const oldPolygon = polygon.toGeoJSON();
-        var poly = [];
-        var poly2 = [];
-        console.log("polygonIntersect", polygon, latlngs);
-        var latlngsCoords = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](latlngs);
-        latlngsCoords.forEach(function (element) {
-            var feat = { type: "Polygon", coordinates: [element[0]] };
-            poly.push(feat);
-        });
-        var polygonCoords = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](polygon);
-        polygonCoords.forEach(function (element) {
-            var feat = { type: "Polygon", coordinates: [element[0]] };
-            poly2.push(feat);
-        });
-        var intersect = false;
-        loop1: for (var i = 0; i < poly.length; i++) {
-            if (this.getKinks(poly[i]).length < 2) {
-                for (var j = 0; j < poly2.length; j++) {
-                    if (this.getKinks(poly2[j]).length < 2) {
-                        intersect = !!_turf_turf__WEBPACK_IMPORTED_MODULE_1__["intersect"](poly[i], poly2[j]);
-                        if (intersect) {
-                            break loop1;
-                        }
-                    }
-                }
-            }
-        }
-        return intersect;
-    };
-    TurfHelperService.prototype.getIntersection = function (poly1, poly2) {
-        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["intersect"](poly1, poly2);
-    };
-    TurfHelperService.prototype.getDistance = function (point1, point2) {
-        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["distance"](point1, point2);
-    };
-    TurfHelperService.prototype.isWithin = function (polygon1, polygon2) {
-        console.log(polygon1);
-        console.log("Ytre: ", polygon2);
-        return _turf_turf__WEBPACK_IMPORTED_MODULE_1__["booleanWithin"](_turf_turf__WEBPACK_IMPORTED_MODULE_1__["polygon"]([polygon1]), _turf_turf__WEBPACK_IMPORTED_MODULE_1__["polygon"]([polygon2]));
-    };
-    TurfHelperService.prototype.equalPolygons = function (polygon1, polygon2) {
-        console.log(polygon1);
-        console.log(polygon2);
-        console.log(_turf_turf__WEBPACK_IMPORTED_MODULE_1__["booleanEqual"](polygon1, polygon2));
-    };
-    TurfHelperService.prototype.convertToBoundingBoxPolygon = function (polygon) {
-        var bbox = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["bbox"](polygon);
-        var bboxPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["bboxPolygon"](bbox);
-        return bboxPolygon;
-    };
-    TurfHelperService.prototype.polygonToMultiPolygon = function (poly) {
-        var multi = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([poly.geometry.coordinates]);
-        return multi;
-    };
-    //TODO -cleanup
-    TurfHelperService.prototype.injectPointToPolygon = function (polygon, point) {
-        var coords = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoords"](polygon);
-        var newPolygon;
-        console.log("polygon: ", polygon);
-        if (coords.length < 2) {
-            var polygonPoints = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](polygon);
-            console.log(_turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](point, polygonPoints));
-            var index_1 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](point, polygonPoints).properties.featureIndex;
-            var test = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["coordReduce"](polygonPoints, function (accumulator, oldPoint, i) {
-                if (index_1 === i) {
-                    return accumulator.concat([oldPoint, point]);
-                }
-                return accumulator.concat([oldPoint]);
-            }, []);
-            console.log("test", test);
-            newPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"]([[test]]);
-        }
-        else {
-            var pos_1 = [];
-            var coordinates_1 = [];
-            coords.forEach(function (element) {
-                var polygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["polygon"](element);
-                // turf.booleanPointInPolygon(point, polygon)
-                if (_turf_turf__WEBPACK_IMPORTED_MODULE_1__["booleanPointInPolygon"](point, polygon)) {
-                    var polygonPoints = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](polygon);
-                    var index_2 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](point, polygonPoints).properties.featureIndex;
-                    coordinates_1 = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["coordReduce"](polygonPoints, function (accumulator, oldPoint, i) {
-                        if (index_2 === i) {
-                            return accumulator.concat([oldPoint, point]);
-                        }
-                        return accumulator.concat([oldPoint]);
-                    }, []);
-                    console.log("coordinates", coordinates_1);
-                }
-                else {
-                    pos_1.push(element);
-                }
-            });
-            pos_1.push([coordinates_1]);
-            newPolygon = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["multiPolygon"](pos_1);
-        }
-        return newPolygon;
-    };
-    TurfHelperService.prototype.polygonDifference = function (polygon1, polygon2) {
-        var diff = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["difference"](polygon1, polygon2);
-        console.log(diff);
-        return this.getTurfPolygon(diff);
-    };
-    TurfHelperService.prototype.getBoundingBoxCompassPosition = function (polygon, markerplacement, useOffset, offsetDirection) {
-        var p = this.getMultiPolygon(polygon);
-        var compass = this.getBoundingBoxCompass(polygon);
-        var polygonPoints = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["explode"](polygon);
-        var nearestPoint = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](compass.direction.North, polygonPoints);
-        return null;
-    };
-    TurfHelperService.prototype.getBoundingBoxCompass = function (polygon) {
-        var p = this.getMultiPolygon(polygon);
-        var centerOfMass = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["centerOfMass"](p);
-        var b = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["bbox"](p);
-        var minX = b[0];
-        var minY = b[1];
-        var maxX = b[2];
-        var maxY = b[3];
-        var compass = new _utils__WEBPACK_IMPORTED_MODULE_3__["Compass"](minX, minY, maxX, maxY);
-        compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
-        return compass;
-    };
-    TurfHelperService.prototype.getNearestPointIndex = function (targetPoint, points) {
-        var index = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["nearestPoint"](targetPoint, points).properties.featureIndex;
-        return index;
-    };
-    TurfHelperService.prototype.getCoord = function (point) {
-        var coord = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["getCoord"]([point.lng, point.lat]);
-        return coord;
-    };
-    TurfHelperService.prototype.getFeaturePointCollection = function (points) {
-        var pts = [];
-        points.forEach(function (v) {
-            var p = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["point"]([v.lng, v.lat], {});
-            pts.push(p);
-        });
-        var fc = _turf_turf__WEBPACK_IMPORTED_MODULE_1__["featureCollection"](pts);
-        return fc;
-    };
-    TurfHelperService = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({ providedIn: "root" }),
-        __metadata("design:paramtypes", [])
-    ], TurfHelperService);
-    return TurfHelperService;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/map/utils.ts":
-/*!******************************!*\
-  !*** ./src/app/map/utils.ts ***!
-  \******************************/
-/*! exports provided: PolyDrawUtil, Compass */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PolyDrawUtil", function() { return PolyDrawUtil; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Compass", function() { return Compass; });
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _enums__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./enums */ "./src/app/map/enums.ts");
-
-
-var PolyDrawUtil = /** @class */ (function () {
-    function PolyDrawUtil() {
-    }
-    PolyDrawUtil.getBounds = function (polygon, padding) {
-        if (padding === void 0) { padding = 0; }
-        var tmpLatLng = [];
-        polygon.forEach(function (ll) {
-            if (isNaN(ll.lat) || isNaN(ll.lng)) {
-            }
-            tmpLatLng.push(ll);
-        });
-        var polyLine = new leaflet__WEBPACK_IMPORTED_MODULE_0__["Polyline"](tmpLatLng);
-        var bounds = polyLine.getBounds();
-        if (padding !== 0) {
-            return bounds.pad(padding);
-        }
-        return bounds;
-    };
-    return PolyDrawUtil;
-}());
-
-//TODO make compass ILatLng
-var Compass = /** @class */ (function () {
-    function Compass(minLat, minLng, maxLat, maxLng) {
-        if (minLat === void 0) { minLat = 0; }
-        if (minLng === void 0) { minLng = 0; }
-        if (maxLat === void 0) { maxLat = 0; }
-        if (maxLng === void 0) { maxLng = 0; }
-        this.direction = {
-            BoundingBoxCenter: [0, 0],
-            CenterOfMass: [0, 0],
-            East: [0, 0],
-            North: [0, 0],
-            NorthEast: [0, 0],
-            NorthWest: [0, 0],
-            South: [0, 0],
-            SouthEast: [0, 0],
-            SouthWest: [0, 0],
-            West: [0, 0]
-        };
-        this.direction.North = [(minLat + maxLat) / 2, maxLng];
-        this.direction.NorthEast = [maxLat, maxLng];
-        this.direction.East = [maxLat, (minLng + maxLng) / 2];
-        this.direction.SouthEast = [maxLat, minLng];
-        this.direction.South = [(minLat + maxLat) / 2, minLng];
-        this.direction.SouthWest = [minLat, minLng];
-        this.direction.West = [minLat, (minLng + maxLng) / 2];
-        this.direction.NorthWest = [minLat, maxLng];
-        this.direction.CenterOfMass = [0, 0];
-        this.direction.BoundingBoxCenter = [(minLat + maxLat) / 2, (minLng + maxLng) / 2];
-    }
-    //TODO default return.
-    Compass.prototype.getDirection = function (direction) {
-        switch (direction) {
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].CenterOfMass:
-                return this.direction.CenterOfMass;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].North:
-                return this.direction.North;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].NorthEast:
-                return this.direction.NorthEast;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].East:
-                return this.direction.East;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].SouthEast:
-                return this.direction.SouthEast;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].South:
-                return this.direction.South;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].SouthWest:
-                return this.direction.SouthWest;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].West:
-                return this.direction.West;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].NorthWest:
-                return this.direction.NorthWest;
-            case _enums__WEBPACK_IMPORTED_MODULE_1__["MarkerPlacement"].BoundingBoxCenter:
-                return this.direction.BoundingBoxCenter;
-            default:
-                return this.direction.North;
-        }
-    };
-    return Compass;
 }());
 
 

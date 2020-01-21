@@ -7,7 +7,7 @@ import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
 import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
-import defaultConfig from "./config.json";
+import defaultConfig from "./polyInfo.json";
 import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneraterService } from "./component-generater.service";
 import { Compass, PolyDrawUtil } from "./utils";
@@ -22,7 +22,7 @@ export class PolyDrawService {
   //DrawModes, determine UI buttons etc...
   drawModeSubject: BehaviorSubject<DrawMode> = new BehaviorSubject<DrawMode>(DrawMode.Off);
   drawMode$: Observable<DrawMode> = this.drawModeSubject.asObservable();
-
+ 
   private map: L.Map;
 
   private mergePolygons: boolean;
