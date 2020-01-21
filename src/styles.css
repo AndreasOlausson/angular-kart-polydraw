@@ -25,6 +25,11 @@ html, body{
 }
 .polygon-marker.menu{
   background-color: red;
+  background-image: url("app/images/icons/icon-settings-white.svg");
+  -ms-background-size: 20px 20px;
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  background-position: center;
   width: 24px!important;
   height: 24px!important;
   z-index: 10000;
@@ -40,19 +45,29 @@ html, body{
   width: 24px!important;
   height: 24px!important;
   z-index: 10000;
+  margin-left: -6px !important;
+  margin-top: -6px !important;
 }
 
 .polygon-marker.delete{
-  background-color: rgb(92, 81, 81);;
+  background-color: rgb(100, 93, 93);
+  background-image: url("app/images/icons/icon-trash-white.svg");
+  -ms-background-size: 24px 24px;
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  background-position: center;
   width: 24px!important;
   height: 24px!important;
   z-index: 10000;
 }
 .polygon-marker.delete:hover{
   background-color: rgb(92, 81, 81);
+  background-image: url("app/images/icons/icon-trash-hover-white.svg");
   width: 24px!important;
   height: 24px!important;
   z-index: 10000;
+  margin-left: -6px !important;
+  margin-top: -6px !important;
 }
 
 .polygon-marker.hole{

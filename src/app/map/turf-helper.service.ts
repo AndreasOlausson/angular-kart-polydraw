@@ -30,6 +30,8 @@ export class TurfHelperService {
     return turf.multiPolygon([[concaveman(coordinates)]]);
   }
 
+
+  //TODO add some sort of dynamic tolerance
   getSimplified(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
     const tolerance = this.simplifyTolerance;
     const simplified = turf.simplify(polygon, tolerance);
@@ -125,9 +127,9 @@ export class TurfHelperService {
     console.log(polygon2);
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
-
+  //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
   convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
-    const bbox = turf.bbox(polygon);
+    const bbox = turf.bbox(polygon.geometry);
     const bboxPolygon = turf.bboxPolygon(bbox);
     return bboxPolygon;
   }
@@ -195,7 +197,8 @@ export class TurfHelperService {
     const p = this.getMultiPolygon(polygon);
     const compass = this.getBoundingBoxCompass(polygon);
     const polygonPoints = turf.explode(polygon);
-    const nearestPoint = turf.nearestPoint(compass.direction.North, polygonPoints);
+    const coord = this.getCoord(compass.direction.North);
+    const nearestPoint = turf.nearestPoint(coord, polygonPoints);
 
     return null;
   }
@@ -208,7 +211,7 @@ export class TurfHelperService {
     const maxX = b[2];
     const maxY = b[3];
     const compass = new Compass(minX, minY, maxX, maxY);
-    compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
+    // compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
 
     return compass;
   }
