@@ -600,7 +600,7 @@ export class MapHelperService {
     if (featureCollection.features[0].geometry.coordinates.length > 1) {
       featureCollection.features[0].geometry.coordinates.forEach(element => {
         let feature = this.turfHelper.getMultiPolygon([element]);
-        
+
 
         console.log("Markerdragend: ", feature);
         if (this.turfHelper.hasKinks(feature)) {
@@ -835,19 +835,10 @@ export class MapHelperService {
     return comp.location.nativeElement;
   }
   private convertToBoundsPolygon(latlngs: ILatLng[]) {
-
-    const lPoly = this.leafletHelper.createPolygon(latlngs);
-    console.log("to delete", latlngs);
     this.deletePolygon([latlngs]);
-
-    // const coords = this.convertToCoords([latlngs]);
-    // const p = this.getPolygon()
-
-    // if (poly.geometry.type === "MultiPolygon") {
-    //   let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(poly);
-    //   this.deletePolygon(this.getLatLngsFromJson(poly));
-    //   this.addPolygonLayer(newPolygon, false);
-    // }
+    let polygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
+    let newPolygon = this.turfHelper.convertToBoundingBoxPolygon(polygon);
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), false);
   }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));

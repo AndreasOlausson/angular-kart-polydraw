@@ -127,7 +127,7 @@ export class TurfHelperService {
   }
 
   convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
-    const bbox = turf.bbox(polygon);
+    const bbox = turf.bbox(polygon.geometry);
     const bboxPolygon = turf.bboxPolygon(bbox);
     return bboxPolygon;
   }
