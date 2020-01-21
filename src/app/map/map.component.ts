@@ -1,7 +1,8 @@
 import { Component, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 
 import * as L from "leaflet"
-import { MapStateService } from './map-state.service';
+import { MapStateService } from 'projects/lib/src/public_api';
+
 
 @Component({
   selector: 'map-cmp',

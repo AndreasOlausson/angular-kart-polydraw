@@ -2,7 +2,6 @@
   "name": "angular",
   "version": "0.0.0",
   "private": true,
-  
   "dependencies": {
     "@angular/common": "^8.2.14",
     "@angular/compiler": "^8.2.14",
@@ -37,10 +36,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "test-build":"tsc"
+    "test-build": "tsc"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
+    "@angular-devkit/build-ng-packagr": "~0.10.0",
     "@angular/cli": "~7.0.2",
     "@angular/compiler-cli": "~7.0.0",
     "@angular/language-service": "~7.0.0",
@@ -55,8 +55,11 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ng-packagr": "^4.2.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
+    "tsickle": ">=0.29.0",
+    "tslib": "^1.9.0",
     "tslint": "~5.11.0",
     "typescript": "~3.1.1"
   }

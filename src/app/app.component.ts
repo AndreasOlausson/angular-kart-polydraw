@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
-import { PolyDrawService } from "./map/polydraw.service";
+
 import { ILatLng } from "./map/polygon-helpers";
+import { PolyDrawService } from "projects/lib/src/public_api";
 
 @Component({
   selector: "my-app",

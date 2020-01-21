@@ -18,6 +18,14 @@
       "dom"
     ],
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "lib": [
+        "dist/lib"
+      ],
+      "lib/*": [
+        "dist/lib/*"
+      ]
+    }
   }
-  }
+}
