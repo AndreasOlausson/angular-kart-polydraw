@@ -1,7 +1,9 @@
 import { Injectable, ComponentFactoryResolver, Injector, ComponentRef, ComponentFactory, OnDestroy, Component } from '@angular/core';
 import { AlterPolygonComponent } from './popups/alter-polygon/alter-polygon.component';
 
-
+@Injectable({
+  providedIn: 'root'
+})
 export class ComponentGeneraterService implements OnDestroy {
 
   private clusterPopuprefs: ComponentRef<AlterPolygonComponent>[] = [];

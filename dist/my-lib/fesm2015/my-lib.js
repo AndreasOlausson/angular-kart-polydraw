@@ -1,5 +1,5 @@
 import { __decorate, __metadata } from 'tslib';
-import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -708,7 +708,7 @@ AlterPolygonComponent = __decorate([
     })
 ], AlterPolygonComponent);
 
-class ComponentGeneraterService {
+let ComponentGeneraterService = class ComponentGeneraterService {
     constructor(cfr, injector) {
         this.cfr = cfr;
         this.injector = injector;
@@ -731,7 +731,19 @@ class ComponentGeneraterService {
         });
         this.clusterPopuprefs = [];
     }
-}
+};
+ComponentGeneraterService.ctorParameters = () => [
+    { type: ComponentFactoryResolver },
+    { type: Injector }
+];
+ComponentGeneraterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(ɵɵinject(ComponentFactoryResolver), ɵɵinject(INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
+ComponentGeneraterService = __decorate([
+    Injectable({
+        providedIn: 'root'
+    }),
+    __metadata("design:paramtypes", [ComponentFactoryResolver,
+        Injector])
+], ComponentGeneraterService);
 
 let LeafletHelperService = class LeafletHelperService {
     constructor() { }
@@ -1610,7 +1622,6 @@ MyLibModule = __decorate([
     NgModule({
         declarations: [AlterPolygonComponent],
         imports: [],
-        providers: [ComponentGeneraterService],
         exports: []
     })
 ], MyLibModule);

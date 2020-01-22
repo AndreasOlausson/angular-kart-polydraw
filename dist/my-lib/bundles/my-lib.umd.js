@@ -949,6 +949,18 @@
             });
             this.clusterPopuprefs = [];
         };
+        ComponentGeneraterService.ctorParameters = function () { return [
+            { type: core.ComponentFactoryResolver },
+            { type: core.Injector }
+        ]; };
+        ComponentGeneraterService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(core.ɵɵinject(core.ComponentFactoryResolver), core.ɵɵinject(core.INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
+        ComponentGeneraterService = __decorate([
+            core.Injectable({
+                providedIn: 'root'
+            }),
+            __metadata("design:paramtypes", [core.ComponentFactoryResolver,
+                core.Injector])
+        ], ComponentGeneraterService);
         return ComponentGeneraterService;
     }());
 
@@ -1845,7 +1857,6 @@
             core.NgModule({
                 declarations: [AlterPolygonComponent],
                 imports: [],
-                providers: [ComponentGeneraterService],
                 exports: []
             })
         ], MyLibModule);

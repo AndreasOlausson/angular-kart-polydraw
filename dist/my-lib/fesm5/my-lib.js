@@ -1,5 +1,5 @@
 import { __decorate, __metadata, __spread, __assign } from 'tslib';
-import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, NgModule } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -752,6 +752,18 @@ var ComponentGeneraterService = /** @class */ (function () {
         });
         this.clusterPopuprefs = [];
     };
+    ComponentGeneraterService.ctorParameters = function () { return [
+        { type: ComponentFactoryResolver },
+        { type: Injector }
+    ]; };
+    ComponentGeneraterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(ɵɵinject(ComponentFactoryResolver), ɵɵinject(INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
+    ComponentGeneraterService = __decorate([
+        Injectable({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [ComponentFactoryResolver,
+            Injector])
+    ], ComponentGeneraterService);
     return ComponentGeneraterService;
 }());
 
@@ -1648,7 +1660,6 @@ var MyLibModule = /** @class */ (function () {
         NgModule({
             declarations: [AlterPolygonComponent],
             imports: [],
-            providers: [ComponentGeneraterService],
             exports: []
         })
     ], MyLibModule);
