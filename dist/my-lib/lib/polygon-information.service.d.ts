@@ -1,6 +1,6 @@
-import { Subject, Observable } from 'rxjs';
-import { PolygonInfo, PolygonDrawStates, ILatLng } from './polygon-helpers';
-import { PolyStateService } from './map-state.service';
+import { Subject, Observable } from "rxjs";
+import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
+import { PolyStateService } from "./map-state.service";
 export declare class PolygonInformationService {
     private mapStateService;
     polygonInformationSubject: Subject<PolygonInfo[]>;

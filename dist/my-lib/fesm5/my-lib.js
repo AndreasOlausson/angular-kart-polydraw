@@ -1,8 +1,8 @@
-import { __decorate, __metadata, __spread, __assign } from 'tslib';
+import { __assign, __decorate, __metadata, __spread } from 'tslib';
 import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, debounceTime, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
@@ -12,14 +12,24 @@ var PolyStateService = /** @class */ (function () {
         this.map$ = this.mapSubject.asObservable();
         this.polygonSubject = new BehaviorSubject(null);
         this.polygons$ = this.polygonSubject.asObservable();
-        this.mapZoomLevel$ = new Observable();
+        this.mapStateSubject = new BehaviorSubject(new MapStateModel());
+        this.mapState$ = this.mapStateSubject.asObservable();
+        this.mapZoomLevel$ = this.mapState$.pipe(map(function (state) { return state.mapBoundState.zoom; }));
     }
+    PolyStateService.prototype.updateMapStates = function (newState) {
+        var state = this.mapStateSubject.value;
+        state = __assign({}, state, newState);
+        this.mapStateSubject.next(state);
+    };
     PolyStateService.prototype.updateMapState = function (map) {
         this.mapSubject.next(map);
     };
     PolyStateService.prototype.updatePolygons = function (polygons) {
         console.log("map-state", polygons);
         this.polygonSubject.next(polygons);
+    };
+    PolyStateService.prototype.updateMapBounds = function (mapBounds) {
+        this.updateMapStates({ mapBoundState: mapBounds });
     };
     PolyStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolyStateService_Factory() { return new PolyStateService(); }, token: PolyStateService, providedIn: "root" });
     PolyStateService = __decorate([
@@ -29,6 +39,20 @@ var PolyStateService = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], PolyStateService);
     return PolyStateService;
+}());
+var MapStateModel = /** @class */ (function () {
+    function MapStateModel(mapBoundState) {
+        if (mapBoundState === void 0) { mapBoundState = new MapBoundsState(null, 11); }
+        this.mapBoundState = mapBoundState;
+    }
+    return MapStateModel;
+}());
+var MapBoundsState = /** @class */ (function () {
+    function MapBoundsState(bounds, zoom) {
+        this.bounds = bounds;
+        this.zoom = zoom;
+    }
+    return MapBoundsState;
 }());
 
 var DrawMode;
@@ -580,7 +604,7 @@ var PolygonInformationService = /** @class */ (function () {
         this.polygonDrawStates = new PolygonDrawStates();
     }
     PolygonInformationService.prototype.updatePolygons = function () {
-        console.log('updatePolygons: ', this.polygonInformationStorage);
+        console.log("updatePolygons: ", this.polygonInformationStorage);
         var newPolygons = null;
         if (this.polygonInformationStorage.length > 0) {
             newPolygons = [];
@@ -610,7 +634,7 @@ var PolygonInformationService = /** @class */ (function () {
     PolygonInformationService.prototype.saveCurrentState = function () {
         this.polygonInformationSubject.next(this.polygonInformationStorage);
         this.polygonDrawStatesSubject.next(this.polygonDrawStates);
-        console.log('saveCurrentState: ', this.polygonInformationStorage);
+        console.log("saveCurrentState: ", this.polygonInformationStorage);
     };
     PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
         var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
@@ -619,8 +643,8 @@ var PolygonInformationService = /** @class */ (function () {
     };
     PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
         var index = 0;
-        console.log('DeleteTrashCan: ', polygon);
-        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
+        console.log("DeleteTrashCan: ", polygon);
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
         // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
         this.polygonInformationStorage.forEach(function (v, i) {
             console.log(v.polygon);
@@ -633,21 +657,21 @@ var PolygonInformationService = /** @class */ (function () {
                 v.polygon.splice(id, 1);
                 console.log(v.polygon);
             }
-            console.log('ID: ', id);
+            console.log("ID: ", id);
         });
         this.updatePolygons();
-        console.log('Index: ', index);
+        console.log("Index: ", index);
         if (this.polygonInformationStorage.length > 1) {
             this.polygonInformationStorage.splice(index, 1);
         }
-        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
     };
     PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
         this.polygonInformationStorage = [];
     };
     PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
         var _this = this;
-        console.log('Create Info: ', arrayOfFeatureGroups);
+        console.log("Create Info: ", arrayOfFeatureGroups);
         if (arrayOfFeatureGroups.length > 0) {
             arrayOfFeatureGroups.forEach(function (featureGroup) {
                 console.log(featureGroup.getLayers()[0].getLatLngs());
@@ -674,7 +698,7 @@ var PolygonInformationService = /** @class */ (function () {
     ]; };
     PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
     PolygonInformationService = __decorate([
-        Injectable({ providedIn: 'root' }),
+        Injectable({ providedIn: "root" }),
         __metadata("design:paramtypes", [PolyStateService])
     ], PolygonInformationService);
     return PolygonInformationService;

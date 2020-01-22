@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-import { PolygonInfo, PolygonDrawStates, ILatLng } from './polygon-helpers';
-import { PolyDrawService } from './polydraw.service';
-import { PolyStateService } from './map-state.service';
+import { Injectable } from "@angular/core";
+import { Subject, Observable } from "rxjs";
+import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
+import { PolyDrawService } from "./polydraw.service";
+import { PolyStateService } from "./map-state.service";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class PolygonInformationService {
   polygonInformationSubject: Subject<PolygonInfo[]> = new Subject<
     PolygonInfo[]
@@ -19,14 +19,14 @@ export class PolygonInformationService {
     PolygonDrawStates
   > = this.polygonDrawStatesSubject.asObservable();
 
-   polygonDrawStates: PolygonDrawStates = null;
+  polygonDrawStates: PolygonDrawStates = null;
   polygonInformationStorage = [];
   constructor(private mapStateService: PolyStateService) {
     this.polygonDrawStates = new PolygonDrawStates();
   }
 
   updatePolygons() {
-    console.log('updatePolygons: ', this.polygonInformationStorage);
+    console.log("updatePolygons: ", this.polygonInformationStorage);
 
     let newPolygons: ILatLng[][][] = null;
     if (this.polygonInformationStorage.length > 0) {
@@ -63,7 +63,7 @@ export class PolygonInformationService {
   saveCurrentState(): void {
     this.polygonInformationSubject.next(this.polygonInformationStorage);
     this.polygonDrawStatesSubject.next(this.polygonDrawStates);
-    console.log('saveCurrentState: ', this.polygonInformationStorage);
+    console.log("saveCurrentState: ", this.polygonInformationStorage);
   }
 
   deleteTrashcan(polygon) {
@@ -76,8 +76,8 @@ export class PolygonInformationService {
 
   deleteTrashCanOnMulti(polygon: ILatLng[][][]) {
     let index = 0;
-    console.log('DeleteTrashCan: ', polygon);
-    console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
+    console.log("DeleteTrashCan: ", polygon);
+    console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
     // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
     this.polygonInformationStorage.forEach((v, i) => {
       console.log(v.polygon);
@@ -93,14 +93,14 @@ export class PolygonInformationService {
 
         console.log(v.polygon);
       }
-      console.log('ID: ', id);
+      console.log("ID: ", id);
     });
     this.updatePolygons();
-    console.log('Index: ', index);
+    console.log("Index: ", index);
     if (this.polygonInformationStorage.length > 1) {
       this.polygonInformationStorage.splice(index, 1);
     }
-    console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
+    console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
   }
 
   deletePolygonInformationStorage() {
@@ -108,7 +108,7 @@ export class PolygonInformationService {
   }
 
   createPolygonInformationStorage(arrayOfFeatureGroups) {
-    console.log('Create Info: ', arrayOfFeatureGroups);
+    console.log("Create Info: ", arrayOfFeatureGroups);
     if (arrayOfFeatureGroups.length > 0) {
       arrayOfFeatureGroups.forEach(featureGroup => {
         console.log(featureGroup.getLayers()[0].getLatLngs());
@@ -121,19 +121,18 @@ export class PolygonInformationService {
     }
   }
 
-
-  activate(){
-    this.polygonDrawStates.activate()
+  activate() {
+    this.polygonDrawStates.activate();
   }
-  reset(){
+  reset() {
     this.polygonDrawStates.reset();
   }
 
-  setMoveMode(){
+  setMoveMode() {
     this.polygonDrawStates.setMoveMode();
   }
 
-  setFreeDrawMode(){
-    this.polygonDrawStates.setFreeDrawMode()
+  setFreeDrawMode() {
+    this.polygonDrawStates.setFreeDrawMode();
   }
 }

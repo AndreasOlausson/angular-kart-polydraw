@@ -1,8 +1,8 @@
 import { __decorate, __metadata } from 'tslib';
 import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { filter, debounceTime, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
@@ -12,7 +12,14 @@ let PolyStateService = class PolyStateService {
         this.map$ = this.mapSubject.asObservable();
         this.polygonSubject = new BehaviorSubject(null);
         this.polygons$ = this.polygonSubject.asObservable();
-        this.mapZoomLevel$ = new Observable();
+        this.mapStateSubject = new BehaviorSubject(new MapStateModel());
+        this.mapState$ = this.mapStateSubject.asObservable();
+        this.mapZoomLevel$ = this.mapState$.pipe(map((state) => state.mapBoundState.zoom));
+    }
+    updateMapStates(newState) {
+        let state = this.mapStateSubject.value;
+        state = Object.assign({}, state, newState);
+        this.mapStateSubject.next(state);
     }
     updateMapState(map) {
         this.mapSubject.next(map);
@@ -20,6 +27,9 @@ let PolyStateService = class PolyStateService {
     updatePolygons(polygons) {
         console.log("map-state", polygons);
         this.polygonSubject.next(polygons);
+    }
+    updateMapBounds(mapBounds) {
+        this.updateMapStates({ mapBoundState: mapBounds });
     }
 };
 PolyStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolyStateService_Factory() { return new PolyStateService(); }, token: PolyStateService, providedIn: "root" });
@@ -29,6 +39,17 @@ PolyStateService = __decorate([
     }),
     __metadata("design:paramtypes", [])
 ], PolyStateService);
+class MapStateModel {
+    constructor(mapBoundState = new MapBoundsState(null, 11)) {
+        this.mapBoundState = mapBoundState;
+    }
+}
+class MapBoundsState {
+    constructor(bounds, zoom) {
+        this.bounds = bounds;
+        this.zoom = zoom;
+    }
+}
 
 var DrawMode;
 (function (DrawMode) {
@@ -558,7 +579,7 @@ let PolygonInformationService = class PolygonInformationService {
         this.polygonDrawStates = new PolygonDrawStates();
     }
     updatePolygons() {
-        console.log('updatePolygons: ', this.polygonInformationStorage);
+        console.log("updatePolygons: ", this.polygonInformationStorage);
         let newPolygons = null;
         if (this.polygonInformationStorage.length > 0) {
             newPolygons = [];
@@ -588,7 +609,7 @@ let PolygonInformationService = class PolygonInformationService {
     saveCurrentState() {
         this.polygonInformationSubject.next(this.polygonInformationStorage);
         this.polygonDrawStatesSubject.next(this.polygonDrawStates);
-        console.log('saveCurrentState: ', this.polygonInformationStorage);
+        console.log("saveCurrentState: ", this.polygonInformationStorage);
     }
     deleteTrashcan(polygon) {
         const idx = this.polygonInformationStorage.findIndex(v => v.polygon[0] === polygon);
@@ -597,8 +618,8 @@ let PolygonInformationService = class PolygonInformationService {
     }
     deleteTrashCanOnMulti(polygon) {
         let index = 0;
-        console.log('DeleteTrashCan: ', polygon);
-        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
+        console.log("DeleteTrashCan: ", polygon);
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
         // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
         this.polygonInformationStorage.forEach((v, i) => {
             console.log(v.polygon);
@@ -611,20 +632,20 @@ let PolygonInformationService = class PolygonInformationService {
                 v.polygon.splice(id, 1);
                 console.log(v.polygon);
             }
-            console.log('ID: ', id);
+            console.log("ID: ", id);
         });
         this.updatePolygons();
-        console.log('Index: ', index);
+        console.log("Index: ", index);
         if (this.polygonInformationStorage.length > 1) {
             this.polygonInformationStorage.splice(index, 1);
         }
-        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
     }
     deletePolygonInformationStorage() {
         this.polygonInformationStorage = [];
     }
     createPolygonInformationStorage(arrayOfFeatureGroups) {
-        console.log('Create Info: ', arrayOfFeatureGroups);
+        console.log("Create Info: ", arrayOfFeatureGroups);
         if (arrayOfFeatureGroups.length > 0) {
             arrayOfFeatureGroups.forEach(featureGroup => {
                 console.log(featureGroup.getLayers()[0].getLatLngs());
@@ -652,7 +673,7 @@ PolygonInformationService.ctorParameters = () => [
 ];
 PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
 PolygonInformationService = __decorate([
-    Injectable({ providedIn: 'root' }),
+    Injectable({ providedIn: "root" }),
     __metadata("design:paramtypes", [PolyStateService])
 ], PolygonInformationService);
 
