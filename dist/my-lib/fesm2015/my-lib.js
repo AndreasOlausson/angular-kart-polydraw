@@ -943,7 +943,7 @@ class PolyDrawService {
     }
     // fine
     initPolyDraw() {
-        console.log("initPolyDraw", this.map);
+        console.log("initPolyDraw", this.map, this.tracer);
         const container = this.map.getContainer();
         const drawMode = this.getDrawMode();
         if (this.config.touchSupport) {
