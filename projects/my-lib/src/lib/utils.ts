@@ -1,8 +1,7 @@
 import { ICompass } from "./interface";
 import * as L from "leaflet";
 import { ILatLng } from "./polygon-helpers";
-import { MarkerPlacement } from "./enums";
-import { TurfHelperService } from "./turf-helper.service"
+import { MarkerPosition } from "./enums";
 
 export class PolyDrawUtil {
     static getBounds(polygon: ILatLng[], padding: number = 0): L.LatLngBounds {
@@ -37,43 +36,65 @@ export class Compass {
     };
 
     constructor(minLat: number = 0, minLng: number = 0, maxLat: number = 0, maxLng: number = 0) {
-        
-        this.direction.North = {lat: maxLat, lng: (minLng + maxLng) / 2};
-        this.direction.NorthEast = {lat: maxLat, lng: maxLng};
-        this.direction.East = {lat: (minLat + maxLat) / 2, lng: maxLng};
-        this.direction.SouthEast = {lat: minLat, lng: maxLng};
-        this.direction.South = {lat: minLat, lng: (minLng + maxLng) / 2};
-        this.direction.SouthWest = {lat: minLat, lng: minLng};
-        this.direction.West = {lat:(minLat + maxLat) / 2, lng: minLng};
-        this.direction.NorthWest = {lat: maxLat, lng: minLng};
+
+        this.direction.North = { lat: maxLat, lng: (minLng + maxLng) / 2 };
+        this.direction.NorthEast = { lat: maxLat, lng: maxLng };
+        this.direction.East = { lat: (minLat + maxLat) / 2, lng: maxLng };
+        this.direction.SouthEast = { lat: minLat, lng: maxLng };
+        this.direction.South = { lat: minLat, lng: (minLng + maxLng) / 2 };
+        this.direction.SouthWest = { lat: minLat, lng: minLng };
+        this.direction.West = { lat: (minLat + maxLat) / 2, lng: minLng };
+        this.direction.NorthWest = { lat: maxLat, lng: minLng };
         // this.direction.CenterOfMass = { lat: 0, lng: 0 };
         // this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
     }
     //TODO default return.
-    getDirection(direction: MarkerPlacement) {
+    getDirection(direction: MarkerPosition) {
         switch (direction) {
-            // case MarkerPlacement.CenterOfMass:
+            // case MarkerPosition.CenterOfMass:
             //     return this.direction.CenterOfMass;
-            case MarkerPlacement.North:
+            case MarkerPosition.North:
                 return this.direction.North;
-            case MarkerPlacement.NorthEast:
+            case MarkerPosition.NorthEast:
                 return this.direction.NorthEast;
-            case MarkerPlacement.East:
+            case MarkerPosition.East:
                 return this.direction.East;
-            case MarkerPlacement.SouthEast:
+            case MarkerPosition.SouthEast:
                 return this.direction.SouthEast;
-            case MarkerPlacement.South:
+            case MarkerPosition.South:
                 return this.direction.South;
-            case MarkerPlacement.SouthWest:
+            case MarkerPosition.SouthWest:
                 return this.direction.SouthWest;
-            case MarkerPlacement.West:
+            case MarkerPosition.West:
                 return this.direction.West;
-            case MarkerPlacement.NorthWest:
+            case MarkerPosition.NorthWest:
                 return this.direction.NorthWest;
-            // case MarkerPlacement.BoundingBoxCenter:
+            // case MarkerPosition.BoundingBoxCenter:
             //     return this.direction.BoundingBoxCenter;
             default:
                 return this.direction.North;
         }
+    }
+    //TODO startNode, go clockwise or not
+    getPositions(startNode: MarkerPosition = MarkerPosition.SouthWest, clockwise: boolean = false, addClosingNode: boolean = true): number[][] {
+
+        let positions: number[][] = [];
+
+        positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        positions.push([this.direction.South.lng, this.direction.South.lat]);
+        positions.push([this.direction.SouthEast.lng, this.direction.SouthEast.lat]);
+        positions.push([this.direction.East.lng, this.direction.East.lat]);
+        positions.push([this.direction.NorthEast.lng, this.direction.NorthEast.lat]);
+        positions.push([this.direction.North.lng, this.direction.North.lat]);
+        positions.push([this.direction.NorthWest.lng, this.direction.NorthWest.lat]);
+        positions.push([this.direction.West.lng, this.direction.West.lat]);
+        if (addClosingNode) {
+            positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        }
+
+
+
+        return positions;
     }
 }

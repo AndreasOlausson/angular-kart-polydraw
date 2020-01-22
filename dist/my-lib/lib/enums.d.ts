@@ -6,7 +6,7 @@ export declare enum DrawMode {
     AppendMarker = 8,
     LoadPredefined = 16
 }
-export declare enum MarkerPlacement {
+export declare enum MarkerPosition {
     North = 1,
     East = 2,
     South = 3,

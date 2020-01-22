@@ -9,6 +9,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@types/concaveman": "^1.1.3",
     "@types/leaflet": "^1.5.8"
   }
 }

@@ -1,11 +1,11 @@
-import * as L from 'leaflet';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { MapStateService } from './map-state.service';
-import { TurfHelperService } from './turf-helper.service';
-import { PolygonInformationService } from './polygon-information.service';
-import { ComponentGeneraterService } from './component-generater.service';
-import { LeafletHelperService } from './leaflet-helper.service';
-import { ILatLng } from './polygon-helpers';
+import * as L from "leaflet";
+import { Observable, BehaviorSubject } from "rxjs";
+import { MapStateService } from "./map-state.service";
+import { TurfHelperService } from "./turf-helper.service";
+import { PolygonInformationService } from "./polygon-information.service";
+import { ILatLng } from "./polygon-helpers";
+import { ComponentGeneraterService } from "./component-generater.service";
+import { LeafletHelperService } from "./leaflet-helper.service";
 export declare class PolyDrawService {
     private mapState;
     private popupGenerator;
@@ -68,6 +68,7 @@ export declare class PolyDrawService {
     toggleMarkerMenu(): void;
     private getHtmlContent;
     private convertToBoundsPolygon;
+    private convertToSimplifiedPolygon;
     private getMarkerIndex;
 }
 export declare enum DrawMode {

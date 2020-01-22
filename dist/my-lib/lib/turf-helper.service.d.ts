@@ -1,7 +1,7 @@
-import * as turf from "@turf/turf";
-import { Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
-import { ICompass } from "./interface";
-import { ILatLng } from "./polygon-helpers";
+import * as turf from '@turf/turf';
+import { Feature, Polygon, MultiPolygon, Position } from '@turf/turf';
+import { ICompass } from './interface';
+import { ILatLng } from './polygon-helpers';
 export declare class TurfHelperService {
     private simplifyTolerance;
     constructor();
@@ -18,11 +18,11 @@ export declare class TurfHelperService {
     getDistance(point1: any, point2: any): number;
     isWithin(polygon1: Position[], polygon2: Position[]): boolean;
     equalPolygons(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>): void;
-    convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon>;
+    convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>, addMidpointMarkers?: boolean): Feature<Polygon>;
     polygonToMultiPolygon(poly: Feature<Polygon>): Feature<MultiPolygon>;
     injectPointToPolygon(polygon: any, point: any): any;
     polygonDifference(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon>;
-    getBoundingBoxCompassPosition(polygon: any, markerplacement: ICompass, useOffset: any, offsetDirection: any): any;
+    getBoundingBoxCompassPosition(polygon: any, MarkerPosition: ICompass, useOffset: any, offsetDirection: any): any;
     private getBoundingBoxCompass;
     getNearestPointIndex(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number;
     getCoord(point: ILatLng): turf.Coord;

@@ -1,21 +1,21 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
-import * as turf from "@turf/turf";
-import concaveman from "concaveman";
-import { Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
-import { MarkerPlacement } from "./enums";
-import { ICompass } from "./interface";
-import { Compass } from "./utils";
-import { ILatLng } from "./polygon-helpers";
+import * as turf from '@turf/turf';
+import concaveman from 'concaveman';
+import { Feature, Polygon, MultiPolygon, Position } from '@turf/turf';
+import { MarkerPosition } from './enums';
+import { ICompass } from './interface';
+import { Compass } from './utils';
+import { ILatLng } from './polygon-helpers';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class TurfHelperService {
   private simplifyTolerance = { tolerance: 0.0001, highQuality: false };
   constructor() {}
 
   union(poly1, poly2): Feature<Polygon | MultiPolygon> {
-    console.log("poly1: ", poly1);
-    console.log("poly2: ", poly2);
+    console.log('poly1: ', poly1);
+    console.log('poly2: ', poly2);
 
     let union = turf.union(poly1, poly2);
 
@@ -40,9 +40,9 @@ export class TurfHelperService {
 
   getTurfPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
     let turfPolygon;
-    console.log("Get TurfPolygon:", polygon);
+    console.log('Get TurfPolygon:', polygon);
     // if (polygon.geometry)
-    if (polygon.geometry.type === "Polygon") {
+    if (polygon.geometry.type === 'Polygon') {
       turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
     } else {
       turfPolygon = turf.multiPolygon(polygon.geometry.coordinates);
@@ -78,17 +78,17 @@ export class TurfHelperService {
     let poly = [];
     let poly2 = [];
 
-    console.log("polygonIntersect", polygon, latlngs);
+    console.log('polygonIntersect', polygon, latlngs);
 
     let latlngsCoords = turf.getCoords(latlngs);
     latlngsCoords.forEach(element => {
-      let feat = { type: "Polygon", coordinates: [element[0]] };
+      let feat = { type: 'Polygon', coordinates: [element[0]] };
 
       poly.push(feat);
     });
     let polygonCoords = turf.getCoords(polygon);
     polygonCoords.forEach(element => {
-      let feat = { type: "Polygon", coordinates: [element[0]] };
+      let feat = { type: 'Polygon', coordinates: [element[0]] };
 
       poly2.push(feat);
     });
@@ -118,7 +118,7 @@ export class TurfHelperService {
 
   isWithin(polygon1: Position[], polygon2: Position[]): boolean {
     console.log(polygon1);
-    console.log("Ytre: ", polygon2);
+    console.log('Ytre: ', polygon2);
     return turf.booleanWithin(turf.polygon([polygon1]), turf.polygon([polygon2]));
   }
 
@@ -128,9 +128,18 @@ export class TurfHelperService {
     console.log(turf.booleanEqual(polygon1, polygon2));
   }
   //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
-  convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
+  convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>, addMidpointMarkers: boolean = false): Feature<Polygon> {
     const bbox = turf.bbox(polygon.geometry);
     const bboxPolygon = turf.bboxPolygon(bbox);
+
+
+    const compass = new Compass(bbox[1], bbox[0], bbox[3], bbox[2]);
+
+    const compassPositions = compass.getPositions();
+
+    bboxPolygon.geometry.coordinates = [];
+    bboxPolygon.geometry.coordinates = [compassPositions];
+
     return bboxPolygon;
   }
   polygonToMultiPolygon(poly: Feature<Polygon>): Feature<MultiPolygon> {
@@ -141,7 +150,7 @@ export class TurfHelperService {
   injectPointToPolygon(polygon, point) {
     let coords = turf.getCoords(polygon);
     let newPolygon;
-    console.log("polygon: ", polygon);
+    console.log('polygon: ', polygon);
     if (coords.length < 2) {
       const polygonPoints = turf.explode(polygon);
       console.log(turf.nearestPoint(point, polygonPoints));
@@ -156,7 +165,7 @@ export class TurfHelperService {
         },
         []
       );
-      console.log("test", test);
+      console.log('test', test);
       newPolygon = turf.multiPolygon([[test]]);
     } else {
       let pos = [];
@@ -177,7 +186,7 @@ export class TurfHelperService {
             },
             []
           );
-          console.log("coordinates", coordinates);
+          console.log('coordinates', coordinates);
         } else {
           pos.push(element);
         }
@@ -193,7 +202,7 @@ export class TurfHelperService {
     console.log(diff);
     return this.getTurfPolygon(diff);
   }
-  getBoundingBoxCompassPosition(polygon, markerplacement: ICompass, useOffset, offsetDirection) {
+  getBoundingBoxCompassPosition(polygon, MarkerPosition: ICompass, useOffset, offsetDirection) {
     const p = this.getMultiPolygon(polygon);
     const compass = this.getBoundingBoxCompass(polygon);
     const polygonPoints = turf.explode(polygon);
