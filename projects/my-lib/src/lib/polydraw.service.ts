@@ -15,9 +15,6 @@ import { MarkerPlacement } from './enums';
 import { LeafletHelperService } from './leaflet-helper.service';
 import { ILatLng } from './polygon-helpers';
 
-@Injectable({
-  providedIn: 'root'
-})
 // Rename - PolyDrawService
 export class PolyDrawService {
   // DrawModes, determine UI buttons etc...
