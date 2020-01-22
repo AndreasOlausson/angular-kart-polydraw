@@ -1187,7 +1187,7 @@
                     }
                 });
             }
-            this.map.addLayer(this.tracer);
+            this.tracer.addTo(this.map);
             this.setDrawMode(exports.DrawMode.Off);
         };
         // Test L.MouseEvent

@@ -261,7 +261,7 @@ export class PolyDrawService {
       });
     }
 
-    this.map.addLayer(this.tracer);
+    this.tracer.addTo(this.map)
     this.setDrawMode(DrawMode.Off);
   }
   // Test L.MouseEvent
