@@ -13,6 +13,9 @@ export class MapStateService {
     private mapSubject = new BehaviorSubject<L.Map>(null); 
 
     map$: Observable<L.Map> = this.mapSubject.asObservable();
+    private polygonSubject = new BehaviorSubject<ILatLng[][][]>(null); 
+
+    polygons$: Observable<ILatLng[][][]> = this.polygonSubject.asObservable();
 
     updateMapState(map: L.Map){
         this.mapSubject.next(map)
@@ -20,5 +23,6 @@ export class MapStateService {
 
     updatePolygons(polygons: ILatLng[][][]):void{
         console.log("map-state",polygons);
+        this.polygonSubject.next(polygons)
     }
 }

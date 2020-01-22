@@ -207,12 +207,15 @@
         function MapStateService() {
             this.mapSubject = new rxjs.BehaviorSubject(null);
             this.map$ = this.mapSubject.asObservable();
+            this.polygonSubject = new rxjs.BehaviorSubject(null);
+            this.polygons$ = this.polygonSubject.asObservable();
         }
         MapStateService.prototype.updateMapState = function (map) {
             this.mapSubject.next(map);
         };
         MapStateService.prototype.updatePolygons = function (polygons) {
             console.log("map-state", polygons);
+            this.polygonSubject.next(polygons);
         };
         MapStateService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function MapStateService_Factory() { return new MapStateService(); }, token: MapStateService, providedIn: "root" });
         MapStateService = __decorate([

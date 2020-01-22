@@ -5,6 +5,8 @@ export declare class MapStateService {
     constructor();
     private mapSubject;
     map$: Observable<L.Map>;
+    private polygonSubject;
+    polygons$: Observable<ILatLng[][][]>;
     updateMapState(map: L.Map): void;
     updatePolygons(polygons: ILatLng[][][]): void;
 }

@@ -10,12 +10,15 @@ var MapStateService = /** @class */ (function () {
     function MapStateService() {
         this.mapSubject = new BehaviorSubject(null);
         this.map$ = this.mapSubject.asObservable();
+        this.polygonSubject = new BehaviorSubject(null);
+        this.polygons$ = this.polygonSubject.asObservable();
     }
     MapStateService.prototype.updateMapState = function (map) {
         this.mapSubject.next(map);
     };
     MapStateService.prototype.updatePolygons = function (polygons) {
         console.log("map-state", polygons);
+        this.polygonSubject.next(polygons);
     };
     MapStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function MapStateService_Factory() { return new MapStateService(); }, token: MapStateService, providedIn: "root" });
     MapStateService = __decorate([
