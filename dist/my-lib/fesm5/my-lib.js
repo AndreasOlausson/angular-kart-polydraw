@@ -6,28 +6,28 @@ import { filter } from 'rxjs/operators';
 import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
-var MapStateService = /** @class */ (function () {
-    function MapStateService() {
+var PolyStateService = /** @class */ (function () {
+    function PolyStateService() {
         this.mapSubject = new BehaviorSubject(null);
         this.map$ = this.mapSubject.asObservable();
         this.polygonSubject = new BehaviorSubject(null);
         this.polygons$ = this.polygonSubject.asObservable();
     }
-    MapStateService.prototype.updateMapState = function (map) {
+    PolyStateService.prototype.updateMapState = function (map) {
         this.mapSubject.next(map);
     };
-    MapStateService.prototype.updatePolygons = function (polygons) {
+    PolyStateService.prototype.updatePolygons = function (polygons) {
         console.log("map-state", polygons);
         this.polygonSubject.next(polygons);
     };
-    MapStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function MapStateService_Factory() { return new MapStateService(); }, token: MapStateService, providedIn: "root" });
-    MapStateService = __decorate([
+    PolyStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolyStateService_Factory() { return new PolyStateService(); }, token: PolyStateService, providedIn: "root" });
+    PolyStateService = __decorate([
         Injectable({
             providedIn: 'root'
         }),
         __metadata("design:paramtypes", [])
-    ], MapStateService);
-    return MapStateService;
+    ], PolyStateService);
+    return PolyStateService;
 }());
 
 var DrawMode;
@@ -654,12 +654,12 @@ var PolygonInformationService = /** @class */ (function () {
         }
     };
     PolygonInformationService.ctorParameters = function () { return [
-        { type: MapStateService }
+        { type: PolyStateService }
     ]; };
-    PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(MapStateService)); }, token: PolygonInformationService, providedIn: "root" });
+    PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
     PolygonInformationService = __decorate([
         Injectable({ providedIn: "root" }),
-        __metadata("design:paramtypes", [MapStateService])
+        __metadata("design:paramtypes", [PolyStateService])
     ], PolygonInformationService);
     return PolygonInformationService;
 }());
@@ -1627,20 +1627,20 @@ var PolyDrawService = /** @class */ (function () {
         return nearestPointIdx;
     };
     PolyDrawService.ctorParameters = function () { return [
-        { type: MapStateService },
+        { type: PolyStateService },
         { type: ComponentGeneraterService },
         { type: TurfHelperService },
         { type: PolygonInformationService },
         { type: LeafletHelperService }
     ]; };
-    PolyDrawService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(ɵɵinject(MapStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
+    PolyDrawService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(ɵɵinject(PolyStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
     PolyDrawService = __decorate([
         Injectable({
             providedIn: 'root'
         })
         // Rename - PolyDrawService
         ,
-        __metadata("design:paramtypes", [MapStateService,
+        __metadata("design:paramtypes", [PolyStateService,
             ComponentGeneraterService,
             TurfHelperService,
             PolygonInformationService,
@@ -1679,5 +1679,5 @@ var MyLibModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentGeneraterService, DrawMode$1 as DrawMode, MapStateService, MyLibModule, PolyDrawService, PolygonInformationService, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
+export { ComponentGeneraterService, DrawMode$1 as DrawMode, MyLibModule, PolyDrawService, PolyStateService, PolygonInformationService, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
 //# sourceMappingURL=my-lib.js.map

@@ -6,7 +6,7 @@ import { ILatLng } from './polygon-helpers';
 @Injectable({
     providedIn: 'root'
 })
-export class MapStateService {
+export class PolyStateService {
     constructor() { }
     
 

@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
 import { PolyDrawService } from "./polydraw.service";
-import { MapStateService } from "./map-state.service";
+import { PolyStateService } from "./map-state.service";
 
 @Injectable({ providedIn: "root" })
 export class PolygonInformationService {
@@ -12,7 +12,7 @@ export class PolygonInformationService {
   polygonDrawStates$: Observable<PolygonDrawStates> = this.polygonDrawStatesSubject.asObservable();
 
   polygonInformationStorage = [];
-  constructor(private mapStateService: MapStateService) {}
+  constructor(private mapStateService: PolyStateService) {}
 
   updatePolygons() {
     console.log("updatePolygons: ", this.polygonInformationStorage);

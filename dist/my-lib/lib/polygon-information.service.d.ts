@@ -1,6 +1,6 @@
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
-import { MapStateService } from "./map-state.service";
+import { PolyStateService } from "./map-state.service";
 export declare class PolygonInformationService {
     private mapStateService;
     polygonInformationSubject: Subject<PolygonInfo[]>;
@@ -8,7 +8,7 @@ export declare class PolygonInformationService {
     polygonDrawStatesSubject: Subject<PolygonDrawStates>;
     polygonDrawStates$: Observable<PolygonDrawStates>;
     polygonInformationStorage: any[];
-    constructor(mapStateService: MapStateService);
+    constructor(mapStateService: PolyStateService);
     updatePolygons(): void;
     saveCurrentState(): void;
     deleteTrashcan(polygon: any): void;

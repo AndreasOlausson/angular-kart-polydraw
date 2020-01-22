@@ -4,7 +4,7 @@ import * as L from 'leaflet';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Feature, Polygon, MultiPolygon } from '@turf/turf';
-import { MapStateService } from './map-state.service';
+import { PolyStateService } from './map-state.service';
 import { TurfHelperService } from './turf-helper.service';
 import { PolygonInformationService } from './polygon-information.service';
 import defaultConfig from './polyinfo.json';
@@ -37,7 +37,7 @@ export class PolyDrawService {
   private config: typeof defaultConfig = null;
 
   constructor(
-    private mapState: MapStateService,
+    private mapState: PolyStateService,
     private popupGenerator: ComponentGeneraterService,
     private turfHelper: TurfHelperService,
     private polygonInformation: PolygonInformationService,

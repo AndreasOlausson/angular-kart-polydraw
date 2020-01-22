@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import * as L from "leaflet";
 import { ILatLng } from './polygon-helpers';
-export declare class MapStateService {
+export declare class PolyStateService {
     constructor();
     private mapSubject;
     map$: Observable<L.Map>;
