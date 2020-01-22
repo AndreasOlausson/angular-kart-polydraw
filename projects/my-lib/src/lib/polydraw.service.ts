@@ -237,7 +237,7 @@ export class PolyDrawService {
 
   // fine
   private initPolyDraw() {
-    // console.log("initPolyDraw", null);
+    console.log("initPolyDraw", this.map);
 
     const container: HTMLElement = this.map.getContainer();
     const drawMode = this.getDrawMode();

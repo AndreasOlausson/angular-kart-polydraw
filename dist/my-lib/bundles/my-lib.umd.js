@@ -1166,8 +1166,8 @@
         };
         // fine
         PolyDrawService.prototype.initPolyDraw = function () {
-            // console.log("initPolyDraw", null);
             var _this = this;
+            console.log("initPolyDraw", this.map);
             var container = this.map.getContainer();
             var drawMode = this.getDrawMode();
             if (this.config.touchSupport) {
