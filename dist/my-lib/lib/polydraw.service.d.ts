@@ -1,14 +1,12 @@
-import * as L from 'leaflet';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { MapStateService } from './map-state.service';
-import { TurfHelperService } from './turf-helper.service';
-import { PolygonInformationService } from './polygon-information.service';
-import { ComponentGeneraterService } from './component-generater.service';
-import { LeafletHelperService } from './leaflet-helper.service';
-import { ILatLng } from './polygon-helpers';
+import * as L from "leaflet";
+import { Observable, BehaviorSubject } from "rxjs";
+import { MapStateService } from "./map-state.service";
+import { TurfHelperService } from "./turf-helper.service";
+import { PolygonInformationService } from "./polygon-information.service";
+import { LeafletHelperService } from "./leaflet-helper.service";
+import { ILatLng } from "./polygon-helpers";
 export declare class PolyDrawService {
     private mapState;
-    private popupGenerator;
     private turfHelper;
     private polygonInformation;
     private leafletHelper;
@@ -22,7 +20,7 @@ export declare class PolyDrawService {
     private readonly polygonDrawStates;
     private ngUnsubscribe;
     private config;
-    constructor(mapState: MapStateService, popupGenerator: ComponentGeneraterService, turfHelper: TurfHelperService, polygonInformation: PolygonInformationService, leafletHelper: LeafletHelperService);
+    constructor(mapState: MapStateService, turfHelper: TurfHelperService, polygonInformation: PolygonInformationService, leafletHelper: LeafletHelperService);
     configurate(config: Object): void;
     closeAndReset(): void;
     deletePolygon(polygon: ILatLng[][]): void;
@@ -66,7 +64,6 @@ export declare class PolyDrawService {
     subtractClick(): void;
     private resetTracker;
     toggleMarkerMenu(): void;
-    private getHtmlContent;
     private convertToBoundsPolygon;
     private getMarkerIndex;
 }
