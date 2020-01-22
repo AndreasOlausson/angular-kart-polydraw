@@ -1005,7 +1005,7 @@
                 console.log('this.config', _this.config);
                 _this.configurate({});
                 console.log('after this.config', _this.config);
-                _this.tracer = leaflet.polyline([[0, 0]], _this.config.polyLineOptions);
+                _this.tracer = leaflet.polyline([[0, 0]]);
                 _this.initPolyDraw();
             });
             this.polygonInformation.polygonInformation$.subscribe(function (k) {

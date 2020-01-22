@@ -785,7 +785,7 @@ class PolyDrawService {
             console.log('this.config', this.config);
             this.configurate({});
             console.log('after this.config', this.config);
-            this.tracer = polyline([[0, 0]], this.config.polyLineOptions);
+            this.tracer = polyline([[0, 0]]);
             this.initPolyDraw();
         });
         this.polygonInformation.polygonInformation$.subscribe(k => {
