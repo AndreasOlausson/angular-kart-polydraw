@@ -11,7 +11,7 @@ import defaultConfig from "./config.json";
 import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneraterService } from "./component-generater.service";
 import { Compass, PolyDrawUtil } from "./utils";
-import { MarkerPlacement } from "./enums";
+import { MarkerPosition } from "./enums";
 import { LeafletHelperService } from "./leaflet-helper.service";
 
 @Injectable({
@@ -849,7 +849,7 @@ export class PolyDrawService {
     this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true);
 
   }
-  private getMarkerIndex(latlngs: ILatLng[], position: MarkerPlacement): number {
+  private getMarkerIndex(latlngs: ILatLng[], position: MarkerPosition): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
     const compass = new Compass(bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast());
     const compassDirection = compass.getDirection(position);

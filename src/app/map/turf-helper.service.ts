@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import * as turf from "@turf/turf";
 import * as concaveman from "concaveman";
 import { Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
-import { MarkerPlacement } from "./enums";
+import { MarkerPosition } from "./enums";
 import { ICompass } from "./interface";
 import { Compass } from "./utils";
 import { ILatLng } from "./polygon-helpers";
@@ -202,7 +202,7 @@ export class TurfHelperService {
     console.log(diff);
     return this.getTurfPolygon(diff);
   }
-  getBoundingBoxCompassPosition(polygon, markerplacement: ICompass, useOffset, offsetDirection) {
+  getBoundingBoxCompassPosition(polygon, MarkerPosition: ICompass, useOffset, offsetDirection) {
     const p = this.getMultiPolygon(polygon);
     const compass = this.getBoundingBoxCompass(polygon);
     const polygonPoints = turf.explode(polygon);
