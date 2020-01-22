@@ -481,7 +481,7 @@ class PolygonInfo {
         this.trashcanPoint = [];
         this.sqmArea = [];
         this.perimeter = [];
-        console.log("PolygonInfo: ", polygon);
+        console.log('PolygonInfo: ', polygon);
         polygon.forEach((polygons, i) => {
             this.trashcanPoint[i] = this.getTrashcanPoint(polygons[0]);
             this.sqmArea[i] = this.calculatePolygonArea(polygons[0]);
@@ -511,19 +511,33 @@ class PolygonInfo {
             previousPoint = polygon[polygon.length - 1];
             nextPoint = polygon[idx + 1];
         }
-        const secondPoint = (previousPoint.lng < nextPoint.lng) ? previousPoint : nextPoint;
+        const secondPoint = previousPoint.lng < nextPoint.lng ? previousPoint : nextPoint;
         const midpoint = PolygonUtil.getMidPoint(polygon[idx], secondPoint);
         return midpoint;
     }
     calculatePolygonArea(polygon) {
-        const area = PolygonUtil.getSqmArea((polygon));
+        const area = PolygonUtil.getSqmArea(polygon);
         return area;
     }
     calculatePolygonPerimeter(polygon) {
-        const perimeter = PolygonUtil.getPerimeter((polygon));
+        const perimeter = PolygonUtil.getPerimeter(polygon);
         return perimeter;
     }
 }
+const addClass = (selector, className) => {
+    const elements = document.querySelectorAll(selector);
+    for (let i = 0; i < elements.length; i++) {
+        elements.item(i).classList.add(className);
+    }
+};
+const ɵ0 = addClass;
+const removeClass = (selector, className) => {
+    const elements = document.querySelectorAll(selector);
+    for (let i = 0; i < elements.length; i++) {
+        elements.item(i).classList.remove(className);
+    }
+};
+const ɵ1 = removeClass;
 class PolygonDrawStates {
     constructor() {
         this.canUsePolyDraw = false;
@@ -542,6 +556,7 @@ class PolygonDrawStates {
     }
     resetDrawModes() {
         this.isFreeDrawMode = false;
+        removeClass('img.leaflet-tile', 'disable-events');
         this.isMoveMode = false;
     }
     setFreeDrawMode(isAuto = false) {
@@ -551,6 +566,7 @@ class PolygonDrawStates {
         if (this.isActivated) {
             this.resetDrawModes();
             this.isFreeDrawMode = true;
+            addClass('img.leaflet-tile', 'disable-events');
             if (isAuto) {
                 this.isAuto = true;
             }

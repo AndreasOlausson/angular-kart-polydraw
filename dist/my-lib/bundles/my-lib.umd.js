@@ -700,7 +700,7 @@
             this.trashcanPoint = [];
             this.sqmArea = [];
             this.perimeter = [];
-            console.log("PolygonInfo: ", polygon);
+            console.log('PolygonInfo: ', polygon);
             polygon.forEach(function (polygons, i) {
                 _this.trashcanPoint[i] = _this.getTrashcanPoint(polygons[0]);
                 _this.sqmArea[i] = _this.calculatePolygonArea(polygons[0]);
@@ -730,20 +730,34 @@
                 previousPoint = polygon[polygon.length - 1];
                 nextPoint = polygon[idx + 1];
             }
-            var secondPoint = (previousPoint.lng < nextPoint.lng) ? previousPoint : nextPoint;
+            var secondPoint = previousPoint.lng < nextPoint.lng ? previousPoint : nextPoint;
             var midpoint = PolygonUtil.getMidPoint(polygon[idx], secondPoint);
             return midpoint;
         };
         PolygonInfo.prototype.calculatePolygonArea = function (polygon) {
-            var area = PolygonUtil.getSqmArea((polygon));
+            var area = PolygonUtil.getSqmArea(polygon);
             return area;
         };
         PolygonInfo.prototype.calculatePolygonPerimeter = function (polygon) {
-            var perimeter = PolygonUtil.getPerimeter((polygon));
+            var perimeter = PolygonUtil.getPerimeter(polygon);
             return perimeter;
         };
         return PolygonInfo;
     }());
+    var addClass = function (selector, className) {
+        var elements = document.querySelectorAll(selector);
+        for (var i = 0; i < elements.length; i++) {
+            elements.item(i).classList.add(className);
+        }
+    };
+    var ɵ0 = addClass;
+    var removeClass = function (selector, className) {
+        var elements = document.querySelectorAll(selector);
+        for (var i = 0; i < elements.length; i++) {
+            elements.item(i).classList.remove(className);
+        }
+    };
+    var ɵ1 = removeClass;
     var PolygonDrawStates = /** @class */ (function () {
         function PolygonDrawStates() {
             this.canUsePolyDraw = false;
@@ -762,6 +776,7 @@
         };
         PolygonDrawStates.prototype.resetDrawModes = function () {
             this.isFreeDrawMode = false;
+            removeClass('img.leaflet-tile', 'disable-events');
             this.isMoveMode = false;
         };
         PolygonDrawStates.prototype.setFreeDrawMode = function (isAuto) {
@@ -772,6 +787,7 @@
             if (this.isActivated) {
                 this.resetDrawModes();
                 this.isFreeDrawMode = true;
+                addClass('img.leaflet-tile', 'disable-events');
                 if (isAuto) {
                     this.isAuto = true;
                 }
