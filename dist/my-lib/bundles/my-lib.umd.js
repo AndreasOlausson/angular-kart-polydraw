@@ -999,6 +999,7 @@
             this.config = null;
             this.mapState.map$.pipe(operators.filter(function (m) { return m !== null; })).subscribe(function (map) {
                 _this.map = map;
+                console.log("Kartet: ", map);
                 console.log('pre this.config', _this.config);
                 _this.config = defaultConfig;
                 console.log('this.config', _this.config);

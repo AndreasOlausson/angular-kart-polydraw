@@ -48,6 +48,7 @@ export class PolyDrawService {
   ) {
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
+      console.log("Kartet: ", map);
       console.log('pre this.config', this.config);
       this.config = defaultConfig;
       console.log('this.config', this.config);
