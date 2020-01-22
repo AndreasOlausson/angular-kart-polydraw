@@ -785,7 +785,7 @@ class PolyDrawService {
             console.log('this.config', this.config);
             this.configurate({});
             console.log('after this.config', this.config);
-            this.tracer = polyline([[0, 0]]);
+            this.tracer = polyline([[0, 0]], this.config.polyLineOptions);
             this.initPolyDraw();
         });
         this.polygonInformation.polygonInformation$.subscribe(k => {
@@ -1159,16 +1159,22 @@ class PolyDrawService {
     }
     // fine, TODO: if special markers
     addMarker(latlngs, FeatureGroup) {
-        const menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
-        const deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
+        /*     const menuMarkerIdx = this.getMarkerIndex(
+              latlngs,
+              this.config.markers.markerMenuIcon.position
+            );
+            const deleteMarkerIdx = this.getMarkerIndex(
+              latlngs,
+              this.config.markers.markerDeleteIcon.position
+            ); */
         latlngs.forEach((latlng, i) => {
             let iconClasses = this.config.markers.markerIcon.styleClasses;
-            if (i === menuMarkerIdx && this.config.markers.menu) {
-                iconClasses = this.config.markers.markerMenuIcon.styleClasses;
-            }
-            if (i === deleteMarkerIdx && this.config.markers.delete) {
-                iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-            }
+            /*     if (i === menuMarkerIdx && this.config.markers.menu) {
+                  iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+                }
+                if (i === deleteMarkerIdx && this.config.markers.delete) {
+                  iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+                } */
             const marker = new Marker(latlng, {
                 icon: this.createDivIcon(iconClasses),
                 draggable: true,
@@ -1182,7 +1188,7 @@ class PolyDrawService {
             marker.on('dragend', e => {
                 this.markerDragEnd(FeatureGroup);
             });
-            if (i === menuMarkerIdx && this.config.markers.menu) {
+            /*   if (i === menuMarkerIdx && this.config.markers.menu) {
                 // marker.bindPopup(
                 //   this.getHtmlContent(e => {
                 //     console.log("clicked on", e.target);
@@ -1191,12 +1197,12 @@ class PolyDrawService {
                 // marker.on("click", e => {
                 //   this.convertToBoundsPolygon(e, latlngs)
                 // })
-            }
-            if (i === deleteMarkerIdx && this.config.markers.delete) {
+              }
+              if (i === deleteMarkerIdx && this.config.markers.delete) {
                 marker.on('click', e => {
-                    this.deletePolygon([latlngs]);
+                  this.deletePolygon([latlngs]);
                 });
-            }
+              } */
         });
     }
     addHoleMarker(latlngs, FeatureGroup) {

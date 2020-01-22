@@ -1005,7 +1005,7 @@
                 console.log('this.config', _this.config);
                 _this.configurate({});
                 console.log('after this.config', _this.config);
-                _this.tracer = leaflet.polyline([[0, 0]]);
+                _this.tracer = leaflet.polyline([[0, 0]], _this.config.polyLineOptions);
                 _this.initPolyDraw();
             });
             this.polygonInformation.polygonInformation$.subscribe(function (k) {
@@ -1387,17 +1387,23 @@
         };
         // fine, TODO: if special markers
         PolyDrawService.prototype.addMarker = function (latlngs, FeatureGroup) {
+            /*     const menuMarkerIdx = this.getMarkerIndex(
+                  latlngs,
+                  this.config.markers.markerMenuIcon.position
+                );
+                const deleteMarkerIdx = this.getMarkerIndex(
+                  latlngs,
+                  this.config.markers.markerDeleteIcon.position
+                ); */
             var _this = this;
-            var menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
-            var deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
             latlngs.forEach(function (latlng, i) {
                 var iconClasses = _this.config.markers.markerIcon.styleClasses;
-                if (i === menuMarkerIdx && _this.config.markers.menu) {
-                    iconClasses = _this.config.markers.markerMenuIcon.styleClasses;
-                }
-                if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                    iconClasses = _this.config.markers.markerDeleteIcon.styleClasses;
-                }
+                /*     if (i === menuMarkerIdx && this.config.markers.menu) {
+                      iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+                    }
+                    if (i === deleteMarkerIdx && this.config.markers.delete) {
+                      iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+                    } */
                 var marker = new leaflet.Marker(latlng, {
                     icon: _this.createDivIcon(iconClasses),
                     draggable: true,
@@ -1411,7 +1417,7 @@
                 marker.on('dragend', function (e) {
                     _this.markerDragEnd(FeatureGroup);
                 });
-                if (i === menuMarkerIdx && _this.config.markers.menu) {
+                /*   if (i === menuMarkerIdx && this.config.markers.menu) {
                     // marker.bindPopup(
                     //   this.getHtmlContent(e => {
                     //     console.log("clicked on", e.target);
@@ -1420,12 +1426,12 @@
                     // marker.on("click", e => {
                     //   this.convertToBoundsPolygon(e, latlngs)
                     // })
-                }
-                if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                    marker.on('click', function (e) {
-                        _this.deletePolygon([latlngs]);
+                  }
+                  if (i === deleteMarkerIdx && this.config.markers.delete) {
+                    marker.on('click', e => {
+                      this.deletePolygon([latlngs]);
                     });
-                }
+                  } */
             });
         };
         PolyDrawService.prototype.addHoleMarker = function (latlngs, FeatureGroup) {

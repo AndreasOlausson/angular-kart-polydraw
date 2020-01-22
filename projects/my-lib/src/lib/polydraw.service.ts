@@ -54,7 +54,7 @@ export class PolyDrawService {
       console.log('this.config', this.config);
       this.configurate({});
       console.log('after this.config', this.config);
-      this.tracer = L.polyline([[0, 0]]);
+      this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
 
       this.initPolyDraw();
     });
@@ -490,23 +490,23 @@ export class PolyDrawService {
   }
   // fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
-    const menuMarkerIdx = this.getMarkerIndex(
+/*     const menuMarkerIdx = this.getMarkerIndex(
       latlngs,
       this.config.markers.markerMenuIcon.position
     );
     const deleteMarkerIdx = this.getMarkerIndex(
       latlngs,
       this.config.markers.markerDeleteIcon.position
-    );
+    ); */
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-      if (i === menuMarkerIdx && this.config.markers.menu) {
+  /*     if (i === menuMarkerIdx && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
         iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-      }
+      } */
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
@@ -520,7 +520,7 @@ export class PolyDrawService {
       marker.on('dragend', e => {
         this.markerDragEnd(FeatureGroup);
       });
-      if (i === menuMarkerIdx && this.config.markers.menu) {
+    /*   if (i === menuMarkerIdx && this.config.markers.menu) {
         // marker.bindPopup(
         //   this.getHtmlContent(e => {
         //     console.log("clicked on", e.target);
@@ -534,7 +534,7 @@ export class PolyDrawService {
         marker.on('click', e => {
           this.deletePolygon([latlngs]);
         });
-      }
+      } */
     });
   }
 
