@@ -1016,6 +1016,7 @@ var PolyDrawService = /** @class */ (function () {
         if (latlngs.length > 1 && latlngs.length < 3) {
             var coordinates_1 = [];
             console.log(GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), latlngs[latlngs.length - 1].length);
+            // tslint:disable-next-line: max-line-length
             var within = this.turfHelper.isWithin(GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), GeoJSON.latLngsToCoords(latlngs[0]));
             if (within) {
                 latlngs.forEach(function (polygon) {
@@ -1633,6 +1634,12 @@ var PolyDrawService = /** @class */ (function () {
                     });
                     this.setLeafletMapEvents(false, false, false);
                     break;
+            }
+            if (isActiveDrawMode) {
+                this.polygonInformation.setFreeDrawMode();
+            }
+            else {
+                this.polygonInformation.setMoveMode();
             }
         }
     };

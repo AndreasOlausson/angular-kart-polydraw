@@ -983,6 +983,7 @@ class PolyDrawService {
         if (latlngs.length > 1 && latlngs.length < 3) {
             const coordinates = [];
             console.log(GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), latlngs[latlngs.length - 1].length);
+            // tslint:disable-next-line: max-line-length
             const within = this.turfHelper.isWithin(GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), GeoJSON.latLngsToCoords(latlngs[0]));
             if (within) {
                 latlngs.forEach(polygon => {
@@ -1590,6 +1591,12 @@ class PolyDrawService {
                     });
                     this.setLeafletMapEvents(false, false, false);
                     break;
+            }
+            if (isActiveDrawMode) {
+                this.polygonInformation.setFreeDrawMode();
+            }
+            else {
+                this.polygonInformation.setMoveMode();
             }
         }
     }
