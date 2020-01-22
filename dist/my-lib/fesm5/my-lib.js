@@ -1,8 +1,8 @@
 import { __decorate, __metadata, __spread, __assign } from 'tslib';
 import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
@@ -12,6 +12,7 @@ var PolyStateService = /** @class */ (function () {
         this.map$ = this.mapSubject.asObservable();
         this.polygonSubject = new BehaviorSubject(null);
         this.polygons$ = this.polygonSubject.asObservable();
+        this.mapZoomLevel$ = new Observable();
     }
     PolyStateService.prototype.updateMapState = function (map) {
         this.mapSubject.next(map);
@@ -574,10 +575,12 @@ var PolygonInformationService = /** @class */ (function () {
         this.polygonInformation$ = this.polygonInformationSubject.asObservable();
         this.polygonDrawStatesSubject = new Subject();
         this.polygonDrawStates$ = this.polygonDrawStatesSubject.asObservable();
+        this.polygonDrawStates = null;
         this.polygonInformationStorage = [];
+        this.polygonDrawStates = new PolygonDrawStates();
     }
     PolygonInformationService.prototype.updatePolygons = function () {
-        console.log("updatePolygons: ", this.polygonInformationStorage);
+        console.log('updatePolygons: ', this.polygonInformationStorage);
         var newPolygons = null;
         if (this.polygonInformationStorage.length > 0) {
             newPolygons = [];
@@ -595,18 +598,19 @@ var PolygonInformationService = /** @class */ (function () {
                 });
                 newPolygons.push(test);
             });
-            // this.polygonDrawStates.hasPolygons = true;
+            this.polygonDrawStates.hasPolygons = true;
         }
         else {
-            // this.polygonDrawStates.reset();
-            // this.polygonDrawStates.hasPolygons = false;
+            this.polygonDrawStates.reset();
+            this.polygonDrawStates.hasPolygons = false;
         }
         this.mapStateService.updatePolygons(newPolygons);
         this.saveCurrentState();
     };
     PolygonInformationService.prototype.saveCurrentState = function () {
         this.polygonInformationSubject.next(this.polygonInformationStorage);
-        console.log("saveCurrentState: ", this.polygonInformationStorage);
+        this.polygonDrawStatesSubject.next(this.polygonDrawStates);
+        console.log('saveCurrentState: ', this.polygonInformationStorage);
     };
     PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
         var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
@@ -615,8 +619,8 @@ var PolygonInformationService = /** @class */ (function () {
     };
     PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
         var index = 0;
-        console.log("DeleteTrashCan: ", polygon);
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+        console.log('DeleteTrashCan: ', polygon);
+        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
         // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
         this.polygonInformationStorage.forEach(function (v, i) {
             console.log(v.polygon);
@@ -629,21 +633,21 @@ var PolygonInformationService = /** @class */ (function () {
                 v.polygon.splice(id, 1);
                 console.log(v.polygon);
             }
-            console.log("ID: ", id);
+            console.log('ID: ', id);
         });
         this.updatePolygons();
-        console.log("Index: ", index);
+        console.log('Index: ', index);
         if (this.polygonInformationStorage.length > 1) {
             this.polygonInformationStorage.splice(index, 1);
         }
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
     };
     PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
         this.polygonInformationStorage = [];
     };
     PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
         var _this = this;
-        console.log("Create Info: ", arrayOfFeatureGroups);
+        console.log('Create Info: ', arrayOfFeatureGroups);
         if (arrayOfFeatureGroups.length > 0) {
             arrayOfFeatureGroups.forEach(function (featureGroup) {
                 console.log(featureGroup.getLayers()[0].getLatLngs());
@@ -653,12 +657,24 @@ var PolygonInformationService = /** @class */ (function () {
             this.updatePolygons();
         }
     };
+    PolygonInformationService.prototype.activate = function () {
+        this.polygonDrawStates.activate();
+    };
+    PolygonInformationService.prototype.reset = function () {
+        this.polygonDrawStates.reset();
+    };
+    PolygonInformationService.prototype.setMoveMode = function () {
+        this.polygonDrawStates.setMoveMode();
+    };
+    PolygonInformationService.prototype.setFreeDrawMode = function () {
+        this.polygonDrawStates.setFreeDrawMode();
+    };
     PolygonInformationService.ctorParameters = function () { return [
         { type: PolyStateService }
     ]; };
     PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
     PolygonInformationService = __decorate([
-        Injectable({ providedIn: "root" }),
+        Injectable({ providedIn: 'root' }),
         __metadata("design:paramtypes", [PolyStateService])
     ], PolygonInformationService);
     return PolygonInformationService;
@@ -821,10 +837,10 @@ var PolyDrawService = /** @class */ (function () {
         // DrawModes, determine UI buttons etc...
         this.drawModeSubject = new BehaviorSubject(DrawMode$1.Off);
         this.drawMode$ = this.drawModeSubject.asObservable();
+        this.minimumFreeDrawZoomLevel = 12;
         // add to config
         this.arrayOfFeatureGroups = [];
         this.tracer = {};
-        this.polygonDrawStates = null;
         // end add to config
         this.ngUnsubscribe = new Subject();
         this.config = null;
@@ -837,6 +853,9 @@ var PolyDrawService = /** @class */ (function () {
             console.log('after this.config', _this.config);
             _this.tracer = polyline([[0, 0]], _this.config.polyLineOptions);
             _this.initPolyDraw();
+        });
+        this.mapState.mapZoomLevel$.pipe(debounceTime(100), takeUntil(this.ngUnsubscribe)).subscribe(function (zoom) {
+            _this.onZoomChange(zoom);
         });
         this.polygonInformation.polygonInformation$.subscribe(function (k) {
             console.log('PolyInfo start: ', k);
@@ -911,7 +930,7 @@ var PolyDrawService = /** @class */ (function () {
         });
         this.arrayOfFeatureGroups = [];
         this.polygonInformation.deletePolygonInformationStorage();
-        // this.polygonDrawStates.reset();
+        this.polygonInformation.reset();
         this.polygonInformation.updatePolygons();
     };
     // fine
@@ -947,6 +966,8 @@ var PolyDrawService = /** @class */ (function () {
         });
         this.arrayOfFeatureGroups.push(featureGroup);
         this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+        this.polygonInformation.activate();
+        this.polygonInformation.setMoveMode();
     };
     // innehåll i if'ar flytta till egna metoder
     PolyDrawService.prototype.convertToCoords = function (latlngs) {
@@ -1074,6 +1095,17 @@ var PolyDrawService = /** @class */ (function () {
         this.resetTracker();
         this.drawStartedEvents(false);
     };
+    PolyDrawService.prototype.onZoomChange = function (zoomLevel) {
+        //console.log("onZoomChange", zoomLevel);
+        if (zoomLevel >= this.minimumFreeDrawZoomLevel) {
+            this.polygonInformation.polygonDrawStates.canUsePolyDraw = true;
+        }
+        else {
+            this.polygonInformation.polygonDrawStates.canUsePolyDraw = false;
+            this.polygonInformation.setMoveMode();
+        }
+        this.polygonInformation.saveCurrentState();
+    };
     // fine
     PolyDrawService.prototype.drawStartedEvents = function (onoff) {
         // console.log("drawStartedEvents", onoff);
@@ -1121,6 +1153,7 @@ var PolyDrawService = /** @class */ (function () {
         });
         this.arrayOfFeatureGroups.push(featureGroup);
         console.log('Array: ', this.arrayOfFeatureGroups);
+        this.polygonInformation.activate();
         this.setDrawMode(DrawMode$1.Off);
         featureGroup.on('click', function (e) {
             _this.polygonClicked(e, latLngs);
@@ -1569,12 +1602,20 @@ var PolyDrawService = /** @class */ (function () {
     };
     // remove, use modeChange
     PolyDrawService.prototype.drawModeClick = function () {
-        this.setDrawMode(DrawMode$1.AddPolygon);
+        if (this.polygonInformation.polygonDrawStates.isFreeDrawMode) {
+            this.polygonInformation.setMoveMode();
+            this.setDrawMode(DrawMode$1.Off);
+        }
+        else {
+            this.polygonInformation.setFreeDrawMode();
+            this.setDrawMode(DrawMode$1.AddPolygon);
+        }
         this.polygonInformation.saveCurrentState();
     };
     // remove, use modeChange
     PolyDrawService.prototype.freedrawMenuClick = function () {
         this.setDrawMode(DrawMode$1.AddPolygon);
+        this.polygonInformation.activate();
         this.polygonInformation.saveCurrentState();
     };
     // remove, use modeChange

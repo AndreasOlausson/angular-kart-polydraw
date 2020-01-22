@@ -2,13 +2,13 @@ import { Injectable, Optional } from '@angular/core';
 import * as L from 'leaflet';
 // import * as turf from "@turf/turf";
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { Feature, Polygon, MultiPolygon } from '@turf/turf';
 import { PolyStateService } from './map-state.service';
 import { TurfHelperService } from './turf-helper.service';
 import { PolygonInformationService } from './polygon-information.service';
 import defaultConfig from './polyinfo.json';
-import { ILatLng } from './polygon-helpers';
+import { ILatLng, PolygonDrawStates } from './polygon-helpers';
 import { ComponentGeneraterService } from './component-generater.service';
 import { Compass, PolyDrawUtil } from './utils';
 import { MarkerPosition } from './enums';
@@ -22,7 +22,8 @@ export class PolyDrawService {
   // DrawModes, determine UI buttons etc...
   drawModeSubject: BehaviorSubject<DrawMode> = new BehaviorSubject<DrawMode>(DrawMode.Off);
   drawMode$: Observable<DrawMode> = this.drawModeSubject.asObservable();
-
+  
+  private readonly minimumFreeDrawZoomLevel: number = 12;
   private map: L.Map;
 
   private mergePolygons: boolean;
@@ -30,7 +31,6 @@ export class PolyDrawService {
   // add to config
   private arrayOfFeatureGroups: L.FeatureGroup<L.Layer>[] = [];
   private tracer: L.Polyline = {} as any;
-  private readonly polygonDrawStates = null;
   // end add to config
 
   private ngUnsubscribe = new Subject();
@@ -53,6 +53,10 @@ export class PolyDrawService {
       this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
 
       this.initPolyDraw();
+    });
+
+    this.mapState.mapZoomLevel$.pipe(debounceTime(100), takeUntil(this.ngUnsubscribe)).subscribe((zoom: number) => {
+      this.onZoomChange(zoom);
     });
 
     this.polygonInformation.polygonInformation$.subscribe(k => {
@@ -135,7 +139,7 @@ export class PolyDrawService {
 
     this.arrayOfFeatureGroups = [];
     this.polygonInformation.deletePolygonInformationStorage();
-    // this.polygonDrawStates.reset();
+    this.polygonInformation.reset();
     this.polygonInformation.updatePolygons();
   }
   // fine
@@ -174,6 +178,8 @@ export class PolyDrawService {
 
     this.arrayOfFeatureGroups.push(featureGroup);
     this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+    this.polygonInformation.activate();
+    this.polygonInformation.setMoveMode();
   }
 
   // innehåll i if'ar flytta till egna metoder
@@ -307,6 +313,18 @@ export class PolyDrawService {
     this.resetTracker();
     this.drawStartedEvents(false);
   }
+
+  private onZoomChange(zoomLevel: number): void {
+    //console.log("onZoomChange", zoomLevel);
+
+    if (zoomLevel >= this.minimumFreeDrawZoomLevel) {
+      this.polygonInformation.polygonDrawStates.canUsePolyDraw = true;
+    } else {
+      this.polygonInformation.polygonDrawStates.canUsePolyDraw = false;
+      this.polygonInformation.setMoveMode();
+    }
+    this.polygonInformation.saveCurrentState();
+  }
   // fine
   private drawStartedEvents(onoff: boolean) {
     // console.log("drawStartedEvents", onoff);
@@ -355,6 +373,7 @@ export class PolyDrawService {
 
     this.arrayOfFeatureGroups.push(featureGroup);
     console.log('Array: ', this.arrayOfFeatureGroups);
+    this.polygonInformation.activate();
     this.setDrawMode(DrawMode.Off);
 
     featureGroup.on('click', e => {
@@ -804,12 +823,19 @@ export class PolyDrawService {
   }
   // remove, use modeChange
   drawModeClick(): void {
-    this.setDrawMode(DrawMode.AddPolygon);
+    if (this.polygonInformation.polygonDrawStates.isFreeDrawMode) {
+      this.polygonInformation.setMoveMode();
+      this.setDrawMode(DrawMode.Off);
+    } else {
+      this.polygonInformation.setFreeDrawMode();
+      this.setDrawMode(DrawMode.AddPolygon);
+    }
     this.polygonInformation.saveCurrentState();
   }
   // remove, use modeChange
   freedrawMenuClick(): void {
     this.setDrawMode(DrawMode.AddPolygon);
+    this.polygonInformation.activate();
     this.polygonInformation.saveCurrentState();
   }
 

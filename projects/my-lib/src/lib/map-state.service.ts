@@ -11,11 +11,14 @@ export class PolyStateService {
     
 
     private mapSubject = new BehaviorSubject<L.Map>(null); 
-
+    
     map$: Observable<L.Map> = this.mapSubject.asObservable();
     private polygonSubject = new BehaviorSubject<ILatLng[][][]>(null); 
 
     polygons$: Observable<ILatLng[][][]> = this.polygonSubject.asObservable();
+
+    mapZoomLevel$: Observable<number> = new Observable();
+
 
     updateMapState(map: L.Map){
         this.mapSubject.next(map)

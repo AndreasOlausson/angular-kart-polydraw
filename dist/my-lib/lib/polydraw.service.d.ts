@@ -14,12 +14,12 @@ export declare class PolyDrawService {
     private leafletHelper;
     drawModeSubject: BehaviorSubject<DrawMode>;
     drawMode$: Observable<DrawMode>;
+    private readonly minimumFreeDrawZoomLevel;
     private map;
     private mergePolygons;
     private kinks;
     private arrayOfFeatureGroups;
     private tracer;
-    private readonly polygonDrawStates;
     private ngUnsubscribe;
     private config;
     constructor(mapState: PolyStateService, popupGenerator: ComponentGeneraterService, turfHelper: TurfHelperService, polygonInformation: PolygonInformationService, leafletHelper: LeafletHelperService);
@@ -37,6 +37,7 @@ export declare class PolyDrawService {
     private mouseUpLeave;
     private startDraw;
     private stopDraw;
+    private onZoomChange;
     private drawStartedEvents;
     private subtractPolygon;
     private addPolygon;

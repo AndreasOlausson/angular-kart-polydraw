@@ -7,6 +7,7 @@ export declare class PolyStateService {
     map$: Observable<L.Map>;
     private polygonSubject;
     polygons$: Observable<ILatLng[][][]>;
+    mapZoomLevel$: Observable<number>;
     updateMapState(map: L.Map): void;
     updatePolygons(polygons: ILatLng[][][]): void;
 }

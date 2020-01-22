@@ -1,8 +1,8 @@
 import { __decorate, __metadata } from 'tslib';
 import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, debounceTime, takeUntil } from 'rxjs/operators';
 import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
@@ -12,6 +12,7 @@ let PolyStateService = class PolyStateService {
         this.map$ = this.mapSubject.asObservable();
         this.polygonSubject = new BehaviorSubject(null);
         this.polygons$ = this.polygonSubject.asObservable();
+        this.mapZoomLevel$ = new Observable();
     }
     updateMapState(map) {
         this.mapSubject.next(map);
@@ -552,16 +553,18 @@ let PolygonInformationService = class PolygonInformationService {
         this.polygonInformation$ = this.polygonInformationSubject.asObservable();
         this.polygonDrawStatesSubject = new Subject();
         this.polygonDrawStates$ = this.polygonDrawStatesSubject.asObservable();
+        this.polygonDrawStates = null;
         this.polygonInformationStorage = [];
+        this.polygonDrawStates = new PolygonDrawStates();
     }
     updatePolygons() {
-        console.log("updatePolygons: ", this.polygonInformationStorage);
+        console.log('updatePolygons: ', this.polygonInformationStorage);
         let newPolygons = null;
         if (this.polygonInformationStorage.length > 0) {
             newPolygons = [];
             this.polygonInformationStorage.forEach(v => {
                 let test = [];
-                v.polygon.forEach((poly) => {
+                v.polygon.forEach(poly => {
                     let test2 = [];
                     poly.forEach(polygon => {
                         test2 = [...polygon];
@@ -573,18 +576,19 @@ let PolygonInformationService = class PolygonInformationService {
                 });
                 newPolygons.push(test);
             });
-            // this.polygonDrawStates.hasPolygons = true;
+            this.polygonDrawStates.hasPolygons = true;
         }
         else {
-            // this.polygonDrawStates.reset();
-            // this.polygonDrawStates.hasPolygons = false;
+            this.polygonDrawStates.reset();
+            this.polygonDrawStates.hasPolygons = false;
         }
         this.mapStateService.updatePolygons(newPolygons);
         this.saveCurrentState();
     }
     saveCurrentState() {
         this.polygonInformationSubject.next(this.polygonInformationStorage);
-        console.log("saveCurrentState: ", this.polygonInformationStorage);
+        this.polygonDrawStatesSubject.next(this.polygonDrawStates);
+        console.log('saveCurrentState: ', this.polygonInformationStorage);
     }
     deleteTrashcan(polygon) {
         const idx = this.polygonInformationStorage.findIndex(v => v.polygon[0] === polygon);
@@ -593,8 +597,8 @@ let PolygonInformationService = class PolygonInformationService {
     }
     deleteTrashCanOnMulti(polygon) {
         let index = 0;
-        console.log("DeleteTrashCan: ", polygon);
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+        console.log('DeleteTrashCan: ', polygon);
+        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
         // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
         this.polygonInformationStorage.forEach((v, i) => {
             console.log(v.polygon);
@@ -607,20 +611,20 @@ let PolygonInformationService = class PolygonInformationService {
                 v.polygon.splice(id, 1);
                 console.log(v.polygon);
             }
-            console.log("ID: ", id);
+            console.log('ID: ', id);
         });
         this.updatePolygons();
-        console.log("Index: ", index);
+        console.log('Index: ', index);
         if (this.polygonInformationStorage.length > 1) {
             this.polygonInformationStorage.splice(index, 1);
         }
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+        console.log('deleteTrashCanOnMulti: ', this.polygonInformationStorage);
     }
     deletePolygonInformationStorage() {
         this.polygonInformationStorage = [];
     }
     createPolygonInformationStorage(arrayOfFeatureGroups) {
-        console.log("Create Info: ", arrayOfFeatureGroups);
+        console.log('Create Info: ', arrayOfFeatureGroups);
         if (arrayOfFeatureGroups.length > 0) {
             arrayOfFeatureGroups.forEach(featureGroup => {
                 console.log(featureGroup.getLayers()[0].getLatLngs());
@@ -630,13 +634,25 @@ let PolygonInformationService = class PolygonInformationService {
             this.updatePolygons();
         }
     }
+    activate() {
+        this.polygonDrawStates.activate();
+    }
+    reset() {
+        this.polygonDrawStates.reset();
+    }
+    setMoveMode() {
+        this.polygonDrawStates.setMoveMode();
+    }
+    setFreeDrawMode() {
+        this.polygonDrawStates.setFreeDrawMode();
+    }
 };
 PolygonInformationService.ctorParameters = () => [
     { type: PolyStateService }
 ];
 PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
 PolygonInformationService = __decorate([
-    Injectable({ providedIn: "root" }),
+    Injectable({ providedIn: 'root' }),
     __metadata("design:paramtypes", [PolyStateService])
 ], PolygonInformationService);
 
@@ -794,10 +810,10 @@ class PolyDrawService {
         // DrawModes, determine UI buttons etc...
         this.drawModeSubject = new BehaviorSubject(DrawMode$1.Off);
         this.drawMode$ = this.drawModeSubject.asObservable();
+        this.minimumFreeDrawZoomLevel = 12;
         // add to config
         this.arrayOfFeatureGroups = [];
         this.tracer = {};
-        this.polygonDrawStates = null;
         // end add to config
         this.ngUnsubscribe = new Subject();
         this.config = null;
@@ -810,6 +826,9 @@ class PolyDrawService {
             console.log('after this.config', this.config);
             this.tracer = polyline([[0, 0]], this.config.polyLineOptions);
             this.initPolyDraw();
+        });
+        this.mapState.mapZoomLevel$.pipe(debounceTime(100), takeUntil(this.ngUnsubscribe)).subscribe((zoom) => {
+            this.onZoomChange(zoom);
         });
         this.polygonInformation.polygonInformation$.subscribe(k => {
             console.log('PolyInfo start: ', k);
@@ -882,7 +901,7 @@ class PolyDrawService {
         });
         this.arrayOfFeatureGroups = [];
         this.polygonInformation.deletePolygonInformationStorage();
-        // this.polygonDrawStates.reset();
+        this.polygonInformation.reset();
         this.polygonInformation.updatePolygons();
     }
     // fine
@@ -917,6 +936,8 @@ class PolyDrawService {
         });
         this.arrayOfFeatureGroups.push(featureGroup);
         this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+        this.polygonInformation.activate();
+        this.polygonInformation.setMoveMode();
     }
     // innehåll i if'ar flytta till egna metoder
     convertToCoords(latlngs) {
@@ -1043,6 +1064,17 @@ class PolyDrawService {
         this.resetTracker();
         this.drawStartedEvents(false);
     }
+    onZoomChange(zoomLevel) {
+        //console.log("onZoomChange", zoomLevel);
+        if (zoomLevel >= this.minimumFreeDrawZoomLevel) {
+            this.polygonInformation.polygonDrawStates.canUsePolyDraw = true;
+        }
+        else {
+            this.polygonInformation.polygonDrawStates.canUsePolyDraw = false;
+            this.polygonInformation.setMoveMode();
+        }
+        this.polygonInformation.saveCurrentState();
+    }
     // fine
     drawStartedEvents(onoff) {
         // console.log("drawStartedEvents", onoff);
@@ -1088,6 +1120,7 @@ class PolyDrawService {
         });
         this.arrayOfFeatureGroups.push(featureGroup);
         console.log('Array: ', this.arrayOfFeatureGroups);
+        this.polygonInformation.activate();
         this.setDrawMode(DrawMode$1.Off);
         featureGroup.on('click', e => {
             this.polygonClicked(e, latLngs);
@@ -1529,12 +1562,20 @@ class PolyDrawService {
     }
     // remove, use modeChange
     drawModeClick() {
-        this.setDrawMode(DrawMode$1.AddPolygon);
+        if (this.polygonInformation.polygonDrawStates.isFreeDrawMode) {
+            this.polygonInformation.setMoveMode();
+            this.setDrawMode(DrawMode$1.Off);
+        }
+        else {
+            this.polygonInformation.setFreeDrawMode();
+            this.setDrawMode(DrawMode$1.AddPolygon);
+        }
         this.polygonInformation.saveCurrentState();
     }
     // remove, use modeChange
     freedrawMenuClick() {
         this.setDrawMode(DrawMode$1.AddPolygon);
+        this.polygonInformation.activate();
         this.polygonInformation.saveCurrentState();
     }
     // remove, use modeChange
