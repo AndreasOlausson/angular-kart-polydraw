@@ -1,11 +1,11 @@
 import { NgModule } from "@angular/core";
 import { AlterPolygonComponent } from "./popups/alter-polygon/alter-polygon.component";
-import { PolyDrawService } from './polydraw.service';
+import { ComponentGeneraterService } from './component-generater.service';
 
 @NgModule({
   declarations: [ AlterPolygonComponent],
   imports: [],
-  providers:[PolyDrawService],
+  providers: [ComponentGeneraterService],
   exports: [ ]
 })
 export class MyLibModule {}

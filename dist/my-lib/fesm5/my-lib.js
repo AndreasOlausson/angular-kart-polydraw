@@ -1,74 +1,31 @@
-import { __assign, __spread, __decorate, __metadata } from 'tslib';
-import { Polyline, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil, Polygon, polygon } from 'leaflet';
+import { __decorate, __metadata, __spread, __assign } from 'tslib';
+import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, NgModule } from '@angular/core';
+import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ɵɵdefineInjectable, Injectable, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, ɵɵinject, INJECTOR, NgModule } from '@angular/core';
-import { area, length, point, midpoint, union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon as polygon$1, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, featureCollection } from '@turf/turf';
+import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
-var touchSupport = true;
-var mergePolygons = true;
-var kinks = false;
-var markers = {
-	menu: true,
-	"delete": true,
-	markerIcon: {
-		styleClasses: [
-			"polygon-marker"
-		]
-	},
-	holeIcon: {
-		styleClasses: [
-			"polygon-marker",
-			"hole"
-		]
-	},
-	markerMenuIcon: {
-		position: 4,
-		styleClasses: [
-			"polygon-marker",
-			"menu"
-		]
-	},
-	markerDeleteIcon: {
-		position: 1,
-		styleClasses: [
-			"polygon-marker",
-			"delete"
-		]
-	}
-};
-var polyLineOptions = {
-	color: "#50622b",
-	opacity: 1,
-	smoothFactor: 0,
-	noClip: true,
-	clickable: false,
-	weight: 2
-};
-var subtractLineOptions = {
-	color: "#50622b",
-	opacity: 1,
-	smoothFactor: 0,
-	noClip: true,
-	clickable: false,
-	weight: 2
-};
-var polygonOptions = {
-	smoothFactor: 0.3,
-	color: "#50622b",
-	fillColor: "#b4cd8a",
-	noClip: true
-};
-var defaultConfig = {
-	touchSupport: touchSupport,
-	mergePolygons: mergePolygons,
-	kinks: kinks,
-	markers: markers,
-	polyLineOptions: polyLineOptions,
-	subtractLineOptions: subtractLineOptions,
-	polygonOptions: polygonOptions
-};
+var MapStateService = /** @class */ (function () {
+    function MapStateService() {
+        this.mapSubject = new BehaviorSubject(null);
+        this.map$ = this.mapSubject.asObservable();
+    }
+    MapStateService.prototype.updateMapState = function (map) {
+        this.mapSubject.next(map);
+    };
+    MapStateService.prototype.updatePolygons = function (polygons) {
+        console.log("map-state", polygons);
+    };
+    MapStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function MapStateService_Factory() { return new MapStateService(); }, token: MapStateService, providedIn: "root" });
+    MapStateService = __decorate([
+        Injectable({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [])
+    ], MapStateService);
+    return MapStateService;
+}());
 
 var DrawMode;
 (function (DrawMode) {
@@ -173,7 +130,646 @@ var Compass = /** @class */ (function () {
     return Compass;
 }());
 
-// Rename - PolyDrawService
+var TurfHelperService = /** @class */ (function () {
+    function TurfHelperService() {
+        this.simplifyTolerance = { tolerance: 0.0001, highQuality: false };
+    }
+    TurfHelperService.prototype.union = function (poly1, poly2) {
+        console.log("poly1: ", poly1);
+        console.log("poly2: ", poly2);
+        var union$1 = union(poly1, poly2);
+        return this.getTurfPolygon(union$1);
+    };
+    TurfHelperService.prototype.turfConcaveman = function (feature) {
+        //console.log("turfConcaveman", points);
+        var points = explode(feature);
+        var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
+        return multiPolygon([[concaveman(coordinates)]]);
+    };
+    //TODO add some sort of dynamic tolerance
+    TurfHelperService.prototype.getSimplified = function (polygon) {
+        var tolerance = this.simplifyTolerance;
+        var simplified = simplify(polygon, tolerance);
+        return simplified;
+    };
+    TurfHelperService.prototype.getTurfPolygon = function (polygon) {
+        var turfPolygon;
+        console.log("Get TurfPolygon:", polygon);
+        // if (polygon.geometry)
+        if (polygon.geometry.type === "Polygon") {
+            turfPolygon = multiPolygon([polygon.geometry.coordinates]);
+        }
+        else {
+            turfPolygon = multiPolygon(polygon.geometry.coordinates);
+        }
+        return turfPolygon;
+    };
+    TurfHelperService.prototype.getMultiPolygon = function (polygonArray) {
+        return multiPolygon(polygonArray);
+    };
+    TurfHelperService.prototype.getKinks = function (feature) {
+        var unkink = unkinkPolygon(feature);
+        var coordinates = [];
+        featureEach(unkink, function (current) {
+            coordinates.push(current);
+        });
+        return coordinates;
+    };
+    TurfHelperService.prototype.getCoords = function (feature) {
+        return getCoords(feature);
+    };
+    TurfHelperService.prototype.hasKinks = function (feature) {
+        var kinks = kinks$1(feature);
+        return kinks.features.length > 0;
+    };
+    TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
+        // const oldPolygon = polygon.toGeoJSON();
+        var poly = [];
+        var poly2 = [];
+        console.log("polygonIntersect", polygon, latlngs);
+        var latlngsCoords = getCoords(latlngs);
+        latlngsCoords.forEach(function (element) {
+            var feat = { type: "Polygon", coordinates: [element[0]] };
+            poly.push(feat);
+        });
+        var polygonCoords = getCoords(polygon);
+        polygonCoords.forEach(function (element) {
+            var feat = { type: "Polygon", coordinates: [element[0]] };
+            poly2.push(feat);
+        });
+        var intersect$1 = false;
+        loop1: for (var i = 0; i < poly.length; i++) {
+            if (this.getKinks(poly[i]).length < 2) {
+                for (var j = 0; j < poly2.length; j++) {
+                    if (this.getKinks(poly2[j]).length < 2) {
+                        intersect$1 = !!intersect(poly[i], poly2[j]);
+                        if (intersect$1) {
+                            break loop1;
+                        }
+                    }
+                }
+            }
+        }
+        return intersect$1;
+    };
+    TurfHelperService.prototype.getIntersection = function (poly1, poly2) {
+        return intersect(poly1, poly2);
+    };
+    TurfHelperService.prototype.getDistance = function (point1, point2) {
+        return distance(point1, point2);
+    };
+    TurfHelperService.prototype.isWithin = function (polygon1, polygon2) {
+        console.log(polygon1);
+        console.log("Ytre: ", polygon2);
+        return booleanWithin(polygon([polygon1]), polygon([polygon2]));
+    };
+    TurfHelperService.prototype.equalPolygons = function (polygon1, polygon2) {
+        console.log(polygon1);
+        console.log(polygon2);
+        console.log(booleanEqual(polygon1, polygon2));
+    };
+    //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
+    TurfHelperService.prototype.convertToBoundingBoxPolygon = function (polygon) {
+        var bbox$1 = bbox(polygon.geometry);
+        var bboxPolygon$1 = bboxPolygon(bbox$1);
+        return bboxPolygon$1;
+    };
+    TurfHelperService.prototype.polygonToMultiPolygon = function (poly) {
+        var multi = multiPolygon([poly.geometry.coordinates]);
+        return multi;
+    };
+    //TODO -cleanup
+    TurfHelperService.prototype.injectPointToPolygon = function (polygon$1, point) {
+        var coords = getCoords(polygon$1);
+        var newPolygon;
+        console.log("polygon: ", polygon$1);
+        if (coords.length < 2) {
+            var polygonPoints = explode(polygon$1);
+            console.log(nearestPoint(point, polygonPoints));
+            var index_1 = nearestPoint(point, polygonPoints).properties.featureIndex;
+            var test = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
+                if (index_1 === i) {
+                    return __spread(accumulator, [oldPoint, point]);
+                }
+                return __spread(accumulator, [oldPoint]);
+            }, []);
+            console.log("test", test);
+            newPolygon = multiPolygon([[test]]);
+        }
+        else {
+            var pos_1 = [];
+            var coordinates_1 = [];
+            coords.forEach(function (element) {
+                var polygon$1 = polygon(element);
+                // turf.booleanPointInPolygon(point, polygon)
+                if (booleanPointInPolygon(point, polygon$1)) {
+                    var polygonPoints = explode(polygon$1);
+                    var index_2 = nearestPoint(point, polygonPoints).properties.featureIndex;
+                    coordinates_1 = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
+                        if (index_2 === i) {
+                            return __spread(accumulator, [oldPoint, point]);
+                        }
+                        return __spread(accumulator, [oldPoint]);
+                    }, []);
+                    console.log("coordinates", coordinates_1);
+                }
+                else {
+                    pos_1.push(element);
+                }
+            });
+            pos_1.push([coordinates_1]);
+            newPolygon = multiPolygon(pos_1);
+        }
+        return newPolygon;
+    };
+    TurfHelperService.prototype.polygonDifference = function (polygon1, polygon2) {
+        var diff = difference(polygon1, polygon2);
+        console.log(diff);
+        return this.getTurfPolygon(diff);
+    };
+    TurfHelperService.prototype.getBoundingBoxCompassPosition = function (polygon, markerplacement, useOffset, offsetDirection) {
+        var p = this.getMultiPolygon(polygon);
+        var compass = this.getBoundingBoxCompass(polygon);
+        var polygonPoints = explode(polygon);
+        var coord = this.getCoord(compass.direction.North);
+        var nearestPoint$1 = nearestPoint(coord, polygonPoints);
+        return null;
+    };
+    TurfHelperService.prototype.getBoundingBoxCompass = function (polygon) {
+        var p = this.getMultiPolygon(polygon);
+        var centerOfMass$1 = centerOfMass(p);
+        var b = bbox(p);
+        var minX = b[0];
+        var minY = b[1];
+        var maxX = b[2];
+        var maxY = b[3];
+        var compass = new Compass(minX, minY, maxX, maxY);
+        // compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
+        return compass;
+    };
+    TurfHelperService.prototype.getNearestPointIndex = function (targetPoint, points) {
+        var index = nearestPoint(targetPoint, points).properties.featureIndex;
+        return index;
+    };
+    TurfHelperService.prototype.getCoord = function (point) {
+        var coord = getCoord([point.lng, point.lat]);
+        return coord;
+    };
+    TurfHelperService.prototype.getFeaturePointCollection = function (points) {
+        var pts = [];
+        points.forEach(function (v) {
+            var p = point([v.lng, v.lat], {});
+            pts.push(p);
+        });
+        var fc = featureCollection(pts);
+        return fc;
+    };
+    TurfHelperService.ngInjectableDef = ɵɵdefineInjectable({ factory: function TurfHelperService_Factory() { return new TurfHelperService(); }, token: TurfHelperService, providedIn: "root" });
+    TurfHelperService = __decorate([
+        Injectable({ providedIn: "root" }),
+        __metadata("design:paramtypes", [])
+    ], TurfHelperService);
+    return TurfHelperService;
+}());
+
+var PolygonUtil = /** @class */ (function () {
+    function PolygonUtil() {
+    }
+    PolygonUtil.getCenter = function (polygon) {
+        var pi = Math.PI;
+        var x = 0;
+        var y = 0;
+        var z = 0;
+        polygon.forEach(function (v) {
+            var lat1 = v.lat;
+            var lon1 = v.lng;
+            lat1 = lat1 * pi / 180;
+            lon1 = lon1 * pi / 180;
+            x += Math.cos(lat1) * Math.cos(lon1);
+            y += Math.cos(lat1) * Math.sin(lon1);
+            z += Math.sin(lat1);
+        });
+        var lng = Math.atan2(y, x);
+        var hyp = Math.sqrt(x * x + y * y);
+        var lat = Math.atan2(z, hyp);
+        lat = lat * 180 / pi;
+        lng = lng * 180 / pi;
+        var center = { lat: lat, lng: lng };
+        return center;
+    };
+    PolygonUtil.getSouthWest = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorthWest();
+    };
+    PolygonUtil.getNorthEast = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorthEast();
+    };
+    PolygonUtil.getNorthWest = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorthWest();
+    };
+    PolygonUtil.getSouthEast = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getSouthEast();
+    };
+    PolygonUtil.getNorth = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getNorth();
+    };
+    PolygonUtil.getSouth = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getSouth();
+    };
+    PolygonUtil.getWest = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getWest();
+    };
+    PolygonUtil.getEast = function (polygon) {
+        var bounds = this.getBounds(polygon);
+        return bounds.getEast();
+    };
+    PolygonUtil.getSqmArea = function (polygon) {
+        var poly = new Polygon(polygon);
+        var geoJsonPoly = poly.toGeoJSON();
+        var area$1 = area((geoJsonPoly));
+        return area$1;
+    };
+    PolygonUtil.getPerimeter = function (polygon) {
+        var poly = new Polygon(polygon);
+        var geoJsonPoly = poly.toGeoJSON();
+        var perimeter = length((geoJsonPoly), { units: "meters" });
+        return perimeter;
+    };
+    PolygonUtil.getPolygonChecksum = function (polygon) {
+        var uniqueLatLngs = polygon.filter(function (v, i, a) {
+            return a.indexOf(a.find(function (x) { return x.lat === v.lat && x.lng === v.lng; })) === i;
+        });
+        return uniqueLatLngs.reduce(function (a, b) { return +a + +b.lat; }, 0) * uniqueLatLngs.reduce(function (a, b) { return +a + +b.lng; }, 0);
+    };
+    PolygonUtil.getMidPoint = function (point1, point2) {
+        var p1 = point([point1.lng, point1.lat]);
+        var p2 = point([point2.lng, point2.lat]);
+        var midpoint$1 = midpoint(p1, p2);
+        var returnPoint = {
+            lat: midpoint$1.geometry.coordinates[1],
+            lng: midpoint$1.geometry.coordinates[0]
+        };
+        return returnPoint;
+    };
+    PolygonUtil.getBounds = function (polygon) {
+        var tmpLatLng = [];
+        polygon.forEach(function (ll) {
+            if (isNaN(ll.lat) || isNaN(ll.lng)) {
+            }
+            tmpLatLng.push(ll);
+        });
+        var polyLine = new Polyline(tmpLatLng);
+        var bounds = polyLine.getBounds();
+        return bounds;
+    };
+    return PolygonUtil;
+}());
+//export class FreedrawSubtract extends L.FreeDraw {
+//    constructor() {
+//        //this will become L.FreeDraw
+//        super(null);
+//        //call methods in freedraw by this
+//        const foo = this.size();
+//        this.consoleLogNumberOfPolygons(foo);
+//    }
+//    consoleLogNumberOfPolygons(size: number): void {
+//        console.log("Number of polygons: ", size);
+//    }
+//}
+
+var PolygonInfo = /** @class */ (function () {
+    function PolygonInfo(polygon) {
+        var _this = this;
+        this.polygon = [];
+        this.trashcanPoint = [];
+        this.sqmArea = [];
+        this.perimeter = [];
+        console.log("PolygonInfo: ", polygon);
+        polygon.forEach(function (polygons, i) {
+            _this.trashcanPoint[i] = _this.getTrashcanPoint(polygons[0]);
+            _this.sqmArea[i] = _this.calculatePolygonArea(polygons[0]);
+            _this.perimeter[i] = _this.calculatePolygonPerimeter(polygons[0]);
+            console.log(polygons[0]);
+            _this.polygon[i] = polygons;
+        });
+    }
+    PolygonInfo.prototype.setSqmArea = function (area) {
+        this.sqmArea[0] = area;
+    };
+    PolygonInfo.prototype.getTrashcanPoint = function (polygon) {
+        var res = Math.max.apply(Math, polygon.map(function (o) { return o.lat; }));
+        var idx = polygon.findIndex(function (o) { return o.lat === res; });
+        var previousPoint;
+        var nextPoint;
+        if (idx > 0) {
+            previousPoint = polygon[idx - 1];
+            if (idx < polygon.length - 1) {
+                nextPoint = polygon[idx + 1];
+            }
+            else {
+                nextPoint = polygon[0];
+            }
+        }
+        else {
+            previousPoint = polygon[polygon.length - 1];
+            nextPoint = polygon[idx + 1];
+        }
+        var secondPoint = (previousPoint.lng < nextPoint.lng) ? previousPoint : nextPoint;
+        var midpoint = PolygonUtil.getMidPoint(polygon[idx], secondPoint);
+        return midpoint;
+    };
+    PolygonInfo.prototype.calculatePolygonArea = function (polygon) {
+        var area = PolygonUtil.getSqmArea((polygon));
+        return area;
+    };
+    PolygonInfo.prototype.calculatePolygonPerimeter = function (polygon) {
+        var perimeter = PolygonUtil.getPerimeter((polygon));
+        return perimeter;
+    };
+    return PolygonInfo;
+}());
+var PolygonDrawStates = /** @class */ (function () {
+    function PolygonDrawStates() {
+        this.canUsePolyDraw = false;
+        this.reset();
+    }
+    PolygonDrawStates.prototype.activate = function () {
+        this.reset();
+        this.isActivated = true;
+    };
+    PolygonDrawStates.prototype.reset = function () {
+        this.isActivated = false;
+        this.hasPolygons = false;
+        this.canRevert = false;
+        this.isAuto = false;
+        this.resetDrawModes();
+    };
+    PolygonDrawStates.prototype.resetDrawModes = function () {
+        this.isFreeDrawMode = false;
+        this.isMoveMode = false;
+    };
+    PolygonDrawStates.prototype.setFreeDrawMode = function (isAuto) {
+        if (isAuto === void 0) { isAuto = false; }
+        if (isAuto) {
+            this.isActivated = true;
+        }
+        if (this.isActivated) {
+            this.resetDrawModes();
+            this.isFreeDrawMode = true;
+            if (isAuto) {
+                this.isAuto = true;
+            }
+        }
+    };
+    PolygonDrawStates.prototype.setMoveMode = function () {
+        if (this.isActivated) {
+            this.resetDrawModes();
+            this.isMoveMode = true;
+        }
+    };
+    PolygonDrawStates.prototype.forceCanUseFreeDraw = function () {
+        this.canUsePolyDraw = true;
+    };
+    return PolygonDrawStates;
+}());
+
+var PolygonInformationService = /** @class */ (function () {
+    function PolygonInformationService(mapStateService) {
+        this.mapStateService = mapStateService;
+        this.polygonInformationSubject = new Subject();
+        this.polygonInformation$ = this.polygonInformationSubject.asObservable();
+        this.polygonDrawStatesSubject = new Subject();
+        this.polygonDrawStates$ = this.polygonDrawStatesSubject.asObservable();
+        this.polygonInformationStorage = [];
+    }
+    PolygonInformationService.prototype.updatePolygons = function () {
+        console.log("updatePolygons: ", this.polygonInformationStorage);
+        var newPolygons = null;
+        if (this.polygonInformationStorage.length > 0) {
+            newPolygons = [];
+            this.polygonInformationStorage.forEach(function (v) {
+                var test = [];
+                v.polygon.forEach(function (poly) {
+                    var test2 = [];
+                    poly.forEach(function (polygon) {
+                        test2 = __spread(polygon);
+                        if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
+                            test2.push(polygon[0]);
+                        }
+                        test.push(test2);
+                    });
+                });
+                newPolygons.push(test);
+            });
+            // this.polygonDrawStates.hasPolygons = true;
+        }
+        else {
+            // this.polygonDrawStates.reset();
+            // this.polygonDrawStates.hasPolygons = false;
+        }
+        this.mapStateService.updatePolygons(newPolygons);
+        this.saveCurrentState();
+    };
+    PolygonInformationService.prototype.saveCurrentState = function () {
+        this.polygonInformationSubject.next(this.polygonInformationStorage);
+        console.log("saveCurrentState: ", this.polygonInformationStorage);
+    };
+    PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
+        var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
+        this.polygonInformationStorage.splice(idx, 1);
+        this.updatePolygons();
+    };
+    PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
+        var index = 0;
+        console.log("DeleteTrashCan: ", polygon);
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+        // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
+        this.polygonInformationStorage.forEach(function (v, i) {
+            console.log(v.polygon);
+            var id = v.polygon.findIndex(function (poly) { return poly.toString() === polygon.toString(); });
+            if (id >= 0) {
+                index = i;
+                v.trashcanPoint.splice(id, 1);
+                v.sqmArea.splice(id, 1);
+                v.perimeter.splice(id, 1);
+                v.polygon.splice(id, 1);
+                console.log(v.polygon);
+            }
+            console.log("ID: ", id);
+        });
+        this.updatePolygons();
+        console.log("Index: ", index);
+        if (this.polygonInformationStorage.length > 1) {
+            this.polygonInformationStorage.splice(index, 1);
+        }
+        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
+    };
+    PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
+        this.polygonInformationStorage = [];
+    };
+    PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
+        var _this = this;
+        console.log("Create Info: ", arrayOfFeatureGroups);
+        if (arrayOfFeatureGroups.length > 0) {
+            arrayOfFeatureGroups.forEach(function (featureGroup) {
+                console.log(featureGroup.getLayers()[0].getLatLngs());
+                var polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs());
+                _this.polygonInformationStorage.push(polyInfo);
+            });
+            this.updatePolygons();
+        }
+    };
+    PolygonInformationService.ctorParameters = function () { return [
+        { type: MapStateService }
+    ]; };
+    PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(MapStateService)); }, token: PolygonInformationService, providedIn: "root" });
+    PolygonInformationService = __decorate([
+        Injectable({ providedIn: "root" }),
+        __metadata("design:paramtypes", [MapStateService])
+    ], PolygonInformationService);
+    return PolygonInformationService;
+}());
+
+var touchSupport = true;
+var mergePolygons = true;
+var kinks = false;
+var markers = {
+	menu: true,
+	"delete": true,
+	markerIcon: {
+		styleClasses: [
+			"polygon-marker"
+		]
+	},
+	holeIcon: {
+		styleClasses: [
+			"polygon-marker",
+			"hole"
+		]
+	},
+	markerMenuIcon: {
+		position: 4,
+		styleClasses: [
+			"polygon-marker",
+			"menu"
+		]
+	},
+	markerDeleteIcon: {
+		position: 1,
+		styleClasses: [
+			"polygon-marker",
+			"delete"
+		]
+	}
+};
+var polyLineOptions = {
+	color: "#50622b",
+	opacity: 1,
+	smoothFactor: 0,
+	noClip: true,
+	clickable: false,
+	weight: 2
+};
+var subtractLineOptions = {
+	color: "#50622b",
+	opacity: 1,
+	smoothFactor: 0,
+	noClip: true,
+	clickable: false,
+	weight: 2
+};
+var polygonOptions = {
+	smoothFactor: 0.3,
+	color: "#50622b",
+	fillColor: "#b4cd8a",
+	noClip: true
+};
+var defaultConfig = {
+	touchSupport: touchSupport,
+	mergePolygons: mergePolygons,
+	kinks: kinks,
+	markers: markers,
+	polyLineOptions: polyLineOptions,
+	subtractLineOptions: subtractLineOptions,
+	polygonOptions: polygonOptions
+};
+
+var AlterPolygonComponent = /** @class */ (function () {
+    function AlterPolygonComponent() {
+        this.simplyfiClicked = new EventEmitter();
+        this.bboxClicked = new EventEmitter();
+    }
+    AlterPolygonComponent.prototype.onSimplify = function ($event) {
+        this.simplyfiClicked.emit($event);
+    };
+    AlterPolygonComponent.prototype.onBbox = function ($event) {
+        this.bboxClicked.emit($event);
+    };
+    __decorate([
+        Output(),
+        __metadata("design:type", EventEmitter)
+    ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
+    __decorate([
+        Output(),
+        __metadata("design:type", EventEmitter)
+    ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
+    AlterPolygonComponent = __decorate([
+        Component({
+            selector: 'app-alter-polygon',
+            template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
+            styles: [""]
+        })
+    ], AlterPolygonComponent);
+    return AlterPolygonComponent;
+}());
+
+var ComponentGeneraterService = /** @class */ (function () {
+    function ComponentGeneraterService(cfr, injector) {
+        this.cfr = cfr;
+        this.injector = injector;
+        this.clusterPopuprefs = [];
+    }
+    ComponentGeneraterService.prototype.ngOnDestroy = function () {
+        this.destroyAngularPopupComponents();
+    };
+    ComponentGeneraterService.prototype.generateAlterPopup = function () {
+        var cmpFactory = this.cfr.resolveComponentFactory(AlterPolygonComponent);
+        var popupComponentRef = cmpFactory.create(this.injector);
+        this.clusterPopuprefs.push(popupComponentRef);
+        return popupComponentRef;
+    };
+    ComponentGeneraterService.prototype.destroyAngularPopupComponents = function () {
+        this.clusterPopuprefs.forEach(function (cref) {
+            if (cref) {
+                cref.destroy();
+            }
+        });
+        this.clusterPopuprefs = [];
+    };
+    return ComponentGeneraterService;
+}());
+
+var LeafletHelperService = /** @class */ (function () {
+    function LeafletHelperService() {
+    }
+    LeafletHelperService.prototype.createPolygon = function (latLngs) {
+        var p = polygon$1(latLngs);
+        return p;
+    };
+    LeafletHelperService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LeafletHelperService_Factory() { return new LeafletHelperService(); }, token: LeafletHelperService, providedIn: "root" });
+    LeafletHelperService = __decorate([
+        Injectable({ providedIn: "root" }),
+        __metadata("design:paramtypes", [])
+    ], LeafletHelperService);
+    return LeafletHelperService;
+}());
+
 var PolyDrawService = /** @class */ (function () {
     function PolyDrawService(mapState, popupGenerator, turfHelper, polygonInformation, leafletHelper) {
         var _this = this;
@@ -1013,6 +1609,26 @@ var PolyDrawService = /** @class */ (function () {
         var nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc);
         return nearestPointIdx;
     };
+    PolyDrawService.ctorParameters = function () { return [
+        { type: MapStateService },
+        { type: ComponentGeneraterService },
+        { type: TurfHelperService },
+        { type: PolygonInformationService },
+        { type: LeafletHelperService }
+    ]; };
+    PolyDrawService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(ɵɵinject(MapStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
+    PolyDrawService = __decorate([
+        Injectable({
+            providedIn: 'root'
+        })
+        // Rename - PolyDrawService
+        ,
+        __metadata("design:paramtypes", [MapStateService,
+            ComponentGeneraterService,
+            TurfHelperService,
+            PolygonInformationService,
+            LeafletHelperService])
+    ], PolyDrawService);
     return PolyDrawService;
 }());
 // flytt til enum.ts
@@ -1025,398 +1641,6 @@ var DrawMode$1;
     DrawMode[DrawMode["LoadPolygon"] = 4] = "LoadPolygon";
 })(DrawMode$1 || (DrawMode$1 = {}));
 
-var MapStateService = /** @class */ (function () {
-    function MapStateService() {
-        this.mapSubject = new BehaviorSubject(null);
-        this.map$ = this.mapSubject.asObservable();
-    }
-    MapStateService.prototype.updateMapState = function (map) {
-        this.mapSubject.next(map);
-    };
-    MapStateService.prototype.updatePolygons = function (polygons) {
-        console.log("map-state", polygons);
-    };
-    MapStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function MapStateService_Factory() { return new MapStateService(); }, token: MapStateService, providedIn: "root" });
-    MapStateService = __decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [])
-    ], MapStateService);
-    return MapStateService;
-}());
-
-var AlterPolygonComponent = /** @class */ (function () {
-    function AlterPolygonComponent() {
-        this.simplyfiClicked = new EventEmitter();
-        this.bboxClicked = new EventEmitter();
-    }
-    AlterPolygonComponent.prototype.onSimplify = function ($event) {
-        this.simplyfiClicked.emit($event);
-    };
-    AlterPolygonComponent.prototype.onBbox = function ($event) {
-        this.bboxClicked.emit($event);
-    };
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
-    AlterPolygonComponent = __decorate([
-        Component({
-            selector: 'app-alter-polygon',
-            template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
-            styles: [""]
-        })
-    ], AlterPolygonComponent);
-    return AlterPolygonComponent;
-}());
-
-var ComponentGeneraterService = /** @class */ (function () {
-    function ComponentGeneraterService(cfr, injector) {
-        this.cfr = cfr;
-        this.injector = injector;
-        this.clusterPopuprefs = [];
-    }
-    ComponentGeneraterService.prototype.ngOnDestroy = function () {
-        this.destroyAngularPopupComponents();
-    };
-    ComponentGeneraterService.prototype.generateAlterPopup = function () {
-        var cmpFactory = this.cfr.resolveComponentFactory(AlterPolygonComponent);
-        var popupComponentRef = cmpFactory.create(this.injector);
-        this.clusterPopuprefs.push(popupComponentRef);
-        return popupComponentRef;
-    };
-    ComponentGeneraterService.prototype.destroyAngularPopupComponents = function () {
-        this.clusterPopuprefs.forEach(function (cref) {
-            if (cref) {
-                cref.destroy();
-            }
-        });
-        this.clusterPopuprefs = [];
-    };
-    ComponentGeneraterService.ctorParameters = function () { return [
-        { type: ComponentFactoryResolver },
-        { type: Injector }
-    ]; };
-    ComponentGeneraterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(ɵɵinject(ComponentFactoryResolver), ɵɵinject(INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
-    ComponentGeneraterService = __decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [ComponentFactoryResolver,
-            Injector])
-    ], ComponentGeneraterService);
-    return ComponentGeneraterService;
-}());
-
-var PolygonUtil = /** @class */ (function () {
-    function PolygonUtil() {
-    }
-    PolygonUtil.getCenter = function (polygon) {
-        var pi = Math.PI;
-        var x = 0;
-        var y = 0;
-        var z = 0;
-        polygon.forEach(function (v) {
-            var lat1 = v.lat;
-            var lon1 = v.lng;
-            lat1 = lat1 * pi / 180;
-            lon1 = lon1 * pi / 180;
-            x += Math.cos(lat1) * Math.cos(lon1);
-            y += Math.cos(lat1) * Math.sin(lon1);
-            z += Math.sin(lat1);
-        });
-        var lng = Math.atan2(y, x);
-        var hyp = Math.sqrt(x * x + y * y);
-        var lat = Math.atan2(z, hyp);
-        lat = lat * 180 / pi;
-        lng = lng * 180 / pi;
-        var center = { lat: lat, lng: lng };
-        return center;
-    };
-    PolygonUtil.getSouthWest = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorthWest();
-    };
-    PolygonUtil.getNorthEast = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorthEast();
-    };
-    PolygonUtil.getNorthWest = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorthWest();
-    };
-    PolygonUtil.getSouthEast = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getSouthEast();
-    };
-    PolygonUtil.getNorth = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getNorth();
-    };
-    PolygonUtil.getSouth = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getSouth();
-    };
-    PolygonUtil.getWest = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getWest();
-    };
-    PolygonUtil.getEast = function (polygon) {
-        var bounds = this.getBounds(polygon);
-        return bounds.getEast();
-    };
-    PolygonUtil.getSqmArea = function (polygon) {
-        var poly = new Polygon(polygon);
-        var geoJsonPoly = poly.toGeoJSON();
-        var area$1 = area((geoJsonPoly));
-        return area$1;
-    };
-    PolygonUtil.getPerimeter = function (polygon) {
-        var poly = new Polygon(polygon);
-        var geoJsonPoly = poly.toGeoJSON();
-        var perimeter = length((geoJsonPoly), { units: "meters" });
-        return perimeter;
-    };
-    PolygonUtil.getPolygonChecksum = function (polygon) {
-        var uniqueLatLngs = polygon.filter(function (v, i, a) {
-            return a.indexOf(a.find(function (x) { return x.lat === v.lat && x.lng === v.lng; })) === i;
-        });
-        return uniqueLatLngs.reduce(function (a, b) { return +a + +b.lat; }, 0) * uniqueLatLngs.reduce(function (a, b) { return +a + +b.lng; }, 0);
-    };
-    PolygonUtil.getMidPoint = function (point1, point2) {
-        var p1 = point([point1.lng, point1.lat]);
-        var p2 = point([point2.lng, point2.lat]);
-        var midpoint$1 = midpoint(p1, p2);
-        var returnPoint = {
-            lat: midpoint$1.geometry.coordinates[1],
-            lng: midpoint$1.geometry.coordinates[0]
-        };
-        return returnPoint;
-    };
-    PolygonUtil.getBounds = function (polygon) {
-        var tmpLatLng = [];
-        polygon.forEach(function (ll) {
-            if (isNaN(ll.lat) || isNaN(ll.lng)) {
-            }
-            tmpLatLng.push(ll);
-        });
-        var polyLine = new Polyline(tmpLatLng);
-        var bounds = polyLine.getBounds();
-        return bounds;
-    };
-    return PolygonUtil;
-}());
-//export class FreedrawSubtract extends L.FreeDraw {
-//    constructor() {
-//        //this will become L.FreeDraw
-//        super(null);
-//        //call methods in freedraw by this
-//        const foo = this.size();
-//        this.consoleLogNumberOfPolygons(foo);
-//    }
-//    consoleLogNumberOfPolygons(size: number): void {
-//        console.log("Number of polygons: ", size);
-//    }
-//}
-
-var PolygonInfo = /** @class */ (function () {
-    function PolygonInfo(polygon) {
-        var _this = this;
-        this.polygon = [];
-        this.trashcanPoint = [];
-        this.sqmArea = [];
-        this.perimeter = [];
-        console.log("PolygonInfo: ", polygon);
-        polygon.forEach(function (polygons, i) {
-            _this.trashcanPoint[i] = _this.getTrashcanPoint(polygons[0]);
-            _this.sqmArea[i] = _this.calculatePolygonArea(polygons[0]);
-            _this.perimeter[i] = _this.calculatePolygonPerimeter(polygons[0]);
-            console.log(polygons[0]);
-            _this.polygon[i] = polygons;
-        });
-    }
-    PolygonInfo.prototype.setSqmArea = function (area) {
-        this.sqmArea[0] = area;
-    };
-    PolygonInfo.prototype.getTrashcanPoint = function (polygon) {
-        var res = Math.max.apply(Math, polygon.map(function (o) { return o.lat; }));
-        var idx = polygon.findIndex(function (o) { return o.lat === res; });
-        var previousPoint;
-        var nextPoint;
-        if (idx > 0) {
-            previousPoint = polygon[idx - 1];
-            if (idx < polygon.length - 1) {
-                nextPoint = polygon[idx + 1];
-            }
-            else {
-                nextPoint = polygon[0];
-            }
-        }
-        else {
-            previousPoint = polygon[polygon.length - 1];
-            nextPoint = polygon[idx + 1];
-        }
-        var secondPoint = (previousPoint.lng < nextPoint.lng) ? previousPoint : nextPoint;
-        var midpoint = PolygonUtil.getMidPoint(polygon[idx], secondPoint);
-        return midpoint;
-    };
-    PolygonInfo.prototype.calculatePolygonArea = function (polygon) {
-        var area = PolygonUtil.getSqmArea((polygon));
-        return area;
-    };
-    PolygonInfo.prototype.calculatePolygonPerimeter = function (polygon) {
-        var perimeter = PolygonUtil.getPerimeter((polygon));
-        return perimeter;
-    };
-    return PolygonInfo;
-}());
-var PolygonDrawStates = /** @class */ (function () {
-    function PolygonDrawStates() {
-        this.canUsePolyDraw = false;
-        this.reset();
-    }
-    PolygonDrawStates.prototype.activate = function () {
-        this.reset();
-        this.isActivated = true;
-    };
-    PolygonDrawStates.prototype.reset = function () {
-        this.isActivated = false;
-        this.hasPolygons = false;
-        this.canRevert = false;
-        this.isAuto = false;
-        this.resetDrawModes();
-    };
-    PolygonDrawStates.prototype.resetDrawModes = function () {
-        this.isFreeDrawMode = false;
-        this.isMoveMode = false;
-    };
-    PolygonDrawStates.prototype.setFreeDrawMode = function (isAuto) {
-        if (isAuto === void 0) { isAuto = false; }
-        if (isAuto) {
-            this.isActivated = true;
-        }
-        if (this.isActivated) {
-            this.resetDrawModes();
-            this.isFreeDrawMode = true;
-            if (isAuto) {
-                this.isAuto = true;
-            }
-        }
-    };
-    PolygonDrawStates.prototype.setMoveMode = function () {
-        if (this.isActivated) {
-            this.resetDrawModes();
-            this.isMoveMode = true;
-        }
-    };
-    PolygonDrawStates.prototype.forceCanUseFreeDraw = function () {
-        this.canUsePolyDraw = true;
-    };
-    return PolygonDrawStates;
-}());
-
-var PolygonInformationService = /** @class */ (function () {
-    function PolygonInformationService(mapStateService) {
-        this.mapStateService = mapStateService;
-        this.polygonInformationSubject = new Subject();
-        this.polygonInformation$ = this.polygonInformationSubject.asObservable();
-        this.polygonDrawStatesSubject = new Subject();
-        this.polygonDrawStates$ = this.polygonDrawStatesSubject.asObservable();
-        this.polygonInformationStorage = [];
-    }
-    PolygonInformationService.prototype.updatePolygons = function () {
-        console.log("updatePolygons: ", this.polygonInformationStorage);
-        var newPolygons = null;
-        if (this.polygonInformationStorage.length > 0) {
-            newPolygons = [];
-            this.polygonInformationStorage.forEach(function (v) {
-                var test = [];
-                v.polygon.forEach(function (poly) {
-                    var test2 = [];
-                    poly.forEach(function (polygon) {
-                        test2 = __spread(polygon);
-                        if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
-                            test2.push(polygon[0]);
-                        }
-                        test.push(test2);
-                    });
-                });
-                newPolygons.push(test);
-            });
-            // this.polygonDrawStates.hasPolygons = true;
-        }
-        else {
-            // this.polygonDrawStates.reset();
-            // this.polygonDrawStates.hasPolygons = false;
-        }
-        this.mapStateService.updatePolygons(newPolygons);
-        this.saveCurrentState();
-    };
-    PolygonInformationService.prototype.saveCurrentState = function () {
-        this.polygonInformationSubject.next(this.polygonInformationStorage);
-        console.log("saveCurrentState: ", this.polygonInformationStorage);
-    };
-    PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
-        var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
-        this.polygonInformationStorage.splice(idx, 1);
-        this.updatePolygons();
-    };
-    PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
-        var index = 0;
-        console.log("DeleteTrashCan: ", polygon);
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
-        // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
-        this.polygonInformationStorage.forEach(function (v, i) {
-            console.log(v.polygon);
-            var id = v.polygon.findIndex(function (poly) { return poly.toString() === polygon.toString(); });
-            if (id >= 0) {
-                index = i;
-                v.trashcanPoint.splice(id, 1);
-                v.sqmArea.splice(id, 1);
-                v.perimeter.splice(id, 1);
-                v.polygon.splice(id, 1);
-                console.log(v.polygon);
-            }
-            console.log("ID: ", id);
-        });
-        this.updatePolygons();
-        console.log("Index: ", index);
-        if (this.polygonInformationStorage.length > 1) {
-            this.polygonInformationStorage.splice(index, 1);
-        }
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
-    };
-    PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
-        this.polygonInformationStorage = [];
-    };
-    PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
-        var _this = this;
-        console.log("Create Info: ", arrayOfFeatureGroups);
-        if (arrayOfFeatureGroups.length > 0) {
-            arrayOfFeatureGroups.forEach(function (featureGroup) {
-                console.log(featureGroup.getLayers()[0].getLatLngs());
-                var polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs());
-                _this.polygonInformationStorage.push(polyInfo);
-            });
-            this.updatePolygons();
-        }
-    };
-    PolygonInformationService.ctorParameters = function () { return [
-        { type: MapStateService }
-    ]; };
-    PolygonInformationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(MapStateService)); }, token: PolygonInformationService, providedIn: "root" });
-    PolygonInformationService = __decorate([
-        Injectable({ providedIn: "root" }),
-        __metadata("design:paramtypes", [MapStateService])
-    ], PolygonInformationService);
-    return PolygonInformationService;
-}());
-
 var MyLibModule = /** @class */ (function () {
     function MyLibModule() {
     }
@@ -1424,7 +1648,7 @@ var MyLibModule = /** @class */ (function () {
         NgModule({
             declarations: [AlterPolygonComponent],
             imports: [],
-            providers: [PolyDrawService],
+            providers: [ComponentGeneraterService],
             exports: []
         })
     ], MyLibModule);
@@ -1434,223 +1658,6 @@ var MyLibModule = /** @class */ (function () {
 /*
  * Public API Surface of my-lib
  */
-
-var LeafletHelperService = /** @class */ (function () {
-    function LeafletHelperService() {
-    }
-    LeafletHelperService.prototype.createPolygon = function (latLngs) {
-        var p = polygon(latLngs);
-        return p;
-    };
-    LeafletHelperService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LeafletHelperService_Factory() { return new LeafletHelperService(); }, token: LeafletHelperService, providedIn: "root" });
-    LeafletHelperService = __decorate([
-        Injectable({ providedIn: "root" }),
-        __metadata("design:paramtypes", [])
-    ], LeafletHelperService);
-    return LeafletHelperService;
-}());
-
-var TurfHelperService = /** @class */ (function () {
-    function TurfHelperService() {
-        this.simplifyTolerance = { tolerance: 0.0001, highQuality: false };
-    }
-    TurfHelperService.prototype.union = function (poly1, poly2) {
-        console.log("poly1: ", poly1);
-        console.log("poly2: ", poly2);
-        var union$1 = union(poly1, poly2);
-        return this.getTurfPolygon(union$1);
-    };
-    TurfHelperService.prototype.turfConcaveman = function (feature) {
-        //console.log("turfConcaveman", points);
-        var points = explode(feature);
-        var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
-        return multiPolygon([[concaveman(coordinates)]]);
-    };
-    //TODO add some sort of dynamic tolerance
-    TurfHelperService.prototype.getSimplified = function (polygon) {
-        var tolerance = this.simplifyTolerance;
-        var simplified = simplify(polygon, tolerance);
-        return simplified;
-    };
-    TurfHelperService.prototype.getTurfPolygon = function (polygon) {
-        var turfPolygon;
-        console.log("Get TurfPolygon:", polygon);
-        // if (polygon.geometry)
-        if (polygon.geometry.type === "Polygon") {
-            turfPolygon = multiPolygon([polygon.geometry.coordinates]);
-        }
-        else {
-            turfPolygon = multiPolygon(polygon.geometry.coordinates);
-        }
-        return turfPolygon;
-    };
-    TurfHelperService.prototype.getMultiPolygon = function (polygonArray) {
-        return multiPolygon(polygonArray);
-    };
-    TurfHelperService.prototype.getKinks = function (feature) {
-        var unkink = unkinkPolygon(feature);
-        var coordinates = [];
-        featureEach(unkink, function (current) {
-            coordinates.push(current);
-        });
-        return coordinates;
-    };
-    TurfHelperService.prototype.getCoords = function (feature) {
-        return getCoords(feature);
-    };
-    TurfHelperService.prototype.hasKinks = function (feature) {
-        var kinks = kinks$1(feature);
-        return kinks.features.length > 0;
-    };
-    TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
-        // const oldPolygon = polygon.toGeoJSON();
-        var poly = [];
-        var poly2 = [];
-        console.log("polygonIntersect", polygon, latlngs);
-        var latlngsCoords = getCoords(latlngs);
-        latlngsCoords.forEach(function (element) {
-            var feat = { type: "Polygon", coordinates: [element[0]] };
-            poly.push(feat);
-        });
-        var polygonCoords = getCoords(polygon);
-        polygonCoords.forEach(function (element) {
-            var feat = { type: "Polygon", coordinates: [element[0]] };
-            poly2.push(feat);
-        });
-        var intersect$1 = false;
-        loop1: for (var i = 0; i < poly.length; i++) {
-            if (this.getKinks(poly[i]).length < 2) {
-                for (var j = 0; j < poly2.length; j++) {
-                    if (this.getKinks(poly2[j]).length < 2) {
-                        intersect$1 = !!intersect(poly[i], poly2[j]);
-                        if (intersect$1) {
-                            break loop1;
-                        }
-                    }
-                }
-            }
-        }
-        return intersect$1;
-    };
-    TurfHelperService.prototype.getIntersection = function (poly1, poly2) {
-        return intersect(poly1, poly2);
-    };
-    TurfHelperService.prototype.getDistance = function (point1, point2) {
-        return distance(point1, point2);
-    };
-    TurfHelperService.prototype.isWithin = function (polygon1, polygon2) {
-        console.log(polygon1);
-        console.log("Ytre: ", polygon2);
-        return booleanWithin(polygon$1([polygon1]), polygon$1([polygon2]));
-    };
-    TurfHelperService.prototype.equalPolygons = function (polygon1, polygon2) {
-        console.log(polygon1);
-        console.log(polygon2);
-        console.log(booleanEqual(polygon1, polygon2));
-    };
-    //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
-    TurfHelperService.prototype.convertToBoundingBoxPolygon = function (polygon) {
-        var bbox$1 = bbox(polygon.geometry);
-        var bboxPolygon$1 = bboxPolygon(bbox$1);
-        return bboxPolygon$1;
-    };
-    TurfHelperService.prototype.polygonToMultiPolygon = function (poly) {
-        var multi = multiPolygon([poly.geometry.coordinates]);
-        return multi;
-    };
-    //TODO -cleanup
-    TurfHelperService.prototype.injectPointToPolygon = function (polygon, point) {
-        var coords = getCoords(polygon);
-        var newPolygon;
-        console.log("polygon: ", polygon);
-        if (coords.length < 2) {
-            var polygonPoints = explode(polygon);
-            console.log(nearestPoint(point, polygonPoints));
-            var index_1 = nearestPoint(point, polygonPoints).properties.featureIndex;
-            var test = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
-                if (index_1 === i) {
-                    return __spread(accumulator, [oldPoint, point]);
-                }
-                return __spread(accumulator, [oldPoint]);
-            }, []);
-            console.log("test", test);
-            newPolygon = multiPolygon([[test]]);
-        }
-        else {
-            var pos_1 = [];
-            var coordinates_1 = [];
-            coords.forEach(function (element) {
-                var polygon = polygon$1(element);
-                // turf.booleanPointInPolygon(point, polygon)
-                if (booleanPointInPolygon(point, polygon)) {
-                    var polygonPoints = explode(polygon);
-                    var index_2 = nearestPoint(point, polygonPoints).properties.featureIndex;
-                    coordinates_1 = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
-                        if (index_2 === i) {
-                            return __spread(accumulator, [oldPoint, point]);
-                        }
-                        return __spread(accumulator, [oldPoint]);
-                    }, []);
-                    console.log("coordinates", coordinates_1);
-                }
-                else {
-                    pos_1.push(element);
-                }
-            });
-            pos_1.push([coordinates_1]);
-            newPolygon = multiPolygon(pos_1);
-        }
-        return newPolygon;
-    };
-    TurfHelperService.prototype.polygonDifference = function (polygon1, polygon2) {
-        var diff = difference(polygon1, polygon2);
-        console.log(diff);
-        return this.getTurfPolygon(diff);
-    };
-    TurfHelperService.prototype.getBoundingBoxCompassPosition = function (polygon, markerplacement, useOffset, offsetDirection) {
-        var p = this.getMultiPolygon(polygon);
-        var compass = this.getBoundingBoxCompass(polygon);
-        var polygonPoints = explode(polygon);
-        var coord = this.getCoord(compass.direction.North);
-        var nearestPoint$1 = nearestPoint(coord, polygonPoints);
-        return null;
-    };
-    TurfHelperService.prototype.getBoundingBoxCompass = function (polygon) {
-        var p = this.getMultiPolygon(polygon);
-        var centerOfMass$1 = centerOfMass(p);
-        var b = bbox(p);
-        var minX = b[0];
-        var minY = b[1];
-        var maxX = b[2];
-        var maxY = b[3];
-        var compass = new Compass(minX, minY, maxX, maxY);
-        // compass.direction.CenterOfMass = centerOfMass.geometry.coordinates[0][0];
-        return compass;
-    };
-    TurfHelperService.prototype.getNearestPointIndex = function (targetPoint, points) {
-        var index = nearestPoint(targetPoint, points).properties.featureIndex;
-        return index;
-    };
-    TurfHelperService.prototype.getCoord = function (point) {
-        var coord = getCoord([point.lng, point.lat]);
-        return coord;
-    };
-    TurfHelperService.prototype.getFeaturePointCollection = function (points) {
-        var pts = [];
-        points.forEach(function (v) {
-            var p = point([v.lng, v.lat], {});
-            pts.push(p);
-        });
-        var fc = featureCollection(pts);
-        return fc;
-    };
-    TurfHelperService.ngInjectableDef = ɵɵdefineInjectable({ factory: function TurfHelperService_Factory() { return new TurfHelperService(); }, token: TurfHelperService, providedIn: "root" });
-    TurfHelperService = __decorate([
-        Injectable({ providedIn: "root" }),
-        __metadata("design:paramtypes", [])
-    ], TurfHelperService);
-    return TurfHelperService;
-}());
 
 /**
  * Generated bundle index. Do not edit.
