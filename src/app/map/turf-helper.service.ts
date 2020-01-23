@@ -11,7 +11,7 @@ import { ILatLng } from "./polygon-helpers";
 @Injectable({ providedIn: "root" })
 export class TurfHelperService {
   private simplifyTolerance = { tolerance: 0.0001, highQuality: false };
-  constructor() {}
+  constructor() { }
 
   union(poly1, poly2): Feature<Polygon | MultiPolygon> {
     console.log("poly1: ", poly1);
@@ -31,11 +31,26 @@ export class TurfHelperService {
   }
 
 
-  //TODO add some sort of dynamic tolerance
-  getSimplified(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
-    const tolerance = this.simplifyTolerance;
-    const simplified = turf.simplify(polygon, tolerance);
-    return simplified;
+  //TODO add fractionGuard to config
+  getSimplified(polygon: Feature<Polygon | MultiPolygon>, dynamicTolerance: boolean = false): Feature<Polygon | MultiPolygon> {
+
+    const numOfEdges = polygon.geometry.coordinates[0][0].length;
+    let tolerance = this.simplifyTolerance;
+    if (!dynamicTolerance) {
+      const simplified = turf.simplify(polygon, tolerance);
+      return simplified;
+    } else {
+      // default simplification
+      let simplified = turf.simplify(polygon, tolerance);
+      const fractionGuard = 0.9;
+      while (simplified.geometry.coordinates[0][0].length > 4 && (simplified.geometry.coordinates[0][0].length / (numOfEdges + 2) > fractionGuard)) {
+        console.log("yay", tolerance.tolerance, simplified.geometry.coordinates[0][0].length);
+        tolerance.tolerance = tolerance.tolerance * 2;
+        simplified = turf.simplify(polygon, tolerance);
+      }
+      return simplified;
+    }
+
   }
 
   getTurfPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
@@ -157,7 +172,7 @@ export class TurfHelperService {
       let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex;
       const test = turf.coordReduce(
         polygonPoints,
-        function(accumulator, oldPoint, i) {
+        function (accumulator, oldPoint, i) {
           if (index === i) {
             return [...accumulator, oldPoint, point];
           }
@@ -178,7 +193,7 @@ export class TurfHelperService {
           let index = turf.nearestPoint(point, polygonPoints).properties.featureIndex;
           coordinates = turf.coordReduce(
             polygonPoints,
-            function(accumulator, oldPoint, i) {
+            function (accumulator, oldPoint, i) {
               if (index === i) {
                 return [...accumulator, oldPoint, point];
               }

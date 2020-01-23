@@ -330,10 +330,10 @@ export class PolyDrawService {
     }
   }
   //fine
-  private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean) {
+  private addPolygonLayer(latlngs: Feature<Polygon | MultiPolygon>, simplify: boolean, dynamicTolerance: boolean = false) {
     let featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
-    const latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
+    const latLngs = simplify ? this.turfHelper.getSimplified(latlngs, dynamicTolerance) : latlngs;
     console.log("AddPolygonLayer: ", latLngs);
     let polygon = this.getPolygon(latLngs);
     featureGroup.addLayer(polygon);
@@ -467,8 +467,8 @@ export class PolyDrawService {
         //   })
         // );
         marker.on("click", e => {
-          this.convertToBoundsPolygon(latlngs, true);
-          //this.convertToSimplifiedPolygon(latlngs);
+          //this.convertToBoundsPolygon(latlngs, true);
+          this.convertToSimplifiedPolygon(latlngs);
         })
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
@@ -846,7 +846,7 @@ export class PolyDrawService {
   private convertToSimplifiedPolygon(latlngs: ILatLng[]) {
     this.deletePolygon([latlngs]);
     let newPolygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
-    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true);
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true, true);
 
   }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPosition): number {
