@@ -5,19 +5,30 @@
   "markers": {
     "menu": true,
     "delete": true,
-    "markerIcon":{
-      "styleClasses": ["polygon-marker"]
+    "markerIcon": {
+      "styleClasses": [
+        "polygon-marker"
+      ]
     },
-    "holeIcon":{
-      "styleClasses": ["polygon-marker", "hole"]
+    "holeIcon": {
+      "styleClasses": [
+        "polygon-marker",
+        "hole"
+      ]
     },
-    "markerMenuIcon":{
+    "markerMenuIcon": {
       "position": 7,
-      "styleClasses": ["polygon-marker", "menu"]
+      "styleClasses": [
+        "polygon-marker",
+        "menu"
+      ]
     },
-    "markerDeleteIcon":{
+    "markerDeleteIcon": {
       "position": 5,
-      "styleClasses": ["polygon-marker", "delete"]
+      "styleClasses": [
+        "polygon-marker",
+        "delete"
+      ]
     }
   },
   "polyLineOptions": {
@@ -41,5 +52,13 @@
     "color": "#50622b",
     "fillColor": "#b4cd8a",
     "noClip": true
+  },
+  "simplification": {
+    "tolerance": 0.0001,
+    "highQuality": false,
+    "dynamicMode": {
+      "fractionGuard": 0.9,
+      "multipiler": 2
+    }
   }
 }

@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { filter } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state.service";
-import { TurfHelperService } from "./turf-helper.service";
+//import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
 import defaultConfig from "./config.json";
 import { ILatLng } from "./polygon-helpers";
@@ -13,6 +13,8 @@ import { ComponentGeneraterService } from "./component-generater.service";
 import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPosition } from "./enums";
 import { LeafletHelperService } from "./leaflet-helper.service";
+
+import { TurfHelper } from "./turf-helper";
 
 @Injectable({
   providedIn: "root"
@@ -35,14 +37,17 @@ export class PolyDrawService {
 
   private ngUnsubscribe = new Subject();
   private config: typeof defaultConfig = null;
-
+  private turfHelper: TurfHelper = null;
   constructor(
     private mapState: MapStateService,
     private popupGenerator: ComponentGeneraterService,
-    private turfHelper: TurfHelperService,
+    //private turfHelper: TurfHelperService,
     private polygonInformation: PolygonInformationService,
     private leafletHelper: LeafletHelperService
   ) {
+
+    this.turfHelper = new TurfHelper("world");
+
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
       console.log("pre this.config", this.config);
@@ -459,7 +464,7 @@ export class PolyDrawService {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === menuMarkerIdx && this.config.markers.menu) {
-        
+
 
         // marker.bindPopup(
         //   this.getHtmlContent(e => {
@@ -601,7 +606,7 @@ export class PolyDrawService {
     if (featureCollection.features[0].geometry.coordinates.length > 1) {
       featureCollection.features[0].geometry.coordinates.forEach(element => {
         let feature = this.turfHelper.getMultiPolygon([element]);
-        
+
 
         console.log("Markerdragend: ", feature);
         if (this.turfHelper.hasKinks(feature)) {
@@ -854,15 +859,15 @@ export class PolyDrawService {
     const compass = new Compass(bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast());
     const compassDirection = compass.getDirection(position);
     const latLngPoint: ILatLng = {
-        lat: compassDirection.lat,
-        lng: compassDirection.lng
+      lat: compassDirection.lat,
+      lng: compassDirection.lng
     }
     const targetPoint = this.turfHelper.getCoord(latLngPoint);
     const fc = this.turfHelper.getFeaturePointCollection(latlngs);
     const nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc as any)
 
     return nearestPointIdx;
-}
+  }
 
 
 }
