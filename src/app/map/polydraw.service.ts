@@ -47,7 +47,6 @@ export class PolyDrawService {
   ) {
 
     this.turfHelper = new TurfHelper("world");
-
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
       console.log("pre this.config", this.config);

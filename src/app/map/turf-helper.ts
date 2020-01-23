@@ -13,7 +13,11 @@ export class TurfHelper {
         console.log("x");
      }
 
-    union = function(poly1, poly2): Feature<Polygon | MultiPolygon> {
+    TurfHelper(x: string){
+        console.log("hello ", x)
+    }
+  
+    public union(poly1, poly2): Feature<Polygon | MultiPolygon> {
       console.log("poly1: ", poly1);
       console.log("poly2: ", poly2);
   
@@ -22,7 +26,7 @@ export class TurfHelper {
       return this.getTurfPolygon(union);
     }
   
-    turfConcaveman = function(feature: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
+    public turfConcaveman(feature: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
       //console.log("turfConcaveman", points);
       let points = turf.explode(feature);
   
@@ -32,7 +36,7 @@ export class TurfHelper {
   
   
     //TODO add fractionGuard & multipiler to config
-    getSimplified = function(polygon: Feature<Polygon | MultiPolygon>, dynamicTolerance: boolean = false): Feature<Polygon | MultiPolygon> {
+    public getSimplified(polygon: Feature<Polygon | MultiPolygon>, dynamicTolerance: boolean = false): Feature<Polygon | MultiPolygon> {
   
       const numOfEdges = polygon.geometry.coordinates[0][0].length;
       let tolerance = this.simplifyTolerance;
@@ -54,7 +58,7 @@ export class TurfHelper {
   
     }
   
-    getTurfPolygon = function(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
+    public getTurfPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
       let turfPolygon;
       console.log("Get TurfPolygon:", polygon);
       // if (polygon.geometry)
@@ -66,11 +70,11 @@ export class TurfHelper {
       return turfPolygon;
     }
   
-    getMultiPolygon = function(polygonArray: Position[][][]): Feature<Polygon | MultiPolygon> {
+    public getMultiPolygon(polygonArray: Position[][][]): Feature<Polygon | MultiPolygon> {
       return turf.multiPolygon(polygonArray);
     }
   
-    getKinks = function(feature: Feature<Polygon | MultiPolygon>) {
+    public getKinks(feature: Feature<Polygon | MultiPolygon>) {
       const unkink = turf.unkinkPolygon(feature);
       let coordinates = [];
       turf.featureEach(unkink, current => {
@@ -80,16 +84,16 @@ export class TurfHelper {
       return coordinates;
     }
   
-    getCoords = function(feature: Feature<Polygon | MultiPolygon>) {
+    public getCoords(feature: Feature<Polygon | MultiPolygon>) {
       return turf.getCoords(feature);
     }
   
-    hasKinks = function(feature: Feature<Polygon | MultiPolygon>) {
+    public hasKinks(feature: Feature<Polygon | MultiPolygon>) {
       const kinks = turf.kinks(feature);
       return kinks.features.length > 0;
     }
   
-    polygonIntersect = function(polygon: Feature<Polygon | MultiPolygon>, latlngs: Feature<Polygon | MultiPolygon>): boolean {
+    public polygonIntersect(polygon: Feature<Polygon | MultiPolygon>, latlngs: Feature<Polygon | MultiPolygon>): boolean {
       // const oldPolygon = polygon.toGeoJSON();
       let poly = [];
       let poly2 = [];
@@ -125,26 +129,26 @@ export class TurfHelper {
       return intersect;
     }
   
-    getIntersection = function(poly1, poly2): Feature {
+    public getIntersection(poly1, poly2): Feature {
       return turf.intersect(poly1, poly2);
     }
-    getDistance = function(point1, point2): number {
+    public getDistance(point1, point2): number {
       return turf.distance(point1, point2);
     }
   
-    isWithin = function(polygon1: Position[], polygon2: Position[]): boolean {
+    public isWithin(polygon1: Position[], polygon2: Position[]): boolean {
       console.log(polygon1);
       console.log("Ytre: ", polygon2);
       return turf.booleanWithin(turf.polygon([polygon1]), turf.polygon([polygon2]));
     }
   
-    equalPolygons = function(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>) {
+    public equalPolygons(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>) {
       console.log(polygon1);
       console.log(polygon2);
       console.log(turf.booleanEqual(polygon1, polygon2));
     }
     //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
-    convertToBoundingBoxPolygon = function(polygon: Feature<Polygon | MultiPolygon>, addMidpointMarkers: boolean = false): Feature<Polygon> {
+    public convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>, addMidpointMarkers: boolean = false): Feature<Polygon> {
       const bbox = turf.bbox(polygon.geometry);
       const bboxPolygon = turf.bboxPolygon(bbox);
   
@@ -158,12 +162,12 @@ export class TurfHelper {
   
       return bboxPolygon;
     }
-    polygonToMultiPolygon = function(poly: Feature<Polygon>): Feature<MultiPolygon> {
+    public polygonToMultiPolygon(poly: Feature<Polygon>): Feature<MultiPolygon> {
       const multi = turf.multiPolygon([poly.geometry.coordinates]);
       return multi;
     }
     //TODO -cleanup
-    injectPointToPolygon = function(polygon, point) {
+    public injectPointToPolygon(polygon, point) {
       let coords = turf.getCoords(polygon);
       let newPolygon;
       console.log("polygon: ", polygon);
@@ -213,12 +217,12 @@ export class TurfHelper {
       return newPolygon;
     }
   
-    polygonDifference = function(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
+    public polygonDifference(polygon1: Feature<Polygon | MultiPolygon>, polygon2: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
       let diff = turf.difference(polygon1, polygon2);
       console.log(diff);
       return this.getTurfPolygon(diff);
     }
-    getBoundingBoxCompassPosition = function(polygon, MarkerPosition: ICompass, useOffset, offsetDirection) {
+    public getBoundingBoxCompassPosition(polygon, MarkerPosition: ICompass, useOffset, offsetDirection) {
       const p = this.getMultiPolygon(polygon);
       const compass = this.getBoundingBoxCompass(polygon);
       const polygonPoints = turf.explode(polygon);
@@ -241,15 +245,15 @@ export class TurfHelper {
       return compass;
     }
   
-    getNearestPointIndex = function(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number {
+    public getNearestPointIndex(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number {
       let index = turf.nearestPoint(targetPoint, points).properties.featureIndex;
       return index;
     }
-    getCoord = function(point: ILatLng): turf.Coord {
+    public getCoord(point: ILatLng): turf.Coord {
       const coord = turf.getCoord([point.lng, point.lat]);
       return coord;
     }
-    getFeaturePointCollection = function(points: ILatLng[]): turf.FeatureCollection {
+    public getFeaturePointCollection(points: ILatLng[]): turf.FeatureCollection {
       const pts = [];
       points.forEach(v => {
         const p = turf.point([v.lng, v.lat], {});
