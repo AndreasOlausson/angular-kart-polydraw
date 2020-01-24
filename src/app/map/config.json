@@ -63,5 +63,8 @@
       "fractionGuard": 0.9,
       "multipiler": 2
     }
+  },
+  "boundingBox":{
+    "addMidPointMarkers": true
   }
 }

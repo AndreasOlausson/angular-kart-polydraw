@@ -126,7 +126,7 @@ export class TurfHelper {
     getIntersection(poly1, poly2): Feature {
         return turf.intersect(poly1, poly2);
     }
-    
+
     getDistance(point1, point2): number {
         return turf.distance(point1, point2);
     }
@@ -143,17 +143,16 @@ export class TurfHelper {
         console.log(turf.booleanEqual(polygon1, polygon2));
     }
 
-    convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>, addMidpointMarkers: boolean = false): Feature<Polygon> {
+    convertToBoundingBoxPolygon(polygon: Feature<Polygon | MultiPolygon>): Feature<Polygon> {
         const bbox = turf.bbox(polygon.geometry);
         const bboxPolygon = turf.bboxPolygon(bbox);
 
-
-        const compass = new Compass(bbox[1], bbox[0], bbox[3], bbox[2]);
-
-        const compassPositions = compass.getPositions();
-
-        bboxPolygon.geometry.coordinates = [];
-        bboxPolygon.geometry.coordinates = [compassPositions];
+        if (this.config.boundingBox.addMidPointMarkers) {
+            const compass = new Compass(bbox[1], bbox[0], bbox[3], bbox[2]);
+            const compassPositions = compass.getPositions();
+            bboxPolygon.geometry.coordinates = [];
+            bboxPolygon.geometry.coordinates = [compassPositions];
+        }
 
         return bboxPolygon;
     }

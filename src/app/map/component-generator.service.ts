@@ -4,7 +4,7 @@ import { AlterPolygonComponent } from './popups/alter-polygon/alter-polygon.comp
 @Injectable({
   providedIn: 'root'
 })
-export class ComponentGeneraterService implements OnDestroy {
+export class ComponentGeneratorService implements OnDestroy {
 
   private clusterPopuprefs: ComponentRef<AlterPolygonComponent>[] = [];
 

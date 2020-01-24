@@ -1,3 +1,4 @@
+//TODO Does this have to be a service?
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as L from "leaflet"

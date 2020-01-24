@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ComponentGeneraterService } from './component-generater.service';
+import { ComponentGeneraterService } from './component-generator.service';
 
 describe('ComponentGeneraterService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
