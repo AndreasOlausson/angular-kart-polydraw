@@ -46,7 +46,8 @@ export class PolyDrawService {
     private leafletHelper: LeafletHelperService
   ) {
 
-    this.turfHelper = new TurfHelper("world");
+    
+
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
       console.log("pre this.config", this.config);
@@ -56,6 +57,7 @@ export class PolyDrawService {
       console.log("after this.config", this.config);
       this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
 
+      this.turfHelper = new TurfHelper(this.config);
       this.initPolyDraw();
     });
 
