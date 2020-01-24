@@ -12,8 +12,6 @@ import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneraterService } from "./component-generater.service";
 import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPosition } from "./enums";
-import { LeafletHelperService } from "./leaflet-helper.service";
-
 import { TurfHelper } from "./turf-helper";
 
 @Injectable({
@@ -42,11 +40,10 @@ export class PolyDrawService {
     private mapState: MapStateService,
     private popupGenerator: ComponentGeneraterService,
     //private turfHelper: TurfHelperService,
-    private polygonInformation: PolygonInformationService,
-    private leafletHelper: LeafletHelperService
+    private polygonInformation: PolygonInformationService
   ) {
 
-    
+
 
     this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
