@@ -2,7 +2,6 @@
   "name": "angular",
   "version": "0.0.0",
   "private": true,
-  
   "dependencies": {
     "@angular/common": "^8.2.14",
     "@angular/compiler": "^8.2.14",
@@ -37,7 +36,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "test-build":"tsc"
+    "test-build": "tsc"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.10.0",
