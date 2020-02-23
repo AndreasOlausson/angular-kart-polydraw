@@ -1,3 +1,4 @@
+//TODO remove, we have config.json
 {
     "mergePolygons": true,
     "iconMarkers": {

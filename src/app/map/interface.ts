@@ -1,5 +1,5 @@
 import { ILatLng } from "./polygon-helpers";
-
+//TODO CenterOfMass & BoundingBoxCenter
 export interface ICompass {
     // CenterOfMass: ILatLng,
     North: ILatLng,

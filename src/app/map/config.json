@@ -5,19 +5,30 @@
   "markers": {
     "menu": true,
     "delete": true,
-    "markerIcon":{
-      "styleClasses": ["polygon-marker"]
+    "markerIcon": {
+      "styleClasses": [
+        "polygon-marker"
+      ]
     },
-    "holeIcon":{
-      "styleClasses": ["polygon-marker", "hole"]
+    "holeIcon": {
+      "styleClasses": [
+        "polygon-marker",
+        "hole"
+      ]
     },
-    "markerMenuIcon":{
-      "position": 4,
-      "styleClasses": ["polygon-marker", "menu"]
+    "markerMenuIcon": {
+      "position": 7,
+      "styleClasses": [
+        "polygon-marker",
+        "menu"
+      ]
     },
-    "markerDeleteIcon":{
-      "position": 1,
-      "styleClasses": ["polygon-marker", "delete"]
+    "markerDeleteIcon": {
+      "position": 5,
+      "styleClasses": [
+        "polygon-marker",
+        "delete"
+      ]
     }
   },
   "polyLineOptions": {
@@ -41,5 +52,19 @@
     "color": "#50622b",
     "fillColor": "#b4cd8a",
     "noClip": true
+  },
+  "simplification": {
+    "simplifyTolerance": {
+      "tolerance": 0.0001,
+      "highQuality": false,
+      "mutate": false
+    },
+    "dynamicMode": {
+      "fractionGuard": 0.9,
+      "multipiler": 2
+    }
+  },
+  "boundingBox":{
+    "addMidPointMarkers": true
   }
 }

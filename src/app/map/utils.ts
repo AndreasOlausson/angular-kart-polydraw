@@ -1,7 +1,7 @@
 import { ICompass } from "./interface";
 import * as L from "leaflet";
 import { ILatLng } from "./polygon-helpers";
-import { MarkerPlacement } from "./enums";
+import { MarkerPosition } from "./enums";
 
 export class PolyDrawUtil {
     static getBounds(polygon: ILatLng[], padding: number = 0): L.LatLngBounds {
@@ -49,51 +49,90 @@ export class Compass {
         // this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
     }
     //TODO default return.
-    getDirection(direction: MarkerPlacement) {
+    getDirection(direction: MarkerPosition) {
         switch (direction) {
-            // case MarkerPlacement.CenterOfMass:
+            // case MarkerPosition.CenterOfMass:
             //     return this.direction.CenterOfMass;
-            case MarkerPlacement.North:
+            case MarkerPosition.North:
                 return this.direction.North;
-            case MarkerPlacement.NorthEast:
+            case MarkerPosition.NorthEast:
                 return this.direction.NorthEast;
-            case MarkerPlacement.East:
+            case MarkerPosition.East:
                 return this.direction.East;
-            case MarkerPlacement.SouthEast:
+            case MarkerPosition.SouthEast:
                 return this.direction.SouthEast;
-            case MarkerPlacement.South:
+            case MarkerPosition.South:
                 return this.direction.South;
-            case MarkerPlacement.SouthWest:
+            case MarkerPosition.SouthWest:
                 return this.direction.SouthWest;
-            case MarkerPlacement.West:
+            case MarkerPosition.West:
                 return this.direction.West;
-            case MarkerPlacement.NorthWest:
+            case MarkerPosition.NorthWest:
                 return this.direction.NorthWest;
-            // case MarkerPlacement.BoundingBoxCenter:
+            // case MarkerPosition.BoundingBoxCenter:
             //     return this.direction.BoundingBoxCenter;
             default:
                 return this.direction.North;
         }
     }
     //TODO startNode, go clockwise or not
-    getPositions(startNode: MarkerPlacement = MarkerPlacement.SouthWest, clockwise: boolean = false, addClosingNode: boolean = true): number[][] {
+    getPositions(startPosition: MarkerPosition = MarkerPosition.SouthWest, clockwise: boolean = false, addClosingNode: boolean = true): number[][] {
 
         let positions: number[][] = [];
 
-        positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
-        positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
-        positions.push([this.direction.South.lng, this.direction.South.lat]);
-        positions.push([this.direction.SouthEast.lng, this.direction.SouthEast.lat]);
-        positions.push([this.direction.East.lng, this.direction.East.lat]);
-        positions.push([this.direction.NorthEast.lng, this.direction.NorthEast.lat]);
-        positions.push([this.direction.North.lng, this.direction.North.lat]);
-        positions.push([this.direction.NorthWest.lng, this.direction.NorthWest.lat]);
-        positions.push([this.direction.West.lng, this.direction.West.lat]);
+        const posArray = this.getPositionAsArray(startPosition, clockwise);
+        posArray.forEach(v => {
+            positions.push([v.lng, v.lat]);
+        });
         if (addClosingNode) {
-            positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+            positions.push([posArray[0].lng, posArray[0].lat]);
         }
 
 
+        // positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        // positions.push([this.direction.South.lng, this.direction.South.lat]);
+        // positions.push([this.direction.SouthEast.lng, this.direction.SouthEast.lat]);
+        // positions.push([this.direction.East.lng, this.direction.East.lat]);
+        // positions.push([this.direction.NorthEast.lng, this.direction.NorthEast.lat]);
+        // positions.push([this.direction.North.lng, this.direction.North.lat]);
+        // positions.push([this.direction.NorthWest.lng, this.direction.NorthWest.lat]);
+        // positions.push([this.direction.West.lng, this.direction.West.lat]);
+        // if (addClosingNode) {
+        //     positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
+        // }
+
+
+
+        return positions;
+    }
+    //TODO make clockwise nicer
+    private getPositionAsArray(startPosition: MarkerPosition = MarkerPosition.SouthWest, clockwise: boolean = false): ILatLng[] {
+
+        const positions: ILatLng[] = [];
+        if(clockwise){
+            positions.push(this.direction.SouthWest);
+            positions.push(this.direction.West);
+            positions.push(this.direction.NorthWest);
+            positions.push(this.direction.North);
+            positions.push(this.direction.NorthEast);
+            positions.push(this.direction.East);
+            positions.push(this.direction.SouthEast);
+            positions.push(this.direction.South);
+        } else {
+            positions.push(this.direction.SouthWest);
+            positions.push(this.direction.South);
+            positions.push(this.direction.SouthEast);
+            positions.push(this.direction.East);
+            positions.push(this.direction.NorthEast);
+            positions.push(this.direction.North);
+            positions.push(this.direction.NorthWest);
+            positions.push(this.direction.West);
+        }
+        
+        for (let index = 0; index < startPosition; index++) {
+            const elem = positions.shift();
+            positions[positions.length] = elem;
+        }
 
         return positions;
     }
