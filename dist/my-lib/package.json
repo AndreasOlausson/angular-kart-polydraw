@@ -17,6 +17,8 @@
   "fesm5": "fesm5/my-lib.js",
   "fesm2015": "fesm2015/my-lib.js",
   "typings": "my-lib.d.ts",
-  "metadata": "my-lib.metadata.json",
-  "sideEffects": false
+  "sideEffects": false,
+  "scripts": {
+    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by Ivy. This is not allowed.\\nPlease delete and rebuild the package, without compiling with Ivy, before attempting to publish.\\n')\" && exit 1"
+  }
 }
