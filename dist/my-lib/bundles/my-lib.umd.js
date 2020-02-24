@@ -1984,6 +1984,8 @@
     exports.MyLibModule = MyLibModule;
     exports.PolyDrawService = PolyDrawService;
     exports.PolyStateService = PolyStateService;
+    exports.PolygonDrawStates = PolygonDrawStates;
+    exports.PolygonInfo = PolygonInfo;
     exports.PolygonInformationService = PolygonInformationService;
 
     Object.defineProperty(exports, '__esModule', { value: true });

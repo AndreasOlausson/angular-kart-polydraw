@@ -1742,5 +1742,5 @@ MyLibModule.ɵinj = ɵɵdefineInjector({ factory: function MyLibModule_Factory(t
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonInformationService };
+export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService };
 //# sourceMappingURL=my-lib.js.map
