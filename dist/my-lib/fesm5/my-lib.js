@@ -1788,5 +1788,5 @@ var MyLibModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentGeneraterService, MyLibModule, PolyDrawService, PolyStateService, PolygonInformationService, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
+export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonInformationService, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
 //# sourceMappingURL=my-lib.js.map

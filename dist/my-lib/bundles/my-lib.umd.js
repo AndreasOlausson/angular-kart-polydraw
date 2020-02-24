@@ -252,7 +252,7 @@
         return MapBoundsState;
     }());
 
-    var DrawMode;
+
     (function (DrawMode) {
         DrawMode[DrawMode["Off"] = 0] = "Off";
         DrawMode[DrawMode["Add"] = 1] = "Add";
@@ -260,8 +260,8 @@
         DrawMode[DrawMode["Subtract"] = 4] = "Subtract";
         DrawMode[DrawMode["AppendMarker"] = 8] = "AppendMarker";
         DrawMode[DrawMode["LoadPredefined"] = 16] = "LoadPredefined";
-    })(DrawMode || (DrawMode = {}));
-    var MarkerPosition;
+    })(exports.DrawMode || (exports.DrawMode = {}));
+
     (function (MarkerPosition) {
         // CenterOfMass = 0,
         MarkerPosition[MarkerPosition["North"] = 1] = "North";
@@ -273,7 +273,7 @@
         MarkerPosition[MarkerPosition["SouthEast"] = 7] = "SouthEast";
         MarkerPosition[MarkerPosition["SouthWest"] = 8] = "SouthWest";
         // BoundingBoxCenter = 9
-    })(MarkerPosition || (MarkerPosition = {}));
+    })(exports.MarkerPosition || (exports.MarkerPosition = {}));
 
     var PolyDrawUtil = /** @class */ (function () {
         function PolyDrawUtil() {
@@ -330,21 +330,21 @@
             switch (direction) {
                 // case MarkerPosition.CenterOfMass:
                 //     return this.direction.CenterOfMass;
-                case MarkerPosition.North:
+                case exports.MarkerPosition.North:
                     return this.direction.North;
-                case MarkerPosition.NorthEast:
+                case exports.MarkerPosition.NorthEast:
                     return this.direction.NorthEast;
-                case MarkerPosition.East:
+                case exports.MarkerPosition.East:
                     return this.direction.East;
-                case MarkerPosition.SouthEast:
+                case exports.MarkerPosition.SouthEast:
                     return this.direction.SouthEast;
-                case MarkerPosition.South:
+                case exports.MarkerPosition.South:
                     return this.direction.South;
-                case MarkerPosition.SouthWest:
+                case exports.MarkerPosition.SouthWest:
                     return this.direction.SouthWest;
-                case MarkerPosition.West:
+                case exports.MarkerPosition.West:
                     return this.direction.West;
-                case MarkerPosition.NorthWest:
+                case exports.MarkerPosition.NorthWest:
                     return this.direction.NorthWest;
                 // case MarkerPosition.BoundingBoxCenter:
                 //     return this.direction.BoundingBoxCenter;
@@ -354,7 +354,7 @@
         };
         //TODO startNode, go clockwise or not
         Compass.prototype.getPositions = function (startNode, clockwise, addClosingNode) {
-            if (startNode === void 0) { startNode = MarkerPosition.SouthWest; }
+            if (startNode === void 0) { startNode = exports.MarkerPosition.SouthWest; }
             if (clockwise === void 0) { clockwise = false; }
             if (addClosingNode === void 0) { addClosingNode = true; }
             var positions = [];
@@ -1072,7 +1072,7 @@
             this.polygonInformation = polygonInformation;
             this.leafletHelper = leafletHelper;
             // DrawModes, determine UI buttons etc...
-            this.drawModeSubject = new rxjs.BehaviorSubject(DrawMode.Off);
+            this.drawModeSubject = new rxjs.BehaviorSubject(exports.DrawMode.Off);
             this.drawMode$ = this.drawModeSubject.asObservable();
             this.minimumFreeDrawZoomLevel = 12;
             // add to config
@@ -1111,7 +1111,7 @@
         // fine
         PolyDrawService.prototype.closeAndReset = function () {
             // console.log("closeAndReset");
-            this.setDrawMode(DrawMode.Off);
+            this.setDrawMode(exports.DrawMode.Off);
             this.removeAllFeatureGroups();
         };
         // make readable
@@ -1263,23 +1263,23 @@
             var drawMode = this.getDrawMode();
             if (this.config.touchSupport) {
                 container.addEventListener("touchstart", function (e) {
-                    if (drawMode !== DrawMode.Off) {
+                    if (drawMode !== exports.DrawMode.Off) {
                         _this.mouseDown(e);
                     }
                 });
                 container.addEventListener("touchend", function (e) {
-                    if (drawMode !== DrawMode.Off) {
+                    if (drawMode !== exports.DrawMode.Off) {
                         _this.mouseUpLeave();
                     }
                 });
                 container.addEventListener("touchmove", function (e) {
-                    if (drawMode !== DrawMode.Off) {
+                    if (drawMode !== exports.DrawMode.Off) {
                         _this.mouseMove(e);
                     }
                 });
             }
             this.map.addLayer(this.tracer);
-            this.setDrawMode(DrawMode.Off);
+            this.setDrawMode(exports.DrawMode.Off);
         };
         // Test L.MouseEvent
         PolyDrawService.prototype.mouseDown = function (event) {
@@ -1318,10 +1318,10 @@
             var geoPos = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON());
             this.stopDraw();
             switch (this.getDrawMode()) {
-                case DrawMode.Add:
+                case exports.DrawMode.Add:
                     this.addPolygon(geoPos, true);
                     break;
-                case DrawMode.Subtract:
+                case exports.DrawMode.Subtract:
                     this.subtractPolygon(geoPos);
                     break;
                 default:
@@ -1403,7 +1403,7 @@
             this.arrayOfFeatureGroups.push(featureGroup);
             console.log("Array: ", this.arrayOfFeatureGroups);
             this.polygonInformation.activate();
-            this.setDrawMode(DrawMode.Off);
+            this.setDrawMode(exports.DrawMode.Off);
             featureGroup.on("click", function (e) {
                 _this.polygonClicked(e, latLngs);
             });
@@ -1835,7 +1835,7 @@
             if (!!this.map) {
                 var isActiveDrawMode = true;
                 switch (mode) {
-                    case DrawMode.Off:
+                    case exports.DrawMode.Off:
                         leaflet.DomUtil.removeClass(this.map.getContainer(), "crosshair-cursor-enabled");
                         this.events(false);
                         this.stopDraw();
@@ -1845,7 +1845,7 @@
                         this.setLeafletMapEvents(true, true, true);
                         isActiveDrawMode = false;
                         break;
-                    case DrawMode.Add:
+                    case exports.DrawMode.Add:
                         leaflet.DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
                         this.events(true);
                         this.tracer.setStyle({
@@ -1853,7 +1853,7 @@
                         });
                         this.setLeafletMapEvents(false, false, false);
                         break;
-                    case DrawMode.Subtract:
+                    case exports.DrawMode.Subtract:
                         leaflet.DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
                         this.events(true);
                         this.tracer.setStyle({
@@ -1878,23 +1878,23 @@
         PolyDrawService.prototype.drawModeClick = function () {
             if (this.polygonInformation.polygonDrawStates.isFreeDrawMode) {
                 this.polygonInformation.setMoveMode();
-                this.setDrawMode(DrawMode.Off);
+                this.setDrawMode(exports.DrawMode.Off);
             }
             else {
                 this.polygonInformation.setFreeDrawMode();
-                this.setDrawMode(DrawMode.Add);
+                this.setDrawMode(exports.DrawMode.Add);
             }
             this.polygonInformation.saveCurrentState();
         };
         // remove, use modeChange
         PolyDrawService.prototype.freedrawMenuClick = function () {
-            this.setDrawMode(DrawMode.Add);
+            this.setDrawMode(exports.DrawMode.Add);
             this.polygonInformation.activate();
             this.polygonInformation.saveCurrentState();
         };
         // remove, use modeChange
         PolyDrawService.prototype.subtractClick = function () {
-            this.setDrawMode(DrawMode.Subtract);
+            this.setDrawMode(exports.DrawMode.Subtract);
             this.polygonInformation.saveCurrentState();
         };
         // fine
