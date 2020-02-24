@@ -1,11 +1,13 @@
-import * as L from 'leaflet';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { PolyStateService } from './map-state.service';
-import { TurfHelperService } from './turf-helper.service';
-import { PolygonInformationService } from './polygon-information.service';
-import { ILatLng } from './polygon-helpers';
-import { ComponentGeneraterService } from './component-generater.service';
-import { LeafletHelperService } from './leaflet-helper.service';
+import * as L from "leaflet";
+import { Observable, BehaviorSubject } from "rxjs";
+import { PolyStateService } from "./map-state.service";
+import { TurfHelperService } from "./turf-helper.service";
+import { PolygonInformationService } from "./polygon-information.service";
+import { ILatLng } from "./polygon-helpers";
+import { ComponentGeneraterService } from "./component-generater.service";
+import { DrawMode } from "./enums";
+import { LeafletHelperService } from "./leaflet-helper.service";
+import * as i0 from "@angular/core";
 export declare class PolyDrawService {
     private mapState;
     private popupGenerator;
@@ -71,11 +73,6 @@ export declare class PolyDrawService {
     private convertToBoundsPolygon;
     private convertToSimplifiedPolygon;
     private getMarkerIndex;
-}
-export declare enum DrawMode {
-    Off = 0,
-    AddPolygon = 1,
-    EditPolygon = 2,
-    SubtractPolygon = 3,
-    LoadPolygon = 4
+    static ɵfac: i0.ɵɵFactoryDef<PolyDrawService>;
+    static ɵprov: i0.ɵɵInjectableDef<PolyDrawService>;
 }

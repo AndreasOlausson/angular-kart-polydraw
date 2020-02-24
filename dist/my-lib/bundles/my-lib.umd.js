@@ -215,7 +215,7 @@
         }
         PolyStateService.prototype.updateMapStates = function (newState) {
             var state = this.mapStateSubject.value;
-            state = __assign({}, state, newState);
+            state = __assign(__assign({}, state), newState);
             this.mapStateSubject.next(state);
         };
         PolyStateService.prototype.updateMapState = function (map) {
@@ -228,15 +228,16 @@
         PolyStateService.prototype.updateMapBounds = function (mapBounds) {
             this.updateMapStates({ mapBoundState: mapBounds });
         };
-        PolyStateService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function PolyStateService_Factory() { return new PolyStateService(); }, token: PolyStateService, providedIn: "root" });
-        PolyStateService = __decorate([
-            core.Injectable({
-                providedIn: 'root'
-            }),
-            __metadata("design:paramtypes", [])
-        ], PolyStateService);
+        PolyStateService.ɵfac = function PolyStateService_Factory(t) { return new (t || PolyStateService)(); };
+        PolyStateService.ɵprov = core["ɵɵdefineInjectable"]({ token: PolyStateService, factory: PolyStateService.ɵfac, providedIn: 'root' });
         return PolyStateService;
     }());
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](PolyStateService, [{
+            type: core.Injectable,
+            args: [{
+                    providedIn: 'root'
+                }]
+        }], function () { return []; }, null); })();
     var MapStateModel = /** @class */ (function () {
         function MapStateModel(mapBoundState) {
             if (mapBoundState === void 0) { mapBoundState = new MapBoundsState(null, 11); }
@@ -574,13 +575,14 @@
             var fc = turf.featureCollection(pts);
             return fc;
         };
-        TurfHelperService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function TurfHelperService_Factory() { return new TurfHelperService(); }, token: TurfHelperService, providedIn: "root" });
-        TurfHelperService = __decorate([
-            core.Injectable({ providedIn: 'root' }),
-            __metadata("design:paramtypes", [])
-        ], TurfHelperService);
+        TurfHelperService.ɵfac = function TurfHelperService_Factory(t) { return new (t || TurfHelperService)(); };
+        TurfHelperService.ɵprov = core["ɵɵdefineInjectable"]({ token: TurfHelperService, factory: TurfHelperService.ɵfac, providedIn: 'root' });
         return TurfHelperService;
     }());
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](TurfHelperService, [{
+            type: core.Injectable,
+            args: [{ providedIn: 'root' }]
+        }], function () { return []; }, null); })();
 
     var PolygonUtil = /** @class */ (function () {
         function PolygonUtil() {
@@ -750,14 +752,12 @@
             elements.item(i).classList.add(className);
         }
     };
-    var ɵ0 = addClass;
     var removeClass = function (selector, className) {
         var elements = document.querySelectorAll(selector);
         for (var i = 0; i < elements.length; i++) {
             elements.item(i).classList.remove(className);
         }
     };
-    var ɵ1 = removeClass;
     var PolygonDrawStates = /** @class */ (function () {
         function PolygonDrawStates() {
             this.canUsePolyDraw = false;
@@ -906,16 +906,14 @@
         PolygonInformationService.prototype.setFreeDrawMode = function () {
             this.polygonDrawStates.setFreeDrawMode();
         };
-        PolygonInformationService.ctorParameters = function () { return [
-            { type: PolyStateService }
-        ]; };
-        PolygonInformationService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(core.ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
-        PolygonInformationService = __decorate([
-            core.Injectable({ providedIn: "root" }),
-            __metadata("design:paramtypes", [PolyStateService])
-        ], PolygonInformationService);
+        PolygonInformationService.ɵfac = function PolygonInformationService_Factory(t) { return new (t || PolygonInformationService)(core["ɵɵinject"](PolyStateService)); };
+        PolygonInformationService.ɵprov = core["ɵɵdefineInjectable"]({ token: PolygonInformationService, factory: PolygonInformationService.ɵfac, providedIn: "root" });
         return PolygonInformationService;
     }());
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](PolygonInformationService, [{
+            type: core.Injectable,
+            args: [{ providedIn: "root" }]
+        }], function () { return [{ type: PolyStateService }]; }, null); })();
 
     var touchSupport = true;
     var mergePolygons = true;
@@ -992,23 +990,39 @@
         AlterPolygonComponent.prototype.onBbox = function ($event) {
             this.bboxClicked.emit($event);
         };
-        __decorate([
-            core.Output(),
-            __metadata("design:type", core.EventEmitter)
-        ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
-        __decorate([
-            core.Output(),
-            __metadata("design:type", core.EventEmitter)
-        ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
-        AlterPolygonComponent = __decorate([
-            core.Component({
-                selector: 'app-alter-polygon',
-                template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
-                styles: [""]
-            })
-        ], AlterPolygonComponent);
+        AlterPolygonComponent.ɵfac = function AlterPolygonComponent_Factory(t) { return new (t || AlterPolygonComponent)(); };
+        AlterPolygonComponent.ɵcmp = core["ɵɵdefineComponent"]({ type: AlterPolygonComponent, selectors: [["app-alter-polygon"]], outputs: { simplyfiClicked: "simplyfiClicked", bboxClicked: "bboxClicked" }, decls: 9, vars: 0, consts: [[1, "marker-menu-inner-wrapper"], [1, "marker-menu-header"], [1, "marker-menu-content"], [1, "marker-menu-button", "simplify", 3, "click"], [1, "marker-menu-separator"], [1, "marker-menu-button", "bbox", 3, "click"]], template: function AlterPolygonComponent_Template(rf, ctx) { if (rf & 1) {
+                core["ɵɵelementStart"](0, "div", 0);
+                core["ɵɵelementStart"](1, "div", 1);
+                core["ɵɵtext"](2, "Alter polygon");
+                core["ɵɵelementEnd"]();
+                core["ɵɵelementStart"](3, "div", 2);
+                core["ɵɵelementStart"](4, "div", 3);
+                core["ɵɵlistener"]("click", function AlterPolygonComponent_Template_div_click_4_listener($event) { return ctx.onSimplify($event); });
+                core["ɵɵtext"](5, "Simplify");
+                core["ɵɵelementEnd"]();
+                core["ɵɵelement"](6, "div", 4);
+                core["ɵɵelementStart"](7, "div", 5);
+                core["ɵɵlistener"]("click", function AlterPolygonComponent_Template_div_click_7_listener($event) { return ctx.onBbox($event); });
+                core["ɵɵtext"](8, "bbox");
+                core["ɵɵelementEnd"]();
+                core["ɵɵelementEnd"]();
+                core["ɵɵelementEnd"]();
+            } }, styles: [""] });
         return AlterPolygonComponent;
     }());
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](AlterPolygonComponent, [{
+            type: core.Component,
+            args: [{
+                    selector: 'app-alter-polygon',
+                    templateUrl: './alter-polygon.component.html',
+                    styleUrls: ['./alter-polygon.component.css']
+                }]
+        }], null, { simplyfiClicked: [{
+                type: core.Output
+            }], bboxClicked: [{
+                type: core.Output
+            }] }); })();
 
     var ComponentGeneraterService = /** @class */ (function () {
         function ComponentGeneraterService(cfr, injector) {
@@ -1033,20 +1047,16 @@
             });
             this.clusterPopuprefs = [];
         };
-        ComponentGeneraterService.ctorParameters = function () { return [
-            { type: core.ComponentFactoryResolver },
-            { type: core.Injector }
-        ]; };
-        ComponentGeneraterService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(core.ɵɵinject(core.ComponentFactoryResolver), core.ɵɵinject(core.INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
-        ComponentGeneraterService = __decorate([
-            core.Injectable({
-                providedIn: 'root'
-            }),
-            __metadata("design:paramtypes", [core.ComponentFactoryResolver,
-                core.Injector])
-        ], ComponentGeneraterService);
+        ComponentGeneraterService.ɵfac = function ComponentGeneraterService_Factory(t) { return new (t || ComponentGeneraterService)(core["ɵɵinject"](core.ComponentFactoryResolver), core["ɵɵinject"](core.Injector)); };
+        ComponentGeneraterService.ɵprov = core["ɵɵdefineInjectable"]({ token: ComponentGeneraterService, factory: ComponentGeneraterService.ɵfac, providedIn: 'root' });
         return ComponentGeneraterService;
     }());
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](ComponentGeneraterService, [{
+            type: core.Injectable,
+            args: [{
+                    providedIn: 'root'
+                }]
+        }], function () { return [{ type: core.ComponentFactoryResolver }, { type: core.Injector }]; }, null); })();
 
     var LeafletHelperService = /** @class */ (function () {
         function LeafletHelperService() {
@@ -1055,13 +1065,14 @@
             var p = leaflet.polygon(latLngs);
             return p;
         };
-        LeafletHelperService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LeafletHelperService_Factory() { return new LeafletHelperService(); }, token: LeafletHelperService, providedIn: "root" });
-        LeafletHelperService = __decorate([
-            core.Injectable({ providedIn: "root" }),
-            __metadata("design:paramtypes", [])
-        ], LeafletHelperService);
+        LeafletHelperService.ɵfac = function LeafletHelperService_Factory(t) { return new (t || LeafletHelperService)(); };
+        LeafletHelperService.ɵprov = core["ɵɵdefineInjectable"]({ token: LeafletHelperService, factory: LeafletHelperService.ɵfac, providedIn: "root" });
         return LeafletHelperService;
     }());
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](LeafletHelperService, [{
+            type: core.Injectable,
+            args: [{ providedIn: "root" }]
+        }], function () { return []; }, null); })();
 
     var PolyDrawService = /** @class */ (function () {
         function PolyDrawService(mapState, popupGenerator, turfHelper, polygonInformation, leafletHelper) {
@@ -1072,7 +1083,7 @@
             this.polygonInformation = polygonInformation;
             this.leafletHelper = leafletHelper;
             // DrawModes, determine UI buttons etc...
-            this.drawModeSubject = new rxjs.BehaviorSubject(exports.DrawMode.Off);
+            this.drawModeSubject = new rxjs.BehaviorSubject(DrawMode.Off);
             this.drawMode$ = this.drawModeSubject.asObservable();
             this.minimumFreeDrawZoomLevel = 12;
             // add to config
@@ -1083,39 +1094,41 @@
             this.config = null;
             this.mapState.map$.pipe(operators.filter(function (m) { return m !== null; })).subscribe(function (map) {
                 _this.map = map;
-                console.log('pre this.config', _this.config);
+                console.log("pre this.config", _this.config);
                 _this.config = defaultConfig;
-                console.log('this.config', _this.config);
+                console.log("this.config", _this.config);
                 _this.configurate({});
-                console.log('after this.config', _this.config);
+                console.log("after this.config", _this.config);
                 _this.tracer = leaflet.polyline([[0, 0]], _this.config.polyLineOptions);
                 _this.initPolyDraw();
             });
-            this.mapState.mapZoomLevel$.pipe(operators.debounceTime(100), operators.takeUntil(this.ngUnsubscribe)).subscribe(function (zoom) {
+            this.mapState.mapZoomLevel$
+                .pipe(operators.debounceTime(100), operators.takeUntil(this.ngUnsubscribe))
+                .subscribe(function (zoom) {
                 _this.onZoomChange(zoom);
             });
             this.polygonInformation.polygonInformation$.subscribe(function (k) {
-                console.log('PolyInfo start: ', k);
+                console.log("PolyInfo start: ", k);
             });
             // TODO - lage en config observable i mapState og oppdater this.config med den
         }
         // new
         PolyDrawService.prototype.configurate = function (config) {
             // TODO if config is path...
-            this.config = __assign({}, defaultConfig, config);
+            this.config = __assign(__assign({}, defaultConfig), config);
             this.mergePolygons = this.config.mergePolygons;
             this.kinks = this.config.kinks;
         };
         // fine
         PolyDrawService.prototype.closeAndReset = function () {
             // console.log("closeAndReset");
-            this.setDrawMode(exports.DrawMode.Off);
+            this.setDrawMode(DrawMode.Off);
             this.removeAllFeatureGroups();
         };
         // make readable
         PolyDrawService.prototype.deletePolygon = function (polygon) {
             var _this = this;
-            console.log('deletePolygon: ', polygon);
+            console.log("deletePolygon: ", polygon);
             if (this.arrayOfFeatureGroups.length > 0) {
                 this.arrayOfFeatureGroups.forEach(function (featureGroup) {
                     var layer = featureGroup.getLayers()[0];
@@ -1138,10 +1151,10 @@
                             }
                             polygon3 = test;
                         }
-                        console.log('Test: ', polygon3);
+                        console.log("Test: ", polygon3);
                         console.log(polygon);
                         var equals = _this.polygonArrayEquals(polygon3, polygon);
-                        console.log('equals: ', equals, ' length: ', length);
+                        console.log("equals: ", equals, " length: ", length);
                         if (equals && length === 1) {
                             _this.polygonInformation.deleteTrashcan(polygon);
                             _this.removeFeatureGroup(featureGroup);
@@ -1187,7 +1200,7 @@
             var polygon = this.getPolygon(polygon2);
             featureGroup.addLayer(polygon);
             var markerLatlngs = polygon.getLatLngs();
-            console.log('markers: ', markerLatlngs);
+            console.log("markers: ", markerLatlngs);
             markerLatlngs.forEach(function (polygon) {
                 polygon.forEach(function (polyElement, i) {
                     if (i === 0) {
@@ -1195,7 +1208,7 @@
                     }
                     else {
                         _this.addHoleMarker(polyElement, featureGroup);
-                        console.log('Hull: ', polyElement);
+                        console.log("Hull: ", polyElement);
                     }
                 });
                 // this.addMarker(polygon[0], featureGroup);
@@ -1228,7 +1241,7 @@
                 if (coordinates_1.length >= 1) {
                     coords.push(coordinates_1);
                 }
-                console.log('Within1 ', within);
+                console.log("Within1 ", within);
             }
             else if (latlngs.length > 2) {
                 var coordinates_2 = [];
@@ -1260,33 +1273,36 @@
             var container = this.map.getContainer();
             var drawMode = this.getDrawMode();
             if (this.config.touchSupport) {
-                container.addEventListener('touchstart', function (e) {
-                    if (drawMode !== exports.DrawMode.Off) {
+                container.addEventListener("touchstart", function (e) {
+                    if (drawMode !== DrawMode.Off) {
                         _this.mouseDown(e);
                     }
                 });
-                container.addEventListener('touchend', function (e) {
-                    if (drawMode !== exports.DrawMode.Off) {
+                container.addEventListener("touchend", function (e) {
+                    if (drawMode !== DrawMode.Off) {
                         _this.mouseUpLeave();
                     }
                 });
-                container.addEventListener('touchmove', function (e) {
-                    if (drawMode !== exports.DrawMode.Off) {
+                container.addEventListener("touchmove", function (e) {
+                    if (drawMode !== DrawMode.Off) {
                         _this.mouseMove(e);
                     }
                 });
             }
             this.map.addLayer(this.tracer);
-            this.setDrawMode(exports.DrawMode.Off);
+            this.setDrawMode(DrawMode.Off);
         };
         // Test L.MouseEvent
         PolyDrawService.prototype.mouseDown = function (event) {
-            console.log('mouseDown', event);
+            console.log("mouseDown", event);
             if (event.originalEvent != null) {
                 this.tracer.setLatLngs([event.latlng]);
             }
             else {
-                var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+                var latlng = this.map.containerPointToLatLng([
+                    event.touches[0].clientX,
+                    event.touches[0].clientY
+                ]);
                 this.tracer.setLatLngs([latlng]);
             }
             this.startDraw();
@@ -1298,7 +1314,10 @@
                 this.tracer.addLatLng(event.latlng);
             }
             else {
-                var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+                var latlng = this.map.containerPointToLatLng([
+                    event.touches[0].clientX,
+                    event.touches[0].clientY
+                ]);
                 this.tracer.addLatLng(latlng);
             }
         };
@@ -1310,10 +1329,10 @@
             var geoPos = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON());
             this.stopDraw();
             switch (this.getDrawMode()) {
-                case exports.DrawMode.AddPolygon:
+                case DrawMode.Add:
                     this.addPolygon(geoPos, true);
                     break;
-                case exports.DrawMode.SubtractPolygon:
+                case DrawMode.Subtract:
                     this.subtractPolygon(geoPos);
                     break;
                 default:
@@ -1334,7 +1353,7 @@
             this.drawStartedEvents(false);
         };
         PolyDrawService.prototype.onZoomChange = function (zoomLevel) {
-            //console.log("onZoomChange", zoomLevel);
+            // console.log("onZoomChange", zoomLevel);
             if (zoomLevel >= this.minimumFreeDrawZoomLevel) {
                 this.polygonInformation.polygonDrawStates.canUsePolyDraw = true;
             }
@@ -1347,9 +1366,9 @@
         // fine
         PolyDrawService.prototype.drawStartedEvents = function (onoff) {
             // console.log("drawStartedEvents", onoff);
-            var onoroff = onoff ? 'on' : 'off';
-            this.map[onoroff]('mousemove', this.mouseMove, this);
-            this.map[onoroff]('mouseup', this.mouseUpLeave, this);
+            var onoroff = onoff ? "on" : "off";
+            this.map[onoroff]("mousemove", this.mouseMove, this);
+            this.map[onoroff]("mouseup", this.mouseUpLeave, this);
         };
         // On hold
         PolyDrawService.prototype.subtractPolygon = function (latlngs) {
@@ -1358,8 +1377,11 @@
         // fine
         PolyDrawService.prototype.addPolygon = function (latlngs, simplify, noMerge) {
             if (noMerge === void 0) { noMerge = false; }
-            console.log('addPolygon', latlngs, simplify, noMerge, this.kinks, this.config);
-            if (this.mergePolygons && !noMerge && this.arrayOfFeatureGroups.length > 0 && !this.kinks) {
+            console.log("addPolygon", latlngs, simplify, noMerge, this.kinks, this.config);
+            if (this.mergePolygons &&
+                !noMerge &&
+                this.arrayOfFeatureGroups.length > 0 &&
+                !this.kinks) {
                 this.merge(latlngs);
             }
             else {
@@ -1371,7 +1393,7 @@
             var _this = this;
             var featureGroup = new leaflet.FeatureGroup();
             var latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
-            console.log('AddPolygonLayer: ', latLngs);
+            console.log("AddPolygonLayer: ", latLngs);
             var polygon = this.getPolygon(latLngs);
             featureGroup.addLayer(polygon);
             console.log(polygon);
@@ -1383,32 +1405,35 @@
                     }
                     else {
                         _this.addHoleMarker(polyElement, featureGroup);
-                        console.log('Hull: ', polyElement);
+                        console.log("Hull: ", polyElement);
                     }
                 });
                 // this.addMarker(polygon[0], featureGroup);
                 // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
             });
             this.arrayOfFeatureGroups.push(featureGroup);
-            console.log('Array: ', this.arrayOfFeatureGroups);
+            console.log("Array: ", this.arrayOfFeatureGroups);
             this.polygonInformation.activate();
-            this.setDrawMode(exports.DrawMode.Off);
-            featureGroup.on('click', function (e) {
+            this.setDrawMode(DrawMode.Off);
+            featureGroup.on("click", function (e) {
                 _this.polygonClicked(e, latLngs);
             });
         };
         // fine
         PolyDrawService.prototype.polygonClicked = function (e, poly) {
             var newPoint = e.latlng;
-            if (poly.geometry.type === 'MultiPolygon') {
-                var newPolygon = this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat]);
+            if (poly.geometry.type === "MultiPolygon") {
+                var newPolygon = this.turfHelper.injectPointToPolygon(poly, [
+                    newPoint.lng,
+                    newPoint.lat
+                ]);
                 this.deletePolygon(this.getLatLngsFromJson(poly));
                 this.addPolygonLayer(newPolygon, false);
             }
         };
         // fine
         PolyDrawService.prototype.getPolygon = function (latlngs) {
-            console.log('getPolygons: ', latlngs);
+            console.log("getPolygons: ", latlngs);
             var polygon = leaflet.GeoJSON.geometryToLayer(latlngs);
             polygon.setStyle(this.config.polygonOptions);
             return polygon;
@@ -1416,13 +1441,13 @@
         // fine
         PolyDrawService.prototype.merge = function (latlngs) {
             var _this = this;
-            console.log('merge', latlngs);
+            console.log("merge", latlngs);
             var polygonFeature = [];
             var newArray = [];
             var polyIntersection = false;
             this.arrayOfFeatureGroups.forEach(function (featureGroup) {
                 var featureCollection = featureGroup.toGeoJSON();
-                console.log('Merger: ', featureCollection.features[0]);
+                console.log("Merger: ", featureCollection.features[0]);
                 if (featureCollection.features[0].geometry.coordinates.length > 1) {
                     featureCollection.features[0].geometry.coordinates.forEach(function (element) {
                         var feature = _this.turfHelper.getMultiPolygon([element]);
@@ -1472,8 +1497,8 @@
         };
         // fine
         PolyDrawService.prototype.events = function (onoff) {
-            var onoroff = onoff ? 'on' : 'off';
-            this.map[onoroff]('mousedown', this.mouseDown, this);
+            var onoroff = onoff ? "on" : "off";
+            this.map[onoroff]("mousedown", this.mouseDown, this);
         };
         // fine, TODO: if special markers
         PolyDrawService.prototype.addMarker = function (latlngs, FeatureGroup) {
@@ -1488,13 +1513,17 @@
                 if (i === deleteMarkerIdx && _this.config.markers.delete) {
                     iconClasses = _this.config.markers.markerDeleteIcon.styleClasses;
                 }
-                var marker = new leaflet.Marker(latlng, { icon: _this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+                var marker = new leaflet.Marker(latlng, {
+                    icon: _this.createDivIcon(iconClasses),
+                    draggable: true,
+                    title: i.toString()
+                });
                 FeatureGroup.addLayer(marker).addTo(_this.map);
                 // console.log("FeatureGroup: ", FeatureGroup);
-                marker.on('drag', function (e) {
+                marker.on("drag", function (e) {
                     _this.markerDrag(FeatureGroup);
                 });
-                marker.on('dragend', function (e) {
+                marker.on("dragend", function (e) {
                     _this.markerDragEnd(FeatureGroup);
                 });
                 if (i === menuMarkerIdx && _this.config.markers.menu) {
@@ -1503,13 +1532,13 @@
                     //     console.log("clicked on", e.target);
                     //   })
                     // );
-                    marker.on('click', function (e) {
+                    marker.on("click", function (e) {
                         _this.convertToBoundsPolygon(latlngs, true);
                         // this.convertToSimplifiedPolygon(latlngs);
                     });
                 }
                 if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                    marker.on('click', function (e) {
+                    marker.on("click", function (e) {
                         _this.deletePolygon([latlngs]);
                     });
                 }
@@ -1527,12 +1556,16 @@
                 if (i === latlngs.length - 1 && this.config.markers.delete) {
                   iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
                 } */
-                var marker = new leaflet.Marker(latlng, { icon: _this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+                var marker = new leaflet.Marker(latlng, {
+                    icon: _this.createDivIcon(iconClasses),
+                    draggable: true,
+                    title: i.toString()
+                });
                 FeatureGroup.addLayer(marker).addTo(_this.map);
-                marker.on('drag', function (e) {
+                marker.on("drag", function (e) {
                     _this.markerDrag(FeatureGroup);
                 });
-                marker.on('dragend', function (e) {
+                marker.on("dragend", function (e) {
                     _this.markerDragEnd(FeatureGroup);
                 });
                 /*   if (i === 0 && this.config.markers.menu) {
@@ -1551,7 +1584,7 @@
             });
         };
         PolyDrawService.prototype.createDivIcon = function (classNames) {
-            var classes = classNames.join(' ');
+            var classes = classNames.join(" ");
             var icon = leaflet.divIcon({ className: classes });
             return icon;
         };
@@ -1563,17 +1596,17 @@
             var layerLength = FeatureGroup.getLayers();
             var posarrays = layerLength[0].getLatLngs();
             console.log(posarrays);
-            console.log('markerdrag: ', layerLength);
+            console.log("markerdrag: ", layerLength);
             var length = 0;
             if (posarrays.length > 1) {
                 for (var index = 0; index < posarrays.length; index++) {
                     testarray = [];
                     hole = [];
-                    console.log('Posisjoner: ', posarrays[index]);
+                    console.log("Posisjoner: ", posarrays[index]);
                     if (index === 0) {
                         if (posarrays[0].length > 1) {
                             for (var i = 0; index < posarrays[0].length; i++) {
-                                console.log('Posisjoner 2: ', posarrays[index][i]);
+                                console.log("Posisjoner 2: ", posarrays[index][i]);
                                 for (var j = 0; j < posarrays[0][i].length; j++) {
                                     testarray.push(layerLength[j + 1].getLatLng());
                                 }
@@ -1586,12 +1619,12 @@
                             }
                             hole.push(testarray);
                         }
-                        console.log('Hole: ', hole);
+                        console.log("Hole: ", hole);
                         newPos.push(hole);
                     }
                     else {
                         length += posarrays[index - 1][0].length;
-                        console.log('STart index: ', length);
+                        console.log("STart index: ", length);
                         for (var j = length; j < posarrays[index][0].length + length; j++) {
                             testarray.push(layerLength[j + 1].getLatLng());
                         }
@@ -1606,7 +1639,7 @@
                 var length2 = 0;
                 for (var index = 0; index < posarrays[0].length; index++) {
                     testarray = [];
-                    console.log('Polygon drag: ', posarrays[0][index]);
+                    console.log("Polygon drag: ", posarrays[0][index]);
                     if (index === 0) {
                         if (posarrays[0][index].length > 1) {
                             for (var j = 0; j < posarrays[0][index].length; j++) {
@@ -1628,9 +1661,9 @@
                     hole.push(testarray);
                 }
                 newPos.push(hole);
-                console.log('Hole 2: ', hole);
+                console.log("Hole 2: ", hole);
             }
-            console.log('Nye posisjoner: ', newPos);
+            console.log("Nye posisjoner: ", newPos);
             layerLength[0].setLatLngs(newPos);
         };
         // check this
@@ -1638,17 +1671,17 @@
             var _this = this;
             this.polygonInformation.deletePolygonInformationStorage();
             var featureCollection = FeatureGroup.toGeoJSON();
-            console.log('Markerdragend polygon: ', featureCollection.features[0].geometry.coordinates);
+            console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
             if (featureCollection.features[0].geometry.coordinates.length > 1) {
                 featureCollection.features[0].geometry.coordinates.forEach(function (element) {
                     var feature = _this.turfHelper.getMultiPolygon([element]);
-                    console.log('Markerdragend: ', feature);
+                    console.log("Markerdragend: ", feature);
                     if (_this.turfHelper.hasKinks(feature)) {
                         _this.kinks = true;
                         var unkink = _this.turfHelper.getKinks(feature);
                         // this.deletePolygon(this.getLatLngsFromJson(feature));
                         _this.removeFeatureGroup(FeatureGroup);
-                        console.log('Unkink: ', unkink);
+                        console.log("Unkink: ", unkink);
                         unkink.forEach(function (polygon) {
                             _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
                         });
@@ -1661,13 +1694,13 @@
             }
             else {
                 var feature = this.turfHelper.getMultiPolygon(featureCollection.features[0].geometry.coordinates);
-                console.log('Markerdragend: ', feature);
+                console.log("Markerdragend: ", feature);
                 if (this.turfHelper.hasKinks(feature)) {
                     this.kinks = true;
                     var unkink = this.turfHelper.getKinks(feature);
                     // this.deletePolygon(this.getLatLngsFromJson(feature));
                     this.removeFeatureGroup(FeatureGroup);
-                    console.log('Unkink: ', unkink);
+                    console.log("Unkink: ", unkink);
                     unkink.forEach(function (polygon) {
                         _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
                     });
@@ -1682,13 +1715,15 @@
         };
         // fine, check the returned type
         PolyDrawService.prototype.getLatLngsFromJson = function (feature) {
-            console.log('getLatLngsFromJson: ', feature);
+            console.log("getLatLngsFromJson: ", feature);
             var coord;
             if (feature) {
-                if (feature.geometry.coordinates.length > 1 && feature.geometry.type === 'MultiPolygon') {
+                if (feature.geometry.coordinates.length > 1 &&
+                    feature.geometry.type === "MultiPolygon") {
                     coord = leaflet.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
                 }
-                else if (feature.geometry.coordinates[0].length > 1 && feature.geometry.type === 'Polygon') {
+                else if (feature.geometry.coordinates[0].length > 1 &&
+                    feature.geometry.type === "Polygon") {
                     coord = leaflet.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0]);
                 }
                 else {
@@ -1700,7 +1735,7 @@
         // fine
         PolyDrawService.prototype.unionPolygons = function (layers, latlngs, polygonFeature) {
             var _this = this;
-            console.log('unionPolygons', layers, latlngs, polygonFeature);
+            console.log("unionPolygons", layers, latlngs, polygonFeature);
             var addNew = latlngs;
             layers.forEach(function (featureGroup, i) {
                 var featureCollection = featureGroup.toGeoJSON();
@@ -1717,7 +1752,7 @@
         };
         // fine
         PolyDrawService.prototype.removeFeatureGroup = function (featureGroup) {
-            console.log('removeFeatureGroup', featureGroup);
+            console.log("removeFeatureGroup", featureGroup);
             featureGroup.clearLayers();
             this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(function (featureGroups) { return featureGroups !== featureGroup; });
             // this.updatePolygons();
@@ -1725,16 +1760,18 @@
         };
         // fine until refactoring
         PolyDrawService.prototype.removeFeatureGroupOnMerge = function (featureGroup) {
-            console.log('removeFeatureGroupOnMerge', featureGroup);
+            console.log("removeFeatureGroupOnMerge", featureGroup);
             var newArray = [];
             if (featureGroup.getLayers()[0]) {
                 var polygon_1 = featureGroup.getLayers()[0].getLatLngs()[0];
                 this.polygonInformation.polygonInformationStorage.forEach(function (v) {
-                    if (v.polygon.toString() !== polygon_1[0].toString() && v.polygon[0].toString() === polygon_1[0][0].toString()) {
+                    if (v.polygon.toString() !== polygon_1[0].toString() &&
+                        v.polygon[0].toString() === polygon_1[0][0].toString()) {
                         v.polygon = polygon_1;
                         newArray.push(v);
                     }
-                    if (v.polygon.toString() !== polygon_1[0].toString() && v.polygon[0].toString() !== polygon_1[0][0].toString()) {
+                    if (v.polygon.toString() !== polygon_1[0].toString() &&
+                        v.polygon[0].toString() !== polygon_1[0][0].toString()) {
                         newArray.push(v);
                     }
                 });
@@ -1746,7 +1783,7 @@
         // fine until refactoring
         PolyDrawService.prototype.deletePolygonOnMerge = function (polygon) {
             var _this = this;
-            console.log('deletePolygonOnMerge', polygon);
+            console.log("deletePolygonOnMerge", polygon);
             var polygon2 = [];
             if (this.arrayOfFeatureGroups.length > 0) {
                 this.arrayOfFeatureGroups.forEach(function (featureGroup) {
@@ -1758,7 +1795,7 @@
                     }
                     var equals = _this.polygonArrayEqualsMerge(polygon2, polygon);
                     if (equals) {
-                        console.log('EQUALS', polygon);
+                        console.log("EQUALS", polygon);
                         _this.removeFeatureGroupOnMerge(featureGroup);
                         _this.deletePolygon(polygon);
                         _this.polygonInformation.deleteTrashcan(polygon);
@@ -1795,39 +1832,43 @@
         PolyDrawService.prototype.setLeafletMapEvents = function (enableDragging, enableDoubleClickZoom, enableScrollWheelZoom) {
             // console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
             enableDragging ? this.map.dragging.enable() : this.map.dragging.disable();
-            enableDoubleClickZoom ? this.map.doubleClickZoom.enable() : this.map.doubleClickZoom.disable();
-            enableScrollWheelZoom ? this.map.scrollWheelZoom.enable() : this.map.scrollWheelZoom.disable();
+            enableDoubleClickZoom
+                ? this.map.doubleClickZoom.enable()
+                : this.map.doubleClickZoom.disable();
+            enableScrollWheelZoom
+                ? this.map.scrollWheelZoom.enable()
+                : this.map.scrollWheelZoom.disable();
         };
         // fine
         PolyDrawService.prototype.setDrawMode = function (mode) {
-            console.log('setDrawMode', this.map);
+            console.log("setDrawMode", this.map);
             this.drawModeSubject.next(mode);
             if (!!this.map) {
                 var isActiveDrawMode = true;
                 switch (mode) {
-                    case exports.DrawMode.Off:
-                        leaflet.DomUtil.removeClass(this.map.getContainer(), 'crosshair-cursor-enabled');
+                    case DrawMode.Off:
+                        leaflet.DomUtil.removeClass(this.map.getContainer(), "crosshair-cursor-enabled");
                         this.events(false);
                         this.stopDraw();
                         this.tracer.setStyle({
-                            color: ''
+                            color: ""
                         });
                         this.setLeafletMapEvents(true, true, true);
                         isActiveDrawMode = false;
                         break;
-                    case exports.DrawMode.AddPolygon:
-                        leaflet.DomUtil.addClass(this.map.getContainer(), 'crosshair-cursor-enabled');
+                    case DrawMode.Add:
+                        leaflet.DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
                         this.events(true);
                         this.tracer.setStyle({
                             color: defaultConfig.polyLineOptions.color
                         });
                         this.setLeafletMapEvents(false, false, false);
                         break;
-                    case exports.DrawMode.SubtractPolygon:
-                        leaflet.DomUtil.addClass(this.map.getContainer(), 'crosshair-cursor-enabled');
+                    case DrawMode.Subtract:
+                        leaflet.DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
                         this.events(true);
                         this.tracer.setStyle({
-                            color: '#D9460F'
+                            color: "#D9460F"
                         });
                         this.setLeafletMapEvents(false, false, false);
                         break;
@@ -1848,23 +1889,23 @@
         PolyDrawService.prototype.drawModeClick = function () {
             if (this.polygonInformation.polygonDrawStates.isFreeDrawMode) {
                 this.polygonInformation.setMoveMode();
-                this.setDrawMode(exports.DrawMode.Off);
+                this.setDrawMode(DrawMode.Off);
             }
             else {
                 this.polygonInformation.setFreeDrawMode();
-                this.setDrawMode(exports.DrawMode.AddPolygon);
+                this.setDrawMode(DrawMode.Add);
             }
             this.polygonInformation.saveCurrentState();
         };
         // remove, use modeChange
         PolyDrawService.prototype.freedrawMenuClick = function () {
-            this.setDrawMode(exports.DrawMode.AddPolygon);
+            this.setDrawMode(DrawMode.Add);
             this.polygonInformation.activate();
             this.polygonInformation.saveCurrentState();
         };
         // remove, use modeChange
         PolyDrawService.prototype.subtractClick = function () {
-            this.setDrawMode(exports.DrawMode.SubtractPolygon);
+            this.setDrawMode(DrawMode.Subtract);
             this.polygonInformation.saveCurrentState();
         };
         // fine
@@ -1872,16 +1913,16 @@
             this.tracer.setLatLngs([[0, 0]]);
         };
         PolyDrawService.prototype.toggleMarkerMenu = function () {
-            alert('open menu');
+            alert("open menu");
         };
         PolyDrawService.prototype.getHtmlContent = function (callBack) {
             var comp = this.popupGenerator.generateAlterPopup();
             comp.instance.bboxClicked.subscribe(function (e) {
-                console.log('bbox clicked', e);
+                console.log("bbox clicked", e);
                 callBack(e);
             });
             comp.instance.simplyfiClicked.subscribe(function (e) {
-                console.log('simplyfi clicked', e);
+                console.log("simplyfi clicked", e);
                 callBack(e);
             });
             return comp.location.nativeElement;
@@ -1899,7 +1940,7 @@
             this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true);
         };
         PolyDrawService.prototype.getMarkerIndex = function (latlngs, position) {
-            var bounds = PolyDrawUtil.getBounds(latlngs, (Math.sqrt(2) / 2));
+            var bounds = PolyDrawUtil.getBounds(latlngs, Math.sqrt(2) / 2);
             var compass = new Compass(bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast());
             var compassDirection = compass.getDirection(position);
             var latLngPoint = {
@@ -1911,59 +1952,39 @@
             var nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc);
             return nearestPointIdx;
         };
-        PolyDrawService.ctorParameters = function () { return [
-            { type: PolyStateService },
-            { type: ComponentGeneraterService },
-            { type: TurfHelperService },
-            { type: PolygonInformationService },
-            { type: LeafletHelperService }
-        ]; };
-        PolyDrawService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(core.ɵɵinject(PolyStateService), core.ɵɵinject(ComponentGeneraterService), core.ɵɵinject(TurfHelperService), core.ɵɵinject(PolygonInformationService), core.ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
-        PolyDrawService = __decorate([
-            core.Injectable({
-                providedIn: 'root'
-            })
-            // Rename - PolyDrawService
-            ,
-            __metadata("design:paramtypes", [PolyStateService,
-                ComponentGeneraterService,
-                TurfHelperService,
-                PolygonInformationService,
-                LeafletHelperService])
-        ], PolyDrawService);
+        PolyDrawService.ɵfac = function PolyDrawService_Factory(t) { return new (t || PolyDrawService)(core["ɵɵinject"](PolyStateService), core["ɵɵinject"](ComponentGeneraterService), core["ɵɵinject"](TurfHelperService), core["ɵɵinject"](PolygonInformationService), core["ɵɵinject"](LeafletHelperService)); };
+        PolyDrawService.ɵprov = core["ɵɵdefineInjectable"]({ token: PolyDrawService, factory: PolyDrawService.ɵfac, providedIn: "root" });
         return PolyDrawService;
     }());
-    // flytt til enum.ts
-
-    (function (DrawMode) {
-        DrawMode[DrawMode["Off"] = 0] = "Off";
-        DrawMode[DrawMode["AddPolygon"] = 1] = "AddPolygon";
-        DrawMode[DrawMode["EditPolygon"] = 2] = "EditPolygon";
-        DrawMode[DrawMode["SubtractPolygon"] = 3] = "SubtractPolygon";
-        DrawMode[DrawMode["LoadPolygon"] = 4] = "LoadPolygon";
-    })(exports.DrawMode || (exports.DrawMode = {}));
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](PolyDrawService, [{
+            type: core.Injectable,
+            args: [{
+                    providedIn: "root"
+                }]
+        }], function () { return [{ type: PolyStateService }, { type: ComponentGeneraterService }, { type: TurfHelperService }, { type: PolygonInformationService }, { type: LeafletHelperService }]; }, null); })();
 
     var MyLibModule = /** @class */ (function () {
         function MyLibModule() {
         }
-        MyLibModule = __decorate([
-            core.NgModule({
-                declarations: [AlterPolygonComponent],
-                imports: [],
-                exports: []
-            })
-        ], MyLibModule);
+        MyLibModule.ɵmod = core["ɵɵdefineNgModule"]({ type: MyLibModule });
+        MyLibModule.ɵinj = core["ɵɵdefineInjector"]({ factory: function MyLibModule_Factory(t) { return new (t || MyLibModule)(); }, imports: [[]] });
         return MyLibModule;
     }());
+    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && core["ɵɵsetNgModuleScope"](MyLibModule, { declarations: [AlterPolygonComponent] }); })();
+    /*@__PURE__*/ (function () { core["ɵsetClassMetadata"](MyLibModule, [{
+            type: core.NgModule,
+            args: [{
+                    declarations: [AlterPolygonComponent],
+                    imports: [],
+                    exports: []
+                }]
+        }], null, null); })();
 
     exports.ComponentGeneraterService = ComponentGeneraterService;
     exports.MyLibModule = MyLibModule;
     exports.PolyDrawService = PolyDrawService;
     exports.PolyStateService = PolyStateService;
     exports.PolygonInformationService = PolygonInformationService;
-    exports.ɵa = TurfHelperService;
-    exports.ɵb = LeafletHelperService;
-    exports.ɵc = AlterPolygonComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

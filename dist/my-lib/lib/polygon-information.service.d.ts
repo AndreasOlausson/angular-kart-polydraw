@@ -1,6 +1,7 @@
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
 import { PolyStateService } from "./map-state.service";
+import * as i0 from "@angular/core";
 export declare class PolygonInformationService {
     private mapStateService;
     polygonInformationSubject: Subject<PolygonInfo[]>;
@@ -20,4 +21,6 @@ export declare class PolygonInformationService {
     reset(): void;
     setMoveMode(): void;
     setFreeDrawMode(): void;
+    static ɵfac: i0.ɵɵFactoryDef<PolygonInformationService>;
+    static ɵprov: i0.ɵɵInjectableDef<PolygonInformationService>;
 }

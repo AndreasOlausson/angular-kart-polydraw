@@ -5,15 +5,10 @@
     "@angular/common": "^8.0.3",
     "@angular/core": "^8.0.3",
     "leaflet": "^1.6.0",
-    "@turf/turf": "^5.1.6"
+    "@turf/turf": "^5.1.6",
+    "tslib": "^1.10.0"
   },
-  "dependencies": {
-    "tslib": "^1.9.0"
-  },
-  "devDependencies": {
-    "@types/concaveman": "^1.1.3",
-    "@types/leaflet": "^1.5.8"
-  },
+  "dependencies": {},
   "main": "bundles/my-lib.umd.js",
   "module": "fesm5/my-lib.js",
   "es2015": "fesm2015/my-lib.js",
@@ -22,6 +17,8 @@
   "fesm5": "fesm5/my-lib.js",
   "fesm2015": "fesm2015/my-lib.js",
   "typings": "my-lib.d.ts",
-  "metadata": "my-lib.metadata.json",
-  "sideEffects": false
+  "sideEffects": false,
+  "scripts": {
+    "prepublishOnly": "node --eval \"console.error('ERROR: Trying to publish a package that has been compiled by Ivy. This is not allowed.\\nPlease delete and rebuild the package, without compiling with Ivy, before attempting to publish.\\n')\" && exit 1"
+  }
 }
