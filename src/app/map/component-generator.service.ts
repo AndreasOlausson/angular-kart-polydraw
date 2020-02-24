@@ -1,5 +1,6 @@
 import { Injectable, ComponentFactoryResolver, Injector, ComponentRef, ComponentFactory, OnDestroy, Component } from '@angular/core';
 import { AlterPolygonComponent } from './popups/alter-polygon/alter-polygon.component';
+import { InfoMarkerPopupComponent } from './popups/info-marker/info-marker.component';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,7 @@ import { AlterPolygonComponent } from './popups/alter-polygon/alter-polygon.comp
 export class ComponentGeneratorService implements OnDestroy {
 
   private clusterPopuprefs: ComponentRef<AlterPolygonComponent>[] = [];
+  private infoMarkerClusterPopuprefs: ComponentRef<InfoMarkerPopupComponent>[] = [];
 
   constructor(
     private readonly cfr: ComponentFactoryResolver,
@@ -23,7 +25,12 @@ export class ComponentGeneratorService implements OnDestroy {
     this.clusterPopuprefs.push(popupComponentRef);
     return popupComponentRef;
   }
-
+  generateInfoMarkerPopup(): ComponentRef<InfoMarkerPopupComponent> {
+    const cmpFactory: ComponentFactory<InfoMarkerPopupComponent> = this.cfr.resolveComponentFactory(InfoMarkerPopupComponent);
+    const popupComponentRef: ComponentRef<InfoMarkerPopupComponent> = cmpFactory.create(this.injector);
+    this.infoMarkerClusterPopuprefs.push(popupComponentRef);
+    return popupComponentRef;
+  }
   destroyAngularPopupComponents(): void {
     this.clusterPopuprefs.forEach(cref => {
       if (cref) {
@@ -31,5 +38,11 @@ export class ComponentGeneratorService implements OnDestroy {
       }
     });
     this.clusterPopuprefs = [];
+    this.infoMarkerClusterPopuprefs.forEach(cref => {
+      if (cref) {
+        cref.destroy();
+      }
+    });
+    this.infoMarkerClusterPopuprefs = [];
   }
 }

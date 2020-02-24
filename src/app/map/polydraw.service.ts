@@ -347,6 +347,7 @@ export class PolyDrawService {
                     console.log("Hull: ", polyElement);
                 }
             });
+            console.log("This is a good place to add area info icon");
             // this.addMarker(polygon[0], featureGroup);
             //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
         });
@@ -439,6 +440,7 @@ export class PolyDrawService {
 
         const menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
         const deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
+        const infoMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerInfoIcon.position);
 
         latlngs.forEach((latlng, i) => {
             let iconClasses = this.config.markers.markerIcon.styleClasses;
@@ -447,6 +449,9 @@ export class PolyDrawService {
             }
             if (i === deleteMarkerIdx && this.config.markers.delete) {
                 iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+            }
+            if (i === infoMarkerIdx && this.config.markers.info) {
+                iconClasses = this.config.markers.markerInfoIcon.styleClasses;
             }
             const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
             FeatureGroup.addLayer(marker).addTo(this.map);
@@ -460,15 +465,28 @@ export class PolyDrawService {
             if (i === menuMarkerIdx && this.config.markers.menu) {
 
 
-                // marker.bindPopup(
-                //   this.getHtmlContent(e => {
-                //     console.log("clicked on", e.target);
-                //   })
-                // );
-                marker.on("click", e => {
-                this.convertToBoundsPolygon(latlngs);
-                    //this.convertToSimplifiedPolygon(latlngs);
-                })
+                marker.bindPopup(
+                  this.getMenuMarkerHtmlContent(e => {
+                    console.log("clicked on", e.target);
+                  })
+                );
+                // marker.on("click", e => {
+                // this.convertToBoundsPolygon(latlngs);
+                //     //this.convertToSimplifiedPolygon(latlngs);
+                // })
+            }
+            if (i === infoMarkerIdx && this.config.markers.info) {
+
+
+                marker.bindPopup(
+                  this.getInfoMarkerHtmlContent(e => {
+                    console.log("clicked on", e.target);
+                  }), {className: "info-marker"}
+                );
+                // marker.on("click", e => {
+                // this.convertToBoundsPolygon(latlngs);
+                //     //this.convertToSimplifiedPolygon(latlngs);
+                // })
             }
             if (i === deleteMarkerIdx && this.config.markers.delete) {
                 marker.on("click", e => {
@@ -822,8 +840,20 @@ export class PolyDrawService {
     toggleMarkerMenu(): void {
         alert("open menu");
     }
-    private getHtmlContent(callBack: Function): HTMLElement {
+    private getMenuMarkerHtmlContent(callBack: Function): HTMLElement {
         const comp = this.popupGenerator.generateAlterPopup();
+        comp.instance.bboxClicked.subscribe(e => {
+            console.log("bbox clicked", e);
+            callBack(e);
+        });
+        comp.instance.simplyfiClicked.subscribe(e => {
+            console.log("simplyfi clicked", e);
+            callBack(e);
+        });
+        return comp.location.nativeElement;
+    }
+    private getInfoMarkerHtmlContent(callBack: Function): HTMLElement {
+        const comp = this.popupGenerator.generateInfoMarkerPopup();
         comp.instance.bboxClicked.subscribe(e => {
             console.log("bbox clicked", e);
             callBack(e);
