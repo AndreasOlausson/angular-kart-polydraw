@@ -884,7 +884,7 @@ var PolyDrawService = /** @class */ (function () {
         // end add to config
         this.ngUnsubscribe = new Subject();
         this.config = null;
-        this.mapState.map$.pipe(filter(function (m) { return m !== null; })).subscribe(function (map) {
+        this.mapState.map$.pipe(filter(function (m) { return m != null; })).subscribe(function (map) {
             _this.map = map;
             console.log("pre this.config", _this.config);
             _this.config = defaultConfig;

@@ -45,7 +45,7 @@ export class PolyDrawService {
     private polygonInformation: PolygonInformationService,
     private leafletHelper: LeafletHelperService
   ) {
-    this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
+    this.mapState.map$.pipe(filter(m => m != null)).subscribe((map: L.Map) => {
       this.map = map;
       console.log("pre this.config", this.config);
       this.config = defaultConfig;

@@ -1081,7 +1081,7 @@
             // end add to config
             this.ngUnsubscribe = new rxjs.Subject();
             this.config = null;
-            this.mapState.map$.pipe(operators.filter(function (m) { return m !== null; })).subscribe(function (map) {
+            this.mapState.map$.pipe(operators.filter(function (m) { return m != null; })).subscribe(function (map) {
                 _this.map = map;
                 console.log("pre this.config", _this.config);
                 _this.config = defaultConfig;
