@@ -45,7 +45,7 @@ export class PolyDrawService {
     private polygonInformation: PolygonInformationService,
     private leafletHelper: LeafletHelperService
   ) {
-    this.mapState.map$.pipe(filter(m => m != null)).subscribe((map: L.Map) => {
+    this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
       this.map = map;
       console.log("Kartet i polydraw: ", this.map);
       console.log("pre this.config", this.config);
@@ -54,7 +54,7 @@ export class PolyDrawService {
       this.configurate({});
       console.log("after this.config", this.config);
       this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
-
+      console.log("Tracer pipe: ", this.tracer);
       this.initPolyDraw();
     });
 
@@ -269,7 +269,7 @@ export class PolyDrawService {
         }
       });
     }
-
+    console.log("Tracer init: ", this.tracer);
     this.map.addLayer(this.tracer);
     this.setDrawMode(DrawMode.Off);
   }

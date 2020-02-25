@@ -884,7 +884,7 @@ var PolyDrawService = /** @class */ (function () {
         // end add to config
         this.ngUnsubscribe = new Subject();
         this.config = null;
-        this.mapState.map$.pipe(filter(function (m) { return m != null; })).subscribe(function (map) {
+        this.mapState.map$.pipe(filter(function (m) { return m !== null; })).subscribe(function (map) {
             _this.map = map;
             console.log("Kartet i polydraw: ", _this.map);
             console.log("pre this.config", _this.config);
@@ -893,6 +893,7 @@ var PolyDrawService = /** @class */ (function () {
             _this.configurate({});
             console.log("after this.config", _this.config);
             _this.tracer = polyline([[0, 0]], _this.config.polyLineOptions);
+            console.log("Tracer pipe: ", _this.tracer);
             _this.initPolyDraw();
         });
         this.mapState.mapZoomLevel$
@@ -1082,6 +1083,7 @@ var PolyDrawService = /** @class */ (function () {
                 }
             });
         }
+        console.log("Tracer init: ", this.tracer);
         this.map.addLayer(this.tracer);
         this.setDrawMode(DrawMode.Off);
     };
