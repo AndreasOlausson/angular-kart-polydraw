@@ -4,6 +4,7 @@ import { AlterPolygonComponent } from "./popups/alter-polygon/alter-polygon.comp
 @NgModule({
   declarations: [ AlterPolygonComponent],
   imports: [],
-  exports: [AlterPolygonComponent ]
+  exports: [ ],
+  entryComponents: [AlterPolygonComponent]
 })
 export class MyLibModule {}

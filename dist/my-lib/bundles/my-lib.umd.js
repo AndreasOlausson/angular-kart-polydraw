@@ -1990,7 +1990,8 @@
             core.NgModule({
                 declarations: [AlterPolygonComponent],
                 imports: [],
-                exports: [AlterPolygonComponent]
+                exports: [],
+                entryComponents: [AlterPolygonComponent]
             })
         ], MyLibModule);
         return MyLibModule;

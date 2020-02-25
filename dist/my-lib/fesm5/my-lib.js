@@ -1776,7 +1776,8 @@ var MyLibModule = /** @class */ (function () {
         NgModule({
             declarations: [AlterPolygonComponent],
             imports: [],
-            exports: [AlterPolygonComponent]
+            exports: [],
+            entryComponents: [AlterPolygonComponent]
         })
     ], MyLibModule);
     return MyLibModule;
