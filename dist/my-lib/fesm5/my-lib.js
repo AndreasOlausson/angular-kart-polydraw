@@ -1083,6 +1083,7 @@ var PolyDrawService = /** @class */ (function () {
                 }
             });
         }
+        console.log("Map init: ", this.map);
         console.log("Tracer init: ", this.tracer);
         this.map.addLayer(this.tracer);
         this.setDrawMode(DrawMode.Off);
@@ -1792,4 +1793,4 @@ var MyLibModule = /** @class */ (function () {
  */
 
 export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
-//# sourceMappingURL=polydraw.js.map
+//# sourceMappingURL=my-lib.js.map

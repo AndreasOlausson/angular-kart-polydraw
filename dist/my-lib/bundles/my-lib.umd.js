@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('leaflet'), require('rxjs'), require('rxjs/operators'), require('@turf/turf'), require('concaveman')) :
-    typeof define === 'function' && define.amd ? define('polydraw', ['exports', '@angular/core', 'leaflet', 'rxjs', 'rxjs/operators', '@turf/turf', 'concaveman'], factory) :
-    (global = global || self, factory(global.polydraw = {}, global.ng.core, global.leaflet, global.rxjs, global.rxjs.operators, global.turf, global.concaveman));
+    typeof define === 'function' && define.amd ? define('my-lib', ['exports', '@angular/core', 'leaflet', 'rxjs', 'rxjs/operators', '@turf/turf', 'concaveman'], factory) :
+    (global = global || self, factory(global['my-lib'] = {}, global.ng.core, global.leaflet, global.rxjs, global.rxjs.operators, global.turf, global.concaveman));
 }(this, (function (exports, core, leaflet, rxjs, operators, turf, concaveman) { 'use strict';
 
     concaveman = concaveman && concaveman.hasOwnProperty('default') ? concaveman['default'] : concaveman;
@@ -1280,6 +1280,7 @@
                     }
                 });
             }
+            console.log("Map init: ", this.map);
             console.log("Tracer init: ", this.tracer);
             this.map.addLayer(this.tracer);
             this.setDrawMode(exports.DrawMode.Off);
@@ -1996,4 +1997,4 @@
     Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=polydraw.umd.js.map
+//# sourceMappingURL=my-lib.umd.js.map

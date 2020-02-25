@@ -269,6 +269,7 @@ export class PolyDrawService {
         }
       });
     }
+    console.log("Map init: ", this.map);
     console.log("Tracer init: ", this.tracer);
     this.map.addLayer(this.tracer);
     this.setDrawMode(DrawMode.Off);
