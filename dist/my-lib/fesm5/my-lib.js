@@ -1323,14 +1323,12 @@ var PolyDrawService = /** @class */ (function () {
                 _this.markerDragEnd(FeatureGroup);
             });
             if (i === menuMarkerIdx && _this.config.markers.menu) {
-                // marker.bindPopup(
-                //   this.getHtmlContent(e => {
-                //     console.log("clicked on", e.target);
-                //   })
-                // );
+                marker.bindPopup(_this.getHtmlContent(function (e) {
+                    console.log("clicked on", e.target);
+                }));
                 marker.on("click", function (e) {
                     _this.convertToBoundsPolygon(latlngs, true);
-                    // this.convertToSimplifiedPolygon(latlngs);
+                    _this.convertToSimplifiedPolygon(latlngs);
                 });
             }
             if (i === deleteMarkerIdx && _this.config.markers.delete) {
