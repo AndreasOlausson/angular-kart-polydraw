@@ -6,6 +6,8 @@ import { Component, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./info-marker.component.css']
 })
 export class InfoMarkerPopupComponent {
+  test= 'JADA'
+  test2 = 60
 
   @Output() simplyfiClicked: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
