@@ -4,7 +4,7 @@
   "peerDependencies": {
     "@angular/common": "^8.0.3",
     "@angular/core": "^8.0.3",
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.5.1",
     "@turf/turf": "^5.1.6"
   },
   "dependencies": {},
