@@ -1732,7 +1732,7 @@ MyLibModule = __decorate([
         declarations: [AlterPolygonComponent],
         imports: [],
         exports: [],
-        entryComponents: []
+        entryComponents: [AlterPolygonComponent]
     })
 ], MyLibModule);
 

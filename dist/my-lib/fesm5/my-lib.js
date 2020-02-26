@@ -1777,7 +1777,7 @@ var MyLibModule = /** @class */ (function () {
             declarations: [AlterPolygonComponent],
             imports: [],
             exports: [],
-            entryComponents: []
+            entryComponents: [AlterPolygonComponent]
         })
     ], MyLibModule);
     return MyLibModule;

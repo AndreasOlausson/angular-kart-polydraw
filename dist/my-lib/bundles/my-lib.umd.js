@@ -1991,7 +1991,7 @@
                 declarations: [AlterPolygonComponent],
                 imports: [],
                 exports: [],
-                entryComponents: []
+                entryComponents: [AlterPolygonComponent]
             })
         ], MyLibModule);
         return MyLibModule;

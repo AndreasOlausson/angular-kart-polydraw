@@ -5,6 +5,6 @@ import { AlterPolygonComponent } from "./popups/alter-polygon/alter-polygon.comp
   declarations: [ AlterPolygonComponent],
   imports: [],
   exports: [ ],
-  entryComponents: []
+  entryComponents: [AlterPolygonComponent]
 })
 export class MyLibModule {}
