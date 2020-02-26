@@ -1731,8 +1731,8 @@ MyLibModule = __decorate([
     NgModule({
         declarations: [AlterPolygonComponent],
         imports: [],
-        exports: [AlterPolygonComponent],
-        entryComponents: [AlterPolygonComponent]
+        exports: [],
+        entryComponents: []
     })
 ], MyLibModule);
 
