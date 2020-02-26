@@ -1027,6 +1027,21 @@
         return AlterPolygonComponent;
     }());
 
+    var MyLibModule = /** @class */ (function () {
+        function MyLibModule() {
+        }
+        MyLibModule = __decorate([
+            core.NgModule({
+                declarations: [AlterPolygonComponent],
+                imports: [],
+                providers: [],
+                exports: [AlterPolygonComponent],
+                entryComponents: [AlterPolygonComponent]
+            })
+        ], MyLibModule);
+        return MyLibModule;
+    }());
+
     var ComponentGeneraterService = /** @class */ (function () {
         function ComponentGeneraterService(cfr, injector) {
             this.cfr = cfr;
@@ -1054,8 +1069,11 @@
             { type: core.ComponentFactoryResolver },
             { type: core.Injector }
         ]; };
+        ComponentGeneraterService.ɵprov = core["ɵɵdefineInjectable"]({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(core["ɵɵinject"](core.ComponentFactoryResolver), core["ɵɵinject"](core.INJECTOR)); }, token: ComponentGeneraterService, providedIn: MyLibModule });
         ComponentGeneraterService = __decorate([
-            core.Injectable(),
+            core.Injectable({
+                providedIn: MyLibModule
+            }),
             __metadata("design:paramtypes", [core.ComponentFactoryResolver,
                 core.Injector])
         ], ComponentGeneraterService);
@@ -1980,21 +1998,6 @@
         return PolyDrawService;
     }());
 
-    var MyLibModule = /** @class */ (function () {
-        function MyLibModule() {
-        }
-        MyLibModule = __decorate([
-            core.NgModule({
-                declarations: [AlterPolygonComponent],
-                imports: [],
-                providers: [ComponentGeneraterService],
-                exports: [AlterPolygonComponent],
-                entryComponents: [AlterPolygonComponent]
-            })
-        ], MyLibModule);
-        return MyLibModule;
-    }());
-
     exports.ComponentGeneraterService = ComponentGeneraterService;
     exports.MyLibModule = MyLibModule;
     exports.PolyDrawService = PolyDrawService;
@@ -2004,9 +2007,9 @@
     exports.PolygonInformationService = PolygonInformationService;
     exports.ɵ0 = ɵ0;
     exports.ɵ1 = ɵ1;
-    exports.ɵa = TurfHelperService;
-    exports.ɵb = LeafletHelperService;
-    exports.ɵc = AlterPolygonComponent;
+    exports.ɵa = AlterPolygonComponent;
+    exports.ɵb = TurfHelperService;
+    exports.ɵc = LeafletHelperService;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
