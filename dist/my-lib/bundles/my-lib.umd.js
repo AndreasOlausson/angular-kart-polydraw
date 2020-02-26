@@ -1054,11 +1054,8 @@
             { type: core.ComponentFactoryResolver },
             { type: core.Injector }
         ]; };
-        ComponentGeneraterService.ɵprov = core["ɵɵdefineInjectable"]({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(core["ɵɵinject"](core.ComponentFactoryResolver), core["ɵɵinject"](core.INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
         ComponentGeneraterService = __decorate([
-            core.Injectable({
-                providedIn: 'root'
-            }),
+            core.Injectable(),
             __metadata("design:paramtypes", [core.ComponentFactoryResolver,
                 core.Injector])
         ], ComponentGeneraterService);
@@ -1990,6 +1987,7 @@
             core.NgModule({
                 declarations: [AlterPolygonComponent],
                 imports: [],
+                providers: [ComponentGeneraterService],
                 exports: [AlterPolygonComponent],
                 entryComponents: [AlterPolygonComponent]
             })
