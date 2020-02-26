@@ -1285,12 +1285,14 @@ class PolyDrawService {
                 this.markerDragEnd(FeatureGroup);
             });
             if (i === menuMarkerIdx && this.config.markers.menu) {
-                marker.bindPopup(this.getHtmlContent(e => {
-                    console.log("clicked on", e.target);
-                }));
+                // marker.bindPopup(
+                //   this.getHtmlContent(e => {
+                //     console.log("clicked on", e.target);
+                //   })
+                // );
                 marker.on("click", e => {
                     this.convertToBoundsPolygon(latlngs, true);
-                    this.convertToSimplifiedPolygon(latlngs);
+                    // this.convertToSimplifiedPolygon(latlngs);
                 });
             }
             if (i === deleteMarkerIdx && this.config.markers.delete) {
