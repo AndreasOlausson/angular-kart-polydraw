@@ -1990,13 +1990,14 @@
             core.NgModule({
                 declarations: [AlterPolygonComponent],
                 imports: [],
-                exports: [],
+                exports: [AlterPolygonComponent],
                 entryComponents: [AlterPolygonComponent]
             })
         ], MyLibModule);
         return MyLibModule;
     }());
 
+    exports.AlterPolygonComponent = AlterPolygonComponent;
     exports.ComponentGeneraterService = ComponentGeneraterService;
     exports.MyLibModule = MyLibModule;
     exports.PolyDrawService = PolyDrawService;
@@ -2008,7 +2009,6 @@
     exports.ɵ1 = ɵ1;
     exports.ɵa = TurfHelperService;
     exports.ɵb = LeafletHelperService;
-    exports.ɵc = AlterPolygonComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

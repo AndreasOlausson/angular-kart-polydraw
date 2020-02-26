@@ -9,3 +9,4 @@ export * from './lib/polygon-information.service';
 export * from './lib/my-lib.module';
 export * from './lib/enums';
 export * from './lib/polygon-helpers';
+export * from './lib/popups/alter-polygon/alter-polygon.component';

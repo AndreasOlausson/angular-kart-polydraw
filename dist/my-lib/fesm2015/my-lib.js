@@ -1731,7 +1731,7 @@ MyLibModule = __decorate([
     NgModule({
         declarations: [AlterPolygonComponent],
         imports: [],
-        exports: [],
+        exports: [AlterPolygonComponent],
         entryComponents: [AlterPolygonComponent]
     })
 ], MyLibModule);
@@ -1744,5 +1744,5 @@ MyLibModule = __decorate([
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
+export { AlterPolygonComponent, ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb };
 //# sourceMappingURL=my-lib.js.map
