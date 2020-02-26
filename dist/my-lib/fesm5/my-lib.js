@@ -1303,12 +1303,12 @@ var PolyDrawService = /** @class */ (function () {
         var deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
         latlngs.forEach(function (latlng, i) {
             var iconClasses = _this.config.markers.markerIcon.styleClasses;
-            if (i === menuMarkerIdx && _this.config.markers.menu) {
-                iconClasses = _this.config.markers.markerMenuIcon.styleClasses;
-            }
-            if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                iconClasses = _this.config.markers.markerDeleteIcon.styleClasses;
-            }
+            /*   if (i === menuMarkerIdx && this.config.markers.menu) {
+                iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+              }
+              if (i === deleteMarkerIdx && this.config.markers.delete) {
+                iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+              } */
             var marker = new Marker(latlng, {
                 icon: _this.createDivIcon(iconClasses),
                 draggable: true,

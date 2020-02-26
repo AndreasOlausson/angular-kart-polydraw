@@ -525,12 +525,12 @@ export class PolyDrawService {
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-      if (i === menuMarkerIdx && this.config.markers.menu) {
+    /*   if (i === menuMarkerIdx && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
         iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-      }
+      } */
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
