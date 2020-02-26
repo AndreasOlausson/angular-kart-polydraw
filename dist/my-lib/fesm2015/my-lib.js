@@ -1,5 +1,5 @@
 import { __decorate, __metadata } from 'tslib';
-import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, NgModule, ComponentFactoryResolver, Injector, INJECTOR } from '@angular/core';
+import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
@@ -785,18 +785,6 @@ AlterPolygonComponent = __decorate([
     })
 ], AlterPolygonComponent);
 
-let MyLibModule = class MyLibModule {
-};
-MyLibModule = __decorate([
-    NgModule({
-        declarations: [AlterPolygonComponent],
-        imports: [],
-        providers: [],
-        exports: [AlterPolygonComponent],
-        entryComponents: [AlterPolygonComponent]
-    })
-], MyLibModule);
-
 let ComponentGeneraterService = class ComponentGeneraterService {
     constructor(cfr, injector) {
         this.cfr = cfr;
@@ -825,10 +813,10 @@ ComponentGeneraterService.ctorParameters = () => [
     { type: ComponentFactoryResolver },
     { type: Injector }
 ];
-ComponentGeneraterService.ɵprov = ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(ɵɵinject(ComponentFactoryResolver), ɵɵinject(INJECTOR)); }, token: ComponentGeneraterService, providedIn: MyLibModule });
+ComponentGeneraterService.ɵprov = ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(ɵɵinject(ComponentFactoryResolver), ɵɵinject(INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
 ComponentGeneraterService = __decorate([
     Injectable({
-        providedIn: MyLibModule
+        providedIn: 'root'
     }),
     __metadata("design:paramtypes", [ComponentFactoryResolver,
         Injector])
@@ -1737,6 +1725,18 @@ PolyDrawService = __decorate([
         LeafletHelperService])
 ], PolyDrawService);
 
+let MyLibModule = class MyLibModule {
+};
+MyLibModule = __decorate([
+    NgModule({
+        declarations: [AlterPolygonComponent],
+        imports: [],
+        providers: [],
+        exports: [AlterPolygonComponent],
+        entryComponents: [AlterPolygonComponent]
+    })
+], MyLibModule);
+
 /*
  * Public API Surface of my-lib
  */
@@ -1745,5 +1745,5 @@ PolyDrawService = __decorate([
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, AlterPolygonComponent as ɵa, TurfHelperService as ɵb, LeafletHelperService as ɵc };
+export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
 //# sourceMappingURL=my-lib.js.map
