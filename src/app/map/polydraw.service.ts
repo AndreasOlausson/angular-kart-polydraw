@@ -627,9 +627,12 @@ export class PolyDrawService {
                     // this.deletePolygon(this.getLatLngsFromJson(feature));
                     this.removeFeatureGroup(FeatureGroup);
                     console.log("Unkink: ", unkink);
+                    let testCoord = []
                     unkink.forEach(polygon => {
+                        // testCoord.push(polygon.geometry.coordinates)
                         this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
                     });
+                    // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
                 } else {
                     this.kinks = false;
                     this.addPolygon(feature, false);
@@ -647,12 +650,12 @@ export class PolyDrawService {
                 // console.log("TEST");
                 let testCoord = []
                 unkink.forEach(polygon => {
-                    testCoord.push(polygon.geometry.coordinates)
-                    // this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
+                    // testCoord.push(polygon.geometry.coordinates)
+                    this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
                 });
                 console.log("TEST ",testCoord);
                 // console.log("TESTMulti: ", this.turfHelper.getMultiPolygon(testCoord));
-                this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
+                // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
             } else {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.kinks = false;
