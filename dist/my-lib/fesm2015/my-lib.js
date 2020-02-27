@@ -3,7 +3,7 @@ import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Com
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
-import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
+import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, booleanPointInPolygon, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
 let PolyStateService = class PolyStateService {
@@ -169,12 +169,12 @@ let TurfHelperService = class TurfHelperService {
     union(poly1, poly2) {
         console.log('poly1: ', poly1);
         console.log('poly2: ', poly2);
-        let union$1 = union(poly1, poly2);
+        const union$1 = union(poly1, poly2);
         return this.getTurfPolygon(union$1);
     }
     turfConcaveman(feature) {
         //console.log("turfConcaveman", points);
-        let points = explode(feature);
+        const points = explode(feature);
         const coordinates = points.features.map(f => f.geometry.coordinates);
         return multiPolygon([[concaveman(coordinates)]]);
     }
@@ -201,7 +201,7 @@ let TurfHelperService = class TurfHelperService {
     }
     getKinks(feature) {
         const unkink = unkinkPolygon(feature);
-        let coordinates = [];
+        const coordinates = [];
         featureEach(unkink, current => {
             coordinates.push(current);
         });
@@ -215,18 +215,19 @@ let TurfHelperService = class TurfHelperService {
         return kinks.features.length > 0;
     }
     polygonIntersect(polygon, latlngs) {
+        var _a, _b;
         // const oldPolygon = polygon.toGeoJSON();
-        let poly = [];
-        let poly2 = [];
+        const poly = [];
+        const poly2 = [];
         console.log('polygonIntersect', polygon, latlngs);
-        let latlngsCoords = getCoords(latlngs);
+        const latlngsCoords = getCoords(latlngs);
         latlngsCoords.forEach(element => {
-            let feat = { type: 'Polygon', coordinates: [element[0]] };
+            const feat = { type: 'Polygon', coordinates: [element[0]] };
             poly.push(feat);
         });
-        let polygonCoords = getCoords(polygon);
+        const polygonCoords = getCoords(polygon);
         polygonCoords.forEach(element => {
-            let feat = { type: 'Polygon', coordinates: [element[0]] };
+            const feat = { type: 'Polygon', coordinates: [element[0]] };
             poly2.push(feat);
         });
         let intersect$1 = false;
@@ -234,7 +235,15 @@ let TurfHelperService = class TurfHelperService {
             if (this.getKinks(poly[i]).length < 2) {
                 for (let j = 0; j < poly2.length; j++) {
                     if (this.getKinks(poly2[j]).length < 2) {
-                        intersect$1 = !!intersect(poly[i], poly2[j]);
+                        const test = intersect(poly[i], poly2[j]);
+                        if (((_a = test) === null || _a === void 0 ? void 0 : _a.geometry.type) === 'Point') {
+                            intersect$1 = !(booleanPointInPolygon(test, poly[i]) &&
+                                booleanPointInPolygon(test, poly2[j]));
+                            console.log('Intersect test: ');
+                        }
+                        else if (((_b = test) === null || _b === void 0 ? void 0 : _b.geometry.type) === 'Polygon') {
+                            intersect$1 = !!intersect(poly[i], poly2[j]);
+                        }
                         if (intersect$1) {
                             break loop1;
                         }
@@ -276,13 +285,14 @@ let TurfHelperService = class TurfHelperService {
     }
     //TODO -cleanup
     injectPointToPolygon(polygon$1, point) {
-        let coords = getCoords(polygon$1);
+        const coords = getCoords(polygon$1);
         let newPolygon;
         console.log('polygon: ', polygon$1);
         if (coords.length < 2) {
             const polygonPoints = explode(polygon$1);
             console.log(nearestPoint(point, polygonPoints));
-            let index = nearestPoint(point, polygonPoints).properties.featureIndex;
+            const index = nearestPoint(point, polygonPoints).properties
+                .featureIndex;
             const test = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                 if (index === i) {
                     return [...accumulator, oldPoint, point];
@@ -293,14 +303,15 @@ let TurfHelperService = class TurfHelperService {
             newPolygon = multiPolygon([[test]]);
         }
         else {
-            let pos = [];
+            const pos = [];
             let coordinates = [];
             coords.forEach(element => {
-                let polygon$1 = polygon(element);
+                const polygon$1 = polygon(element);
                 // turf.booleanPointInPolygon(point, polygon)
                 if (booleanPointInPolygon(point, polygon$1)) {
                     const polygonPoints = explode(polygon$1);
-                    let index = nearestPoint(point, polygonPoints).properties.featureIndex;
+                    const index = nearestPoint(point, polygonPoints).properties
+                        .featureIndex;
                     coordinates = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                         if (index === i) {
                             return [...accumulator, oldPoint, point];
@@ -319,7 +330,7 @@ let TurfHelperService = class TurfHelperService {
         return newPolygon;
     }
     polygonDifference(polygon1, polygon2) {
-        let diff = difference(polygon1, polygon2);
+        const diff = difference(polygon1, polygon2);
         console.log(diff);
         return this.getTurfPolygon(diff);
     }
@@ -344,7 +355,7 @@ let TurfHelperService = class TurfHelperService {
         return compass;
     }
     getNearestPointIndex(targetPoint, points) {
-        let index = nearestPoint(targetPoint, points).properties.featureIndex;
+        const index = nearestPoint(targetPoint, points).properties.featureIndex;
         return index;
     }
     getCoord(point) {
@@ -1266,11 +1277,11 @@ class PolyDrawService {
         latlngs.forEach((latlng, i) => {
             let iconClasses = this.config.markers.markerIcon.styleClasses;
             /*   if (i === menuMarkerIdx && this.config.markers.menu) {
-                iconClasses = this.config.markers.markerMenuIcon.styleClasses;
-              }
-              if (i === deleteMarkerIdx && this.config.markers.delete) {
-                iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-              } */
+              iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+            }
+            if (i === deleteMarkerIdx && this.config.markers.delete) {
+              iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+            } */
             const marker = new Marker(latlng, {
                 icon: this.createDivIcon(iconClasses),
                 draggable: true,
@@ -1457,9 +1468,11 @@ class PolyDrawService {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.removeFeatureGroup(FeatureGroup);
                 console.log("Unkink: ", unkink);
+                let testCoord = [];
                 unkink.forEach(polygon => {
-                    this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
+                    testCoord.push(polygon.geometry.coordinates);
                 });
+                this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
             }
             else {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));

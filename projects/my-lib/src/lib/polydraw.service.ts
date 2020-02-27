@@ -525,7 +525,7 @@ export class PolyDrawService {
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-    /*   if (i === menuMarkerIdx && this.config.markers.menu) {
+      /*   if (i === menuMarkerIdx && this.config.markers.menu) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
@@ -724,9 +724,12 @@ export class PolyDrawService {
         // this.deletePolygon(this.getLatLngsFromJson(feature));
         this.removeFeatureGroup(FeatureGroup);
         console.log("Unkink: ", unkink);
+        let testCoord = []
         unkink.forEach(polygon => {
-          this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
+          testCoord.push(polygon.geometry.coordinates)
+
         });
+        this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
       } else {
         // this.deletePolygon(this.getLatLngsFromJson(feature));
         this.kinks = false;

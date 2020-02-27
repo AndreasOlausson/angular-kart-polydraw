@@ -3,7 +3,7 @@ import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Com
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
-import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, booleanPointInPolygon, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
+import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, booleanPointInPolygon, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
 var PolyStateService = /** @class */ (function () {
@@ -231,6 +231,7 @@ var TurfHelperService = /** @class */ (function () {
         return kinks.features.length > 0;
     };
     TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
+        var _a, _b;
         // const oldPolygon = polygon.toGeoJSON();
         var poly = [];
         var poly2 = [];
@@ -250,7 +251,15 @@ var TurfHelperService = /** @class */ (function () {
             if (this.getKinks(poly[i]).length < 2) {
                 for (var j = 0; j < poly2.length; j++) {
                     if (this.getKinks(poly2[j]).length < 2) {
-                        intersect$1 = !!intersect(poly[i], poly2[j]);
+                        var test = intersect(poly[i], poly2[j]);
+                        if (((_a = test) === null || _a === void 0 ? void 0 : _a.geometry.type) === 'Point') {
+                            intersect$1 = !(booleanPointInPolygon(test, poly[i]) &&
+                                booleanPointInPolygon(test, poly2[j]));
+                            console.log('Intersect test: ');
+                        }
+                        else if (((_b = test) === null || _b === void 0 ? void 0 : _b.geometry.type) === 'Polygon') {
+                            intersect$1 = !!intersect(poly[i], poly2[j]);
+                        }
                         if (intersect$1) {
                             break loop1;
                         }
@@ -299,7 +308,8 @@ var TurfHelperService = /** @class */ (function () {
         if (coords.length < 2) {
             var polygonPoints = explode(polygon$1);
             console.log(nearestPoint(point, polygonPoints));
-            var index_1 = nearestPoint(point, polygonPoints).properties.featureIndex;
+            var index_1 = nearestPoint(point, polygonPoints).properties
+                .featureIndex;
             var test = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                 if (index_1 === i) {
                     return __spread(accumulator, [oldPoint, point]);
@@ -317,7 +327,8 @@ var TurfHelperService = /** @class */ (function () {
                 // turf.booleanPointInPolygon(point, polygon)
                 if (booleanPointInPolygon(point, polygon$1)) {
                     var polygonPoints = explode(polygon$1);
-                    var index_2 = nearestPoint(point, polygonPoints).properties.featureIndex;
+                    var index_2 = nearestPoint(point, polygonPoints).properties
+                        .featureIndex;
                     coordinates_1 = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                         if (index_2 === i) {
                             return __spread(accumulator, [oldPoint, point]);
@@ -1304,11 +1315,11 @@ var PolyDrawService = /** @class */ (function () {
         latlngs.forEach(function (latlng, i) {
             var iconClasses = _this.config.markers.markerIcon.styleClasses;
             /*   if (i === menuMarkerIdx && this.config.markers.menu) {
-                iconClasses = this.config.markers.markerMenuIcon.styleClasses;
-              }
-              if (i === deleteMarkerIdx && this.config.markers.delete) {
-                iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-              } */
+              iconClasses = this.config.markers.markerMenuIcon.styleClasses;
+            }
+            if (i === deleteMarkerIdx && this.config.markers.delete) {
+              iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
+            } */
             var marker = new Marker(latlng, {
                 icon: _this.createDivIcon(iconClasses),
                 draggable: true,
@@ -1497,9 +1508,11 @@ var PolyDrawService = /** @class */ (function () {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.removeFeatureGroup(FeatureGroup);
                 console.log("Unkink: ", unkink);
+                var testCoord_1 = [];
                 unkink.forEach(function (polygon) {
-                    _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
+                    testCoord_1.push(polygon.geometry.coordinates);
                 });
+                this.addPolygon(this.turfHelper.getMultiPolygon(testCoord_1), false, true);
             }
             else {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
