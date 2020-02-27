@@ -1508,11 +1508,11 @@ var PolyDrawService = /** @class */ (function () {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.removeFeatureGroup(FeatureGroup);
                 console.log("Unkink: ", unkink);
-                var testCoord_1 = [];
+                var testCoord = [];
                 unkink.forEach(function (polygon) {
-                    testCoord_1.push(polygon.geometry.coordinates);
+                    _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
                 });
-                this.addPolygon(this.turfHelper.getMultiPolygon(testCoord_1), false, true);
+                // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
             }
             else {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));

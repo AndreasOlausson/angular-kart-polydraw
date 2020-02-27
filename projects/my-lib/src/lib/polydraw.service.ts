@@ -726,10 +726,13 @@ export class PolyDrawService {
         console.log("Unkink: ", unkink);
         let testCoord = []
         unkink.forEach(polygon => {
-          testCoord.push(polygon.geometry.coordinates)
-
+          this.addPolygon(
+            this.turfHelper.getTurfPolygon(polygon),
+            false,
+            true
+          );
         });
-        this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
+        // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
       } else {
         // this.deletePolygon(this.getLatLngsFromJson(feature));
         this.kinks = false;
