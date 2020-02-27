@@ -644,20 +644,27 @@ export class PolyDrawService {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.removeFeatureGroup(FeatureGroup);
                 console.log("Unkink: ", unkink);
+                // console.log("TEST");
+                let testCoord = []
                 unkink.forEach(polygon => {
-                    this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
+                    testCoord.push(polygon.geometry.coordinates)
+                    // this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
                 });
+                console.log("TEST ",testCoord);
+                // console.log("TESTMulti: ", this.turfHelper.getMultiPolygon(testCoord));
+                this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
             } else {
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.kinks = false;
                 this.addPolygon(feature, false);
             }
         }
+        console.log(this.arrayOfFeatureGroups);
         this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
     }
     //fine, check the returned type
     private getLatLngsFromJson(feature: Feature<Polygon | MultiPolygon>): ILatLng[][] {
-        console.log("getLatLngsFromJson: ", feature);
+        // console.log("getLatLngsFromJson: ", feature);
         let coord;
         if (feature) {
             if (feature.geometry.coordinates.length > 1 && feature.geometry.type === "MultiPolygon") {
@@ -674,7 +681,7 @@ export class PolyDrawService {
 
     //fine
     private unionPolygons(layers, latlngs: Feature<Polygon | MultiPolygon>, polygonFeature) {
-        console.log("unionPolygons", layers, latlngs, polygonFeature);
+        // console.log("unionPolygons", layers, latlngs, polygonFeature);
 
         let addNew = latlngs;
         layers.forEach((featureGroup, i) => {
@@ -694,7 +701,7 @@ export class PolyDrawService {
     }
     //fine
     private removeFeatureGroup(featureGroup: L.FeatureGroup) {
-        console.log("removeFeatureGroup", featureGroup);
+        // console.log("removeFeatureGroup", featureGroup);
 
         featureGroup.clearLayers();
         this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(featureGroups => featureGroups !== featureGroup);
@@ -703,7 +710,7 @@ export class PolyDrawService {
     }
     //fine until refactoring
     private removeFeatureGroupOnMerge(featureGroup: L.FeatureGroup) {
-        console.log("removeFeatureGroupOnMerge", featureGroup);
+        // console.log("removeFeatureGroupOnMerge", featureGroup);
 
         let newArray = [];
         if (featureGroup.getLayers()[0]) {
@@ -726,7 +733,7 @@ export class PolyDrawService {
     }
     //fine until refactoring
     private deletePolygonOnMerge(polygon) {
-        console.log("deletePolygonOnMerge", polygon);
+        // console.log("deletePolygonOnMerge", polygon);
         let polygon2 = []
         if (this.arrayOfFeatureGroups.length > 0) {
             this.arrayOfFeatureGroups.forEach(featureGroup => {
@@ -739,7 +746,7 @@ export class PolyDrawService {
                 const equals = this.polygonArrayEqualsMerge(polygon2, polygon);
 
                 if (equals) {
-                    console.log("EQUALS", polygon);
+                    // console.log("EQUALS", polygon);
                     this.removeFeatureGroupOnMerge(featureGroup);
                     this.deletePolygon(polygon);
                     this.polygonInformation.deleteTrashcan(polygon);
