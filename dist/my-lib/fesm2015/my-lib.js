@@ -904,6 +904,9 @@ class PolyDrawService {
     // make readable
     deletePolygon(polygon) {
         console.log("deletePolygon: ", polygon);
+        if (polygon.length > 1) {
+            polygon.length = 1;
+        }
         if (this.arrayOfFeatureGroups.length > 0) {
             this.arrayOfFeatureGroups.forEach(featureGroup => {
                 const layer = featureGroup.getLayers()[0];

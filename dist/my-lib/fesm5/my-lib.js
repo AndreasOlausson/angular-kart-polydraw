@@ -934,6 +934,9 @@ var PolyDrawService = /** @class */ (function () {
     PolyDrawService.prototype.deletePolygon = function (polygon) {
         var _this = this;
         console.log("deletePolygon: ", polygon);
+        if (polygon.length > 1) {
+            polygon.length = 1;
+        }
         if (this.arrayOfFeatureGroups.length > 0) {
             this.arrayOfFeatureGroups.forEach(function (featureGroup) {
                 var layer = featureGroup.getLayers()[0];
