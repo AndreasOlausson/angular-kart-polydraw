@@ -1213,30 +1213,32 @@
         // check this
         PolyDrawService.prototype.addAutoPolygon = function (geographicBorders) {
             var _this = this;
-            var featureGroup = new leaflet.FeatureGroup();
-            var polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
-            console.log(polygon2);
-            var polygon = this.getPolygon(polygon2);
-            featureGroup.addLayer(polygon);
-            var markerLatlngs = polygon.getLatLngs();
-            console.log("markers: ", markerLatlngs);
-            markerLatlngs.forEach(function (polygon) {
-                polygon.forEach(function (polyElement, i) {
-                    if (i === 0) {
-                        _this.addMarker(polyElement, featureGroup);
-                    }
-                    else {
-                        _this.addHoleMarker(polyElement, featureGroup);
-                        console.log("Hull: ", polyElement);
-                    }
+            geographicBorders.forEach(function (group) {
+                var featureGroup = new leaflet.FeatureGroup();
+                var polygon2 = _this.turfHelper.getMultiPolygon(_this.convertToCoords(group));
+                console.log(polygon2);
+                var polygon = _this.getPolygon(polygon2);
+                featureGroup.addLayer(polygon);
+                var markerLatlngs = polygon.getLatLngs();
+                console.log("markers: ", markerLatlngs);
+                markerLatlngs.forEach(function (polygon) {
+                    polygon.forEach(function (polyElement, i) {
+                        if (i === 0) {
+                            _this.addMarker(polyElement, featureGroup);
+                        }
+                        else {
+                            _this.addHoleMarker(polyElement, featureGroup);
+                            console.log("Hull: ", polyElement);
+                        }
+                    });
+                    // this.addMarker(polygon[0], featureGroup);
+                    // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
                 });
-                // this.addMarker(polygon[0], featureGroup);
-                // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
+                _this.arrayOfFeatureGroups.push(featureGroup);
+                _this.polygonInformation.createPolygonInformationStorage(_this.arrayOfFeatureGroups);
+                _this.polygonInformation.activate();
+                _this.polygonInformation.setMoveMode();
             });
-            this.arrayOfFeatureGroups.push(featureGroup);
-            this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-            this.polygonInformation.activate();
-            this.polygonInformation.setMoveMode();
         };
         // innehåll i if'ar flytta till egna metoder
         PolyDrawService.prototype.convertToCoords = function (latlngs) {

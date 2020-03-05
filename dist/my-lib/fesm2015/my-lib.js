@@ -967,30 +967,32 @@ class PolyDrawService {
     }
     // check this
     addAutoPolygon(geographicBorders) {
-        const featureGroup = new FeatureGroup();
-        const polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
-        console.log(polygon2);
-        const polygon = this.getPolygon(polygon2);
-        featureGroup.addLayer(polygon);
-        const markerLatlngs = polygon.getLatLngs();
-        console.log("markers: ", markerLatlngs);
-        markerLatlngs.forEach(polygon => {
-            polygon.forEach((polyElement, i) => {
-                if (i === 0) {
-                    this.addMarker(polyElement, featureGroup);
-                }
-                else {
-                    this.addHoleMarker(polyElement, featureGroup);
-                    console.log("Hull: ", polyElement);
-                }
+        geographicBorders.forEach(group => {
+            const featureGroup = new FeatureGroup();
+            const polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(group));
+            console.log(polygon2);
+            const polygon = this.getPolygon(polygon2);
+            featureGroup.addLayer(polygon);
+            const markerLatlngs = polygon.getLatLngs();
+            console.log("markers: ", markerLatlngs);
+            markerLatlngs.forEach(polygon => {
+                polygon.forEach((polyElement, i) => {
+                    if (i === 0) {
+                        this.addMarker(polyElement, featureGroup);
+                    }
+                    else {
+                        this.addHoleMarker(polyElement, featureGroup);
+                        console.log("Hull: ", polyElement);
+                    }
+                });
+                // this.addMarker(polygon[0], featureGroup);
+                // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
             });
-            // this.addMarker(polygon[0], featureGroup);
-            // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
+            this.arrayOfFeatureGroups.push(featureGroup);
+            this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+            this.polygonInformation.activate();
+            this.polygonInformation.setMoveMode();
         });
-        this.arrayOfFeatureGroups.push(featureGroup);
-        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-        this.polygonInformation.activate();
-        this.polygonInformation.setMoveMode();
     }
     // innehåll i if'ar flytta till egna metoder
     convertToCoords(latlngs) {

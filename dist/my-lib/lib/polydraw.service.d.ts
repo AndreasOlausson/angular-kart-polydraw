@@ -30,7 +30,7 @@ export declare class PolyDrawService {
     removeAllFeatureGroups(): void;
     getDrawMode(): DrawMode;
     addViken(polygon: any): void;
-    addAutoPolygon(geographicBorders: L.LatLng[][]): void;
+    addAutoPolygon(geographicBorders: L.LatLng[][][]): void;
     private convertToCoords;
     private initPolyDraw;
     private mouseDown;

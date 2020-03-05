@@ -158,11 +158,12 @@ export class PolyDrawService {
   }
 
   // check this
-  addAutoPolygon(geographicBorders: L.LatLng[][]): void {
+  addAutoPolygon(geographicBorders: L.LatLng[][][]): void {
+    geographicBorders.forEach(group => {
     const featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
     const polygon2 = this.turfHelper.getMultiPolygon(
-      this.convertToCoords(geographicBorders)
+      this.convertToCoords(group)
     );
     console.log(polygon2);
     const polygon = this.getPolygon(polygon2);
@@ -189,6 +190,7 @@ export class PolyDrawService {
     );
     this.polygonInformation.activate();
     this.polygonInformation.setMoveMode();
+    });
   }
 
   // innehåll i if'ar flytta till egna metoder
