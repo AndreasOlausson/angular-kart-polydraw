@@ -910,6 +910,7 @@ class PolyDrawService {
                 const latlngs = layer.getLatLngs();
                 const length = latlngs.length;
                 //  = []
+                console.log(latlngs);
                 latlngs.forEach((latlng, index) => {
                     let polygon3;
                     const test = [...latlng];

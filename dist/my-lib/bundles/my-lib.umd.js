@@ -1154,6 +1154,7 @@
                     var latlngs = layer.getLatLngs();
                     var length = latlngs.length;
                     //  = []
+                    console.log(latlngs);
                     latlngs.forEach(function (latlng, index) {
                         var polygon3;
                         var test = __spread(latlng);
