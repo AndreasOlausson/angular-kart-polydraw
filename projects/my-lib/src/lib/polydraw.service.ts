@@ -189,12 +189,14 @@ export class PolyDrawService {
     });
 
     this.arrayOfFeatureGroups.push(featureGroup);
+    
+    });
     this.polygonInformation.createPolygonInformationStorage(
       this.arrayOfFeatureGroups
     );
     this.polygonInformation.activate();
     this.polygonInformation.setMoveMode();
-    });
+    console.log(this.polygonInformation.polygonInformationStorage);
   }
 
   // innehåll i if'ar flytta till egna metoder

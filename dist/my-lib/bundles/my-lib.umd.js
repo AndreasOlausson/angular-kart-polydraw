@@ -1239,10 +1239,11 @@
                     // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
                 });
                 _this.arrayOfFeatureGroups.push(featureGroup);
-                _this.polygonInformation.createPolygonInformationStorage(_this.arrayOfFeatureGroups);
-                _this.polygonInformation.activate();
-                _this.polygonInformation.setMoveMode();
             });
+            this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+            this.polygonInformation.activate();
+            this.polygonInformation.setMoveMode();
+            console.log(this.polygonInformation.polygonInformationStorage);
         };
         // innehåll i if'ar flytta till egna metoder
         PolyDrawService.prototype.convertToCoords = function (latlngs) {

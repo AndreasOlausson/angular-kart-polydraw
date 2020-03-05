@@ -993,10 +993,11 @@ class PolyDrawService {
                 // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
             });
             this.arrayOfFeatureGroups.push(featureGroup);
-            this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-            this.polygonInformation.activate();
-            this.polygonInformation.setMoveMode();
         });
+        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+        this.polygonInformation.activate();
+        this.polygonInformation.setMoveMode();
+        console.log(this.polygonInformation.polygonInformationStorage);
     }
     // innehåll i if'ar flytta till egna metoder
     convertToCoords(latlngs) {
