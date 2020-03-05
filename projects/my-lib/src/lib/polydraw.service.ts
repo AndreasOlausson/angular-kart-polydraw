@@ -102,9 +102,9 @@ export class PolyDrawService {
 
           console.log(latlng);
           if (latlng.length > 1) {
-            /* if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
+            if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
               test[0].push(latlng[0][0]);
-              }  */
+              } 
 
             polygon3 = [test[0]];
           } else {
