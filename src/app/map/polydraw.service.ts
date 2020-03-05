@@ -147,10 +147,11 @@ export class PolyDrawService {
     }
 
     //check this
-    addAutoPolygon(geographicBorders: L.LatLng[][]): void {
+    addAutoPolygon(geographicBorders: L.LatLng[][][]): void {
+        geographicBorders.forEach(group => {
         let featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
-        let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(geographicBorders));
+        let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(group));
         console.log(polygon2);
         let polygon = this.getPolygon(polygon2);
 
@@ -171,7 +172,8 @@ export class PolyDrawService {
         });
 
         this.arrayOfFeatureGroups.push(featureGroup);
-        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);}
+        )
     }
 
     //innehåll i if'ar flytta till egna metoder
@@ -630,7 +632,7 @@ export class PolyDrawService {
                     let testCoord = []
                     unkink.forEach(polygon => {
                         // testCoord.push(polygon.geometry.coordinates)
-                        this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
+                        this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false);
                     });
                     // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
                 } else {
@@ -651,7 +653,7 @@ export class PolyDrawService {
                 let testCoord = []
                 unkink.forEach(polygon => {
                     // testCoord.push(polygon.geometry.coordinates)
-                    this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
+                    this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false);
                 });
                 console.log("TEST ",testCoord);
                 // console.log("TESTMulti: ", this.turfHelper.getMultiPolygon(testCoord));
