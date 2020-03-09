@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs';
 import * as L from "leaflet";
 import { ILatLng } from './polygon-helpers';
-import * as i0 from "@angular/core";
 export declare class PolyStateService {
     constructor();
     private mapSubject;
@@ -15,8 +14,6 @@ export declare class PolyStateService {
     updateMapState(map: L.Map): void;
     updatePolygons(polygons: ILatLng[][][]): void;
     updateMapBounds(mapBounds: MapBoundsState): void;
-    static ɵfac: i0.ɵɵFactoryDef<PolyStateService>;
-    static ɵprov: i0.ɵɵInjectableDef<PolyStateService>;
 }
 declare class MapStateModel {
     mapBoundState: MapBoundsState;
