@@ -406,7 +406,7 @@
             //console.log("turfConcaveman", points);
             var points = turf.explode(feature);
             var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
-            return turf.multiPolygon([[concaveman(coordinates)].reverse()]);
+            return turf.multiPolygon([[concaveman(coordinates).reverse()]]);
         };
         //TODO add some sort of dynamic tolerance
         TurfHelperService.prototype.getSimplified = function (polygon) {
