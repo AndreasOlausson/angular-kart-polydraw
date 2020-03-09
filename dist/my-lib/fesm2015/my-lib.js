@@ -176,7 +176,7 @@ let TurfHelperService = class TurfHelperService {
         //console.log("turfConcaveman", points);
         const points = explode(feature);
         const coordinates = points.features.map(f => f.geometry.coordinates);
-        return multiPolygon([[concaveman(coordinates).reverse()]]);
+        return multiPolygon([[concaveman(coordinates)]]);
     }
     //TODO add some sort of dynamic tolerance
     getSimplified(polygon) {
