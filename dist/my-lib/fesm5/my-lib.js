@@ -192,7 +192,7 @@ var TurfHelperService = /** @class */ (function () {
         //console.log("turfConcaveman", points);
         var points = explode(feature);
         var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
-        return multiPolygon([[concaveman(coordinates)]]);
+        return multiPolygon([[concaveman(coordinates)].reverse()]);
     };
     //TODO add some sort of dynamic tolerance
     TurfHelperService.prototype.getSimplified = function (polygon) {
@@ -1814,5 +1814,5 @@ var MyLibModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb, AlterPolygonComponent as ɵc };
+export { AlterPolygonComponent, ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb };
 //# sourceMappingURL=my-lib.js.map

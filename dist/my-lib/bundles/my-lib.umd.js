@@ -406,7 +406,7 @@
             //console.log("turfConcaveman", points);
             var points = turf.explode(feature);
             var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
-            return turf.multiPolygon([[concaveman(coordinates)]]);
+            return turf.multiPolygon([[concaveman(coordinates)].reverse()]);
         };
         //TODO add some sort of dynamic tolerance
         TurfHelperService.prototype.getSimplified = function (polygon) {
@@ -2020,6 +2020,7 @@
         return MyLibModule;
     }());
 
+    exports.AlterPolygonComponent = AlterPolygonComponent;
     exports.ComponentGeneraterService = ComponentGeneraterService;
     exports.MyLibModule = MyLibModule;
     exports.PolyDrawService = PolyDrawService;
@@ -2031,7 +2032,6 @@
     exports.ɵ1 = ɵ1;
     exports.ɵa = TurfHelperService;
     exports.ɵb = LeafletHelperService;
-    exports.ɵc = AlterPolygonComponent;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

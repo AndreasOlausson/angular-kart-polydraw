@@ -29,7 +29,7 @@ export class TurfHelperService {
     const points = turf.explode(feature);
 
     const coordinates = points.features.map(f => f.geometry.coordinates);
-    return turf.multiPolygon([[concaveman(coordinates)]]);
+    return turf.multiPolygon([[concaveman(coordinates)].reverse()]);
   }
 
   //TODO add some sort of dynamic tolerance

@@ -3,6 +3,7 @@
  */
 
 export * from './lib/polydraw.service';
+export * from './lib/popups/alter-polygon/alter-polygon.component';
 export * from './lib/map-state.service';
 export * from './lib/component-generater.service';
 export * from './lib/polygon-information.service';
