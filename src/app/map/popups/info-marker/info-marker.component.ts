@@ -5,12 +5,9 @@ import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
   templateUrl: './info-marker.component.html',
   styleUrls: ['./info-marker.component.css']
 })
-export class InfoMarkerPopupComponent implements OnInit {
-  ngOnInit(): void {
-    this.areaLabel = "fooo"
-  }
-
-  areaLabel: string = "Areaz"
+export class InfoMarkerPopupComponent {
+  test= 'JADA'
+  test2 = 60
 
   @Output() simplyfiClicked: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
 
