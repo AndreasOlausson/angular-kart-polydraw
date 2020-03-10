@@ -19,12 +19,9 @@ export class PolyDrawUtil {
         return bounds;
     }
 }
-//TODO make compass ILatLng
-export class Compass {
 
+export class Compass {
     public direction: ICompass = {
-        // BoundingBoxCenter: { lat: 0, lng: 0 },
-        // CenterOfMass: { lat: 0, lng: 0 },
         East: { lat: 0, lng: 0 },
         North: { lat: 0, lng: 0 },
         NorthEast: { lat: 0, lng: 0 },
@@ -34,9 +31,7 @@ export class Compass {
         SouthWest: { lat: 0, lng: 0 },
         West: { lat: 0, lng: 0 }
     };
-
     constructor(minLat: number = 0, minLng: number = 0, maxLat: number = 0, maxLng: number = 0) {
-
         this.direction.North = { lat: maxLat, lng: (minLng + maxLng) / 2 };
         this.direction.NorthEast = { lat: maxLat, lng: maxLng };
         this.direction.East = { lat: (minLat + maxLat) / 2, lng: maxLng };
@@ -45,14 +40,16 @@ export class Compass {
         this.direction.SouthWest = { lat: minLat, lng: minLng };
         this.direction.West = { lat: (minLat + maxLat) / 2, lng: minLng };
         this.direction.NorthWest = { lat: maxLat, lng: minLng };
-        // this.direction.CenterOfMass = { lat: 0, lng: 0 };
-        // this.direction.BoundingBoxCenter = {lat: (minLat + maxLat) / 2, lng: (minLng + maxLng) / 2};
     }
-    //TODO default return.
+    //TODO call general error handler...
     getDirection(direction: MarkerPosition) {
         switch (direction) {
-            // case MarkerPosition.CenterOfMass:
-            //     return this.direction.CenterOfMass;
+            case MarkerPosition.SouthWest:
+                return this.direction.SouthWest;
+            case MarkerPosition.West:
+                return this.direction.West;
+            case MarkerPosition.NorthWest:
+                return this.direction.NorthWest;
             case MarkerPosition.North:
                 return this.direction.North;
             case MarkerPosition.NorthEast:
@@ -63,19 +60,10 @@ export class Compass {
                 return this.direction.SouthEast;
             case MarkerPosition.South:
                 return this.direction.South;
-            case MarkerPosition.SouthWest:
-                return this.direction.SouthWest;
-            case MarkerPosition.West:
-                return this.direction.West;
-            case MarkerPosition.NorthWest:
-                return this.direction.NorthWest;
-            // case MarkerPosition.BoundingBoxCenter:
-            //     return this.direction.BoundingBoxCenter;
             default:
-                return this.direction.North;
+                throw new Error;
         }
     }
-    //TODO startNode, go clockwise or not
     getPositions(startPosition: MarkerPosition = MarkerPosition.SouthWest, clockwise: boolean = false, addClosingNode: boolean = true): number[][] {
 
         let positions: number[][] = [];
@@ -89,7 +77,6 @@ export class Compass {
         }
         return positions;
     }
-    //TODO make clockwise nicer
     private getPositionAsArray(startPosition: MarkerPosition = MarkerPosition.NorthEast, clockwise: boolean = false): ILatLng[] {
 
         const positions: ILatLng[] = [];
