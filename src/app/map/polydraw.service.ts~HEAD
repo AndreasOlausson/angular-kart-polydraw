@@ -9,7 +9,7 @@ import { TurfHelperService } from "./turf-helper.service";
 import { PolygonInformationService } from "./polygon-information.service";
 import defaultConfig from "./config.json";
 import { ILatLng } from "./polygon-helpers";
-import { ComponentGeneraterService } from "./component-generater.service";
+import { ComponentGeneratorService } from "./component-Generator.service";
 import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPlacement } from "./enums";
 import { LeafletHelperService } from "./leaflet-helper.service";
@@ -36,7 +36,7 @@ export class PolyDrawService {
 
   constructor(
     private mapState: MapStateService,
-    private popupGenerator: ComponentGeneraterService,
+    private popupGenerator: ComponentGeneratorService,
     private turfHelper: TurfHelperService,
     private polygonInformation: PolygonInformationService,
     private leafletHelper: LeafletHelperService

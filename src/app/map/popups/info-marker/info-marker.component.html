@@ -1,16 +1,16 @@
-<div class="area-label-outer-wrapper">
-  <div class="area-label-wrapper">
+<div class="info-marker-outer-wrapper">
+  <div class="info-marker-wrapper">
     <i class="inverted-corner"></i>
     <div class="content">
       <div class="row bottom-separator">
-        <div class="header">Omkrets</div>
+        <div class="header"><i *ngIf="1+1 === 2">{{"areaLabel"}}</i>{{onPoo()}}</div>
         <div>
           <span class='area'>600</span>
           <span class='unit'>m</span>
         </div>
       </div>
       <div class="row">
-        <div class="header">Areal</div>
+        <div class="header">{{ areaLabel }}</div>
         <div class="right-margin">
           <span class='area'>0.02</span>
           <span class='unit'>m<i class="sup">2</i></span>

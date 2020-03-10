@@ -453,7 +453,7 @@ export class PolyDrawService {
             if (i === infoMarkerIdx && this.config.markers.info) {
                 iconClasses = this.config.markers.markerInfoIcon.styleClasses;
             }
-            const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+            const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true });
             FeatureGroup.addLayer(marker).addTo(this.map);
             // console.log("FeatureGroup: ", FeatureGroup);
             marker.on("drag", e => {
@@ -468,7 +468,7 @@ export class PolyDrawService {
                 marker.bindPopup(
                   this.getMenuMarkerHtmlContent(e => {
                     console.log("clicked on", e.target);
-                  })
+                  }), {className: "alter-marker"}
                 );
                 // marker.on("click", e => {
                 // this.convertToBoundsPolygon(latlngs);
