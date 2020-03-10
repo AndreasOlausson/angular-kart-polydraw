@@ -87,29 +87,13 @@ export class Compass {
         if (addClosingNode) {
             positions.push([posArray[0].lng, posArray[0].lat]);
         }
-
-
-        // positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
-        // positions.push([this.direction.South.lng, this.direction.South.lat]);
-        // positions.push([this.direction.SouthEast.lng, this.direction.SouthEast.lat]);
-        // positions.push([this.direction.East.lng, this.direction.East.lat]);
-        // positions.push([this.direction.NorthEast.lng, this.direction.NorthEast.lat]);
-        // positions.push([this.direction.North.lng, this.direction.North.lat]);
-        // positions.push([this.direction.NorthWest.lng, this.direction.NorthWest.lat]);
-        // positions.push([this.direction.West.lng, this.direction.West.lat]);
-        // if (addClosingNode) {
-        //     positions.push([this.direction.SouthWest.lng, this.direction.SouthWest.lat]);
-        // }
-
-
-
         return positions;
     }
     //TODO make clockwise nicer
-    private getPositionAsArray(startPosition: MarkerPosition = MarkerPosition.SouthWest, clockwise: boolean = false): ILatLng[] {
+    private getPositionAsArray(startPosition: MarkerPosition = MarkerPosition.NorthEast, clockwise: boolean = false): ILatLng[] {
 
         const positions: ILatLng[] = [];
-        if(clockwise){
+        if (clockwise) {
             positions.push(this.direction.SouthWest);
             positions.push(this.direction.West);
             positions.push(this.direction.NorthWest);
@@ -128,12 +112,14 @@ export class Compass {
             positions.push(this.direction.NorthWest);
             positions.push(this.direction.West);
         }
-        
-        for (let index = 0; index < startPosition; index++) {
-            const elem = positions.shift();
-            positions[positions.length] = elem;
-        }
 
+        //Change start position
+        if (startPosition !== MarkerPosition.SouthWest) {
+            var chunk = positions.splice(0, startPosition);
+            chunk.forEach((v, i) => {
+                positions.splice(startPosition + i, 0, v);
+            })
+        }
         return positions;
     }
 }
