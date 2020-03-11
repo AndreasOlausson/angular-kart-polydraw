@@ -14,6 +14,7 @@ import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPosition } from "./enums";
 import { TurfHelper } from "./turf-helper";
 
+
 @Injectable({
     providedIn: "root"
 })
@@ -149,30 +150,31 @@ export class PolyDrawService {
     //check this
     addAutoPolygon(geographicBorders: L.LatLng[][][]): void {
         geographicBorders.forEach(group => {
-        let featureGroup: L.FeatureGroup = new L.FeatureGroup();
+            let featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
-        let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(group));
-        console.log(polygon2);
-        let polygon = this.getPolygon(polygon2);
+            let polygon2 = this.turfHelper.getMultiPolygon(this.convertToCoords(group));
+            console.log(polygon2);
+            let polygon = this.getPolygon(polygon2);
 
-        featureGroup.addLayer(polygon);
-        let markerLatlngs = polygon.getLatLngs();
-        console.log("markers: ", markerLatlngs);
-        markerLatlngs.forEach(polygon => {
-            polygon.forEach((polyElement, i) => {
-                if (i === 0) {
-                    this.addMarker(polyElement, featureGroup);
-                } else {
-                    this.addHoleMarker(polyElement, featureGroup);
-                    console.log("Hull: ", polyElement);
-                }
+            featureGroup.addLayer(polygon);
+            let markerLatlngs = polygon.getLatLngs();
+            console.log("markers: ", markerLatlngs);
+            markerLatlngs.forEach(polygon => {
+                polygon.forEach((polyElement, i) => {
+                    if (i === 0) {
+                        this.addMarker(polyElement, featureGroup);
+                    } else {
+                        this.addHoleMarker(polyElement, featureGroup);
+                        console.log("Hull: ", polyElement);
+                    }
+                });
+                // this.addMarker(polygon[0], featureGroup);
+                //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
             });
-            // this.addMarker(polygon[0], featureGroup);
-            //TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
-        });
 
-        this.arrayOfFeatureGroups.push(featureGroup);
-        this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);}
+            this.arrayOfFeatureGroups.push(featureGroup);
+            this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
+        }
         )
     }
 
@@ -468,9 +470,9 @@ export class PolyDrawService {
 
 
                 marker.bindPopup(
-                  this.getMenuMarkerHtmlContent(e => {
-                    console.log("clicked on", e.target);
-                  }), {className: "alter-marker"}
+                    this.getMenuMarkerHtmlContent(e => {
+                        console.log("clicked on", e.target);
+                    }), { className: "alter-marker" }
                 );
                 // marker.on("click", e => {
                 // this.convertToBoundsPolygon(latlngs);
@@ -479,15 +481,19 @@ export class PolyDrawService {
             }
             if (i === infoMarkerIdx && this.config.markers.info) {
 
+                const infoPopup = this.generateInfoMarkerPopup(latlngs);
 
-                marker.bindPopup(
-                  this.getInfoMarkerHtmlContent(e => {
-                    console.log("clicked on", e.target);
-                  }), {className: "info-marker"}
-                );
+                marker.bindPopup(infoPopup);
+
+
+                // marker.bindPopup(
+                //   this.getInfoMarkerHtmlContent(e => {
+                //     console.log("clicked on", e.target);
+                //   }), {className: "info-marker"}
+                // );
                 // marker.on("click", e => {
-                // this.convertToBoundsPolygon(latlngs);
-                //     //this.convertToSimplifiedPolygon(latlngs);
+                //     this.convertToBoundsPolygon(latlngs);
+                //     this.convertToSimplifiedPolygon(latlngs);
                 // })
             }
             if (i === deleteMarkerIdx && this.config.markers.delete) {
@@ -655,7 +661,7 @@ export class PolyDrawService {
                     // testCoord.push(polygon.geometry.coordinates)
                     this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false);
                 });
-                console.log("TEST ",testCoord);
+                console.log("TEST ", testCoord);
                 // console.log("TESTMulti: ", this.turfHelper.getMultiPolygon(testCoord));
                 // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
             } else {
@@ -904,7 +910,47 @@ export class PolyDrawService {
 
         return nearestPointIdx;
     }
+    private generateInfoMarkerPopup(latLngs: ILatLng[]):any {
 
+        const self = this;
+
+        const outerWrapper: HTMLDivElement = document.createElement("div");
+        outerWrapper.classList.add("alter-marker-outer-wrapper");
+        const wrapper: HTMLDivElement = document.createElement("div");
+        wrapper.classList.add("alter-marker-content");
+        const invertedCorner: HTMLElement = document.createElement("i");
+        invertedCorner.classList.add("inverted-corner");
+        const markerContentWrapper: HTMLDivElement = document.createElement("div");
+        markerContentWrapper.classList.add("marker-menu-content");
+        const simplify: HTMLDivElement = document.createElement("div");
+        simplify.classList.add("maker-menu-button", "simplify")
+        const separator: HTMLDivElement = document.createElement("div");
+        separator.classList.add("separator");
+        const bbox: HTMLDivElement = document.createElement("div");
+        bbox.classList.add("marker-menu-button", "bbox");
+
+        outerWrapper.appendChild(wrapper);
+        wrapper.appendChild(invertedCorner);
+        wrapper.appendChild(markerContentWrapper);
+        markerContentWrapper.appendChild(simplify);
+        markerContentWrapper.appendChild(separator);
+        markerContentWrapper.appendChild(bbox);
+
+        simplify.onclick = function () {
+            self.convertToSimplifiedPolygon(latLngs);
+            // do whatever else you want to do - open accordion etc
+        };
+        bbox.onclick = function () {
+            self.convertToBoundsPolygon(latLngs);
+            // do whatever else you want to do - open accordion etc
+        };
+
+
+
+        return outerWrapper;
+        
+
+    }
 
 }
 //flytt til enum.ts
