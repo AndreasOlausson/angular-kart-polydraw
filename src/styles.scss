@@ -220,28 +220,28 @@ body {
     min-height: 40px;
     margin-right: 12px;
   }
-  .marker-menu-content{
-    .marker-menu-button{
-      width: 32px;
-      height: 32px;
+  .marker-menu-content {
+    .marker-menu-button {
+      width: 22px;
+      height: 22px;
       background-repeat: no-repeat;
-      background-size: 28px, 28px;
+      background-size: 22px, 22px;
       background-position: center;
+      padding: 4px;
+      border: 1px solid #fff;
+      margin: 4px;
+      border-radius: 4px;
+      cursor: pointer;
 
-
-      &.simplify{
-        background-image: url("./app/images/icons/icon-simplify.svg");
+      &.simplify {
+        background-image: url("./app/images/icons/icon-simplify2.svg");
       }
       &.bbox {
         background-image: url("app/images/icons/icon-bbox.svg");
       }
     }
   }
-
 }
-
-
-
 
 .alter-marker-wrapper .row.bottom-separator {
   border-bottom: 1px dashed #fff;

@@ -470,8 +470,8 @@ export class PolyDrawService {
 
                 const menuPopup = this.generateMenuMarkerPopup(latlngs);
 
-                marker.bindPopup(menuPopup);
-
+                marker.bindPopup(menuPopup, {className: "alter-marker"});
+              
 
 
 
