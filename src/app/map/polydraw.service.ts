@@ -468,12 +468,18 @@ export class PolyDrawService {
             });
             if (i === menuMarkerIdx && this.config.markers.menu) {
 
+                const menuPopup = this.generateMenuMarkerPopup(latlngs);
 
-                marker.bindPopup(
-                    this.getMenuMarkerHtmlContent(e => {
-                        console.log("clicked on", e.target);
-                    }), { className: "alter-marker" }
-                );
+                marker.bindPopup(menuPopup);
+
+
+
+
+                // marker.bindPopup(
+                //     this.getMenuMarkerHtmlContent(e => {
+                //         console.log("clicked on", e.target);
+                //     }), { className: "alter-marker" }
+                // );
                 // marker.on("click", e => {
                 // this.convertToBoundsPolygon(latlngs);
                 //     //this.convertToSimplifiedPolygon(latlngs);
@@ -481,16 +487,14 @@ export class PolyDrawService {
             }
             if (i === infoMarkerIdx && this.config.markers.info) {
 
-                const infoPopup = this.generateInfoMarkerPopup(latlngs);
-
-                marker.bindPopup(infoPopup);
+                
 
 
-                // marker.bindPopup(
-                //   this.getInfoMarkerHtmlContent(e => {
-                //     console.log("clicked on", e.target);
-                //   }), {className: "info-marker"}
-                // );
+                marker.bindPopup(
+                  this.getInfoMarkerHtmlContent(e => {
+                    console.log("clicked on", e.target);
+                  }), {className: "info-marker"}
+                );
                 // marker.on("click", e => {
                 //     this.convertToBoundsPolygon(latlngs);
                 //     this.convertToSimplifiedPolygon(latlngs);
@@ -910,28 +914,40 @@ export class PolyDrawService {
 
         return nearestPointIdx;
     }
-    private generateInfoMarkerPopup(latLngs: ILatLng[]):any {
+    private generateMenuMarkerPopup(latLngs: ILatLng[]):any {
 
         const self = this;
 
         const outerWrapper: HTMLDivElement = document.createElement("div");
         outerWrapper.classList.add("alter-marker-outer-wrapper");
+
         const wrapper: HTMLDivElement = document.createElement("div");
-        wrapper.classList.add("alter-marker-content");
+        wrapper.classList.add("alter-marker-wrapper");
+
         const invertedCorner: HTMLElement = document.createElement("i");
         invertedCorner.classList.add("inverted-corner");
+
+        const markerContent: HTMLDivElement = document.createElement("div");
+        markerContent.classList.add("content");
+
         const markerContentWrapper: HTMLDivElement = document.createElement("div");
         markerContentWrapper.classList.add("marker-menu-content");
+
         const simplify: HTMLDivElement = document.createElement("div");
-        simplify.classList.add("maker-menu-button", "simplify")
+        simplify.classList.add("marker-menu-button", "simplify")
+        simplify.title="Simplify";
+
         const separator: HTMLDivElement = document.createElement("div");
         separator.classList.add("separator");
         const bbox: HTMLDivElement = document.createElement("div");
         bbox.classList.add("marker-menu-button", "bbox");
+        bbox.title = "Bounding box";
+
 
         outerWrapper.appendChild(wrapper);
         wrapper.appendChild(invertedCorner);
-        wrapper.appendChild(markerContentWrapper);
+        wrapper.appendChild(markerContent);
+        markerContent.appendChild(markerContentWrapper);
         markerContentWrapper.appendChild(simplify);
         markerContentWrapper.appendChild(separator);
         markerContentWrapper.appendChild(bbox);
