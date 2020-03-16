@@ -3,6 +3,7 @@
   "mergePolygons": true,
   "kinks": false,
   "markers": {
+    "coordsTitle": true,
     "info": true,
     "menu": true,
     "delete": true,

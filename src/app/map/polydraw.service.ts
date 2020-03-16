@@ -13,6 +13,7 @@ import { ComponentGeneratorService } from "./component-generator.service";
 import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPosition } from "./enums";
 import { TurfHelper } from "./turf-helper";
+import { PolygonUtil } from './polygon.util';
 
 
 @Injectable({
@@ -457,7 +458,7 @@ export class PolyDrawService {
             if (i === infoMarkerIdx && this.config.markers.info) {
                 iconClasses = this.config.markers.markerInfoIcon.styleClasses;
             }
-            const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true });
+            const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: this.getLatLngInfoString(latlng) });
             FeatureGroup.addLayer(marker).addTo(this.map);
             // console.log("FeatureGroup: ", FeatureGroup);
             marker.on("drag", e => {
@@ -487,14 +488,18 @@ export class PolyDrawService {
             }
             if (i === infoMarkerIdx && this.config.markers.info) {
 
-                
+                const area = PolygonUtil.getSqmArea(latlngs);
+                const perimeter = PolygonUtil.getPerimeter(latlngs);
 
+                const infoPopup = this.generateInfoMarkerPopup(area, perimeter);
 
-                marker.bindPopup(
-                  this.getInfoMarkerHtmlContent(e => {
-                    console.log("clicked on", e.target);
-                  }), {className: "info-marker"}
-                );
+                marker.bindPopup(infoPopup, {className: "info-marker"});
+
+                // marker.bindPopup(
+                //   this.getInfoMarkerHtmlContent(e => {
+                //     console.log("clicked on", e.target);
+                //   }), {className: "info-marker"}
+                // );
                 // marker.on("click", e => {
                 //     this.convertToBoundsPolygon(latlngs);
                 //     this.convertToSimplifiedPolygon(latlngs);
@@ -519,7 +524,7 @@ export class PolyDrawService {
             if (i === latlngs.length - 1 && this.config.markers.delete) {
               iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
             } */
-            const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: i.toString() });
+            const marker = new L.Marker(latlng, { icon: this.createDivIcon(iconClasses), draggable: true, title: this.getLatLngInfoString(latlng) });
             FeatureGroup.addLayer(marker).addTo(this.map);
 
             marker.on("drag", e => {
@@ -965,6 +970,90 @@ export class PolyDrawService {
 
         return outerWrapper;
         
+
+    }
+    private generateInfoMarkerPopup(area: number, perimeter: number):any {
+
+        const self = this;
+
+        const outerWrapper: HTMLDivElement = document.createElement("div");
+        outerWrapper.classList.add("info-marker-outer-wrapper");
+
+        const wrapper: HTMLDivElement = document.createElement("div");
+        wrapper.classList.add("info-marker-wrapper");
+
+        const invertedCorner: HTMLElement = document.createElement("i");
+        invertedCorner.classList.add("inverted-corner");
+
+        const markerContent: HTMLDivElement = document.createElement("div");
+        markerContent.classList.add("content");
+
+        const rowWithSeparator: HTMLDivElement = document.createElement("div");
+        rowWithSeparator.classList.add("row", "bottom-separator");
+
+        const perimeterHeader: HTMLDivElement = document.createElement("div");
+        perimeterHeader.classList.add("header")
+        perimeterHeader.innerText= self.config.markers.markerInfoIcon.perimeterLabel;
+
+        const emptyDiv: HTMLDivElement = document.createElement("div");
+
+        const perimeterArea: HTMLSpanElement = document.createElement("span");
+        perimeterArea.classList.add("area");
+        perimeterArea.innerText = perimeter.toString();
+        const perimeterUnit: HTMLSpanElement = document.createElement("span");
+        perimeterUnit.classList.add("unit");
+        perimeterUnit.innerText = " m";
+
+
+
+
+        const row: HTMLDivElement = document.createElement("div");
+        row.classList.add("row");
+
+        const areaHeader: HTMLDivElement = document.createElement("div");
+        areaHeader.classList.add("header")
+        areaHeader.innerText= self.config.markers.markerInfoIcon.areaLabel;
+
+        const rightRow: HTMLDivElement = document.createElement("div");
+        row.classList.add("right-margin");
+
+        const areaArea: HTMLSpanElement = document.createElement("span");
+        areaArea.classList.add("area");
+        areaArea.innerText = area.toString();
+        const areaUnit: HTMLSpanElement = document.createElement("span");
+        areaUnit.classList.add("unit");
+        areaUnit.innerText = " m";
+
+        const sup: HTMLElement = document.createElement("i");
+        sup.classList.add("sup");
+        sup.innerText = "2";
+
+
+
+
+        outerWrapper.appendChild(wrapper);
+        wrapper.appendChild(invertedCorner);
+        wrapper.appendChild(markerContent);
+        markerContent.appendChild(rowWithSeparator);
+        rowWithSeparator.appendChild(perimeterHeader);
+        rowWithSeparator.appendChild(emptyDiv);
+        emptyDiv.appendChild(perimeterArea);
+        emptyDiv.appendChild(perimeterUnit);
+        markerContent.appendChild(row);
+        row.appendChild(areaHeader);
+        row.appendChild(rightRow);
+        rightRow.appendChild(areaArea);
+        rightRow.appendChild(areaUnit);
+        areaUnit.appendChild(sup);
+
+
+        return outerWrapper;
+        
+
+    }
+    private getLatLngInfoString(latlng: ILatLng): string {
+
+        return "Latitude: " + latlng.lat + " Longitude: " + latlng.lng;
 
     }
 
