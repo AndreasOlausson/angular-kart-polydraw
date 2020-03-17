@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
+import "reflect-metadata";
+import { injectable } from 'tsyringe';
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
-import { PolyDrawService } from "./polydraw.service";
-import { MapStateService } from "./map-state.service";
+import { MapStateService } from "./map-state";
+import { Service } from './ServiceDecorator';
 
-@Injectable({ providedIn: "root" })
+
+@injectable()
 export class PolygonInformationService {
   polygonInformationSubject: Subject<PolygonInfo[]> = new Subject<PolygonInfo[]>();
   polygonInformation$: Observable<PolygonInfo[]> = this.polygonInformationSubject.asObservable();
@@ -12,7 +15,9 @@ export class PolygonInformationService {
   polygonDrawStates$: Observable<PolygonDrawStates> = this.polygonDrawStatesSubject.asObservable();
 
   polygonInformationStorage = [];
-  constructor(private mapStateService: MapStateService) {}
+  
+  constructor(public mapStateService: MapStateService) {
+  }
 
   updatePolygons() {
     console.log("updatePolygons: ", this.polygonInformationStorage);

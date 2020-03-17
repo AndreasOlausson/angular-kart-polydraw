@@ -1,0 +1,44 @@
+
+p {
+    font-family: Lato;
+  }
+  .polydrawbuttons {
+    display: flex;
+    position: absolute;
+    z-index: 1000;
+    top: 10px;
+    left: 50px;
+  }
+  .button {
+    margin: 4px;
+    padding: 4px;
+    background-color: lightblue;
+    border: 1px solid black;
+  }
+  
+  
+  .outer {
+    overflow: hidden;
+  }
+  .inner {
+    border: 2px solid #fff;
+    border-radius: 20px;
+    background-color: rgb(129, 175, 131);
+  }
+  .inner i {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #fff;
+    border-radius: 20px;
+    background-color: #000;
+  }
+  .inner .top {
+    margin-top: -20px;
+  }
+  .inner .right {
+    float: right;
+    margin-right: -20px;
+  }
+  .content {
+    min-height: 80px;
+  }

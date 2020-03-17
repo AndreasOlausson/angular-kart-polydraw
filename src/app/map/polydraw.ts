@@ -1,12 +1,14 @@
 import { Injectable, Optional } from "@angular/core";
+import "reflect-metadata";
+import {injectable, container} from "tsyringe";
 import * as L from "leaflet";
 //import * as turf from "@turf/turf";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { filter } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
-import { MapStateService } from "./map-state.service";
+import { MapStateService } from "./map-state";
 //import { TurfHelperService } from "./turf-helper.service";
-import { PolygonInformationService } from "./polygon-information.service";
+import { PolygonInformationService } from "./polygon-information";
 import defaultConfig from "./config.json";
 import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneratorService } from "./component-generator.service";
@@ -14,12 +16,14 @@ import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPosition } from "./enums";
 import { TurfHelper } from "./turf-helper";
 import { PolygonUtil } from './polygon.util';
+import { Service } from './ServiceDecorator';
 
 
-@Injectable({
+/* @Injectable({
     providedIn: "root"
-})
+}) */
 //Rename - PolyDrawService
+@injectable()
 export class PolyDrawService {
     //DrawModes, determine UI buttons etc...
     drawModeSubject: BehaviorSubject<DrawMode> = new BehaviorSubject<DrawMode>(DrawMode.Off);
@@ -38,16 +42,18 @@ export class PolyDrawService {
     private ngUnsubscribe = new Subject();
     private config: typeof defaultConfig = null;
     private turfHelper: TurfHelper = null;
+    private  mapState: MapStateService = container.resolve(MapStateService)
     constructor(
-        private mapState: MapStateService,
-        private popupGenerator: ComponentGeneratorService,
+     
+        private  popupGenerator: ComponentGeneratorService,
         //private turfHelper: TurfHelperService,
-        private polygonInformation: PolygonInformationService
+        private  polygonInformation: PolygonInformationService
     ) {
 
-
+        console.log(this.mapState);
 
         this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
+            console.log("HER");
             this.map = map;
             this.config = defaultConfig;
             this.configurate({});

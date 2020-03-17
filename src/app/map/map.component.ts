@@ -1,7 +1,8 @@
 import { Component, OnChanges, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
-
+import "reflect-metadata";
 import * as L from "leaflet"
-import { MapStateService } from './map-state.service';
+import { MapStateService } from './map-state';
+import { container } from 'tsyringe';
 
 @Component({
   selector: 'map-cmp',
@@ -20,15 +21,18 @@ import { MapStateService } from './map-state.service';
 export class MapComponent {
   map;
 
-
+  mapState
  
-
-  constructor(private mapState: MapStateService){
-
+  
+  constructor(){
+    this.mapState = container.resolve( MapStateService)
+    console.log(this.mapState);
   }
 
-  ngAfterViewInit(): void {
-    this.initMap();
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.initMap();  
   }
 
   initMap(){

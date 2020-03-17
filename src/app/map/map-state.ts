@@ -1,12 +1,12 @@
 //TODO Does this have to be a service?
+import "reflect-metadata";
+import { injectable, singleton } from 'tsyringe';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as L from "leaflet"
 import { ILatLng } from './polygon-helpers';
 
-@Injectable({
-    providedIn: 'root'
-})
+@singleton()
 export class MapStateService {
     constructor() { }
     
