@@ -1,22 +1,18 @@
-import { Component, Output, EventEmitter } from '@angular/core';
 
-/* @Component({
-  selector: 'app-alter-polygon',
-  templateUrl: './alter-polygon.component.html',
-  styleUrls: ['./alter-polygon.component.css']
-}) */
+import { Subject } from 'rxjs';
+
 export class AlterPolygonComponent {
 
-  simplyfiClicked: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+  simplyfiClicked: Subject<MouseEvent> = new Subject<MouseEvent>();
 
-  bboxClicked: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+  bboxClicked: Subject<MouseEvent> = new Subject<MouseEvent>();
 
   onSimplify($event: MouseEvent): void {
-    this.simplyfiClicked.emit($event);
+    this.simplyfiClicked.next($event);
   }
 
   onBbox($event: MouseEvent): void {
-    this.bboxClicked.emit($event);
+    this.bboxClicked.next($event);
   }
 
 }

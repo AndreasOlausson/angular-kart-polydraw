@@ -17,11 +17,12 @@ import { ComponentGeneratorService } from './map/component-generator.service';
   declarations: [AppComponent, HelloComponent,
     MapComponent,
     // AlterPolygonComponent,
-    InfoMarkerPopupComponent],
+    // InfoMarkerPopupComponent
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     // AlterPolygonComponent,
-    InfoMarkerPopupComponent
+    // InfoMarkerPopupComponent
   ],
   providers:[
     MapStateService,

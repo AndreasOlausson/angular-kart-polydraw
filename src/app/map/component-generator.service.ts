@@ -1,7 +1,6 @@
 import { Injectable, ComponentFactoryResolver, Injector, ComponentRef, ComponentFactory, OnDestroy, Component } from '@angular/core';
 import { AlterPolygonComponent } from './popups/alter-polygon/alter-polygon.component';
 import { InfoMarkerPopupComponent } from './popups/info-marker/info-marker.component';
-import { Service } from './ServiceDecorator';
 import { injectable } from 'tsyringe';
 
 @injectable()

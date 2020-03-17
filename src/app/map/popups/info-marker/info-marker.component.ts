@@ -1,29 +1,22 @@
-import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
+import { Subject } from "rxjs";
 
-@Component({
-  selector: 'app-info-marker',
-  templateUrl: './info-marker.component.html',
-  styleUrls: ['./info-marker.component.css']
-})
 export class InfoMarkerPopupComponent {
-  test= 'JADA'
-  test2 = 60
+  test = "JADA";
+  test2 = 60;
 
-  @Output() simplyfiClicked: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
+  simplyfiClicked: Subject<MouseEvent> = new Subject<MouseEvent>();
 
-  @Output() bboxClicked: EventEmitter<MouseEvent> = new EventEmitter<MouseEvent>();
-
-
+  bboxClicked: Subject<MouseEvent> = new Subject<MouseEvent>();
 
   onSimplify($event: MouseEvent): void {
-    this.simplyfiClicked.emit($event);
+    this.simplyfiClicked.next($event);
   }
 
   onBbox($event: MouseEvent): void {
-    this.bboxClicked.emit($event);
+    this.bboxClicked.next($event);
   }
 
-  getTestLabel():string{
+  getTestLabel(): string {
     return "yay";
   }
 }

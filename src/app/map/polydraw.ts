@@ -16,7 +16,6 @@ import { Compass, PolyDrawUtil } from "./utils";
 import { MarkerPosition } from "./enums";
 import { TurfHelper } from "./turf-helper";
 import { PolygonUtil } from './polygon.util';
-import { Service } from './ServiceDecorator';
 
 
 /* @Injectable({
