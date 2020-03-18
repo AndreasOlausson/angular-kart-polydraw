@@ -1,7 +1,6 @@
 //TODO Does this have to be a service?
 import "reflect-metadata";
-import { injectable, singleton } from 'tsyringe';
-import { Injectable } from '@angular/core';
+import { singleton } from 'tsyringe';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as L from "leaflet"
 import { ILatLng } from './polygon-helpers';
