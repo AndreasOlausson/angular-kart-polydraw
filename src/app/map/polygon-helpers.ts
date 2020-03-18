@@ -13,7 +13,6 @@ export class PolygonInfo {
             console.log(polygons[0]);
             this.polygon[i] = polygons
         })
-        
     }
     setSqmArea(area: number): void {
         this.sqmArea[0] = area;

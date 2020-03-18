@@ -1,4 +1,3 @@
-//TODO Does this have to be a service?
 import "reflect-metadata";
 import { singleton } from 'tsyringe';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -9,7 +8,6 @@ import { ILatLng } from './polygon-helpers';
 export class MapStateService {
     constructor() { }
     
-
     private mapSubject = new BehaviorSubject<L.Map>(null); 
 
     map$: Observable<L.Map> = this.mapSubject.asObservable();
@@ -17,7 +15,6 @@ export class MapStateService {
     updateMapState(map: L.Map){
         this.mapSubject.next(map)
     }
-
     updatePolygons(polygons: ILatLng[][][]):void{
         console.log("map-state",polygons);
     }

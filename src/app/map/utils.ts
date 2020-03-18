@@ -20,7 +20,6 @@ export class PolyDrawUtil {
         return bounds;
     }
 }
-
 export class Compass {
     public direction: ICompass = {
         East: { lat: 0, lng: 0 },
@@ -66,9 +65,7 @@ export class Compass {
         }
     }
     getPositions(startPosition: MarkerPosition = MarkerPosition.SouthWest, clockwise: boolean = false, addClosingNode: boolean = true): number[][] {
-
         let positions: number[][] = [];
-
         const posArray = this.getPositionAsArray(startPosition, clockwise);
         posArray.forEach(v => {
             positions.push([v.lng, v.lat]);
@@ -79,7 +76,6 @@ export class Compass {
         return positions;
     }
     private getPositionAsArray(startPosition: MarkerPosition = MarkerPosition.NorthEast, clockwise: boolean = false): ILatLng[] {
-
         const positions: ILatLng[] = [];
         if (clockwise) {
             positions.push(this.direction.SouthWest);
@@ -100,8 +96,6 @@ export class Compass {
             positions.push(this.direction.NorthWest);
             positions.push(this.direction.West);
         }
-
-        //Change start position
         if (startPosition !== MarkerPosition.SouthWest) {
             var chunk = positions.splice(0, startPosition);
             chunk.forEach((v, i) => {
@@ -111,15 +105,13 @@ export class Compass {
         return positions;
     }
 }
-
 export class Perimeter {
-
     public metricLength: string = "";
     public metricUnit: string = "";
     public imperialLength: string = "";
     public imperialUnit: string = "";
 
-    constructor(length: number, config: typeof defaultConfig ) {
+    constructor(length: number, config: typeof defaultConfig) {
         if (length !== null || length !== undefined) {
             if (length === 0) {
                 if (config.markers.markerInfoIcon.usePerimeterMinValue) {
@@ -180,9 +172,9 @@ export class Area {
     public imperialArea: string = "";
     public imperialUnit: string = "";
 
-    constructor(sqrMeterArea: number, config: typeof defaultConfig){
+    constructor(sqrMeterArea: number, config: typeof defaultConfig) {
         const area = sqrMeterArea;
-        const onlyMetrics = true;
+        const onlyMetrics = config.markers.markerInfoIcon.units.metric.onlyMetrics;
         if (area !== null || area !== undefined) {
             if (area === 0) {
                 this.metricArea = "-";
@@ -199,7 +191,7 @@ export class Area {
                 } else {
                     this.metricArea = (area / 1000).toFixed(1);
                     this.metricUnit = config.markers.markerInfoIcon.units.metric.area.daa;
-                }  
+                }
             }
             else if (area < 10000000) {
                 if (onlyMetrics) {
@@ -222,7 +214,7 @@ export class Area {
             else {
                 this.metricArea = Math.round(area / 1000000).toString();
                 this.metricUnit = config.markers.markerInfoIcon.units.metric.area.km2;;
-                
+
             }
 
             //Imperial
@@ -250,14 +242,13 @@ export class Area {
             } else if (area < 25900404) {
                 this.imperialArea = miles2.toFixed(2);
                 this.imperialUnit = config.markers.markerInfoIcon.units.imperial.area.miles2;
-            } else if (area < 259004040) { 
+            } else if (area < 259004040) {
                 this.imperialArea = miles2.toFixed(1);
                 this.imperialUnit = config.markers.markerInfoIcon.units.imperial.area.miles2;
-            } else { 
+            } else {
                 this.imperialArea = miles2.toFixed(0);
                 this.imperialUnit = config.markers.markerInfoIcon.units.imperial.area.miles2;;
             }
         }
-        console.log("area", this);
     }
 }

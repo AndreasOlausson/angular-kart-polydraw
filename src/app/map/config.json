@@ -6,10 +6,10 @@
     "attachElbow": false
   },
   "markers": {
+    "deleteMarker": true,
+    "infoMarker": true,
+    "menuMarker": true,
     "coordsTitle": true,
-    "info": true,
-    "menu": true,
-    "delete": true,
     "markerIcon": {
       "styleClasses": [
         "polygon-marker"
@@ -22,9 +22,13 @@
       ]
     },
     "markerInfoIcon": {
+      "position": 3,
       "showArea": true,
       "showPerimeter": true,
+      "useMetrics": true,
       "usePerimeterMinValue": false,
+      "areaLabel": "Area",
+      "perimeterLabel": "Perimeter",
       "values": {
         "min": {
           "metric": "50",
@@ -35,14 +39,6 @@
           "imperial": "-"
         }
       },
-      "useMetrics": true,
-      "areaLabel": "Area",
-      "perimeterLabel": "Perimeter",
-      "position": 3,
-      "styleClasses": [
-        "polygon-marker",
-        "info"
-      ],
       "units": {
         "unknownUnit": "",
         "metric": {
@@ -71,7 +67,11 @@
             "miles2": "mi²"
           }
         }
-      }
+      },
+      "styleClasses": [
+        "polygon-marker",
+        "info"
+      ]
     },
     "markerMenuIcon": {
       "position": 7,

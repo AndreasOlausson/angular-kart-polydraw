@@ -442,19 +442,19 @@ export class PolyDrawService {
 
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-      if (i === menuMarkerIdx && this.config.markers.menu) {
+      if (i === menuMarkerIdx && this.config.markers.menuMarker) {
         iconClasses = this.config.markers.markerMenuIcon.styleClasses;
       }
-      if (i === deleteMarkerIdx && this.config.markers.delete) {
+      if (i === deleteMarkerIdx && this.config.markers.deleteMarker) {
         iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
       }
-      if (i === infoMarkerIdx && this.config.markers.info) {
+      if (i === infoMarkerIdx && this.config.markers.infoMarker) {
         iconClasses = this.config.markers.markerInfoIcon.styleClasses;
       }
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
-        title: this.getLatLngInfoString(latlng)
+        title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : "")
       });
       FeatureGroup.addLayer(marker).addTo(this.map);
       // console.log("FeatureGroup: ", FeatureGroup);
@@ -464,40 +464,17 @@ export class PolyDrawService {
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
       });
-      if (i === menuMarkerIdx && this.config.markers.menu) {
+      if (i === menuMarkerIdx && this.config.markers.menuMarker) {
         const menuPopup = this.generateMenuMarkerPopup(latlngs);
-
         marker.bindPopup(menuPopup, { className: "alter-marker" });
-
-        // marker.bindPopup(
-        //     this.getMenuMarkerHtmlContent(e => {
-        //         console.log("clicked on", e.target);
-        //     }), { className: "alter-marker" }
-        // );
-        // marker.on("click", e => {
-        // this.convertToBoundsPolygon(latlngs);
-        //     //this.convertToSimplifiedPolygon(latlngs);
-        // })
       }
-      if (i === infoMarkerIdx && this.config.markers.info) {
+      if (i === infoMarkerIdx && this.config.markers.infoMarker) {
         const area = PolygonUtil.getSqmArea(latlngs);
         const perimeter = PolygonUtil.getPerimeter(latlngs);
-
         const infoPopup = this.generateInfoMarkerPopup(area, perimeter);
-
         marker.bindPopup(infoPopup, { className: "info-marker" });
-
-        // marker.bindPopup(
-        //   this.getInfoMarkerHtmlContent(e => {
-        //     console.log("clicked on", e.target);
-        //   }), {className: "info-marker"}
-        // );
-        // marker.on("click", e => {
-        //     this.convertToBoundsPolygon(latlngs);
-        //     this.convertToSimplifiedPolygon(latlngs);
-        // })
       }
-      if (i === deleteMarkerIdx && this.config.markers.delete) {
+      if (i === deleteMarkerIdx && this.config.markers.deleteMarker) {
         marker.on("click", e => {
           this.deletePolygon([latlngs]);
         });
@@ -508,14 +485,6 @@ export class PolyDrawService {
   private addHoleMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
-      /*  if (i === 0 && this.config.markers.menu) {
-              iconClasses = this.config.markers.markerMenuIcon.styleClasses;
-            }
-      
-            //TODO- legg til fill icon
-            if (i === latlngs.length - 1 && this.config.markers.delete) {
-              iconClasses = this.config.markers.markerDeleteIcon.styleClasses;
-            } */
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
@@ -529,19 +498,6 @@ export class PolyDrawService {
       marker.on("dragend", e => {
         this.markerDragEnd(FeatureGroup);
       });
-      /*   if (i === 0 && this.config.markers.menu) {
-              marker.bindPopup(this.getHtmlContent((e) => {
-                console.log("clicked on", e.target);
-              }));
-              // marker.on("click", e => {
-              //   this.toggleMarkerMenu();
-              // })
-            }
-            if (i === latlngs.length - 1 && this.config.markers.delete) {
-              marker.on("click", e => {
-                this.deletePolygon([latlngs]);
-              });
-            } */
     });
   }
   private createDivIcon(classNames: string[]): L.DivIcon {
