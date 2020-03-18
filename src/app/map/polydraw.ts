@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { injectable, container } from "tsyringe";
 import * as L from "leaflet";
-import { Observable, BehaviorSubject, Subject } from "rxjs";
+import { Observable, BehaviorSubject, Subject, config } from "rxjs";
 import { filter } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state";
@@ -359,11 +359,13 @@ export class PolyDrawService {
   }
   //fine
   private polygonClicked(e: any, poly: Feature<Polygon | MultiPolygon>) {
-    const newPoint = e.latlng;
-    if (poly.geometry.type === "MultiPolygon") {
-      let newPolygon = this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat]);
-      this.deletePolygon(this.getLatLngsFromJson(poly));
-      this.addPolygonLayer(newPolygon, false);
+    if (this.config.modes.attachElbow) {
+      const newPoint = e.latlng;
+      if (poly.geometry.type === "MultiPolygon") {
+        let newPolygon = this.turfHelper.injectPointToPolygon(poly, [newPoint.lng, newPoint.lat]);
+        this.deletePolygon(this.getLatLngsFromJson(poly));
+        this.addPolygonLayer(newPolygon, false);
+      }
     }
   }
   //fine
@@ -922,11 +924,11 @@ export class PolyDrawService {
     markerContentWrapper.appendChild(separator);
     markerContentWrapper.appendChild(bbox);
 
-    simplify.onclick = function() {
+    simplify.onclick = function () {
       self.convertToSimplifiedPolygon(latLngs);
       // do whatever else you want to do - open accordion etc
     };
-    bbox.onclick = function() {
+    bbox.onclick = function () {
       self.convertToBoundsPolygon(latLngs);
       // do whatever else you want to do - open accordion etc
     };

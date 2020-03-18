@@ -2,6 +2,9 @@
   "touchSupport": true,
   "mergePolygons": true,
   "kinks": false,
+  "modes": {
+    "attachElbow": false
+  },
   "markers": {
     "coordsTitle": true,
     "info": true,
@@ -32,7 +35,7 @@
           "imperial": "-"
         }
       },
-      "useMetrics": false,
+      "useMetrics": true,
       "areaLabel": "Area",
       "perimeterLabel": "Perimeter",
       "position": 3,
@@ -69,8 +72,6 @@
           }
         }
       }
-
-
     },
     "markerMenuIcon": {
       "position": 7,
