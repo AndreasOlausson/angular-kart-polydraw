@@ -964,7 +964,7 @@ export class PolyDrawService {
     perimeterArea.innerText = this.config.markers.markerInfoIcon.useMetrics ? _perimeter.metricLength : _perimeter.imperialLength;
     const perimeterUnit: HTMLSpanElement = document.createElement("span");
     perimeterUnit.classList.add("unit");
-    perimeterUnit.innerText = " " + this.config.markers.markerInfoIcon.useMetrics ? _perimeter.metricUnit : _perimeter.imperialUnit;
+    perimeterUnit.innerText = " " + (this.config.markers.markerInfoIcon.useMetrics ? _perimeter.metricUnit : _perimeter.imperialUnit);
 
     const row: HTMLDivElement = document.createElement("div");
     row.classList.add("row");
@@ -981,7 +981,7 @@ export class PolyDrawService {
     areaArea.innerText = this.config.markers.markerInfoIcon.useMetrics ? _area.metricArea : _area.imperialArea;
     const areaUnit: HTMLSpanElement = document.createElement("span");
     areaUnit.classList.add("unit");
-    areaUnit.innerText = " " + this.config.markers.markerInfoIcon.useMetrics ? _area.metricUnit : _area.imperialUnit;
+    areaUnit.innerText = " " + (this.config.markers.markerInfoIcon.useMetrics ? _area.metricUnit : _area.imperialUnit);
 
     // const sup: HTMLElement = document.createElement("i");
     // sup.classList.add("sup");
