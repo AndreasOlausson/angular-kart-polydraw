@@ -11,6 +11,7 @@ export class TurfHelper {
     private config: typeof defaultConfig = null;
 
     constructor(config: Object) {
+        console.log("TEST");
         this.config = { ...defaultConfig, ...config }
     }
 

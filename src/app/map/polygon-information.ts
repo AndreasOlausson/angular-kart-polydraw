@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
+import "reflect-metadata";
+import { injectable } from "tsyringe";
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
-import { PolyDrawService } from "./polydraw.service";
-import { MapStateService } from "./map-state.service";
+import { MapStateService } from "./map-state";
 
-@Injectable({ providedIn: "root" })
+@injectable()
 export class PolygonInformationService {
   polygonInformationSubject: Subject<PolygonInfo[]> = new Subject<PolygonInfo[]>();
   polygonInformation$: Observable<PolygonInfo[]> = this.polygonInformationSubject.asObservable();
@@ -12,7 +12,8 @@ export class PolygonInformationService {
   polygonDrawStates$: Observable<PolygonDrawStates> = this.polygonDrawStatesSubject.asObservable();
 
   polygonInformationStorage = [];
-  constructor(private mapStateService: MapStateService) {}
+
+  constructor(public mapStateService: MapStateService) {}
 
   updatePolygons() {
     console.log("updatePolygons: ", this.polygonInformationStorage);
@@ -20,26 +21,23 @@ export class PolygonInformationService {
     let newPolygons: ILatLng[][][] = null;
     if (this.polygonInformationStorage.length > 0) {
       newPolygons = [];
-      
-      
+
       this.polygonInformationStorage.forEach(v => {
-        let test = []
-        v.polygon.forEach((poly) => {
-          let test2 = []
-            
-            poly.forEach(polygon => {
-              test2 = [...polygon]
-              if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
-                test2.push(polygon[0]);             
-            }  
-            test.push(test2)
-            });
-            
-            
-            });
-           
-            newPolygons.push(test)
+        let test = [];
+        v.polygon.forEach(poly => {
+          let test2 = [];
+
+          poly.forEach(polygon => {
+            test2 = [...polygon];
+            if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
+              test2.push(polygon[0]);
+            }
+            test.push(test2);
+          });
         });
+
+        newPolygons.push(test);
+      });
 
       // this.polygonDrawStates.hasPolygons = true;
     } else {

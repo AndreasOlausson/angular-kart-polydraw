@@ -23,9 +23,11 @@
     "leaflet": "^1.6.0",
     "leaflet-freedraw": "^2.12.0",
     "ramda": "^0.26.1",
+    "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.3",
     "rxjs": "^6.5.4",
     "tslib": "^1.10.0",
+    "tsyringe": "^4.1.0",
     "turf-intersect": "^3.0.12",
     "turf-polygon": "^1.0.3",
     "zone.js": "~0.10.2"

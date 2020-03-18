@@ -32,7 +32,7 @@
           "imperial": "-"
         }
       },
-      "useMetrics": true,
+      "useMetrics": false,
       "areaLabel": "Area",
       "perimeterLabel": "Perimeter",
       "position": 3,
