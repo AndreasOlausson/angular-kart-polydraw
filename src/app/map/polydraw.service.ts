@@ -10,7 +10,7 @@ import { PolygonInformationService } from "./polygon-information.service";
 import defaultConfig from "./config.json";
 import { ILatLng } from "./polygon-helpers";
 import { ComponentGeneratorService } from "./component-generator.service";
-import { Compass, PolyDrawUtil } from "./utils";
+import { Compass, PolyDrawUtil, Perimeter, Area } from "./utils";
 import { MarkerPosition } from "./enums";
 import { TurfHelper } from "./turf-helper";
 import { PolygonUtil } from './polygon.util';
@@ -471,39 +471,15 @@ export class PolyDrawService {
 
                 const menuPopup = this.generateMenuMarkerPopup(latlngs);
 
-                marker.bindPopup(menuPopup, {className: "alter-marker"});
-              
-
-
-
-                // marker.bindPopup(
-                //     this.getMenuMarkerHtmlContent(e => {
-                //         console.log("clicked on", e.target);
-                //     }), { className: "alter-marker" }
-                // );
-                // marker.on("click", e => {
-                // this.convertToBoundsPolygon(latlngs);
-                //     //this.convertToSimplifiedPolygon(latlngs);
-                // })
+                marker.bindPopup(menuPopup, { className: "alter-marker" });
             }
             if (i === infoMarkerIdx && this.config.markers.info) {
 
                 const area = PolygonUtil.getSqmArea(latlngs);
                 const perimeter = PolygonUtil.getPerimeter(latlngs);
-
                 const infoPopup = this.generateInfoMarkerPopup(area, perimeter);
 
-                marker.bindPopup(infoPopup, {className: "info-marker"});
-
-                // marker.bindPopup(
-                //   this.getInfoMarkerHtmlContent(e => {
-                //     console.log("clicked on", e.target);
-                //   }), {className: "info-marker"}
-                // );
-                // marker.on("click", e => {
-                //     this.convertToBoundsPolygon(latlngs);
-                //     this.convertToSimplifiedPolygon(latlngs);
-                // })
+                marker.bindPopup(infoPopup, { className: "info-marker" });
             }
             if (i === deleteMarkerIdx && this.config.markers.delete) {
                 marker.on("click", e => {
@@ -919,7 +895,7 @@ export class PolyDrawService {
 
         return nearestPointIdx;
     }
-    private generateMenuMarkerPopup(latLngs: ILatLng[]):any {
+    private generateMenuMarkerPopup(latLngs: ILatLng[]): any {
 
         const self = this;
 
@@ -940,7 +916,7 @@ export class PolyDrawService {
 
         const simplify: HTMLDivElement = document.createElement("div");
         simplify.classList.add("marker-menu-button", "simplify")
-        simplify.title="Simplify";
+        simplify.title = "Simplify";
 
         const separator: HTMLDivElement = document.createElement("div");
         separator.classList.add("separator");
@@ -969,11 +945,14 @@ export class PolyDrawService {
 
 
         return outerWrapper;
-        
+
 
     }
-    private generateInfoMarkerPopup(area: number, perimeter: number):any {
+    private generateInfoMarkerPopup(area: number, perimeter: number): any {
 
+
+        const _perimeter = new Perimeter(perimeter, this.config);
+        const _area = new Area(area, this.config);
         const self = this;
 
         const outerWrapper: HTMLDivElement = document.createElement("div");
@@ -993,40 +972,37 @@ export class PolyDrawService {
 
         const perimeterHeader: HTMLDivElement = document.createElement("div");
         perimeterHeader.classList.add("header")
-        perimeterHeader.innerText= self.config.markers.markerInfoIcon.perimeterLabel;
+        perimeterHeader.innerText = self.config.markers.markerInfoIcon.perimeterLabel;
 
         const emptyDiv: HTMLDivElement = document.createElement("div");
 
         const perimeterArea: HTMLSpanElement = document.createElement("span");
         perimeterArea.classList.add("area");
-        perimeterArea.innerText = perimeter.toString();
+        perimeterArea.innerText = this.config.markers.markerInfoIcon.useMetrics ? _perimeter.metricLength : _perimeter.imperialLength;
         const perimeterUnit: HTMLSpanElement = document.createElement("span");
         perimeterUnit.classList.add("unit");
-        perimeterUnit.innerText = " m";
-
-
-
+        perimeterUnit.innerText = " " + this.config.markers.markerInfoIcon.useMetrics ? _perimeter.metricUnit : _perimeter.imperialUnit;
 
         const row: HTMLDivElement = document.createElement("div");
         row.classList.add("row");
 
         const areaHeader: HTMLDivElement = document.createElement("div");
         areaHeader.classList.add("header")
-        areaHeader.innerText= self.config.markers.markerInfoIcon.areaLabel;
+        areaHeader.innerText = self.config.markers.markerInfoIcon.areaLabel;
 
         const rightRow: HTMLDivElement = document.createElement("div");
         row.classList.add("right-margin");
 
         const areaArea: HTMLSpanElement = document.createElement("span");
         areaArea.classList.add("area");
-        areaArea.innerText = area.toString();
+        areaArea.innerText = this.config.markers.markerInfoIcon.useMetrics ? _area.metricArea : _area.imperialArea;
         const areaUnit: HTMLSpanElement = document.createElement("span");
         areaUnit.classList.add("unit");
-        areaUnit.innerText = " m";
+        areaUnit.innerText = " " + this.config.markers.markerInfoIcon.useMetrics ? _area.metricUnit : _area.imperialUnit;
 
-        const sup: HTMLElement = document.createElement("i");
-        sup.classList.add("sup");
-        sup.innerText = "2";
+        // const sup: HTMLElement = document.createElement("i");
+        // sup.classList.add("sup");
+        // sup.innerText = "2";
 
 
 
@@ -1044,11 +1020,11 @@ export class PolyDrawService {
         row.appendChild(rightRow);
         rightRow.appendChild(areaArea);
         rightRow.appendChild(areaUnit);
-        areaUnit.appendChild(sup);
+        // areaUnit.appendChild(sup);
 
 
         return outerWrapper;
-        
+
 
     }
     private getLatLngInfoString(latlng: ILatLng): string {

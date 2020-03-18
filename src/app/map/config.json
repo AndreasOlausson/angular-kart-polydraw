@@ -21,6 +21,17 @@
     "markerInfoIcon": {
       "showArea": true,
       "showPerimeter": true,
+      "usePerimeterMinValue": false,
+      "values": {
+        "min": {
+          "metric": "50",
+          "imperial": "100"
+        },
+        "unknown": {
+          "metric": "-",
+          "imperial": "-"
+        }
+      },
       "useMetrics": true,
       "areaLabel": "Area",
       "perimeterLabel": "Perimeter",
@@ -28,7 +39,38 @@
       "styleClasses": [
         "polygon-marker",
         "info"
-      ]
+      ],
+      "units": {
+        "unknownUnit": "",
+        "metric": {
+          "onlyMetrics": true,
+          "perimeter": {
+            "m": "m",
+            "km": "km"
+          },
+          "area": {
+            "m2": "m²",
+            "km2": "km²",
+            "daa": "daa",
+            "ha": "ha"
+          }
+        },
+        "imperial": {
+          "perimeter": {
+            "feet": "ft",
+            "yards": "yd",
+            "miles": "mi"
+          },
+          "area": {
+            "feet2": "ft²",
+            "yards2": "yd²",
+            "acres": "ac",
+            "miles2": "mi²"
+          }
+        }
+      }
+
+
     },
     "markerMenuIcon": {
       "position": 7,
