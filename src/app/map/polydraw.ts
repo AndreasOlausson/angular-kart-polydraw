@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { injectable, container } from "tsyringe";
 import * as L from "leaflet";
-import { Observable, BehaviorSubject, Subject, config } from "rxjs";
+import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { filter } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
 import { MapStateService } from "./map-state";

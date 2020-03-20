@@ -1,4 +1,4 @@
-//TODO We have DrawModes in differnet places, refactor!
+//TODO We have DrawModes in different places, refactor!
 export enum DrawMode {
     Off = 0,
     Add = 1,
