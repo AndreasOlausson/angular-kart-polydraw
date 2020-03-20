@@ -24,7 +24,7 @@ body {
 }
 
 .polygon-marker.menu {
-  background-color: red;
+  background-color: rgb(134, 162, 214);
   background-image: url("app/images/icons/icon-settings-white.svg");
   -ms-background-size: 20px 20px;
   background-size: 20px 20px;
@@ -93,6 +93,8 @@ body {
   margin-left: -6px !important;
   margin-top: -6px !important;
 }
+
+
 
 .polygon-marker.hole {
   background-color: rgb(118, 160, 216);

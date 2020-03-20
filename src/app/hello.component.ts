@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {container} from "tsyringe";
+import { container } from "tsyringe";
 import { Component, Input } from '@angular/core';
 
 import { ILatLng } from './map/polygon-helpers';
@@ -10,7 +10,28 @@ import { PolyDrawService } from './map/polydraw';
   templateUrl: "./hello.component.html",
   styleUrls: ["./hello.component.css"]
 })
-export class HelloComponent  {
+export class HelloComponent {
+  star: ILatLng[][][] = [[
+    [
+      { lat: 59.903, lng: 10.718 },
+      { lat: 59.908, lng: 10.722 },
+      { lat: 59.91, lng:  10.714 },
+      { lat: 59.912, lng: 10.722 },
+      { lat: 59.916, lng: 10.718 },
+      { lat: 59.914, lng: 10.726 },
+      { lat: 59.918, lng: 10.73 },
+      { lat: 59.914, lng: 10.734 },
+      { lat: 59.916, lng: 10.742 },
+      { lat: 59.912, lng: 10.738 },
+      { lat: 59.91, lng:  10.746 },
+      { lat: 59.908, lng: 10.738 },
+      { lat: 59.903, lng: 10.742 },
+      { lat: 59.905, lng: 10.734 },
+      { lat: 59.901, lng: 10.73 },
+      { lat: 59.905, lng: 10.726 },
+      { lat: 59.903, lng: 10.718 }
+    ]
+  ]];
   pn0254: ILatLng[][][] = [[
     [
       { lat: 59.9137669995347, lng: 10.716912 },
@@ -120,23 +141,23 @@ export class HelloComponent  {
 
   homansbyen: ILatLng[][] = [
     [
-      {lat: 59.923856980873936, lng: 10.716666358724478},
-       {lat: 59.92503291743531, lng: 10.717809979918782},
-       {lat: 59.92898204341424, lng: 10.726612840084913},
-       {lat: 59.92553505967488, lng: 10.73081000540787},
-       {lat: 59.92120857646666, lng: 10.732596444866198},
-       {lat: 59.92007735898484, lng: 10.73536681137},
-       {lat: 59.91728146232324, lng: 10.732162703067074},
-       {lat: 59.91872314511897, lng: 10.731608888171255},
-       {lat: 59.91906334379838, lng: 10.730897463821027},
-       {lat: 59.9203110946203, lng: 10.727894411679614},
-       {lat: 59.919826467815064, lng: 10.727161251301162},
-       {lat: 59.92028213379621, lng: 10.72583328175604},
-       {lat: 59.92368739893148, lng: 10.719453160886356},
-       {lat: 59.923856980873936, lng: 10.716666358724478}
-  ]]
+      { lat: 59.923856980873936, lng: 10.716666358724478 },
+      { lat: 59.92503291743531, lng: 10.717809979918782 },
+      { lat: 59.92898204341424, lng: 10.726612840084913 },
+      { lat: 59.92553505967488, lng: 10.73081000540787 },
+      { lat: 59.92120857646666, lng: 10.732596444866198 },
+      { lat: 59.92007735898484, lng: 10.73536681137 },
+      { lat: 59.91728146232324, lng: 10.732162703067074 },
+      { lat: 59.91872314511897, lng: 10.731608888171255 },
+      { lat: 59.91906334379838, lng: 10.730897463821027 },
+      { lat: 59.9203110946203, lng: 10.727894411679614 },
+      { lat: 59.919826467815064, lng: 10.727161251301162 },
+      { lat: 59.92028213379621, lng: 10.72583328175604 },
+      { lat: 59.92368739893148, lng: 10.719453160886356 },
+      { lat: 59.923856980873936, lng: 10.716666358724478 }
+    ]]
   mapHelperService
-  
+
   constructor() {
     this.mapHelperService = container.resolve(PolyDrawService)
     console.log(this.mapHelperService);
@@ -166,7 +187,13 @@ export class HelloComponent  {
     this.mapHelperService.addAutoPolygon(this.homansbyen as any);
   }
 
-  addViken(){
+  addViken() {
     // this.mapHelperService.addViken(this.viken);
   }
+
+  addStar() {
+    this.mapHelperService.addAutoPolygon(this.star as any);
+
+  }
+
 }
