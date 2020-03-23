@@ -3,7 +3,7 @@ import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Com
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
-import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, booleanPointInPolygon, distance, booleanWithin, polygon, booleanEqual, bbox, bboxPolygon, nearestPoint, coordReduce, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
+import { union, explode, multiPolygon, simplify, unkinkPolygon, featureEach, getCoords, kinks as kinks$1, intersect, booleanPointInPolygon, distance, booleanWithin, polygon, bbox, bboxPolygon, nearestPoint, coordReduce, difference, centerOfMass, getCoord, point, featureCollection, area, length, midpoint } from '@turf/turf';
 import concaveman from 'concaveman';
 
 var PolyStateService = /** @class */ (function () {
@@ -25,7 +25,6 @@ var PolyStateService = /** @class */ (function () {
         this.mapSubject.next(map);
     };
     PolyStateService.prototype.updatePolygons = function (polygons) {
-        console.log("map-state", polygons);
         this.polygonSubject.next(polygons);
     };
     PolyStateService.prototype.updateMapBounds = function (mapBounds) {
@@ -183,13 +182,10 @@ var TurfHelperService = /** @class */ (function () {
         this.simplifyTolerance = { tolerance: 0.0001, highQuality: false };
     }
     TurfHelperService.prototype.union = function (poly1, poly2) {
-        console.log('poly1: ', poly1);
-        console.log('poly2: ', poly2);
         var union$1 = union(poly1, poly2);
         return this.getTurfPolygon(union$1);
     };
     TurfHelperService.prototype.turfConcaveman = function (feature) {
-        //console.log("turfConcaveman", points);
         var points = explode(feature);
         var coordinates = points.features.map(function (f) { return f.geometry.coordinates; });
         return multiPolygon([[concaveman(coordinates)]]);
@@ -202,7 +198,6 @@ var TurfHelperService = /** @class */ (function () {
     };
     TurfHelperService.prototype.getTurfPolygon = function (polygon) {
         var turfPolygon;
-        console.log('Get TurfPolygon:', polygon);
         // if (polygon.geometry)
         if (polygon.geometry.type === 'Polygon') {
             turfPolygon = multiPolygon([polygon.geometry.coordinates]);
@@ -235,7 +230,6 @@ var TurfHelperService = /** @class */ (function () {
         // const oldPolygon = polygon.toGeoJSON();
         var poly = [];
         var poly2 = [];
-        console.log('polygonIntersect', polygon, latlngs);
         var latlngsCoords = getCoords(latlngs);
         latlngsCoords.forEach(function (element) {
             var feat = { type: 'Polygon', coordinates: [element[0]] };
@@ -255,7 +249,6 @@ var TurfHelperService = /** @class */ (function () {
                         if (((_a = test) === null || _a === void 0 ? void 0 : _a.geometry.type) === 'Point') {
                             intersect$1 = !(booleanPointInPolygon(test, poly[i]) &&
                                 booleanPointInPolygon(test, poly2[j]));
-                            console.log('Intersect test: ');
                         }
                         else if (((_b = test) === null || _b === void 0 ? void 0 : _b.geometry.type) === 'Polygon') {
                             intersect$1 = !!intersect(poly[i], poly2[j]);
@@ -276,14 +269,9 @@ var TurfHelperService = /** @class */ (function () {
         return distance(point1, point2);
     };
     TurfHelperService.prototype.isWithin = function (polygon1, polygon2) {
-        console.log(polygon1);
-        console.log('Ytre: ', polygon2);
         return booleanWithin(polygon([polygon1]), polygon([polygon2]));
     };
     TurfHelperService.prototype.equalPolygons = function (polygon1, polygon2) {
-        console.log(polygon1);
-        console.log(polygon2);
-        console.log(booleanEqual(polygon1, polygon2));
     };
     //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
     TurfHelperService.prototype.convertToBoundingBoxPolygon = function (polygon, addMidpointMarkers) {
@@ -304,10 +292,8 @@ var TurfHelperService = /** @class */ (function () {
     TurfHelperService.prototype.injectPointToPolygon = function (polygon$1, point) {
         var coords = getCoords(polygon$1);
         var newPolygon;
-        console.log('polygon: ', polygon$1);
         if (coords.length < 2) {
             var polygonPoints = explode(polygon$1);
-            console.log(nearestPoint(point, polygonPoints));
             var index_1 = nearestPoint(point, polygonPoints).properties
                 .featureIndex;
             var test = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
@@ -316,7 +302,6 @@ var TurfHelperService = /** @class */ (function () {
                 }
                 return __spread(accumulator, [oldPoint]);
             }, []);
-            console.log('test', test);
             newPolygon = multiPolygon([[test]]);
         }
         else {
@@ -335,7 +320,6 @@ var TurfHelperService = /** @class */ (function () {
                         }
                         return __spread(accumulator, [oldPoint]);
                     }, []);
-                    console.log('coordinates', coordinates_1);
                 }
                 else {
                     pos_1.push(element);
@@ -348,7 +332,6 @@ var TurfHelperService = /** @class */ (function () {
     };
     TurfHelperService.prototype.polygonDifference = function (polygon1, polygon2) {
         var diff = difference(polygon1, polygon2);
-        console.log(diff);
         return this.getTurfPolygon(diff);
     };
     TurfHelperService.prototype.getBoundingBoxCompassPosition = function (polygon, MarkerPosition, useOffset, offsetDirection) {
@@ -514,12 +497,10 @@ var PolygonInfo = /** @class */ (function () {
         this.trashcanPoint = [];
         this.sqmArea = [];
         this.perimeter = [];
-        console.log('PolygonInfo: ', polygon);
         polygon.forEach(function (polygons, i) {
             _this.trashcanPoint[i] = _this.getTrashcanPoint(polygons[0]);
             _this.sqmArea[i] = _this.calculatePolygonArea(polygons[0]);
             _this.perimeter[i] = _this.calculatePolygonPerimeter(polygons[0]);
-            console.log(polygons[0]);
             _this.polygon[i] = polygons;
         });
     }
@@ -631,7 +612,6 @@ var PolygonInformationService = /** @class */ (function () {
         this.polygonDrawStates = new PolygonDrawStates();
     }
     PolygonInformationService.prototype.updatePolygons = function () {
-        console.log("updatePolygons: ", this.polygonInformationStorage);
         var newPolygons = null;
         if (this.polygonInformationStorage.length > 0) {
             newPolygons = [];
@@ -661,7 +641,6 @@ var PolygonInformationService = /** @class */ (function () {
     PolygonInformationService.prototype.saveCurrentState = function () {
         this.polygonInformationSubject.next(this.polygonInformationStorage);
         this.polygonDrawStatesSubject.next(this.polygonDrawStates);
-        console.log("saveCurrentState: ", this.polygonInformationStorage);
     };
     PolygonInformationService.prototype.deleteTrashcan = function (polygon) {
         var idx = this.polygonInformationStorage.findIndex(function (v) { return v.polygon[0] === polygon; });
@@ -670,11 +649,8 @@ var PolygonInformationService = /** @class */ (function () {
     };
     PolygonInformationService.prototype.deleteTrashCanOnMulti = function (polygon) {
         var index = 0;
-        console.log("DeleteTrashCan: ", polygon);
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
         // const idx = this.polygonInformationStorage.findIndex(v => v.polygon.forEach(poly =>{ poly === polygon}) );
         this.polygonInformationStorage.forEach(function (v, i) {
-            console.log(v.polygon);
             var id = v.polygon.findIndex(function (poly) { return poly.toString() === polygon.toString(); });
             if (id >= 0) {
                 index = i;
@@ -682,26 +658,20 @@ var PolygonInformationService = /** @class */ (function () {
                 v.sqmArea.splice(id, 1);
                 v.perimeter.splice(id, 1);
                 v.polygon.splice(id, 1);
-                console.log(v.polygon);
             }
-            console.log("ID: ", id);
         });
         this.updatePolygons();
-        console.log("Index: ", index);
         if (this.polygonInformationStorage.length > 1) {
             this.polygonInformationStorage.splice(index, 1);
         }
-        console.log("deleteTrashCanOnMulti: ", this.polygonInformationStorage);
     };
     PolygonInformationService.prototype.deletePolygonInformationStorage = function () {
         this.polygonInformationStorage = [];
     };
     PolygonInformationService.prototype.createPolygonInformationStorage = function (arrayOfFeatureGroups) {
         var _this = this;
-        console.log("Create Info: ", arrayOfFeatureGroups);
         if (arrayOfFeatureGroups.length > 0) {
             arrayOfFeatureGroups.forEach(function (featureGroup) {
-                console.log(featureGroup.getLayers()[0].getLatLngs());
                 var polyInfo = new PolygonInfo(featureGroup.getLayers()[0].getLatLngs());
                 _this.polygonInformationStorage.push(polyInfo);
             });
@@ -897,14 +867,9 @@ var PolyDrawService = /** @class */ (function () {
         this.config = null;
         this.mapState.map$.pipe(filter(function (m) { return m !== null; })).subscribe(function (map) {
             _this.map = map;
-            console.log("Kartet i polydraw: ", _this.map);
-            console.log("pre this.config", _this.config);
             _this.config = defaultConfig;
-            console.log("this.config", _this.config);
             _this.configurate({});
-            console.log("after this.config", _this.config);
             _this.tracer = polyline([[0, 0]], _this.config.polyLineOptions);
-            console.log("Tracer pipe: ", _this.tracer);
             _this.initPolyDraw();
         });
         this.mapState.mapZoomLevel$
@@ -912,10 +877,6 @@ var PolyDrawService = /** @class */ (function () {
             .subscribe(function (zoom) {
             _this.onZoomChange(zoom);
         });
-        this.polygonInformation.polygonInformation$.subscribe(function (k) {
-            console.log("PolyInfo start: ", k);
-        });
-        // TODO - lage en config observable i mapState og oppdater this.config med den
     }
     // new
     PolyDrawService.prototype.configurate = function (config) {
@@ -926,14 +887,12 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.closeAndReset = function () {
-        // console.log("closeAndReset");
         this.setDrawMode(DrawMode.Off);
         this.removeAllFeatureGroups();
     };
     // make readable
     PolyDrawService.prototype.deletePolygon = function (polygon) {
         var _this = this;
-        console.log("deletePolygon: ", polygon);
         if (polygon.length > 1) {
             polygon.length = 1;
         }
@@ -943,11 +902,9 @@ var PolyDrawService = /** @class */ (function () {
                 var latlngs = layer.getLatLngs();
                 var length = latlngs.length;
                 //  = []
-                console.log(latlngs);
                 latlngs.forEach(function (latlng, index) {
                     var polygon3;
                     var test = __spread(latlng);
-                    console.log(latlng);
                     if (latlng.length > 1) {
                         if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
                             test[0].push(latlng[0][0]);
@@ -960,14 +917,10 @@ var PolyDrawService = /** @class */ (function () {
                         }
                         polygon3 = test;
                     }
-                    console.log("Test: ", polygon3);
-                    console.log(polygon);
                     var equals = _this.polygonArrayEquals(polygon3, polygon);
-                    console.log("equals: ", equals, " length: ", length);
                     if (equals && length === 1) {
                         _this.polygonInformation.deleteTrashcan(polygon);
                         _this.removeFeatureGroup(featureGroup);
-                        console.log(featureGroup.getLayers());
                     }
                     else if (equals && length > 1) {
                         _this.polygonInformation.deleteTrashCanOnMulti([polygon]);
@@ -983,7 +936,6 @@ var PolyDrawService = /** @class */ (function () {
     // fine
     PolyDrawService.prototype.removeAllFeatureGroups = function () {
         var _this = this;
-        // console.log("removeAllFeatureGroups", null);
         this.arrayOfFeatureGroups.forEach(function (featureGroups) {
             _this.map.removeLayer(featureGroups);
         });
@@ -994,7 +946,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.getDrawMode = function () {
-        // console.log("getDrawMode", null);
         return this.drawModeSubject.value;
     };
     PolyDrawService.prototype.addViken = function (polygon) {
@@ -1006,11 +957,9 @@ var PolyDrawService = /** @class */ (function () {
         geographicBorders.forEach(function (group) {
             var featureGroup = new FeatureGroup();
             var polygon2 = _this.turfHelper.getMultiPolygon(_this.convertToCoords(group));
-            console.log(polygon2);
             var polygon = _this.getPolygon(polygon2);
             featureGroup.addLayer(polygon);
             var markerLatlngs = polygon.getLatLngs();
-            console.log("markers: ", markerLatlngs);
             markerLatlngs.forEach(function (polygon) {
                 polygon.forEach(function (polyElement, i) {
                     if (i === 0) {
@@ -1018,7 +967,6 @@ var PolyDrawService = /** @class */ (function () {
                     }
                     else {
                         _this.addHoleMarker(polyElement, featureGroup);
-                        console.log("Hull: ", polyElement);
                     }
                 });
                 // this.addMarker(polygon[0], featureGroup);
@@ -1029,15 +977,12 @@ var PolyDrawService = /** @class */ (function () {
         this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
         this.polygonInformation.activate();
         this.polygonInformation.setMoveMode();
-        console.log(this.polygonInformation.polygonInformationStorage);
     };
     // innehåll i if'ar flytta till egna metoder
     PolyDrawService.prototype.convertToCoords = function (latlngs) {
         var coords = [];
-        console.log(latlngs.length, latlngs);
         if (latlngs.length > 1 && latlngs.length < 3) {
             var coordinates_1 = [];
-            console.log(GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), latlngs[latlngs.length - 1].length);
             // tslint:disable-next-line: max-line-length
             var within = this.turfHelper.isWithin(GeoJSON.latLngsToCoords(latlngs[latlngs.length - 1]), GeoJSON.latLngsToCoords(latlngs[0]));
             if (within) {
@@ -1053,7 +998,6 @@ var PolyDrawService = /** @class */ (function () {
             if (coordinates_1.length >= 1) {
                 coords.push(coordinates_1);
             }
-            console.log("Within1 ", within);
         }
         else if (latlngs.length > 2) {
             var coordinates_2 = [];
@@ -1075,40 +1019,35 @@ var PolyDrawService = /** @class */ (function () {
         else {
             coords.push([GeoJSON.latLngsToCoords(latlngs[0])]);
         }
-        console.log(coords);
         return coords;
     };
     // fine
     PolyDrawService.prototype.initPolyDraw = function () {
-        // console.log("initPolyDraw", null);
         var _this = this;
         var container = this.map.getContainer();
         var drawMode = this.getDrawMode();
         if (this.config.touchSupport) {
-            container.addEventListener("touchstart", function (e) {
+            container.addEventListener('touchstart', function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseDown(e);
                 }
             });
-            container.addEventListener("touchend", function (e) {
+            container.addEventListener('touchend', function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseUpLeave();
                 }
             });
-            container.addEventListener("touchmove", function (e) {
+            container.addEventListener('touchmove', function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseMove(e);
                 }
             });
         }
-        console.log("Map init: ", this.map);
-        console.log("Tracer init: ", this.tracer);
         this.map.addLayer(this.tracer);
         this.setDrawMode(DrawMode.Off);
     };
     // Test L.MouseEvent
     PolyDrawService.prototype.mouseDown = function (event) {
-        console.log("mouseDown", event);
         if (event.originalEvent != null) {
             this.tracer.setLatLngs([event.latlng]);
         }
@@ -1123,7 +1062,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // TODO event type, create containerPointToLatLng-method
     PolyDrawService.prototype.mouseMove = function (event) {
-        // console.log("mouseMove", event);
         if (event.originalEvent != null) {
             this.tracer.addLatLng(event.latlng);
         }
@@ -1137,9 +1075,7 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.mouseUpLeave = function () {
-        // console.log("mouseUpLeave", null);
         this.polygonInformation.deletePolygonInformationStorage();
-        // console.log("------------------------------Delete trashcans", null);
         var geoPos = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON());
         this.stopDraw();
         switch (this.getDrawMode()) {
@@ -1153,21 +1089,17 @@ var PolyDrawService = /** @class */ (function () {
                 break;
         }
         this.polygonInformation.createPolygonInformationStorage(this.arrayOfFeatureGroups);
-        // console.log("------------------------------create trashcans", null);
     };
     // fine
     PolyDrawService.prototype.startDraw = function () {
-        // console.log("startDraw", null);
         this.drawStartedEvents(true);
     };
     // fine
     PolyDrawService.prototype.stopDraw = function () {
-        // console.log("stopDraw", null);
         this.resetTracker();
         this.drawStartedEvents(false);
     };
     PolyDrawService.prototype.onZoomChange = function (zoomLevel) {
-        // console.log("onZoomChange", zoomLevel);
         if (zoomLevel >= this.minimumFreeDrawZoomLevel) {
             this.polygonInformation.polygonDrawStates.canUsePolyDraw = true;
         }
@@ -1179,10 +1111,9 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.drawStartedEvents = function (onoff) {
-        // console.log("drawStartedEvents", onoff);
-        var onoroff = onoff ? "on" : "off";
-        this.map[onoroff]("mousemove", this.mouseMove, this);
-        this.map[onoroff]("mouseup", this.mouseUpLeave, this);
+        var onoroff = onoff ? 'on' : 'off';
+        this.map[onoroff]('mousemove', this.mouseMove, this);
+        this.map[onoroff]('mouseup', this.mouseUpLeave, this);
     };
     // On hold
     PolyDrawService.prototype.subtractPolygon = function (latlngs) {
@@ -1191,7 +1122,6 @@ var PolyDrawService = /** @class */ (function () {
     // fine
     PolyDrawService.prototype.addPolygon = function (latlngs, simplify, noMerge) {
         if (noMerge === void 0) { noMerge = false; }
-        console.log("addPolygon", latlngs, simplify, noMerge, this.kinks, this.config);
         if (this.mergePolygons &&
             !noMerge &&
             this.arrayOfFeatureGroups.length > 0 &&
@@ -1207,10 +1137,8 @@ var PolyDrawService = /** @class */ (function () {
         var _this = this;
         var featureGroup = new FeatureGroup();
         var latLngs = simplify ? this.turfHelper.getSimplified(latlngs) : latlngs;
-        console.log("AddPolygonLayer: ", latLngs);
         var polygon = this.getPolygon(latLngs);
         featureGroup.addLayer(polygon);
-        console.log(polygon);
         var markerLatlngs = polygon.getLatLngs();
         markerLatlngs.forEach(function (polygon) {
             polygon.forEach(function (polyElement, i) {
@@ -1219,24 +1147,22 @@ var PolyDrawService = /** @class */ (function () {
                 }
                 else {
                     _this.addHoleMarker(polyElement, featureGroup);
-                    console.log("Hull: ", polyElement);
                 }
             });
             // this.addMarker(polygon[0], featureGroup);
             // TODO - Hvis polygon.length >1, så har den hull: egen addMarker funksjon
         });
         this.arrayOfFeatureGroups.push(featureGroup);
-        console.log("Array: ", this.arrayOfFeatureGroups);
         this.polygonInformation.activate();
         this.setDrawMode(DrawMode.Off);
-        featureGroup.on("click", function (e) {
+        featureGroup.on('click', function (e) {
             _this.polygonClicked(e, latLngs);
         });
     };
     // fine
     PolyDrawService.prototype.polygonClicked = function (e, poly) {
         var newPoint = e.latlng;
-        if (poly.geometry.type === "MultiPolygon") {
+        if (poly.geometry.type === 'MultiPolygon') {
             var newPolygon = this.turfHelper.injectPointToPolygon(poly, [
                 newPoint.lng,
                 newPoint.lat
@@ -1247,7 +1173,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.getPolygon = function (latlngs) {
-        console.log("getPolygons: ", latlngs);
         var polygon = GeoJSON.geometryToLayer(latlngs);
         polygon.setStyle(this.config.polygonOptions);
         return polygon;
@@ -1255,13 +1180,11 @@ var PolyDrawService = /** @class */ (function () {
     // fine
     PolyDrawService.prototype.merge = function (latlngs) {
         var _this = this;
-        console.log("merge", latlngs);
         var polygonFeature = [];
         var newArray = [];
         var polyIntersection = false;
         this.arrayOfFeatureGroups.forEach(function (featureGroup) {
             var featureCollection = featureGroup.toGeoJSON();
-            console.log("Merger: ", featureCollection.features[0]);
             if (featureCollection.features[0].geometry.coordinates.length > 1) {
                 featureCollection.features[0].geometry.coordinates.forEach(function (element) {
                     var feature = _this.turfHelper.getMultiPolygon([element]);
@@ -1281,7 +1204,6 @@ var PolyDrawService = /** @class */ (function () {
                 }
             }
         });
-        console.log(newArray);
         if (newArray.length > 0) {
             this.unionPolygons(newArray, latlngs, polygonFeature);
         }
@@ -1311,8 +1233,8 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.events = function (onoff) {
-        var onoroff = onoff ? "on" : "off";
-        this.map[onoroff]("mousedown", this.mouseDown, this);
+        var onoroff = onoff ? 'on' : 'off';
+        this.map[onoroff]('mousedown', this.mouseDown, this);
     };
     // fine, TODO: if special markers
     PolyDrawService.prototype.addMarker = function (latlngs, FeatureGroup) {
@@ -1333,26 +1255,24 @@ var PolyDrawService = /** @class */ (function () {
                 title: i.toString()
             });
             FeatureGroup.addLayer(marker).addTo(_this.map);
-            // console.log("FeatureGroup: ", FeatureGroup);
-            marker.on("drag", function (e) {
+            marker.on('drag', function (e) {
                 _this.markerDrag(FeatureGroup);
             });
-            marker.on("dragend", function (e) {
+            marker.on('dragend', function (e) {
                 _this.markerDragEnd(FeatureGroup);
             });
             if (i === menuMarkerIdx && _this.config.markers.menu) {
                 // marker.bindPopup(
                 //   this.getHtmlContent(e => {
-                //     console.log("clicked on", e.target);
                 //   })
                 // );
-                marker.on("click", function (e) {
+                marker.on('click', function (e) {
                     _this.convertToBoundsPolygon(latlngs, true);
                     // this.convertToSimplifiedPolygon(latlngs);
                 });
             }
             if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                marker.on("click", function (e) {
+                marker.on('click', function (e) {
                     _this.deletePolygon([latlngs]);
                 });
             }
@@ -1376,15 +1296,14 @@ var PolyDrawService = /** @class */ (function () {
                 title: i.toString()
             });
             FeatureGroup.addLayer(marker).addTo(_this.map);
-            marker.on("drag", function (e) {
+            marker.on('drag', function (e) {
                 _this.markerDrag(FeatureGroup);
             });
-            marker.on("dragend", function (e) {
+            marker.on('dragend', function (e) {
                 _this.markerDragEnd(FeatureGroup);
             });
             /*   if (i === 0 && this.config.markers.menu) {
               marker.bindPopup(this.getHtmlContent((e) => {
-                console.log("clicked on", e.target);
               }));
               // marker.on("click", e => {
               //   this.toggleMarkerMenu();
@@ -1398,7 +1317,7 @@ var PolyDrawService = /** @class */ (function () {
         });
     };
     PolyDrawService.prototype.createDivIcon = function (classNames) {
-        var classes = classNames.join(" ");
+        var classes = classNames.join(' ');
         var icon = divIcon({ className: classes });
         return icon;
     };
@@ -1409,18 +1328,14 @@ var PolyDrawService = /** @class */ (function () {
         var hole = [];
         var layerLength = FeatureGroup.getLayers();
         var posarrays = layerLength[0].getLatLngs();
-        console.log(posarrays);
-        console.log("markerdrag: ", layerLength);
         var length = 0;
         if (posarrays.length > 1) {
             for (var index = 0; index < posarrays.length; index++) {
                 testarray = [];
                 hole = [];
-                console.log("Posisjoner: ", posarrays[index]);
                 if (index === 0) {
                     if (posarrays[0].length > 1) {
                         for (var i = 0; index < posarrays[0].length; i++) {
-                            console.log("Posisjoner 2: ", posarrays[index][i]);
                             for (var j = 0; j < posarrays[0][i].length; j++) {
                                 testarray.push(layerLength[j + 1].getLatLng());
                             }
@@ -1433,12 +1348,10 @@ var PolyDrawService = /** @class */ (function () {
                         }
                         hole.push(testarray);
                     }
-                    console.log("Hole: ", hole);
                     newPos.push(hole);
                 }
                 else {
                     length += posarrays[index - 1][0].length;
-                    console.log("STart index: ", length);
                     for (var j = length; j < posarrays[index][0].length + length; j++) {
                         testarray.push(layerLength[j + 1].getLatLng());
                     }
@@ -1453,7 +1366,6 @@ var PolyDrawService = /** @class */ (function () {
             var length2 = 0;
             for (var index = 0; index < posarrays[0].length; index++) {
                 testarray = [];
-                console.log("Polygon drag: ", posarrays[0][index]);
                 if (index === 0) {
                     if (posarrays[0][index].length > 1) {
                         for (var j = 0; j < posarrays[0][index].length; j++) {
@@ -1475,9 +1387,7 @@ var PolyDrawService = /** @class */ (function () {
                 hole.push(testarray);
             }
             newPos.push(hole);
-            console.log("Hole 2: ", hole);
         }
-        console.log("Nye posisjoner: ", newPos);
         layerLength[0].setLatLngs(newPos);
     };
     // check this
@@ -1485,17 +1395,14 @@ var PolyDrawService = /** @class */ (function () {
         var _this = this;
         this.polygonInformation.deletePolygonInformationStorage();
         var featureCollection = FeatureGroup.toGeoJSON();
-        console.log("Markerdragend polygon: ", featureCollection.features[0].geometry.coordinates);
         if (featureCollection.features[0].geometry.coordinates.length > 1) {
             featureCollection.features[0].geometry.coordinates.forEach(function (element) {
                 var feature = _this.turfHelper.getMultiPolygon([element]);
-                console.log("Markerdragend: ", feature);
                 if (_this.turfHelper.hasKinks(feature)) {
                     _this.kinks = true;
                     var unkink = _this.turfHelper.getKinks(feature);
                     // this.deletePolygon(this.getLatLngsFromJson(feature));
                     _this.removeFeatureGroup(FeatureGroup);
-                    console.log("Unkink: ", unkink);
                     unkink.forEach(function (polygon) {
                         _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
                     });
@@ -1508,13 +1415,11 @@ var PolyDrawService = /** @class */ (function () {
         }
         else {
             var feature = this.turfHelper.getMultiPolygon(featureCollection.features[0].geometry.coordinates);
-            console.log("Markerdragend: ", feature);
             if (this.turfHelper.hasKinks(feature)) {
                 this.kinks = true;
                 var unkink = this.turfHelper.getKinks(feature);
                 // this.deletePolygon(this.getLatLngsFromJson(feature));
                 this.removeFeatureGroup(FeatureGroup);
-                console.log("Unkink: ", unkink);
                 var testCoord = [];
                 unkink.forEach(function (polygon) {
                     _this.addPolygon(_this.turfHelper.getTurfPolygon(polygon), false, true);
@@ -1531,15 +1436,14 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine, check the returned type
     PolyDrawService.prototype.getLatLngsFromJson = function (feature) {
-        console.log("getLatLngsFromJson: ", feature);
         var coord;
         if (feature) {
             if (feature.geometry.coordinates.length > 1 &&
-                feature.geometry.type === "MultiPolygon") {
+                feature.geometry.type === 'MultiPolygon') {
                 coord = GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
             }
             else if (feature.geometry.coordinates[0].length > 1 &&
-                feature.geometry.type === "Polygon") {
+                feature.geometry.type === 'Polygon') {
                 coord = GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0]);
             }
             else {
@@ -1551,7 +1455,6 @@ var PolyDrawService = /** @class */ (function () {
     // fine
     PolyDrawService.prototype.unionPolygons = function (layers, latlngs, polygonFeature) {
         var _this = this;
-        console.log("unionPolygons", layers, latlngs, polygonFeature);
         var addNew = latlngs;
         layers.forEach(function (featureGroup, i) {
             var featureCollection = featureGroup.toGeoJSON();
@@ -1568,7 +1471,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.removeFeatureGroup = function (featureGroup) {
-        console.log("removeFeatureGroup", featureGroup);
         featureGroup.clearLayers();
         this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(function (featureGroups) { return featureGroups !== featureGroup; });
         // this.updatePolygons();
@@ -1576,7 +1478,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine until refactoring
     PolyDrawService.prototype.removeFeatureGroupOnMerge = function (featureGroup) {
-        console.log("removeFeatureGroupOnMerge", featureGroup);
         var newArray = [];
         if (featureGroup.getLayers()[0]) {
             var polygon_1 = featureGroup.getLayers()[0].getLatLngs()[0];
@@ -1599,7 +1500,6 @@ var PolyDrawService = /** @class */ (function () {
     // fine until refactoring
     PolyDrawService.prototype.deletePolygonOnMerge = function (polygon) {
         var _this = this;
-        console.log("deletePolygonOnMerge", polygon);
         var polygon2 = [];
         if (this.arrayOfFeatureGroups.length > 0) {
             this.arrayOfFeatureGroups.forEach(function (featureGroup) {
@@ -1611,7 +1511,6 @@ var PolyDrawService = /** @class */ (function () {
                 }
                 var equals = _this.polygonArrayEqualsMerge(polygon2, polygon);
                 if (equals) {
-                    console.log("EQUALS", polygon);
                     _this.removeFeatureGroupOnMerge(featureGroup);
                     _this.deletePolygon(polygon);
                     _this.polygonInformation.deleteTrashcan(polygon);
@@ -1626,7 +1525,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // TODO - legge et annet sted
     PolyDrawService.prototype.polygonArrayEquals = function (poly1, poly2) {
-        // console.log("polygonArrayEquals", poly1, poly2);
         if (poly1[0][0]) {
             if (!poly1[0][0].equals(poly2[0][0])) {
                 return false;
@@ -1646,7 +1544,6 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.setLeafletMapEvents = function (enableDragging, enableDoubleClickZoom, enableScrollWheelZoom) {
-        // console.log("setLeafletMapEvents", enableDragging, enableDoubleClickZoom, enableScrollWheelZoom);
         enableDragging ? this.map.dragging.enable() : this.map.dragging.disable();
         enableDoubleClickZoom
             ? this.map.doubleClickZoom.enable()
@@ -1657,23 +1554,22 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.setDrawMode = function (mode) {
-        console.log("setDrawMode", this.map);
         this.drawModeSubject.next(mode);
         if (!!this.map) {
             var isActiveDrawMode = true;
             switch (mode) {
                 case DrawMode.Off:
-                    DomUtil.removeClass(this.map.getContainer(), "crosshair-cursor-enabled");
+                    DomUtil.removeClass(this.map.getContainer(), 'crosshair-cursor-enabled');
                     this.events(false);
                     this.stopDraw();
                     this.tracer.setStyle({
-                        color: ""
+                        color: ''
                     });
                     this.setLeafletMapEvents(true, true, true);
                     isActiveDrawMode = false;
                     break;
                 case DrawMode.Add:
-                    DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
+                    DomUtil.addClass(this.map.getContainer(), 'crosshair-cursor-enabled');
                     this.events(true);
                     this.tracer.setStyle({
                         color: defaultConfig.polyLineOptions.color
@@ -1681,10 +1577,10 @@ var PolyDrawService = /** @class */ (function () {
                     this.setLeafletMapEvents(false, false, false);
                     break;
                 case DrawMode.Subtract:
-                    DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
+                    DomUtil.addClass(this.map.getContainer(), 'crosshair-cursor-enabled');
                     this.events(true);
                     this.tracer.setStyle({
-                        color: "#D9460F"
+                        color: '#D9460F'
                     });
                     this.setLeafletMapEvents(false, false, false);
                     break;
@@ -1729,16 +1625,14 @@ var PolyDrawService = /** @class */ (function () {
         this.tracer.setLatLngs([[0, 0]]);
     };
     PolyDrawService.prototype.toggleMarkerMenu = function () {
-        alert("open menu");
+        alert('open menu');
     };
     PolyDrawService.prototype.getHtmlContent = function (callBack) {
         var comp = this.popupGenerator.generateAlterPopup();
         comp.instance.bboxClicked.subscribe(function (e) {
-            console.log("bbox clicked", e);
             callBack(e);
         });
         comp.instance.simplyfiClicked.subscribe(function (e) {
-            console.log("simplyfi clicked", e);
             callBack(e);
         });
         return comp.location.nativeElement;
@@ -1778,7 +1672,7 @@ var PolyDrawService = /** @class */ (function () {
     PolyDrawService.ɵprov = ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(ɵɵinject(PolyStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
     PolyDrawService = __decorate([
         Injectable({
-            providedIn: "root"
+            providedIn: 'root'
         })
         // Rename - PolyDrawService
         ,

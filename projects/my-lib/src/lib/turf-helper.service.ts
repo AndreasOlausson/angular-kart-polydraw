@@ -14,8 +14,8 @@ export class TurfHelperService {
   constructor() {}
 
   union(poly1, poly2): Feature<Polygon | MultiPolygon> {
-    console.log('poly1: ', poly1);
-    console.log('poly2: ', poly2);
+    
+    
 
     const union = turf.union(poly1, poly2);
 
@@ -25,7 +25,7 @@ export class TurfHelperService {
   turfConcaveman(
     feature: Feature<Polygon | MultiPolygon>
   ): Feature<Polygon | MultiPolygon> {
-    //console.log("turfConcaveman", points);
+    
     const points = turf.explode(feature);
 
     const coordinates = points.features.map(f => f.geometry.coordinates);
@@ -45,7 +45,7 @@ export class TurfHelperService {
     polygon: Feature<Polygon | MultiPolygon>
   ): Feature<Polygon | MultiPolygon> {
     let turfPolygon;
-    console.log('Get TurfPolygon:', polygon);
+    
     // if (polygon.geometry)
     if (polygon.geometry.type === 'Polygon') {
       turfPolygon = turf.multiPolygon([polygon.geometry.coordinates]);
@@ -88,7 +88,7 @@ export class TurfHelperService {
     const poly = [];
     const poly2 = [];
 
-    console.log('polygonIntersect', polygon, latlngs);
+    
 
     const latlngsCoords = turf.getCoords(latlngs);
     latlngsCoords.forEach(element => {
@@ -113,7 +113,7 @@ export class TurfHelperService {
                 turf.booleanPointInPolygon(test, poly[i]) &&
                 turf.booleanPointInPolygon(test, poly2[j])
               );
-              console.log('Intersect test: ');
+              
             } else if (test?.geometry.type === 'Polygon') {
               intersect = !!turf.intersect(poly[i], poly2[j]);
             }
@@ -137,8 +137,8 @@ export class TurfHelperService {
   }
 
   isWithin(polygon1: Position[], polygon2: Position[]): boolean {
-    console.log(polygon1);
-    console.log('Ytre: ', polygon2);
+    
+    
     return turf.booleanWithin(
       turf.polygon([polygon1]),
       turf.polygon([polygon2])
@@ -149,9 +149,9 @@ export class TurfHelperService {
     polygon1: Feature<Polygon | MultiPolygon>,
     polygon2: Feature<Polygon | MultiPolygon>
   ) {
-    console.log(polygon1);
-    console.log(polygon2);
-    console.log(turf.booleanEqual(polygon1, polygon2));
+    
+    
+    
   }
   //TODO optional add extra markers for N E S W (We have the corners NW, NE, SE, SW)
   convertToBoundingBoxPolygon(
@@ -178,10 +178,10 @@ export class TurfHelperService {
   injectPointToPolygon(polygon, point) {
     const coords = turf.getCoords(polygon);
     let newPolygon;
-    console.log('polygon: ', polygon);
+    
     if (coords.length < 2) {
       const polygonPoints = turf.explode(polygon);
-      console.log(turf.nearestPoint(point, polygonPoints));
+      
       const index = turf.nearestPoint(point, polygonPoints).properties
         .featureIndex;
       const test = turf.coordReduce(
@@ -194,7 +194,7 @@ export class TurfHelperService {
         },
         []
       );
-      console.log('test', test);
+      
       newPolygon = turf.multiPolygon([[test]]);
     } else {
       const pos = [];
@@ -216,7 +216,7 @@ export class TurfHelperService {
             },
             []
           );
-          console.log('coordinates', coordinates);
+          
         } else {
           pos.push(element);
         }
@@ -232,7 +232,7 @@ export class TurfHelperService {
     polygon2: Feature<Polygon | MultiPolygon>
   ): Feature<Polygon | MultiPolygon> {
     const diff = turf.difference(polygon1, polygon2);
-    console.log(diff);
+    
     return this.getTurfPolygon(diff);
   }
   getBoundingBoxCompassPosition(

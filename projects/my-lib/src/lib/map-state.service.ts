@@ -34,7 +34,7 @@ export class PolyStateService {
     }
 
     updatePolygons(polygons: ILatLng[][][]):void{
-        console.log("map-state",polygons);
+        
         this.polygonSubject.next(polygons)
     }
     updateMapBounds(mapBounds: MapBoundsState) {

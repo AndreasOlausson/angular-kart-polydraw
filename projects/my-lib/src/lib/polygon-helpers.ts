@@ -6,12 +6,12 @@ export class PolygonInfo {
   sqmArea: number[] = [];
   perimeter: number[] = [];
   constructor(polygon) {
-    console.log('PolygonInfo: ', polygon);
+    
     polygon.forEach((polygons, i) => {
       this.trashcanPoint[i] = this.getTrashcanPoint(polygons[0]);
       this.sqmArea[i] = this.calculatePolygonArea(polygons[0]);
       this.perimeter[i] = this.calculatePolygonPerimeter(polygons[0]);
-      console.log(polygons[0]);
+    
       this.polygon[i] = polygons;
     });
   }
