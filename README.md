@@ -144,14 +144,16 @@ The area information-marker offsets around the delete marker.
 example:
 ```javascript
 const polyDraw = new PolyDraw({
-  deleteMarkers: {
-    placement: MarkerPlacement.North
-  },
-  areaMarkers: {
-    placement: MarkerPlacement.East
-  },
-  menuMarker: {
-   placement: MarkerPlacement.West
+  markers: {
+    markerDeleteIcon: {
+      position: MarkerPlacement.North
+    },
+    markerInfoIcon: {
+      position: MarkerPlacement.East
+    },
+    markerMenuIcon: {
+      position: MarkerPlacement.West
+    }
   }
 });
 ```
