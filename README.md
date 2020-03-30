@@ -148,13 +148,16 @@ const polyDraw = new PolyDraw({
     placement: MarkerPlacement.North
   },
   areaMarkers: {
-    placement: MarkerPlacement.West
+    placement: MarkerPlacement.East
+  },
+  menuMarker: {
+   placement: MarkerPlacement.West
   }
 });
 ```
 This configuration gives this result.
 
-![PolyDraw](/tmp-marker-placement.jpg)
+![PolyDraw](/star.png)
 
 ```javascript
 MarkerPlacement {
