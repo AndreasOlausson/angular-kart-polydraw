@@ -93,32 +93,32 @@ const polyDraw = new PolyDraw({
 | **modes**              	|object|         | xxx |
 | &nbsp;&nbsp;&nbsp;`attachElbow`             |boolean| `false`        | Set support for attaching elbows |
 | **markers**             |object| `-`        | Main object for marker configuration. |
-| `&nbsp;&nbsp;&nbsp;deleteMarker`            |boolean| `true`        | When enabled, show delete marker icon. |
-| `&nbsp;&nbsp;&nbsp;infoMarker`              |boolean| `true`        | When enabled, show info marker icon. |
-| `&nbsp;&nbsp;&nbsp;menuMarker`              |boolean| `true`        | When enabled, show menu marker icon. |
-| `&nbsp;&nbsp;&nbsp;coordsTitle`             |boolean| `true`        | Allow touch support. |
-| **&nbsp;&nbsp;&nbsp;markerIcon**              |object| `--`        | Default elbow marker icon configuration. |
-| `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses`            |Array| `[polygon-marker]`        | String array with name of style classes |
-| **&nbsp;&nbsp;&nbsp;holeIcon**              	|object| `--`        | Hole marker icon configuration. |
-| `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses`            |Array| `[polygon-marker, hole]`        | String array with name of style classes |
-| **&nbsp;&nbsp;&nbsp;&nbsp;markerInfoIcon**          |object| `--`        | Info marker icon configuration. |
-| `position`              	|int| `--`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
-| `showArea`              	|boolean| `--`        | When enabled, displays area information. |
-| `showPerimeter`           |boolean| `--`        | When enabled, displays perimeter information. |
-| `useMetrics`              |boolean| `--`        | When enabled, displays metric units, otherwise imperial units. |
-| `usePerimeterMinValue`    |boolean| `--`        | When enabled, uses a defined default value in case of the value is unknown. |
-| `areaLabel`              	|string| `--`        | Display text on area label |
-| `perimeterLabel`          |string| `--`        | Display text on perimeter label |
-| `values`              	|object| `--`        | Predefined default values |
-| `min`              		|object| `--`        | Default values for min values if **usePerimeterMinValue** is enabled. |
-| `metric`              	|string| `50`        | Display text on perimeter label |
-| `imperial`              	|string| `100`        | Display text on perimeter label |
-| `unknown`              	|object|         | Default values for unkown values |
-| `metric`              	|string| `-`        | Display text on perimeter label |
-| `imperial`              	|string| `-`        | Display text on perimeter label |
-| `units`              		|object|         | Predefined default values |
-| `unknownUnit`            	|string| `empty string`        | Value for unknown units |
-| `metric`              	|string| `empty string`        | Value for unknown units |
+| &nbsp;&nbsp;&nbsp;`deleteMarker`            |boolean| `true`        | When enabled, show delete marker icon. |
+| &nbsp;&nbsp;&nbsp;`infoMarker`              |boolean| `true`        | When enabled, show info marker icon. |
+| &nbsp;&nbsp;&nbsp;`menuMarker`              |boolean| `true`        | When enabled, show menu marker icon. |
+| &nbsp;&nbsp;&nbsp;`coordsTitle`             |boolean| `true`        | Allow touch support. |
+| &nbsp;&nbsp;&nbsp;**markerIcon**              |object| `--`        | Default elbow marker icon configuration. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`styleClasses`            |Array| `[polygon-marker]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;**holeIcon**              	|object| `--`        | Hole marker icon configuration. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`styleClasses`            |Array| `[polygon-marker, hole]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;&nbsp;**markerInfoIcon**          |object| `--`        | Info marker icon configuration. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`position`              	|int| `--`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`showArea`              	|boolean| `--`        | When enabled, displays area information. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`showPerimeter`           |boolean| `--`        | When enabled, displays perimeter information. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`useMetrics`              |boolean| `--`        | When enabled, displays metric units, otherwise imperial units. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`usePerimeterMinValue`    |boolean| `--`        | When enabled, uses a defined default value in case of the value is unknown. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`areaLabel`              	|string| `--`        | Display text on area label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`perimeterLabel`          |string| `--`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**values**              	|object| `--`        | Predefined default values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**min**              		|object| `--`        | Default values for min values if **usePerimeterMinValue** is enabled. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`metric`              	|string| `50`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`imperial`              	|string| `100`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**unknown**              	|object|         | Default values for unkown values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`metric`              	|string| `-`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`imperial`              	|string| `-`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**units**              		|object|         | Predefined default values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`unknownUnit`            	|string| `empty string`        | Value for unknown units |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**metric**              	|object| `empty string`        | Value for unknown units |
 | `perimeter`              	|object| `--`        | Default values for min values if **usePerimeterMinValue** is enabled. |
 | `m`              			|string| `50`        | Display text on perimeter label |
 | `km`              		|string| `100`        | Display text on perimeter label |
@@ -173,6 +173,7 @@ const polyDraw = new PolyDraw({
 | `multiplier`         	|number| `2`        | text |
 | `boundingBox`       		|object|         | text |
 | `addMidPointMarkers`           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
+
 
 
 
