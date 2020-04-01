@@ -90,7 +90,7 @@ const polyDraw = new PolyDraw({
 | `touchSupport`			|boolean| `true`        | Allow touch support. |
 | `mergePolygons`           |boolean| `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 | `kinks`              		|boolean| `false`        | text |
-| `**modes**`              	|object|         | xxx |
+| **modes**              	|object|         | xxx |
 | `attachElbow`             |boolean| `false`        | Set support for attaching elbows |
 | `**markers**`             |object| `-`        | Main object for marker configuration. |
 | `deleteMarker`            |boolean| `true`        | When enabled, show delete marker icon. |
@@ -138,16 +138,12 @@ const polyDraw = new PolyDraw({
 | `acres`              		|string| `-`        | Display text on perimeter label |
 | `miles2`              	|string| `-`        | Display text on perimeter label |
 | `styleClasses`           	|array| `[polygon-marker, info]`        | String array with name of style classes |
-
-
 | `markerMenuIcon`          |object|         | Menu marker icon configuration. |
 | `position`              	|int| `7`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
 | `styleClasses`           	|array| `[polygon-marker, info]`        | String array with name of style classes |
-
 | `markerDeleteIcon`        |object|         | Delete marker icon configuration. |
 | `position`              	|int| `5`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
 | `styleClasses`           	|array| `[polygon-marker, delete]`        | String array with name of style classes |
-
 | `polyLineOptions`        	|object|         | Normal poly line configuration. |
 | `color`              		|string| `#50622b`        | Poly line color |
 | `opacity`           		|number| `1.0`        | Opacity on poly line. |
@@ -155,7 +151,6 @@ const polyDraw = new PolyDraw({
 | `noClip`           		|boolean| `true`        | text |
 | `clickable`              	|boolean| `false`        | text |
 | `weight`           		|number| `2`        | Poly line width in pixels |
-
 | `subtractLineOptions`        	|object|         | Subtract (holes) poly line configuration. |
 | `color`              		|string| `#50622b`        | Poly line color |
 | `opacity`           		|number| `1.0`        | Opacity on poly line. |
@@ -163,13 +158,11 @@ const polyDraw = new PolyDraw({
 | `noClip`           		|boolean| `true`        | text |
 | `clickable`              	|boolean| `false`        | text |
 | `weight`           		|number| `2`        | Poly line width in pixels |
-
 | `polygonOptions`        	|object|         | Polygon configuration. |
 | `color`              		|string| `#50622b`        | Polygon color |
 | `fillColor`           	|number| `#b4cd8a`        | Polygon fill color. |
 | `smoothFactor`         	|number| `0.3`        | text How much to simplify the polyline. |
 | `noClip`           		|boolean| `true`        | text |
-
 | `simplification`        	|object|         | Simplification configuration. |
 | `simplifyTolerance`       |object|         | Tolerance configuration |
 | `tolerance`           	|number| `0.0001`        | text |
@@ -178,7 +171,6 @@ const polyDraw = new PolyDraw({
 | `dynamicMode`       		|object|         | text |
 | `fractionGuard`           	|number| `0.9`        | text |
 | `multiplier`         	|number| `2`        | text |
-
 | `boundingBox`       		|object|         | text |
 | `addMidPointMarkers`           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
 
