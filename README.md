@@ -85,39 +85,103 @@ const polyDraw = new PolyDraw({
 ```
 ## Config explained
 
-| Key                         | Default      | Result                               |
-| --------------------------- |------------- | ------------------------------------ |
-| `configPath`                | `null`        | Path to custom config-file. |
-| `mergePolygons`             | `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
-| `minimumPolyDrawZoomLevel`  | `null`        | Can be used to disallow PolyDraw on sertain zoom levels |
-| `maximumPolyDrawZoomLevel`  | `null`        | Can be used to disallow PolyDraw on sertain zoom levels |
-**deleteMarkers**
-| `isVisible`                 | `true`        | Show trash-can on every polygons. |
-| `placement`                 | `0 (Center)`  | Where to place the trash-can marker [MarkerPlacement](#enums).. |
-**areaMarkers**
-| `isVisible`                 | `true`        | Show area info-label on every polygons. |
-| `placement`                 | `0 (Center)`  | Where to place the area info marker [MarkerPlacement](#enums).. (Offsets to delete marker if present) |
-| `showArea`                  | `true`        | Show area info on the marker icon. |
-| `showPerimeter`             | `true`        | Show perimeter info on the marker icon |
-| `useMetrics`                | `true`        | If false, Imperial units are showed. |
-| `numOfDecimals`             | `0`           | Number of decimals |
-| `areaLabel`                 | `"Area"`      | Text on label. |
-| `perimeterLabel`            | `"Perimeter"` | Text on label. |
-**polyLineOptions**
-| `color`                     | `#50622b`     | Color of the stroke when drawing. |
-| `opacity`                   | `1`           | Opacity 0 - 1 |
-| `smoothFactor`              | `0`           |  |
-| `noClip`                    | `true`        |  |
-| `clickable`                 | `false`       |  |
-| `weight`                    | `2`           | Stroke width |
-**polygonOptions**
-| `color`                     | `#50622b`     | Border color of edge markers. |
-| `fillColor`                 | `#b4cd8a`     | Color of the edge markers |
-| `smoothFactor`              | `0.3`         |  |
-| `noClip`                    | `true`        |  |
-**simplifyTolerance**
-| `tolerance`                 | `0.00010`     | How much the polygon should be simplified. |
-| `highQuality`               | `false`       |  |
+|Key|Type|Default|Description|
+|---|----|-------|-----------|
+| `touchSupport`			|boolean| `true`        | Allow touch support. |
+| `mergePolygons`           |boolean| `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
+| `kinks`              		|boolean| `false`        | text |
+| `**modes**`              	|object|         | xxx |
+| `attachElbow`             |boolean| `false`        | Set support for attaching elbows |
+| `**markers**`             |object| `-`        | Main object for marker configuration. |
+| `deleteMarker`            |boolean| `true`        | When enabled, show delete marker icon. |
+| `infoMarker`              |boolean| `true`        | When enabled, show info marker icon. |
+| `menuMarker`              |boolean| `true`        | When enabled, show menu marker icon. |
+| `coordsTitle`             |boolean| `true`        | Allow touch support. |
+| `markerIcon`              |object| `--`        | Default elbow marker icon configuration. |
+| `styleClasses`            |Array| `[polygon-marker]`        | String array with name of style classes |
+| `holeIcon`              	|object| `--`        | Hole marker icon configuration. |
+| `styleClasses`            |Array| `[polygon-marker, hole]`        | String array with name of style classes |
+| `markerInfoIcon`          |object| `--`        | Info marker icon configuration. |
+| `position`              	|int| `--`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
+| `showArea`              	|boolean| `--`        | When enabled, displays area information. |
+| `showPerimeter`           |boolean| `--`        | When enabled, displays perimeter information. |
+| `useMetrics`              |boolean| `--`        | When enabled, displays metric units, otherwise imperial units. |
+| `usePerimeterMinValue`    |boolean| `--`        | When enabled, uses a defined default value in case of the value is unknown. |
+| `areaLabel`              	|string| `--`        | Display text on area label |
+| `perimeterLabel`          |string| `--`        | Display text on perimeter label |
+| `values`              	|object| `--`        | Predefined default values |
+| `min`              		|object| `--`        | Default values for min values if **usePerimeterMinValue** is enabled. |
+| `metric`              	|string| `50`        | Display text on perimeter label |
+| `imperial`              	|string| `100`        | Display text on perimeter label |
+| `unknown`              	|object|         | Default values for unkown values |
+| `metric`              	|string| `-`        | Display text on perimeter label |
+| `imperial`              	|string| `-`        | Display text on perimeter label |
+| `units`              		|object|         | Predefined default values |
+| `unknownUnit`            	|string| `empty string`        | Value for unknown units |
+| `metric`              	|string| `empty string`        | Value for unknown units |
+| `perimeter`              	|object| `--`        | Default values for min values if **usePerimeterMinValue** is enabled. |
+| `m`              			|string| `50`        | Display text on perimeter label |
+| `km`              		|string| `100`        | Display text on perimeter label |
+| `area`              		|object|         | Default values for unkown values |
+| `m2`              		|string| `-`        | Display text on perimeter label |
+| `km2`              		|string| `-`        | Display text on perimeter label |
+| `daa`              		|string| `-`        | Display text on perimeter label |
+| `ha`              		|string| `-`        | Display text on perimeter label |
+| `imperial`              	|string| `empty string`        | Value for unknown units |
+| `perimeter`              	|object| `--`        | Default values for min values if **usePerimeterMinValue** is enabled. |
+| `feet`              		|string| `50`        | Display text on perimeter label |
+| `yards`              		|string| `100`        | Display text on perimeter label |
+| `miles`              		|string| `100`        | Display text on perimeter label |
+| `area`              		|object|         | Default values for unkown values |
+| `feet2`              		|string| `-`        | Display text on perimeter label |
+| `yards2`              	|string| `-`        | Display text on perimeter label |
+| `acres`              		|string| `-`        | Display text on perimeter label |
+| `miles2`              	|string| `-`        | Display text on perimeter label |
+| `styleClasses`           	|array| `[polygon-marker, info]`        | String array with name of style classes |
+
+
+| `markerMenuIcon`          |object|         | Menu marker icon configuration. |
+| `position`              	|int| `7`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
+| `styleClasses`           	|array| `[polygon-marker, info]`        | String array with name of style classes |
+
+| `markerDeleteIcon`        |object|         | Delete marker icon configuration. |
+| `position`              	|int| `5`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
+| `styleClasses`           	|array| `[polygon-marker, delete]`        | String array with name of style classes |
+
+| `polyLineOptions`        	|object|         | Normal poly line configuration. |
+| `color`              		|string| `#50622b`        | Poly line color |
+| `opacity`           		|number| `1.0`        | Opacity on poly line. |
+| `smoothFactor`         	|number| `0.0`        | text How much to simplify the polyline. |
+| `noClip`           		|boolean| `true`        | text |
+| `clickable`              	|boolean| `false`        | text |
+| `weight`           		|number| `2`        | Poly line width in pixels |
+
+| `subtractLineOptions`        	|object|         | Subtract (holes) poly line configuration. |
+| `color`              		|string| `#50622b`        | Poly line color |
+| `opacity`           		|number| `1.0`        | Opacity on poly line. |
+| `smoothFactor`         	|number| `0.0`        | text How much to simplify the polyline. |
+| `noClip`           		|boolean| `true`        | text |
+| `clickable`              	|boolean| `false`        | text |
+| `weight`           		|number| `2`        | Poly line width in pixels |
+
+| `polygonOptions`        	|object|         | Polygon configuration. |
+| `color`              		|string| `#50622b`        | Polygon color |
+| `fillColor`           	|number| `#b4cd8a`        | Polygon fill color. |
+| `smoothFactor`         	|number| `0.3`        | text How much to simplify the polyline. |
+| `noClip`           		|boolean| `true`        | text |
+
+| `simplification`        	|object|         | Simplification configuration. |
+| `simplifyTolerance`       |object|         | Tolerance configuration |
+| `tolerance`           	|number| `0.0001`        | text |
+| `highQuality`         	|boolean| `false`        | text |
+| `mutate`           		|boolean| `false`        | text |
+| `dynamicMode`       		|object|         | text |
+| `fractionGuard`           	|number| `0.9`        | text |
+| `multiplier`         	|number| `2`        | text |
+
+| `boundingBox`       		|object|         | text |
+| `addMidPointMarkers`           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
+
 
 
 ## Draw modes
@@ -138,7 +202,7 @@ DrawMode {
 }
 ```
 
-## Marker placement
+## Marker position
 You can choose where you want to put the delete-marker and area information-marker.
 The area information-marker offsets around the delete marker.
 example:
