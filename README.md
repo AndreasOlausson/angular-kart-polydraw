@@ -90,54 +90,54 @@ const polyDraw = new PolyDraw({
 | touchSupport			|boolean| `true`        | Allow touch support. |
 | mergePolygons           |boolean| `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 | kinks              		|boolean| `false`        | text |
-| **modes**              	|object|         | xxx |
-| &nbsp;&nbsp;&nbsp;attachElbow             |boolean| `false`        | Set support for attaching elbows |
+| **modes**              	|object|         | text |
+| &nbsp;&nbsp;&nbsp;attachElbow             |boolean| `false`        | When enabled, set support for attaching elbows |
 | **markers**             |object|         | Main object for marker configuration. |
 | &nbsp;&nbsp;&nbsp;deleteMarker            |boolean| `true`        | When enabled, show delete marker icon. |
 | &nbsp;&nbsp;&nbsp;infoMarker              |boolean| `true`        | When enabled, show info marker icon. |
 | &nbsp;&nbsp;&nbsp;menuMarker              |boolean| `true`        | When enabled, show menu marker icon. |
-| &nbsp;&nbsp;&nbsp;coordsTitle             |boolean| `true`        | Allow touch support. |
+| &nbsp;&nbsp;&nbsp;coordsTitle             |boolean| `true`        | When enabled, show tooltip with coord information on elbow markers. |
 | &nbsp;&nbsp;&nbsp;**markerIcon**              |object|         | Default elbow marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses            |Array| `[polygon-marker]`        | String array with name of style classes |
 | &nbsp;&nbsp;&nbsp;**holeIcon**              	|object|        | Hole marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses            |array| `[polygon-marker, hole]`        | String array with name of style classes |
 | &nbsp;&nbsp;&nbsp;&nbsp;**markerInfoIcon**          |object|         | Info marker icon configuration. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int|         | Where to put the marker, see [Marker position](#marker-position) for more information. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int|         | Where to position the marker, see [Marker position](#marker-position) for more information. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showArea              	|boolean|         | When enabled, displays area information. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showPerimeter           |boolean|         | When enabled, displays perimeter information. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showPerimeter           |boolean|         | When enabled, displays perimeter information section. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useMetrics             |boolean|         | When enabled, displays metric units, otherwise imperial units. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usePerimeterMinValue    |boolean|         | When enabled, uses a defined default value in case of the value is unknown. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;areaLabel              	|string|         | Display text on area label |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perimeterLabel          |string|         | Display text on perimeter label |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**values**              	|object|         | Predefined default values |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**min**              		|object|         | Default values for min values if **usePerimeterMinValue** is enabled. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metric              	|string| `50`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imperial              	|string| `100`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metric              	|string| `50`        | Default min value for metric values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imperial              	|string| `100`        | Default min value for imperial values |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**unknown**              	|object|         | Default values for unkown values |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metric              	|string| `-`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imperial              	|string| `-`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**units**              		|object|         | Predefined default values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;metric              	|string| `-`        | Default unknown value for metric values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imperial              	|string| `-`        | Default unknown value for imperial values |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**units**              		|object|         | Predefined default units |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;unknownUnit            	|string| `empty string`        | Value for unknown units |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**metric**              	|object| `empty string`        | Value for unknown units |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onlyMetrics            	|boolean| `empty string`        | When enabled, daa and ha is removed from area, only m2 and km2 is used.  |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**perimeter**              	|object|         |  text |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m              			|string| `50`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;km              		|string| `100`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**area**              		|object|         | Default values for unkown values |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m2              		|string| `m²`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;km2              		|string| `km²`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;daa              		|string| `daa`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ha              		|string| `ha`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**imperial**              	|object|         |  |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**perimeter**              	|object|         |  |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feet              		|string| `ft`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yards              		|string| `yd`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles              		|string| `mi`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**area**              		|object|         | Default values for unkown values |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feet2              		|string| `ft²`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yards2              	|string| `yd²`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acres              		|string| `ac`        | Display text on perimeter label |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles2              	|string| `mi²`        | Display text on perimeter label |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**metric**              	|object|         | Metric properties |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;onlyMetrics            	|boolean| false        | When enabled, daa and ha is removed from area, only m2 and km2 is used.  |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**perimeter**              	|object|         |  Perimeter properties |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m              			|string| `m`        | Meter unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;km              		|string| `km`        | Kilometer unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**area**              		|object|         | Area properties |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;m2              		|string| `m²`        | Square meter unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;km2              		|string| `km²`        | Square kilometer unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;daa              		|string| `daa`        | Decare unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ha              		|string| `ha`        | Hectare unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**imperial**              	|object|         | Imperial properties |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**perimeter**              	|object|         | Perimeter properties |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feet              		|string| `ft`        | Feet unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yards              		|string| `yd`        | Yard unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles              		|string| `mi`        | Miles unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**area**              		|object|         | Area properties |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;feet2              		|string| `ft²`        | Square feet unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yards2              	|string| `yd²`        | Square yard unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acres              		|string| `ac`        | Acre unit |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles2              	|string| `mi²`        | Square mile unit |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses           	|array| `[polygon-marker, info]`        | String array with name of style classes |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**markerMenuIcon**          |object|         | Menu marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int| `7`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
@@ -145,25 +145,25 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**markerDeleteIcon**        |object|         | Delete marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int| `5`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses           	|array| `[polygon-marker, delete]`        | String array with name of style classes |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**polyLineOptions**        	|object|         | Normal poly line configuration. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color              		|string| `#50622b`        | Poly line color |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opacity           		|number| `1.0`        | Opacity on poly line. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothFactor         	|number| `0.0`        | text How much to simplify the polyline. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | text |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**polyLineOptions**        	|object|         | Polyline configuration. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color              		|string| `#50622b`        | Polyline color |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opacity           		|number| `1.0`        | Opacity on polyline. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothFactor         	|number| `0.0`        | How much to simplify the polyline. Much: smoother look, Less: more accurate. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | Disable polyline clipping. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clickable              	|boolean| `false`        | text |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight           		|number| `2`        | Poly line width in pixels |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**subtractLineOptions**        	|object|         | Subtract (holes) poly line configuration. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color              		|string| `#50622b`        | Poly line color |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opacity           		|number| `1.0`        | Opacity on poly line. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothFactor         	|number| `0.0`        | text How much to simplify the polyline. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | text |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight           		|number| `2`        | Polyline width in pixels |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**subtractLineOptions**        	|object|         | Subtract (holes) polyline configuration. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color              		|string| `#50622b`        | Polyline color |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opacity           		|number| `1.0`        | Opacity on polyline. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothFactor         	|number| `0.0`        | How much to simplify the polyline. Much: smoother look, Less: more accurate. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | Disable polyline clipping. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clickable              	|boolean| `false`        | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;weight           		|number| `2`        | Poly line width in pixels |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**polygonOptions**        	|object|         | Polygon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color              		|string| `#50622b`        | Polygon color |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fillColor           	|number| `#b4cd8a`        | Polygon fill color. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothFactor         	|number| `0.3`        | text How much to simplify the polyline. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | text |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;smoothFactor         	|number| `0.3`        | How much to simplify the polyline. Much: smoother look, Less: more accurate. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | Disable polyline clipping. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**simplification**        	|object|         | Simplification configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**simplifyTolerance**       |object|         | Tolerance configuration |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tolerance           	|number| `0.0001`        | text |
@@ -174,8 +174,6 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplier         	|number| `2`        | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|object|         | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMidPointMarkers           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
-
-
 
 
 
