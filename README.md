@@ -90,8 +90,8 @@ const polyDraw = new PolyDraw({
 | `touchSupport`			|boolean| `true`        | Allow touch support. |
 | `mergePolygons`           |boolean| `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 | `kinks`              		|boolean| `false`        | text |
-| `**modes**`              	|object|         | xxx |
-| `&nbsp;&nbsp;&nbsp;attachElbow`             |boolean| `false`        | Set support for attaching elbows |
+| **modes**              	|object|         | xxx |
+| &nbsp;&nbsp;&nbsp;`attachElbow`             |boolean| `false`        | Set support for attaching elbows |
 | **markers**             |object| `-`        | Main object for marker configuration. |
 | `&nbsp;&nbsp;&nbsp;deleteMarker`            |boolean| `true`        | When enabled, show delete marker icon. |
 | `&nbsp;&nbsp;&nbsp;infoMarker`              |boolean| `true`        | When enabled, show info marker icon. |
