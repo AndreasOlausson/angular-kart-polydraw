@@ -10,7 +10,7 @@ PolyDraw was initially heavily inspired by [Leaflet.FreeDraw (Adam Timberlake "W
 1. [Summary](#summary)
 2. [Getting started](#getting-started)
   1. [Configuration](#configuration)
-  2. [Configuration explained](#configuration-explained)
+  2. [Configuration explained](#config-explained)
   3. [Draw modes](#draw-modes)
   4. [Enums](#enums)
 
@@ -252,7 +252,7 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showArea              	|boolean|         | When enabled, displays area information. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showPerimeter           |boolean|         | When enabled, displays perimeter information section. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;useMetrics             |boolean|         | When enabled, displays metric units, otherwise imperial units. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usePerimeterMinValue    |boolean|         | When enabled, uses a defined default value in case of the value is unknown. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;usePerimeterMinValue    |boolean|         | When enabled, a predefined value is shown in case of a unknown value. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;areaLabel              	|string|         | Display text on area label |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;perimeterLabel          |string|         | Display text on perimeter label |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**values**              	|object|         | Predefined default values |
@@ -312,8 +312,8 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;noClip           		|boolean| `true`        | Disable polyline clipping. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**simplification**        	|object|         | Simplification configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**simplifyTolerance**       |object|         | Tolerance configuration |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tolerance           	|number| `0.0001`        | text |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;highQuality         	|boolean| `false`        | text |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tolerance           	|number| `0.0001`        | Tolerance affects the amount of simplification (lesser value means higher quality but slower and with more points). |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;highQuality         	|boolean| `false`        | Excludes distance-based preprocessing step which leads to highest quality simplification but runs ~10-20 times slower. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mutate           		|boolean| `false`        | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**dynamicMode**       		|object|         | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fractionGuard           	|number| `0.9`        | text |
