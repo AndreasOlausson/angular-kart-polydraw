@@ -36,13 +36,11 @@ yarn add tsyringe
 ```
  > How to
 ```javascript
+import "reflect-metadata";
 import * as L from "Leaflet";
 import { container } from "tsyringe";
-import "reflect-metadata";
 
-import { MapStateService } from './map-state';
-import { PolyDrawService } from './polydraw';
-import { ILatLng } from './polygon-helpers';
+import { MapStateService, PolyDrawService, ILatLng } from 'leaflet-polydraw';
 
 export class LeafletPolydrawExample {
 
