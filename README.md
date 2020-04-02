@@ -20,14 +20,54 @@ PolyDraw was initially heavily inspired by [Leaflet.FreeDraw (Adam Timberlake "W
 ![Screen shot](/tmp-screenshot.jpg)
 
 ## Getting started
-```javascript
-import * as L from "Leaflet";
+ > Pre requirements
+ 
+Polydraw require that TSyringe, a lightweight dependency injection container for JavaScript/TypeScript, is installed in your project, it might work without it if you use angular (Injectable).
+ 
+TSyringe can be found at [https://github.com/microsoft/tsyringe](https://github.com/microsoft/tsyringe).
+Install with npm or yarn:
+```
+npm:
+npm install --save tsyringe
 
-this.map = new L.Map("map");
-this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
-/* Polydraw is initiated with default options, see "Configuration section"*/
-const polyDraw = new PolyDraw();
-polyDraw.setDrawMode(DrawMode.Add);
+yarn:
+yarn add tsyringe
+
+```
+ > How to
+```javascript
+import "reflect-metadata";
+import * as L from "Leaflet";
+import { container } from "tsyringe";
+
+import { MapStateService, PolyDrawService, ILatLng } from 'leaflet-polydraw';
+
+export class LeafletPolydrawExample {
+
+  polyDrawService: PolyDrawService;
+
+  constructor() {
+      this.mapState = container.resolve(MapStateService);
+      this.polyDrawService = container.resolve(PolyDrawService);
+  }
+  onInit() {
+    this.map = new L.Map("map");
+    this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
+  }  
+  onDrawClick(): void {
+    this.polyDrawService.drawModeClick();
+  }
+  onSubtractClick(): void {
+    this.polyDrawService.subtractClick();
+  }
+  onAutoAddPolygon(): void {
+    this.polyDrawService.addAutoPolygon(pre-defined-polygon: ILatLng[][][]);
+  }
+
+}
+
+
+
 
 ```
 
