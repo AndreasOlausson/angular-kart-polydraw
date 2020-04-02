@@ -236,7 +236,7 @@ const polyDraw = new PolyDraw({
 | touchSupport			|boolean| `true`        | Allow touch support. |
 | mergePolygons           |boolean| `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 | kinks              		|boolean| `false`        | text |
-| **modes**              	|object|         | text |
+| **modes**              	|object|         | Turn on or off features |
 | &nbsp;&nbsp;&nbsp;attachElbow             |boolean| `false`        | When enabled, set support for attaching elbows |
 | **markers**             |object|         | Main object for marker configuration. |
 | &nbsp;&nbsp;&nbsp;deleteMarker            |boolean| `true`        | When enabled, show delete marker icon. |
