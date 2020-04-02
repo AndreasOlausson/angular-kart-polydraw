@@ -34,15 +34,42 @@ yarn:
 yarn add tsyringe
 
 ```
-
+ > How to
 ```javascript
 import * as L from "Leaflet";
+import { container } from "tsyringe";
+import "reflect-metadata";
 
-this.map = new L.Map("map");
-this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
-/* Polydraw is initiated with default options, see "Configuration section"*/
-const polyDraw = new PolyDraw();
-polyDraw.setDrawMode(DrawMode.Add);
+import { MapStateService } from './map-state';
+import { PolyDrawService } from './polydraw';
+import { ILatLng } from './polygon-helpers';
+
+export class LeafletPolydrawExample {
+
+  polyDrawService: PolyDrawService;
+
+  constructor() {
+      this.mapState = container.resolve(MapStateService);
+      this.polyDrawService = container.resolve(PolyDrawService);
+  }
+  onInit() {
+    this.map = new L.Map("map");
+    this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
+  }  
+  onDrawClick(): void {
+    this.polyDrawService.drawModeClick();
+  }
+  onSubtractClick(): void {
+    this.polyDrawService.subtractClick();
+  }
+  onAutoAddPolygon(): void {
+    this.polyDrawService.addAutoPolygon(pre-defined-polygon: ILatLng[][][]);
+  }
+
+}
+
+
+
 
 ```
 
