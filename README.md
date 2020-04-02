@@ -25,7 +25,7 @@ PolyDraw was initially heavily inspired by [Leaflet.FreeDraw (Adam Timberlake "W
 Polydraw require that TSyringe, a lightweight dependency injection container for JavaScript/TypeScript, is installed in your project, it might work without it if you use angular (Injectable).
  
 TSyringe can be found at [https://github.com/microsoft/tsyringe](https://github.com/microsoft/tsyringe).
-Install with npm or yarn:
+
 ```
 npm:
 npm install --save tsyringe
@@ -34,6 +34,21 @@ yarn:
 yarn add tsyringe
 
 ```
+Include the following lines to you tsconfig.json
+```javascript
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
+You also need to add a polyfill for the Reflect API, use one of the following, we use 'reflect-metadata' in the example below.
+
+- [reflect-metadata](https://www.npmjs.com/package/reflect-metadata)
+- [core-js (core-js/es7/reflect)](https://www.npmjs.com/package/core-js)
+- [reflection](https://www.npmjs.com/package/@abraham/reflection)
+
  > How to
 ```javascript
 import "reflect-metadata";
