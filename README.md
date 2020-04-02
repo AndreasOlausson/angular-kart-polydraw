@@ -37,12 +37,12 @@ yarn add tsyringe
  > How to
 ```javascript
 import "reflect-metadata";
-import * as L from "Leaflet";
 import { container } from "tsyringe";
+import * as L from "Leaflet";
 
 import { MapStateService, PolyDrawService, ILatLng } from 'leaflet-polydraw';
 
-export class LeafletPolydrawExample {
+export class LeafletPolyDrawExample {
 
   polyDrawService: PolyDrawService;
 
@@ -50,25 +50,24 @@ export class LeafletPolydrawExample {
       this.mapState = container.resolve(MapStateService);
       this.polyDrawService = container.resolve(PolyDrawService);
   }
+  
   onInit() {
     this.map = new L.Map("map");
     this.map.setView(new L.LatLng(59.911491, 10.757933), 16);
-  }  
+  }
+  
   onDrawClick(): void {
     this.polyDrawService.drawModeClick();
   }
+  
   onSubtractClick(): void {
     this.polyDrawService.subtractClick();
   }
+  
   onAutoAddPolygon(): void {
     this.polyDrawService.addAutoPolygon(pre-defined-polygon: ILatLng[][][]);
   }
-
 }
-
-
-
-
 ```
 
 ## Configuration
@@ -76,39 +75,131 @@ Road to configuration.
 * **Default configuration**
 ```json
 {
-    "configPath": null,
-    "mergePolygons": true,
-    "deleteMarkers": {
-        "isVisible": true,
-        "placement": 0,
+  "touchSupport": true,
+  "mergePolygons": true,
+  "kinks": false,
+  "modes": {
+    "attachElbow": false
+  },
+  "markers": {
+    "deleteMarker": true,
+    "infoMarker": true,
+    "menuMarker": true,
+    "coordsTitle": true,
+    "markerIcon": {
+      "styleClasses": [
+        "polygon-marker"
+      ]
     },
-    "arealMarkers": {
-        "isVisible": true,
-        "placement": 0,
-        "showArea": true,
-        "showCircumference": true,
-        "useMetrics": true
+    "holeIcon": {
+      "styleClasses": [
+        "polygon-marker",
+        "hole"
+      ]
     },
-    "minimumPolyDrawZoomLevel": 12,
-    "maximumPolyDrawZoomLevel": null,
-    "polyLineOptions": {
-        "color": "#50622b",
-        "opacity": 1,
-        "smoothFactor": 0,
-        "noClip": true,
-        "clickable": false,
-        "weight": 2
+    "markerInfoIcon": {
+      "position": 3,
+      "showArea": true,
+      "showPerimeter": true,
+      "useMetrics": true,
+      "usePerimeterMinValue": false,
+      "areaLabel": "Area",
+      "perimeterLabel": "Perimeter",
+      "values": {
+        "min": {
+          "metric": "50",
+          "imperial": "100"
+        },
+        "unknown": {
+          "metric": "-",
+          "imperial": "-"
+        }
+      },
+      "units": {
+        "unknownUnit": "",
+        "metric": {
+          "onlyMetrics": true,
+          "perimeter": {
+            "m": "m",
+            "km": "km"
+          },
+          "area": {
+            "m2": "m²",
+            "km2": "km²",
+            "daa": "daa",
+            "ha": "ha"
+          }
+        },
+        "imperial": {
+          "perimeter": {
+            "feet": "ft",
+            "yards": "yd",
+            "miles": "mi"
+          },
+          "area": {
+            "feet2": "ft²",
+            "yards2": "yd²",
+            "acres": "ac",
+            "miles2": "mi²"
+          }
+        }
+      },
+      "styleClasses": [
+        "polygon-marker",
+        "info"
+      ]
     },
-    "polygonOptions": {
-        "smoothFactor": 0.3,
-        "color": "#50622b",
-        "fillColor": "#b4cd8a",
-        "noClip": true
+    "markerMenuIcon": {
+      "position": 7,
+      "styleClasses": [
+        "polygon-marker",
+        "menu"
+      ]
     },
-    "simplifyTolerance": {
-        "tolerance": 0.00010, 
-        "highQuality": false
+    "markerDeleteIcon": {
+      "position": 5,
+      "styleClasses": [
+        "polygon-marker",
+        "delete"
+      ]
     }
+  },
+  "polyLineOptions": {
+    "color": "#50622b",
+    "opacity": 1,
+    "smoothFactor": 0,
+    "noClip": true,
+    "clickable": false,
+    "weight": 2
+  },
+  "subtractLineOptions": {
+    "color": "#50622b",
+    "opacity": 1,
+    "smoothFactor": 0,
+    "noClip": true,
+    "clickable": false,
+    "weight": 2
+  },
+  "polygonOptions": {
+    "smoothFactor": 0.3,
+    "color": "#50622b",
+    "fillColor": "#b4cd8a",
+    "noClip": true
+  },
+  "simplification": {
+    "simplifyTolerance": {
+      "tolerance": 0.0001,
+      "highQuality": false,
+      "mutate": false
+    },
+    "dynamicMode": {
+      "fractionGuard": 0.9,
+      "multipiler": 2
+    }
+  },
+  "boundingBox": {
+    "addMidPointMarkers": true
+  }
 }
 ```
 * **Inline configuration**
