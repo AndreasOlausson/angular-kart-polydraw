@@ -156,11 +156,18 @@ export class HelloComponent {
       { lat: 59.92368739893148, lng: 10.719453160886356 },
       { lat: 59.923856980873936, lng: 10.716666358724478 }
     ]]
-  mapHelperService
+  mapHelperService: PolyDrawService;
 
   constructor() {
     this.mapHelperService = container.resolve(PolyDrawService)
     console.log(this.mapHelperService);
+
+    this.mapHelperService.configurate({
+      polygonOptions: {
+        color: "#FF00FF",
+        fillColor: "#00FF00"
+      }
+    })
   }
 
 

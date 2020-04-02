@@ -58,8 +58,9 @@ export class PolyDrawService {
   //new
   configurate(config: Object): void {
     //TODO if config is path...
+    console.log("before", this.config);
     this.config = { ...defaultConfig, ...config };
-
+    console.log("before", this.config, config);
     this.mergePolygons = this.config.mergePolygons;
     this.kinks = this.config.kinks;
   }
