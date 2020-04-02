@@ -21,6 +21,7 @@ PolyDraw was initially heavily inspired by [Leaflet.FreeDraw (Adam Timberlake "W
 
 ## Getting started
  > Pre requirements
+ 
 Polydraw require that TSyringe, a lightweight dependency injection container for JavaScript/TypeScript, is installed in your project, it might work without it if you use angular (Injectable).
  
 TSyringe can be found at [https://github.com/microsoft/tsyringe](https://github.com/microsoft/tsyringe).
