@@ -342,6 +342,8 @@ this.polyDrawService.configurate({
 
 > Menu marker (North)
 
+![Menu](/polydraw-menu-popup.png)
+
 Used to show a popup with alter-options to the polygon. 
 - Simplify, decrease number of elbows
 - BBox, convert polygon to it's bounding box
@@ -356,7 +358,9 @@ this.polyDrawService.configurate({
     }
 });
 ``` 
-> Menu marker (North East)
+> Info marker (North East)
+
+![Info](/polydraw-info-popup.png)
 
 Used to show a popup with info about the polygon. You can control this marker by:
 ```javascript
