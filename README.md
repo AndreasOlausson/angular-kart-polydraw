@@ -79,8 +79,8 @@ export class LeafletPolyDrawExample {
     this.polyDrawService.subtractClick();
   }
   
-  onAutoAddPolygon(): void {
-    this.polyDrawService.addAutoPolygon(pre-defined-polygon: ILatLng[][][]);
+  onAutoAddPolygon(polygon: ILatLng[][][]): void {
+    this.polyDrawService.addAutoPolygon(polygon);
   }
 }
 ```
@@ -320,6 +320,45 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplier         	|number| `2`        | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|object|         | text |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMidPointMarkers           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
+
+
+## Markers
+
+> Delete marker (North West)
+
+Used to delete the polygon. You can control this marker by:
+```javascript
+this.polyDrawService.configurate({
+    "markers": {
+      "deleteMarker": true,
+      "markerDeleteIcon: {
+        "position": 6,
+        "styleClasses": [
+          "polygon-marker",
+          "delete"
+        ]
+      }
+    }
+});
+``` 
+
+> Menu marker (North)
+
+Used to alter the polygon. You can control this marker by:
+```javascript
+this.polyDrawService.configurate({
+    "markers": {
+      "menuMarker": true,
+      "markerDeleteIcon: {
+        "position": 6,
+        "styleClasses": [
+          "polygon-marker",
+          "menu"
+        ]
+      }
+    }
+});
+``` 
 
 
 
