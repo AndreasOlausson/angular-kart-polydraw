@@ -399,7 +399,7 @@ This configuration gives this result.
 ![PolyDraw](/star2.png)
 
 ```javascript
-MarkerPlacement {
+MarkerPosition {
     SouthWest = 0,
     South = 1,
     SouthEast = 2,
