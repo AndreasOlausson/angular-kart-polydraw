@@ -324,6 +324,8 @@ const polyDraw = new PolyDraw({
 
 ## Markers
 
+![Markers](/polydraw-markers.png)
+
 > Delete marker (North West)
 
 Used to delete the polygon. You can control this marker by:
@@ -332,11 +334,7 @@ this.polyDrawService.configurate({
     "markers": {
       "deleteMarker": true,
       "markerDeleteIcon: {
-        "position": 6,
-        "styleClasses": [
-          "polygon-marker",
-          "delete"
-        ]
+        ...options...
       }
     }
 });
@@ -344,17 +342,29 @@ this.polyDrawService.configurate({
 
 > Menu marker (North)
 
-Used to alter the polygon. You can control this marker by:
+Used to show a popup with alter-options to the polygon. 
+- Simplify, decrease number of elbows
+- BBox, convert polygon to it's bounding box
+You can control this marker by:
 ```javascript
 this.polyDrawService.configurate({
     "markers": {
       "menuMarker": true,
       "markerDeleteIcon: {
-        "position": 6,
-        "styleClasses": [
-          "polygon-marker",
-          "menu"
-        ]
+        ...options...
+      }
+    }
+});
+``` 
+> Menu marker (North East)
+
+Used to show a popup with info about the polygon. You can control this marker by:
+```javascript
+this.polyDrawService.configurate({
+    "markers": {
+      "infoMarker": true,
+      "markerInfoIcon: {
+        ...options...
       }
     }
 });
