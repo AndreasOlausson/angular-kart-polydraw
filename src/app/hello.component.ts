@@ -11,7 +11,7 @@ import { PolyDrawService } from './map/polydraw';
   styleUrls: ["./hello.component.css"]
 })
 export class HelloComponent {
-  star: ILatLng[][][] = [[
+  star2: ILatLng[][][] = [[
     [
       { lat: 59.903, lng: 10.718 },
       { lat: 59.908, lng: 10.722 },
@@ -30,6 +30,27 @@ export class HelloComponent {
       { lat: 59.901, lng: 10.73 },
       { lat: 59.905, lng: 10.726 },
       { lat: 59.903, lng: 10.718 }
+    ]
+  ]];
+  star: ILatLng[][][] = [[
+    [
+      { lat: 58.403, lng: 15.618 },
+      { lat: 58.408, lng: 15.622 },
+      { lat: 58.41, lng:  15.614 },
+      { lat: 58.412, lng: 15.622 },
+      { lat: 58.416, lng: 15.618 },
+      { lat: 58.414, lng: 15.626 },
+      { lat: 58.418, lng: 15.63 },
+      { lat: 58.414, lng: 15.634 },
+      { lat: 58.416, lng: 15.642 },
+      { lat: 58.412, lng: 15.638 },
+      { lat: 58.41, lng:  15.646 },
+      { lat: 58.408, lng: 15.638 },
+      { lat: 58.403, lng: 15.642 },
+      { lat: 58.405, lng: 15.634 },
+      { lat: 58.401, lng: 15.63 },
+      { lat: 58.405, lng: 15.626 },
+      { lat: 58.403, lng: 15.618 }
     ]
   ]];
   pn0254: ILatLng[][][] = [[
