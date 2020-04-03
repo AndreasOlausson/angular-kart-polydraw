@@ -416,7 +416,7 @@ const polyDraw = new PolyDraw({
 ```
 This configuration gives this result.
 
-![PolyDraw](/star.png)
+![PolyDraw](/star2.png)
 
 ```javascript
 MarkerPlacement {
