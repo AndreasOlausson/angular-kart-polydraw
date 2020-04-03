@@ -314,7 +314,7 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**simplifyTolerance**       |object|         | Tolerance configuration |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tolerance           	|number| `0.0001`        | Tolerance affects the amount of simplification (lesser value means higher quality but slower and with more points). |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;highQuality         	|boolean| `false`        | Excludes distance-based preprocessing step which leads to highest quality simplification but runs ~10-20 times slower. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mutate           		|boolean| `false`        | text |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mutate           		|boolean| `false`        | Allows GeoJSON input to be mutated (significant performance increase if true) |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**dynamicMode**       		|object|         |  |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fractionGuard           	|number| `0.9`        | When to stop the dynamic simplification. (ie. Avoid the polygon to have less than 3 points. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplier         	|number| `2`        | A number for how much the tolerance should be increased by. (ie. tolerance * multipiler) |
