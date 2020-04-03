@@ -375,26 +375,6 @@ this.polyDrawService.configurate({
 ``` 
 
 
-
-
-## Draw modes
-You can combine draw modes for different behaviour.
-```javascript
-polyDraw.setDrawMode(DrawMode.Add | DrawMode.Edit);
-```
-With this you can add and edit polygons but you can't append edges.
-How ever, you can't add and subtract at the same time, so if combined "Add" overrides "Subtract".
-```javascript
-DrawMode {
-    Off = 0,
-    Add = 1,
-    Edit = 2,
-    Subtract = 4,
-    AppendMarker = 8,
-    LoadPredefined = 16
-}
-```
-
 ## Marker position
 You can choose where you want to put the delete-marker and area information-marker.
 The area information-marker offsets around the delete marker.
@@ -420,14 +400,17 @@ This configuration gives this result.
 
 ```javascript
 MarkerPlacement {
-    Center = 0,
-    North = 1,
-    East = 2,
-    South = 3,
-    West = 4,
-    NorthEast = 5,
+    SouthWest = 0,
+    South = 1,
+    SouthEast = 2,
+    East = 3,
+    NorthEast = 4,
+    North = 5,
     NorthWest = 6,
-    SouthEast = 7,
-    SouthWest = 8
+    West = 7
 }
 ```
+
+## In the pipe...
+
+- Increase elbows as a menu marker option. 
