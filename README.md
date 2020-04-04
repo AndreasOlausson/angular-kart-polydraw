@@ -411,6 +411,7 @@ MarkerPosition {
 }
 ```
 
-## In the pipe...
+## Up next...
 
+- Fallback positions for special markers (delete, info & menu)
 - Increase elbows as a menu marker option. 
