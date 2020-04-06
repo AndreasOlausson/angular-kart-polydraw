@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { injectable, container } from "tsyringe";
 import * as L from "leaflet";
+import "leaflet.markercluster";
 import { Observable, BehaviorSubject, Subject, config } from "rxjs";
 import { filter } from "rxjs/operators";
 import { Feature, Polygon, MultiPolygon } from "@turf/turf";
@@ -12,6 +13,7 @@ import { Compass, PolyDrawUtil, Perimeter, Area } from "./utils";
 import { MarkerPosition, DrawMode } from "./enums";
 import { TurfHelper } from "./turf-helper";
 import { PolygonUtil } from "./polygon.util";
+
 
 @injectable()
 export class PolyDrawService {
@@ -439,7 +441,7 @@ export class PolyDrawService {
     const menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
     const deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
     const infoMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerInfoIcon.position);
-
+    var markers = (L as any).markerClusterGroup();
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
       if (i === menuMarkerIdx && this.config.markers.menuMarker) {
@@ -456,7 +458,8 @@ export class PolyDrawService {
         draggable: true,
         title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : "")
       });
-      FeatureGroup.addLayer(marker).addTo(this.map);
+      FeatureGroup.addLayer(marker)
+      markers.addLayer(marker);
       // console.log("FeatureGroup: ", FeatureGroup);
       marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
@@ -480,6 +483,7 @@ export class PolyDrawService {
         });
       }
     });
+    markers.addTo(this.map)
   }
 
   private addHoleMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
