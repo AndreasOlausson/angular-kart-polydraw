@@ -442,7 +442,7 @@ export class PolyDrawService {
     const menuMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerMenuIcon.position);
     const deleteMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerDeleteIcon.position);
     const infoMarkerIdx = this.getMarkerIndex(latlngs, this.config.markers.markerInfoIcon.position);
-    var markers = (L as any).markerClusterGroup();
+    //var markers = (L as any).markerClusterGroup();
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
       if (i === menuMarkerIdx && this.config.markers.menuMarker) {
@@ -459,8 +459,9 @@ export class PolyDrawService {
         draggable: true,
         title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : "")
       });
-      FeatureGroup.addLayer(marker)
-      markers.addLayer(marker);
+      FeatureGroup.addLayer(marker).addTo(this.map);
+      // FeatureGroup.addLayer(marker)
+      // markers.addLayer(marker);
       // console.log("FeatureGroup: ", FeatureGroup);
       marker.on("drag", e => {
         this.markerDrag(FeatureGroup);
@@ -484,7 +485,7 @@ export class PolyDrawService {
         });
       }
     });
-    markers.addTo(this.map)
+    //markers.addTo(this.map)
   }
 
   private addHoleMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
@@ -835,6 +836,17 @@ export class PolyDrawService {
     let newPolygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
     this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), true, true);
   }
+  private doubleElbows(latlngs: ILatLng[]) {
+    this.deletePolygon([latlngs]);
+    const doubleLatLngs: ILatLng[] = this.turfHelper.getDoubleElbowLatLngs(latlngs);
+    let newPolygon = this.turfHelper.getMultiPolygon(this.convertToCoords([doubleLatLngs]));
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), false, false);
+  }
+  private bezierify(latlngs: ILatLng[]) {
+    this.deletePolygon([latlngs]);
+    let newPolygon = this.turfHelper.getBezierMultiPolygon(this.convertToCoords([latlngs]));
+    this.addPolygonLayer(this.turfHelper.getTurfPolygon(newPolygon), false, false);
+  }
   private getMarkerIndex(latlngs: ILatLng[], position: MarkerPosition): number {
     const bounds: L.LatLngBounds = PolyDrawUtil.getBounds(latlngs, Math.sqrt(2) / 2);
     const compass = new Compass(bounds.getSouth(), bounds.getWest(), bounds.getNorth(), bounds.getEast());
@@ -871,11 +883,20 @@ export class PolyDrawService {
     simplify.classList.add("marker-menu-button", "simplify");
     simplify.title = "Simplify";
 
-    const separator: HTMLDivElement = document.createElement("div");
-    separator.classList.add("separator");
+    const doubleElbows: HTMLDivElement = document.createElement("div");
+    doubleElbows.classList.add("marker-menu-button", "double-elbows");
+    doubleElbows.title = "DoubleElbows";
+    
     const bbox: HTMLDivElement = document.createElement("div");
     bbox.classList.add("marker-menu-button", "bbox");
     bbox.title = "Bounding box";
+
+    const bezier: HTMLDivElement = document.createElement("div");
+    bezier.classList.add("marker-menu-button", "bezier");
+    bezier.title = "Curve";
+
+    const separator: HTMLDivElement = document.createElement("div");
+    separator.classList.add("separator");
 
     outerWrapper.appendChild(wrapper);
     wrapper.appendChild(invertedCorner);
@@ -883,7 +904,11 @@ export class PolyDrawService {
     markerContent.appendChild(markerContentWrapper);
     markerContentWrapper.appendChild(simplify);
     markerContentWrapper.appendChild(separator);
+    markerContentWrapper.appendChild(doubleElbows);
+    markerContentWrapper.appendChild(separator);
     markerContentWrapper.appendChild(bbox);
+    markerContentWrapper.appendChild(separator);
+    markerContentWrapper.appendChild(bezier);
 
     simplify.onclick = function () {
       self.convertToSimplifiedPolygon(latLngs);
@@ -891,6 +916,15 @@ export class PolyDrawService {
     };
     bbox.onclick = function () {
       self.convertToBoundsPolygon(latLngs);
+      // do whatever else you want to do - open accordion etc
+    };
+
+    doubleElbows.onclick = function () {
+      self.doubleElbows(latLngs);
+      // do whatever else you want to do - open accordion etc
+    };
+    bezier.onclick = function () {
+      self.bezierify(latLngs);
       // do whatever else you want to do - open accordion etc
     };
 
