@@ -302,11 +302,13 @@ export class TurfHelper {
     }
     getBezierMultiPolygon(polygonArray: Position[][][]): Feature<Polygon | MultiPolygon> {
 
+        const t = turf;
+
         const poly = this.getMultiPolygon(polygonArray);
 
         const line = turf.polygonToLineString(poly);
 
-        const bezierLine = turf.bezierSpline(line.geometry[0].coordinates);
+        const bezierLine = turf.bezierSpline((line as any).features[0].geometry);
 
         const bezierPoly = turf.lineStringToPolygon(bezierLine);
 
