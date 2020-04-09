@@ -3,7 +3,8 @@
   "mergePolygons": true,
   "kinks": false,
   "modes": {
-    "attachElbow": false
+    "attachElbow": false,
+    "dragElbow": true
   },
   "markers": {
     "deleteMarker": true,

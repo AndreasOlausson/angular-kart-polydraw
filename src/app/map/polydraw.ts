@@ -456,7 +456,7 @@ export class PolyDrawService {
       }
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
-        draggable: true,
+        draggable: this.config.modes.dragElbow,
         title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : ""),
         zIndexOffset: this.config.markers.markerIcon.zIndexOffset ?? this.config.markers.zIndexOffset
       });
@@ -464,12 +464,15 @@ export class PolyDrawService {
       // FeatureGroup.addLayer(marker)
       // markers.addLayer(marker);
       // console.log("FeatureGroup: ", FeatureGroup);
-      marker.on("drag", e => {
-        this.markerDrag(FeatureGroup);
-      });
-      marker.on("dragend", e => {
-        this.markerDragEnd(FeatureGroup);
-      });
+      if (this.config.modes.dragElbow){
+        marker.on("drag", e => {
+          this.markerDrag(FeatureGroup);
+        });
+        marker.on("dragend", e => {
+          this.markerDragEnd(FeatureGroup);
+        });
+      }
+      
       if (i === menuMarkerIdx && this.config.markers.menuMarker) {
         const menuPopup = this.generateMenuMarkerPopup(latlngs);
         marker.options.zIndexOffset = this.config.markers.markerMenuIcon.zIndexOffset ?? this.config.markers.zIndexOffset;

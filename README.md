@@ -94,7 +94,8 @@ Road to configuration.
   "mergePolygons": true,
   "kinks": false,
   "modes": {
-    "attachElbow": false
+    "attachElbow": false,
+    "dragElbow": true
   },
   "markers": {
     "deleteMarker": true,
@@ -243,7 +244,8 @@ const polyDraw = new PolyDraw({
 | mergePolygons           |boolean| `true`        | PolyDraw attempts to merge polygons if they are intersecting. |
 | kinks              		|boolean| `false`        | text |
 | **modes**              	|object|         | Turn on or off features |
-| &nbsp;&nbsp;&nbsp;attachElbow             |boolean| `false`        | When enabled, set support for attaching elbows |
+| &nbsp;&nbsp;&nbsp;attachElbow             |boolean| `false`        | When enabled, attaching elbows is allowed |
+| &nbsp;&nbsp;&nbsp;dragElbow             |boolean| `true`        | When enabled, dragging elbows is allowed |
 | **markers**             |object|         | Main object for marker configuration. |
 | &nbsp;&nbsp;&nbsp;deleteMarker            |boolean| `true`        | When enabled, show delete marker icon. |
 | &nbsp;&nbsp;&nbsp;infoMarker              |boolean| `true`        | When enabled, show info marker icon. |
@@ -425,5 +427,7 @@ MarkerPosition {
 
 ## Up next...
 
+- Marker cursor, when dragElbows is false
 - Fallback positions for special markers (delete, info & menu)
-- Increase elbows as a menu marker option. 
+- New menu item Increase elbows
+- New menu item Bezier 
