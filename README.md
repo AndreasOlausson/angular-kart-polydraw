@@ -427,7 +427,7 @@ MarkerPosition {
 
 ## Up next...
 
-- Marker cursor, when dragElbows is false
-- Fallback positions for special markers (delete, info & menu)
-- New menu item Increase elbows
-- New menu item Bezier 
+- Prio 1, Not started - Marker cursor, when dragElbows is false
+- Prio 2, Not started - Fallback positions for special markers (delete, info & menu)
+- Prio 1, Beta phase  - New menu item Increase elbows
+- Prio 3, Not started - New menu item Bezier 
