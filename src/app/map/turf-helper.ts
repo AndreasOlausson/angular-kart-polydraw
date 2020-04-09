@@ -304,11 +304,11 @@ export class TurfHelper {
 
         const poly = this.getMultiPolygon(polygonArray);
 
-        const line = turf.polygonToLine(poly);
+        const line = turf.polygonToLineString(poly);
 
-        const bezierLine = turf.bezierSpline(line);
+        const bezierLine = turf.bezierSpline(line.geometry[0].coordinates);
 
-        const bezierPoly = turf.lineToPolygon(bezierLine);
+        const bezierPoly = turf.lineStringToPolygon(bezierLine);
 
         return bezierPoly;
 

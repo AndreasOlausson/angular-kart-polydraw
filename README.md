@@ -101,16 +101,19 @@ Road to configuration.
     "infoMarker": true,
     "menuMarker": true,
     "coordsTitle": true,
+    "zIndexOffset": 0,
     "markerIcon": {
       "styleClasses": [
         "polygon-marker"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "holeIcon": {
       "styleClasses": [
         "polygon-marker",
         "hole"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "markerInfoIcon": {
       "position": 3,
@@ -162,21 +165,24 @@ Road to configuration.
       "styleClasses": [
         "polygon-marker",
         "info"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "markerMenuIcon": {
       "position": 7,
       "styleClasses": [
         "polygon-marker",
         "menu"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "markerDeleteIcon": {
       "position": 5,
       "styleClasses": [
         "polygon-marker",
         "delete"
-      ]
+      ],
+      "zIndexOffset": null
     }
   },
   "polyLineOptions": {
@@ -243,10 +249,13 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;infoMarker              |boolean| `true`        | When enabled, show info marker icon. |
 | &nbsp;&nbsp;&nbsp;menuMarker              |boolean| `true`        | When enabled, show menu marker icon. |
 | &nbsp;&nbsp;&nbsp;coordsTitle             |boolean| `true`        | When enabled, show tooltip with coord information on elbow markers. |
+| &nbsp;&nbsp;&nbsp;zIndexOffset             |number| `0`        | By default, marker images zIndex is set automatically based on its latitude. Use this option if you want to put the marker on top of all others (or below), specifying a high value like 1000 (or high negative value, respectively). |
 | &nbsp;&nbsp;&nbsp;**markerIcon**              |object|         | Default elbow marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses            |Array| `[polygon-marker]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zIndexOffset             |number| `null`        | Override of the zIndexOffset on **markers** |
 | &nbsp;&nbsp;&nbsp;**holeIcon**              	|object|        | Hole marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses            |array| `[polygon-marker, hole]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zIndexOffset             |number| `null`        | Override of the zIndexOffset on **markers** |
 | &nbsp;&nbsp;&nbsp;&nbsp;**markerInfoIcon**          |object|         | Info marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int|         | Where to position the marker, see [Marker position](#marker-position) for more information. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;showArea              	|boolean|         | When enabled, displays area information. |
@@ -285,12 +294,15 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;acres              		|string| `ac`        | Acre unit |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;miles2              	|string| `mi²`        | Square mile unit |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses           	|array| `[polygon-marker, info]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zIndexOffset             |number| `null`        | Override of the zIndexOffset on **markers** |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**markerMenuIcon**          |object|         | Menu marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int| `7`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses           	|array| `[polygon-marker, info]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zIndexOffset             |number| `null`        | Override of the zIndexOffset on **markers** |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**markerDeleteIcon**        |object|         | Delete marker icon configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;position              	|int| `5`        | Where to put the marker, see [Marker position](#marker-position) for more information. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;styleClasses           	|array| `[polygon-marker, delete]`        | String array with name of style classes |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zIndexOffset             |number| `null`        | Override of the zIndexOffset on **markers** |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**polyLineOptions**        	|object|         | Polyline configuration. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color              		|string| `#50622b`        | Polyline color |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;opacity           		|number| `1.0`        | Opacity on polyline. |

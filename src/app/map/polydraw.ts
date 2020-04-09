@@ -457,7 +457,8 @@ export class PolyDrawService {
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
-        title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : "")
+        title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : ""),
+        zIndexOffset: this.config.markers.markerIcon.zIndexOffset ?? this.config.markers.zIndexOffset
       });
       FeatureGroup.addLayer(marker).addTo(this.map);
       // FeatureGroup.addLayer(marker)
@@ -471,15 +472,18 @@ export class PolyDrawService {
       });
       if (i === menuMarkerIdx && this.config.markers.menuMarker) {
         const menuPopup = this.generateMenuMarkerPopup(latlngs);
+        marker.options.zIndexOffset = this.config.markers.markerMenuIcon.zIndexOffset ?? this.config.markers.zIndexOffset;
         marker.bindPopup(menuPopup, { className: "alter-marker" });
       }
       if (i === infoMarkerIdx && this.config.markers.infoMarker) {
         const area = PolygonUtil.getSqmArea(latlngs);
         const perimeter = PolygonUtil.getPerimeter(latlngs);
         const infoPopup = this.generateInfoMarkerPopup(area, perimeter);
+        marker.options.zIndexOffset = this.config.markers.markerInfoIcon.zIndexOffset ?? this.config.markers.zIndexOffset;
         marker.bindPopup(infoPopup, { className: "info-marker" });
       }
       if (i === deleteMarkerIdx && this.config.markers.deleteMarker) {
+        marker.options.zIndexOffset = this.config.markers.markerInfoIcon.zIndexOffset ?? this.config.markers.zIndexOffset;
         marker.on("click", e => {
           this.deletePolygon([latlngs]);
         });
@@ -494,7 +498,8 @@ export class PolyDrawService {
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
-        title: this.getLatLngInfoString(latlng)
+        title: this.getLatLngInfoString(latlng),
+        zIndexOffset: this.config.markers.holeIcon.zIndexOffset ?? this.config.markers.zIndexOffset
       });
       FeatureGroup.addLayer(marker).addTo(this.map);
 
