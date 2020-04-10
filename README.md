@@ -338,7 +338,7 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplier         	|number| `2`        | A number for how much the tolerance should be increased by. (ie. tolerance * multipiler) |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|object|         |  |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMidPointMarkers           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|bezier|         |  |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**bezier**       		|object|         |  |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolution           	|number| `50000`        | Time in milliseconds between points. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sharpness           	|number| `0.85`        | A measure of how curvy the path should be between splines. |
 
