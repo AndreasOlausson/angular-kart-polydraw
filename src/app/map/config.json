@@ -130,5 +130,9 @@
   },
   "boundingBox": {
     "addMidPointMarkers": true
+  },
+  "bezier": {
+    "resolution": 10000,
+    "sharpness": 0.75
   }
 }

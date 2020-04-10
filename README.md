@@ -221,6 +221,10 @@ Road to configuration.
   },
   "boundingBox": {
     "addMidPointMarkers": true
+  },
+  "bezier": {
+    "resolution": 10000,
+    "sharpness": 0.85
   }
 }
 ```
@@ -332,8 +336,11 @@ const polyDraw = new PolyDraw({
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**dynamicMode**       		|object|         |  |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fractionGuard           	|number| `0.9`        | When to stop the dynamic simplification. (ie. Avoid the polygon to have less than 3 points. |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiplier         	|number| `2`        | A number for how much the tolerance should be increased by. (ie. tolerance * multipiler) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|object|         | text |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|object|         |  |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addMidPointMarkers           	|boolean| `true`        | When enabled, bounding boxes is decorated with West, North, East and South elbows. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**boundingBox**       		|bezier|         |  |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;resolution           	|number| `50000`        | Time in milliseconds between points. |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sharpness           	|number| `0.85`        | A measure of how curvy the path should be between splines. |
 
 
 ## Markers

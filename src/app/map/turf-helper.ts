@@ -308,7 +308,10 @@ export class TurfHelper {
 
         const line = turf.polygonToLineString(poly);
 
-        const bezierLine = turf.bezierSpline((line as any).features[0].geometry);
+        //Add first point to "close" the line
+        (line as any).features[0].geometry.coordinates.push((line as any).features[0].geometry.coordinates[0])
+
+        const bezierLine = turf.bezierSpline((line as any).features[0].geometry, {resolution: this.config.bezier.resolution, sharpness: this.config.bezier.sharpness});
 
         const bezierPoly = turf.lineStringToPolygon(bezierLine);
 
