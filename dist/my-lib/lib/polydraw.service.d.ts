@@ -7,6 +7,7 @@ import { ILatLng } from './polygon-helpers';
 import { ComponentGeneraterService } from './component-generater.service';
 import { DrawMode } from './enums';
 import { LeafletHelperService } from './leaflet-helper.service';
+import * as i0 from "@angular/core";
 export declare class PolyDrawService {
     private mapState;
     private popupGenerator;
@@ -72,4 +73,6 @@ export declare class PolyDrawService {
     private convertToBoundsPolygon;
     private convertToSimplifiedPolygon;
     private getMarkerIndex;
+    static ɵfac: i0.ɵɵFactoryDef<PolyDrawService>;
+    static ɵprov: i0.ɵɵInjectableDef<PolyDrawService>;
 }
