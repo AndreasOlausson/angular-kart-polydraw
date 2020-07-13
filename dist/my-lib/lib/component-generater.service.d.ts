@@ -9,6 +9,6 @@ export declare class ComponentGeneraterService implements OnDestroy {
     ngOnDestroy(): void;
     generateAlterPopup(): ComponentRef<AlterPolygonComponent>;
     destroyAngularPopupComponents(): void;
-    static ɵfac: i0.ɵɵFactoryDef<ComponentGeneraterService>;
+    static ɵfac: i0.ɵɵFactoryDef<ComponentGeneraterService, never>;
     static ɵprov: i0.ɵɵInjectableDef<ComponentGeneraterService>;
 }

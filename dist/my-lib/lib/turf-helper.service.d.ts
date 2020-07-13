@@ -28,6 +28,6 @@ export declare class TurfHelperService {
     getNearestPointIndex(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number;
     getCoord(point: ILatLng): turf.Coord;
     getFeaturePointCollection(points: ILatLng[]): turf.FeatureCollection;
-    static ɵfac: i0.ɵɵFactoryDef<TurfHelperService>;
+    static ɵfac: i0.ɵɵFactoryDef<TurfHelperService, never>;
     static ɵprov: i0.ɵɵInjectableDef<TurfHelperService>;
 }

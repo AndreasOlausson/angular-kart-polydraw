@@ -73,6 +73,6 @@ export declare class PolyDrawService {
     private convertToBoundsPolygon;
     private convertToSimplifiedPolygon;
     private getMarkerIndex;
-    static ɵfac: i0.ɵɵFactoryDef<PolyDrawService>;
+    static ɵfac: i0.ɵɵFactoryDef<PolyDrawService, never>;
     static ɵprov: i0.ɵɵInjectableDef<PolyDrawService>;
 }

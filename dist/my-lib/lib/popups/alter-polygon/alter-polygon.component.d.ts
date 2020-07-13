@@ -5,6 +5,6 @@ export declare class AlterPolygonComponent {
     bboxClicked: EventEmitter<MouseEvent>;
     onSimplify($event: MouseEvent): void;
     onBbox($event: MouseEvent): void;
-    static ɵfac: i0.ɵɵFactoryDef<AlterPolygonComponent>;
-    static ɵcmp: i0.ɵɵComponentDefWithMeta<AlterPolygonComponent, "app-alter-polygon", never, {}, { "simplyfiClicked": "simplyfiClicked"; "bboxClicked": "bboxClicked"; }, never>;
+    static ɵfac: i0.ɵɵFactoryDef<AlterPolygonComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDefWithMeta<AlterPolygonComponent, "app-alter-polygon", never, {}, { "simplyfiClicked": "simplyfiClicked"; "bboxClicked": "bboxClicked"; }, never, never>;
 }

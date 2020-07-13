@@ -15,7 +15,7 @@ export declare class PolyStateService {
     updateMapState(map: L.Map): void;
     updatePolygons(polygons: ILatLng[][][]): void;
     updateMapBounds(mapBounds: MapBoundsState): void;
-    static ɵfac: i0.ɵɵFactoryDef<PolyStateService>;
+    static ɵfac: i0.ɵɵFactoryDef<PolyStateService, never>;
     static ɵprov: i0.ɵɵInjectableDef<PolyStateService>;
 }
 declare class MapStateModel {

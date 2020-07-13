@@ -21,6 +21,6 @@ export declare class PolygonInformationService {
     reset(): void;
     setMoveMode(): void;
     setFreeDrawMode(): void;
-    static ɵfac: i0.ɵɵFactoryDef<PolygonInformationService>;
+    static ɵfac: i0.ɵɵFactoryDef<PolygonInformationService, never>;
     static ɵprov: i0.ɵɵInjectableDef<PolygonInformationService>;
 }

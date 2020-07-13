@@ -5,10 +5,11 @@
     "@angular/common": "^8.0.3",
     "@angular/core": "^8.0.3",
     "leaflet": "^1.5.1",
-    "@turf/turf": "^5.1.6",
+    "@turf/turf": "^5.1.6"
+  },
+  "dependencies": {
     "tslib": "^1.10.0"
   },
-  "dependencies": {},
   "main": "bundles/my-lib.umd.js",
   "module": "fesm5/my-lib.js",
   "es2015": "fesm2015/my-lib.js",
