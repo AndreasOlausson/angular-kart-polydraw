@@ -1,6 +1,5 @@
 import { ComponentFactoryResolver, Injector, ComponentRef, OnDestroy } from '@angular/core';
 import { AlterPolygonComponent } from './popups/alter-polygon/alter-polygon.component';
-import * as i0 from "@angular/core";
 export declare class ComponentGeneraterService implements OnDestroy {
     private readonly cfr;
     private readonly injector;
@@ -9,6 +8,4 @@ export declare class ComponentGeneraterService implements OnDestroy {
     ngOnDestroy(): void;
     generateAlterPopup(): ComponentRef<AlterPolygonComponent>;
     destroyAngularPopupComponents(): void;
-    static ɵfac: i0.ɵɵFactoryDef<ComponentGeneraterService, never>;
-    static ɵprov: i0.ɵɵInjectableDef<ComponentGeneraterService>;
 }
