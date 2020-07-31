@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Subject, Observable } from "rxjs";
 import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
-import { PolyDrawService } from "./polydraw.service";
 import { PolyStateService } from "./map-state.service";
 
 @Injectable({ providedIn: "root" })
