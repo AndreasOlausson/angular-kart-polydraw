@@ -1,12 +1,12 @@
-import * as L from 'leaflet';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { PolyStateService } from './map-state.service';
-import { TurfHelperService } from './turf-helper.service';
-import { PolygonInformationService } from './polygon-information.service';
-import { ILatLng } from './polygon-helpers';
-import { ComponentGeneraterService } from './component-generater.service';
-import { DrawMode } from './enums';
-import { LeafletHelperService } from './leaflet-helper.service';
+import * as L from "leaflet";
+import { Observable, BehaviorSubject } from "rxjs";
+import { PolyStateService } from "./map-state.service";
+import { TurfHelperService } from "./turf-helper.service";
+import { PolygonInformationService } from "./polygon-information.service";
+import { ILatLng } from "./polygon-helpers";
+import { ComponentGeneraterService } from "./component-generater.service";
+import { DrawMode } from "./enums";
+import { LeafletHelperService } from "./leaflet-helper.service";
 export declare class PolyDrawService {
     private mapState;
     private popupGenerator;

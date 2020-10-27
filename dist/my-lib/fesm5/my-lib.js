@@ -865,7 +865,9 @@ var PolyDrawService = /** @class */ (function () {
         // end add to config
         this.ngUnsubscribe = new Subject();
         this.config = null;
-        this.mapState.map$.pipe(filter(function (m) { return m !== null; })).subscribe(function (map) {
+        this.mapState.map$
+            .pipe(filter(function (m) { return m !== null; }))
+            .subscribe(function (map) {
             _this.map = map;
             _this.config = defaultConfig;
             _this.configurate({});
@@ -1027,17 +1029,15 @@ var PolyDrawService = /** @class */ (function () {
         var container = this.map.getContainer();
         var drawMode = this.getDrawMode();
         if (this.config.touchSupport) {
-            container.addEventListener('touchstart mousedown', function (e) {
-                if (drawMode !== DrawMode.Off) {
-                    _this.mouseDown(e);
-                }
+            container.addEventListener("touchstart", function (e) {
+                _this.mouseDown(e);
             });
-            container.addEventListener('touchend mouseup', function (e) {
+            container.addEventListener("touchend", function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseUpLeave();
                 }
             });
-            container.addEventListener('touchmove mousemove', function (e) {
+            container.addEventListener("touchmove", function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseMove(e);
                 }
@@ -1054,7 +1054,7 @@ var PolyDrawService = /** @class */ (function () {
         else {
             var latlng = this.map.containerPointToLatLng([
                 event.touches[0].clientX,
-                event.touches[0].clientY
+                event.touches[0].clientY,
             ]);
             this.tracer.setLatLngs([latlng]);
         }
@@ -1068,7 +1068,7 @@ var PolyDrawService = /** @class */ (function () {
         else {
             var latlng = this.map.containerPointToLatLng([
                 event.touches[0].clientX,
-                event.touches[0].clientY
+                event.touches[0].clientY,
             ]);
             this.tracer.addLatLng(latlng);
         }
@@ -1111,9 +1111,9 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.drawStartedEvents = function (onoff) {
-        var onoroff = onoff ? 'on' : 'off';
-        this.map[onoroff]('mousemove', this.mouseMove, this);
-        this.map[onoroff]('mouseup', this.mouseUpLeave, this);
+        var onoroff = onoff ? "on" : "off";
+        this.map[onoroff]("mousemove", this.mouseMove, this);
+        this.map[onoroff]("mouseup", this.mouseUpLeave, this);
     };
     // On hold
     PolyDrawService.prototype.subtractPolygon = function (latlngs) {
@@ -1155,17 +1155,17 @@ var PolyDrawService = /** @class */ (function () {
         this.arrayOfFeatureGroups.push(featureGroup);
         this.polygonInformation.activate();
         this.setDrawMode(DrawMode.Off);
-        featureGroup.on('click', function (e) {
+        featureGroup.on("click", function (e) {
             _this.polygonClicked(e, latLngs);
         });
     };
     // fine
     PolyDrawService.prototype.polygonClicked = function (e, poly) {
         var newPoint = e.latlng;
-        if (poly.geometry.type === 'MultiPolygon') {
+        if (poly.geometry.type === "MultiPolygon") {
             var newPolygon = this.turfHelper.injectPointToPolygon(poly, [
                 newPoint.lng,
-                newPoint.lat
+                newPoint.lat,
             ]);
             this.deletePolygon(this.getLatLngsFromJson(poly));
             this.addPolygonLayer(newPolygon, false);
@@ -1233,8 +1233,8 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.events = function (onoff) {
-        var onoroff = onoff ? 'on' : 'off';
-        this.map[onoroff]('mousedown', this.mouseDown, this);
+        var onoroff = onoff ? "on" : "off";
+        this.map[onoroff]("mousedown", this.mouseDown, this);
     };
     // fine, TODO: if special markers
     PolyDrawService.prototype.addMarker = function (latlngs, FeatureGroup) {
@@ -1252,13 +1252,13 @@ var PolyDrawService = /** @class */ (function () {
             var marker = new Marker(latlng, {
                 icon: _this.createDivIcon(iconClasses),
                 draggable: true,
-                title: i.toString()
+                title: i.toString(),
             });
             FeatureGroup.addLayer(marker).addTo(_this.map);
-            marker.on('drag', function (e) {
+            marker.on("drag", function (e) {
                 _this.markerDrag(FeatureGroup);
             });
-            marker.on('dragend', function (e) {
+            marker.on("dragend", function (e) {
                 _this.markerDragEnd(FeatureGroup);
             });
             if (i === menuMarkerIdx && _this.config.markers.menu) {
@@ -1266,13 +1266,13 @@ var PolyDrawService = /** @class */ (function () {
                 //   this.getHtmlContent(e => {
                 //   })
                 // );
-                marker.on('click', function (e) {
+                marker.on("click", function (e) {
                     _this.convertToBoundsPolygon(latlngs, true);
                     // this.convertToSimplifiedPolygon(latlngs);
                 });
             }
             if (i === deleteMarkerIdx && _this.config.markers.delete) {
-                marker.on('click', function (e) {
+                marker.on("click", function (e) {
                     _this.deletePolygon([latlngs]);
                 });
             }
@@ -1293,13 +1293,13 @@ var PolyDrawService = /** @class */ (function () {
             var marker = new Marker(latlng, {
                 icon: _this.createDivIcon(iconClasses),
                 draggable: true,
-                title: i.toString()
+                title: i.toString(),
             });
             FeatureGroup.addLayer(marker).addTo(_this.map);
-            marker.on('drag', function (e) {
+            marker.on("drag", function (e) {
                 _this.markerDrag(FeatureGroup);
             });
-            marker.on('dragend', function (e) {
+            marker.on("dragend", function (e) {
                 _this.markerDragEnd(FeatureGroup);
             });
             /*   if (i === 0 && this.config.markers.menu) {
@@ -1317,7 +1317,7 @@ var PolyDrawService = /** @class */ (function () {
         });
     };
     PolyDrawService.prototype.createDivIcon = function (classNames) {
-        var classes = classNames.join(' ');
+        var classes = classNames.join(" ");
         var icon = divIcon({ className: classes });
         return icon;
     };
@@ -1439,11 +1439,11 @@ var PolyDrawService = /** @class */ (function () {
         var coord;
         if (feature) {
             if (feature.geometry.coordinates.length > 1 &&
-                feature.geometry.type === 'MultiPolygon') {
+                feature.geometry.type === "MultiPolygon") {
                 coord = GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
             }
             else if (feature.geometry.coordinates[0].length > 1 &&
-                feature.geometry.type === 'Polygon') {
+                feature.geometry.type === "Polygon") {
                 coord = GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0]);
             }
             else {
@@ -1559,28 +1559,28 @@ var PolyDrawService = /** @class */ (function () {
             var isActiveDrawMode = true;
             switch (mode) {
                 case DrawMode.Off:
-                    DomUtil.removeClass(this.map.getContainer(), 'crosshair-cursor-enabled');
+                    DomUtil.removeClass(this.map.getContainer(), "crosshair-cursor-enabled");
                     this.events(false);
                     this.stopDraw();
                     this.tracer.setStyle({
-                        color: ''
+                        color: "",
                     });
                     this.setLeafletMapEvents(true, true, true);
                     isActiveDrawMode = false;
                     break;
                 case DrawMode.Add:
-                    DomUtil.addClass(this.map.getContainer(), 'crosshair-cursor-enabled');
+                    DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
                     this.events(true);
                     this.tracer.setStyle({
-                        color: defaultConfig.polyLineOptions.color
+                        color: defaultConfig.polyLineOptions.color,
                     });
                     this.setLeafletMapEvents(false, false, false);
                     break;
                 case DrawMode.Subtract:
-                    DomUtil.addClass(this.map.getContainer(), 'crosshair-cursor-enabled');
+                    DomUtil.addClass(this.map.getContainer(), "crosshair-cursor-enabled");
                     this.events(true);
                     this.tracer.setStyle({
-                        color: '#D9460F'
+                        color: "#D9460F",
                     });
                     this.setLeafletMapEvents(false, false, false);
                     break;
@@ -1625,7 +1625,7 @@ var PolyDrawService = /** @class */ (function () {
         this.tracer.setLatLngs([[0, 0]]);
     };
     PolyDrawService.prototype.toggleMarkerMenu = function () {
-        alert('open menu');
+        alert("open menu");
     };
     PolyDrawService.prototype.getHtmlContent = function (callBack) {
         var comp = this.popupGenerator.generateAlterPopup();
@@ -1655,7 +1655,7 @@ var PolyDrawService = /** @class */ (function () {
         var compassDirection = compass.getDirection(position);
         var latLngPoint = {
             lat: compassDirection.lat,
-            lng: compassDirection.lng
+            lng: compassDirection.lng,
         };
         var targetPoint = this.turfHelper.getCoord(latLngPoint);
         var fc = this.turfHelper.getFeaturePointCollection(latlngs);
@@ -1672,7 +1672,7 @@ var PolyDrawService = /** @class */ (function () {
     PolyDrawService.ɵprov = ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(ɵɵinject(PolyStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
     PolyDrawService = __decorate([
         Injectable({
-            providedIn: 'root'
+            providedIn: "root",
         })
         // Rename - PolyDrawService
         ,

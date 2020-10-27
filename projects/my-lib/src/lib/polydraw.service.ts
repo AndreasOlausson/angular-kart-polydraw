@@ -1,21 +1,21 @@
-import { Injectable, Optional } from '@angular/core';
-import * as L from 'leaflet';
+import { Injectable, Optional } from "@angular/core";
+import * as L from "leaflet";
 // import * as turf from "@turf/turf";
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
-import { filter, debounceTime, takeUntil } from 'rxjs/operators';
-import { Feature, Polygon, MultiPolygon } from '@turf/turf';
-import { PolyStateService } from './map-state.service';
-import { TurfHelperService } from './turf-helper.service';
-import { PolygonInformationService } from './polygon-information.service';
-import defaultConfig from './polyinfo.json';
-import { ILatLng, PolygonDrawStates } from './polygon-helpers';
-import { ComponentGeneraterService } from './component-generater.service';
-import { Compass, PolyDrawUtil } from './utils';
-import { MarkerPosition, DrawMode } from './enums';
-import { LeafletHelperService } from './leaflet-helper.service';
+import { Observable, BehaviorSubject, Subject } from "rxjs";
+import { filter, debounceTime, takeUntil } from "rxjs/operators";
+import { Feature, Polygon, MultiPolygon } from "@turf/turf";
+import { PolyStateService } from "./map-state.service";
+import { TurfHelperService } from "./turf-helper.service";
+import { PolygonInformationService } from "./polygon-information.service";
+import defaultConfig from "./polyinfo.json";
+import { ILatLng, PolygonDrawStates } from "./polygon-helpers";
+import { ComponentGeneraterService } from "./component-generater.service";
+import { Compass, PolyDrawUtil } from "./utils";
+import { MarkerPosition, DrawMode } from "./enums";
+import { LeafletHelperService } from "./leaflet-helper.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 // Rename - PolyDrawService
 export class PolyDrawService {
@@ -45,13 +45,15 @@ export class PolyDrawService {
     private polygonInformation: PolygonInformationService,
     private leafletHelper: LeafletHelperService
   ) {
-    this.mapState.map$.pipe(filter(m => m !== null)).subscribe((map: L.Map) => {
-      this.map = map;
-      this.config = defaultConfig;
-      this.configurate({});
-      this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
-      this.initPolyDraw();
-    });
+    this.mapState.map$
+      .pipe(filter((m) => m !== null))
+      .subscribe((map: L.Map) => {
+        this.map = map;
+        this.config = defaultConfig;
+        this.configurate({});
+        this.tracer = L.polyline([[0, 0]], this.config.polyLineOptions);
+        this.initPolyDraw();
+      });
 
     this.mapState.mapZoomLevel$
       .pipe(debounceTime(100), takeUntil(this.ngUnsubscribe))
@@ -80,7 +82,7 @@ export class PolyDrawService {
       polygon.length = 1;
     }
     if (this.arrayOfFeatureGroups.length > 0) {
-      this.arrayOfFeatureGroups.forEach(featureGroup => {
+      this.arrayOfFeatureGroups.forEach((featureGroup) => {
         const layer = featureGroup.getLayers()[0] as any;
         const latlngs = layer.getLatLngs();
         const length = latlngs.length;
@@ -122,7 +124,7 @@ export class PolyDrawService {
   }
   // fine
   removeAllFeatureGroups() {
-    this.arrayOfFeatureGroups.forEach(featureGroups => {
+    this.arrayOfFeatureGroups.forEach((featureGroups) => {
       this.map.removeLayer(featureGroups);
     });
 
@@ -142,7 +144,7 @@ export class PolyDrawService {
 
   // check this
   addAutoPolygon(geographicBorders: L.LatLng[][][]): void {
-    geographicBorders.forEach(group => {
+    geographicBorders.forEach((group) => {
       const featureGroup: L.FeatureGroup = new L.FeatureGroup();
 
       const polygon2 = this.turfHelper.getMultiPolygon(
@@ -154,7 +156,7 @@ export class PolyDrawService {
       featureGroup.addLayer(polygon);
       const markerLatlngs = polygon.getLatLngs();
 
-      markerLatlngs.forEach(polygon => {
+      markerLatlngs.forEach((polygon) => {
         polygon.forEach((polyElement, i) => {
           if (i === 0) {
             this.addMarker(polyElement, featureGroup);
@@ -188,11 +190,11 @@ export class PolyDrawService {
         L.GeoJSON.latLngsToCoords(latlngs[0])
       );
       if (within) {
-        latlngs.forEach(polygon => {
+        latlngs.forEach((polygon) => {
           coordinates.push(L.GeoJSON.latLngsToCoords(polygon));
         });
       } else {
-        latlngs.forEach(polygon => {
+        latlngs.forEach((polygon) => {
           coords.push([L.GeoJSON.latLngsToCoords(polygon)]);
         });
       }
@@ -207,12 +209,12 @@ export class PolyDrawService {
           L.GeoJSON.latLngsToCoords(latlngs[0])
         );
         if (within) {
-          latlngs.forEach(polygon => {
+          latlngs.forEach((polygon) => {
             coordinates.push(L.GeoJSON.latLngsToCoords(polygon));
           });
           coords.push(coordinates);
         } else {
-          latlngs.forEach(polygon => {
+          latlngs.forEach((polygon) => {
             coords.push([L.GeoJSON.latLngsToCoords(polygon)]);
           });
         }
@@ -229,19 +231,17 @@ export class PolyDrawService {
     const container: HTMLElement = this.map.getContainer();
     const drawMode = this.getDrawMode();
     if (this.config.touchSupport) {
-      container.addEventListener('touchstart mousedown', e => {
-        if (drawMode !== DrawMode.Off) {
-          this.mouseDown(e);
-        }
+      container.addEventListener("touchstart", (e) => {
+        this.mouseDown(e);
       });
 
-      container.addEventListener('touchend mouseup', e => {
+      container.addEventListener("touchend", (e) => {
         if (drawMode !== DrawMode.Off) {
           this.mouseUpLeave();
         }
       });
 
-      container.addEventListener('touchmove mousemove', e => {
+      container.addEventListener("touchmove", (e) => {
         if (drawMode !== DrawMode.Off) {
           this.mouseMove(e);
         }
@@ -258,7 +258,7 @@ export class PolyDrawService {
     } else {
       const latlng = this.map.containerPointToLatLng([
         event.touches[0].clientX,
-        event.touches[0].clientY
+        event.touches[0].clientY,
       ]);
       this.tracer.setLatLngs([latlng]);
     }
@@ -272,7 +272,7 @@ export class PolyDrawService {
     } else {
       const latlng = this.map.containerPointToLatLng([
         event.touches[0].clientX,
-        event.touches[0].clientY
+        event.touches[0].clientY,
       ]);
       this.tracer.addLatLng(latlng);
     }
@@ -322,10 +322,10 @@ export class PolyDrawService {
   }
   // fine
   private drawStartedEvents(onoff: boolean) {
-    const onoroff = onoff ? 'on' : 'off';
+    const onoroff = onoff ? "on" : "off";
 
-    this.map[onoroff]('mousemove', this.mouseMove, this);
-    this.map[onoroff]('mouseup', this.mouseUpLeave, this);
+    this.map[onoroff]("mousemove", this.mouseMove, this);
+    this.map[onoroff]("mouseup", this.mouseUpLeave, this);
   }
   // On hold
   private subtractPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
@@ -361,7 +361,7 @@ export class PolyDrawService {
     featureGroup.addLayer(polygon);
 
     const markerLatlngs = polygon.getLatLngs();
-    markerLatlngs.forEach(polygon => {
+    markerLatlngs.forEach((polygon) => {
       polygon.forEach((polyElement: ILatLng[], i: number) => {
         if (i === 0) {
           this.addMarker(polyElement, featureGroup);
@@ -378,17 +378,17 @@ export class PolyDrawService {
     this.polygonInformation.activate();
     this.setDrawMode(DrawMode.Off);
 
-    featureGroup.on('click', e => {
+    featureGroup.on("click", (e) => {
       this.polygonClicked(e, latLngs);
     });
   }
   // fine
   private polygonClicked(e: any, poly: Feature<Polygon | MultiPolygon>) {
     const newPoint = e.latlng;
-    if (poly.geometry.type === 'MultiPolygon') {
+    if (poly.geometry.type === "MultiPolygon") {
       const newPolygon = this.turfHelper.injectPointToPolygon(poly, [
         newPoint.lng,
-        newPoint.lat
+        newPoint.lat,
       ]);
       this.deletePolygon(this.getLatLngsFromJson(poly));
       this.addPolygonLayer(newPolygon, false);
@@ -406,18 +406,23 @@ export class PolyDrawService {
     const polygonFeature = [];
     const newArray: L.FeatureGroup[] = [];
     let polyIntersection = false;
-    this.arrayOfFeatureGroups.forEach(featureGroup => {
+    this.arrayOfFeatureGroups.forEach((featureGroup) => {
       const featureCollection = featureGroup.toGeoJSON() as any;
 
       if (featureCollection.features[0].geometry.coordinates.length > 1) {
-        featureCollection.features[0].geometry.coordinates.forEach(element => {
-          const feature = this.turfHelper.getMultiPolygon([element]);
-          polyIntersection = this.turfHelper.polygonIntersect(feature, latlngs);
-          if (polyIntersection) {
-            newArray.push(featureGroup);
-            polygonFeature.push(feature);
+        featureCollection.features[0].geometry.coordinates.forEach(
+          (element) => {
+            const feature = this.turfHelper.getMultiPolygon([element]);
+            polyIntersection = this.turfHelper.polygonIntersect(
+              feature,
+              latlngs
+            );
+            if (polyIntersection) {
+              newArray.push(featureGroup);
+              polygonFeature.push(feature);
+            }
           }
-        });
+        );
       } else {
         const feature = this.turfHelper.getTurfPolygon(
           featureCollection.features[0]
@@ -439,7 +444,7 @@ export class PolyDrawService {
   // next
   private subtract(latlngs: Feature<Polygon | MultiPolygon>) {
     let addHole = latlngs;
-    this.arrayOfFeatureGroups.forEach(featureGroup => {
+    this.arrayOfFeatureGroups.forEach((featureGroup) => {
       const featureCollection = featureGroup.toGeoJSON() as any;
       const layer = featureCollection.features[0];
       const poly = this.getLatLngsFromJson(layer);
@@ -454,14 +459,14 @@ export class PolyDrawService {
 
     const newLatlngs: Feature<Polygon | MultiPolygon> = addHole;
     const coords = this.turfHelper.getCoords(newLatlngs);
-    coords.forEach(value => {
+    coords.forEach((value) => {
       this.addPolygonLayer(this.turfHelper.getMultiPolygon([value]), true);
     });
   }
   // fine
   private events(onoff: boolean) {
-    const onoroff = onoff ? 'on' : 'off';
-    this.map[onoroff]('mousedown', this.mouseDown, this);
+    const onoroff = onoff ? "on" : "off";
+    this.map[onoroff]("mousedown", this.mouseDown, this);
   }
   // fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
@@ -485,14 +490,14 @@ export class PolyDrawService {
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
-        title: i.toString()
+        title: i.toString(),
       });
       FeatureGroup.addLayer(marker).addTo(this.map);
 
-      marker.on('drag', e => {
+      marker.on("drag", (e) => {
         this.markerDrag(FeatureGroup);
       });
-      marker.on('dragend', e => {
+      marker.on("dragend", (e) => {
         this.markerDragEnd(FeatureGroup);
       });
       if (i === menuMarkerIdx && this.config.markers.menu) {
@@ -501,13 +506,13 @@ export class PolyDrawService {
 
         //   })
         // );
-        marker.on('click', e => {
+        marker.on("click", (e) => {
           this.convertToBoundsPolygon(latlngs, true);
           // this.convertToSimplifiedPolygon(latlngs);
         });
       }
       if (i === deleteMarkerIdx && this.config.markers.delete) {
-        marker.on('click', e => {
+        marker.on("click", (e) => {
           this.deletePolygon([latlngs]);
         });
       }
@@ -528,14 +533,14 @@ export class PolyDrawService {
       const marker = new L.Marker(latlng, {
         icon: this.createDivIcon(iconClasses),
         draggable: true,
-        title: i.toString()
+        title: i.toString(),
       });
       FeatureGroup.addLayer(marker).addTo(this.map);
 
-      marker.on('drag', e => {
+      marker.on("drag", (e) => {
         this.markerDrag(FeatureGroup);
       });
-      marker.on('dragend', e => {
+      marker.on("dragend", (e) => {
         this.markerDragEnd(FeatureGroup);
       });
       /*   if (i === 0 && this.config.markers.menu) {
@@ -553,7 +558,7 @@ export class PolyDrawService {
     });
   }
   private createDivIcon(classNames: string[]): L.DivIcon {
-    const classes = classNames.join(' ');
+    const classes = classNames.join(" ");
     const icon = L.divIcon({ className: classes });
     return icon;
   }
@@ -634,7 +639,7 @@ export class PolyDrawService {
     const featureCollection = FeatureGroup.toGeoJSON() as any;
 
     if (featureCollection.features[0].geometry.coordinates.length > 1) {
-      featureCollection.features[0].geometry.coordinates.forEach(element => {
+      featureCollection.features[0].geometry.coordinates.forEach((element) => {
         const feature = this.turfHelper.getMultiPolygon([element]);
 
         if (this.turfHelper.hasKinks(feature)) {
@@ -643,7 +648,7 @@ export class PolyDrawService {
           // this.deletePolygon(this.getLatLngsFromJson(feature));
           this.removeFeatureGroup(FeatureGroup);
 
-          unkink.forEach(polygon => {
+          unkink.forEach((polygon) => {
             this.addPolygon(
               this.turfHelper.getTurfPolygon(polygon),
               false,
@@ -667,7 +672,7 @@ export class PolyDrawService {
         this.removeFeatureGroup(FeatureGroup);
 
         const testCoord = [];
-        unkink.forEach(polygon => {
+        unkink.forEach((polygon) => {
           this.addPolygon(this.turfHelper.getTurfPolygon(polygon), false, true);
         });
         // this.addPolygon(this.turfHelper.getMultiPolygon(testCoord), false, true);
@@ -689,12 +694,12 @@ export class PolyDrawService {
     if (feature) {
       if (
         feature.geometry.coordinates.length > 1 &&
-        feature.geometry.type === 'MultiPolygon'
+        feature.geometry.type === "MultiPolygon"
       ) {
         coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0][0]);
       } else if (
         feature.geometry.coordinates[0].length > 1 &&
-        feature.geometry.type === 'Polygon'
+        feature.geometry.type === "Polygon"
       ) {
         coord = L.GeoJSON.coordsToLatLngs(feature.geometry.coordinates[0]);
       } else {
@@ -731,7 +736,7 @@ export class PolyDrawService {
   private removeFeatureGroup(featureGroup: L.FeatureGroup) {
     featureGroup.clearLayers();
     this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(
-      featureGroups => featureGroups !== featureGroup
+      (featureGroups) => featureGroups !== featureGroup
     );
     // this.updatePolygons();
     this.map.removeLayer(featureGroup);
@@ -741,7 +746,7 @@ export class PolyDrawService {
     const newArray = [];
     if (featureGroup.getLayers()[0]) {
       const polygon = (featureGroup.getLayers()[0] as any).getLatLngs()[0];
-      this.polygonInformation.polygonInformationStorage.forEach(v => {
+      this.polygonInformation.polygonInformationStorage.forEach((v) => {
         if (
           v.polygon.toString() !== polygon[0].toString() &&
           v.polygon[0].toString() === polygon[0][0].toString()
@@ -759,7 +764,7 @@ export class PolyDrawService {
       });
       featureGroup.clearLayers();
       this.arrayOfFeatureGroups = this.arrayOfFeatureGroups.filter(
-        featureGroups => featureGroups !== featureGroup
+        (featureGroups) => featureGroups !== featureGroup
       );
 
       this.map.removeLayer(featureGroup);
@@ -769,7 +774,7 @@ export class PolyDrawService {
   private deletePolygonOnMerge(polygon) {
     let polygon2 = [];
     if (this.arrayOfFeatureGroups.length > 0) {
-      this.arrayOfFeatureGroups.forEach(featureGroup => {
+      this.arrayOfFeatureGroups.forEach((featureGroup) => {
         const layer = featureGroup.getLayers()[0] as any;
         const latlngs = layer.getLatLngs()[0];
         polygon2 = [...latlngs[0]];
@@ -832,12 +837,12 @@ export class PolyDrawService {
         case DrawMode.Off:
           L.DomUtil.removeClass(
             this.map.getContainer(),
-            'crosshair-cursor-enabled'
+            "crosshair-cursor-enabled"
           );
           this.events(false);
           this.stopDraw();
           this.tracer.setStyle({
-            color: ''
+            color: "",
           });
           this.setLeafletMapEvents(true, true, true);
           isActiveDrawMode = false;
@@ -845,22 +850,22 @@ export class PolyDrawService {
         case DrawMode.Add:
           L.DomUtil.addClass(
             this.map.getContainer(),
-            'crosshair-cursor-enabled'
+            "crosshair-cursor-enabled"
           );
           this.events(true);
           this.tracer.setStyle({
-            color: defaultConfig.polyLineOptions.color
+            color: defaultConfig.polyLineOptions.color,
           });
           this.setLeafletMapEvents(false, false, false);
           break;
         case DrawMode.Subtract:
           L.DomUtil.addClass(
             this.map.getContainer(),
-            'crosshair-cursor-enabled'
+            "crosshair-cursor-enabled"
           );
           this.events(true);
           this.tracer.setStyle({
-            color: '#D9460F'
+            color: "#D9460F",
           });
           this.setLeafletMapEvents(false, false, false);
           break;
@@ -907,14 +912,14 @@ export class PolyDrawService {
   }
 
   toggleMarkerMenu(): void {
-    alert('open menu');
+    alert("open menu");
   }
   private getHtmlContent(callBack: Function): HTMLElement {
     const comp = this.popupGenerator.generateAlterPopup();
-    comp.instance.bboxClicked.subscribe(e => {
+    comp.instance.bboxClicked.subscribe((e) => {
       callBack(e);
     });
-    comp.instance.simplyfiClicked.subscribe(e => {
+    comp.instance.simplyfiClicked.subscribe((e) => {
       callBack(e);
     });
     return comp.location.nativeElement;
@@ -955,7 +960,7 @@ export class PolyDrawService {
     const compassDirection = compass.getDirection(position);
     const latLngPoint: ILatLng = {
       lat: compassDirection.lat,
-      lng: compassDirection.lng
+      lng: compassDirection.lng,
     };
     const targetPoint = this.turfHelper.getCoord(latLngPoint);
     const fc = this.turfHelper.getFeaturePointCollection(latlngs);
