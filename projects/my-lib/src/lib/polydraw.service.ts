@@ -229,7 +229,7 @@ export class PolyDrawService {
     const container: HTMLElement = this.map.getContainer();
     const drawMode = this.getDrawMode();
     if (this.config.touchSupport) {
-      container.addEventListener('touchstart', e => {
+      container.addEventListener('touchstart mousedown', e => {
         if (drawMode !== DrawMode.Off) {
           this.mouseDown(e);
         }

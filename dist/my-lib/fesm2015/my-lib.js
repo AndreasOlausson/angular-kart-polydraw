@@ -761,7 +761,7 @@ __decorate([
 AlterPolygonComponent = __decorate([
     Component({
         selector: 'app-alter-polygon',
-        template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
+        template: "<div class=\"marker-menu-inner-wrapper\">\n  <div class=\"marker-menu-header\">Alter polygon</div>\n  <div class=\"marker-menu-content\">\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\n    <div class=\"marker-menu-separator\"></div>\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\n  </div>\n</div>",
         styles: [""]
     })
 ], AlterPolygonComponent);
@@ -994,7 +994,7 @@ class PolyDrawService {
         const container = this.map.getContainer();
         const drawMode = this.getDrawMode();
         if (this.config.touchSupport) {
-            container.addEventListener('touchstart', e => {
+            container.addEventListener('touchstart mousedown', e => {
                 if (drawMode !== DrawMode.Off) {
                     this.mouseDown(e);
                 }
