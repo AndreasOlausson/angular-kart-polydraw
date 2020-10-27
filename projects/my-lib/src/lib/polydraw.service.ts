@@ -235,13 +235,13 @@ export class PolyDrawService {
         }
       });
 
-      container.addEventListener('touchend', e => {
+      container.addEventListener('touchend mouseup', e => {
         if (drawMode !== DrawMode.Off) {
           this.mouseUpLeave();
         }
       });
 
-      container.addEventListener('touchmove', e => {
+      container.addEventListener('touchmove mousemove', e => {
         if (drawMode !== DrawMode.Off) {
           this.mouseMove(e);
         }

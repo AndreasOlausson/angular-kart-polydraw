@@ -1032,12 +1032,12 @@ var PolyDrawService = /** @class */ (function () {
                     _this.mouseDown(e);
                 }
             });
-            container.addEventListener('touchend', function (e) {
+            container.addEventListener('touchend mouseup', function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseUpLeave();
                 }
             });
-            container.addEventListener('touchmove', function (e) {
+            container.addEventListener('touchmove mousemove', function (e) {
                 if (drawMode !== DrawMode.Off) {
                     _this.mouseMove(e);
                 }
