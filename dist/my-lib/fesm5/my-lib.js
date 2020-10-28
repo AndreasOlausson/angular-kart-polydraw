@@ -1062,14 +1062,12 @@ var PolyDrawService = /** @class */ (function () {
     };
     // TODO event type, create containerPointToLatLng-method
     PolyDrawService.prototype.mouseMove = function (event) {
-        if (event.originalEvent != null) {
-            this.tracer.addLatLng(event.latlng);
+        if (event.touches != null) {
+            var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+            this.tracer.addLatLng(latlng);
         }
         else {
-            var latlng = this.map.containerPointToLatLng([
-                event.touches[0].clientX,
-                event.touches[0].clientY,
-            ]);
+            var latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
             this.tracer.addLatLng(latlng);
         }
     };

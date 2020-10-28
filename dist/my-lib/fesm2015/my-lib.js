@@ -1029,14 +1029,12 @@ class PolyDrawService {
     }
     // TODO event type, create containerPointToLatLng-method
     mouseMove(event) {
-        if (event.originalEvent != null) {
-            this.tracer.addLatLng(event.latlng);
+        if (event.touches != null) {
+            const latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+            this.tracer.addLatLng(latlng);
         }
         else {
-            const latlng = this.map.containerPointToLatLng([
-                event.touches[0].clientX,
-                event.touches[0].clientY,
-            ]);
+            const latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
             this.tracer.addLatLng(latlng);
         }
     }
