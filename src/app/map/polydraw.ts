@@ -263,12 +263,14 @@ export class PolyDrawService {
 
   //TODO event type, create containerPointToLatLng-method
   private mouseMove(event) {
-    // console.log("mouseMove", event);
+    console.log("mouseMove", event);
 
-    if (event.originalEvent != null) {
-      this.tracer.addLatLng(event.latlng);
-    } else {
+    if (event.touches != null) {
       const latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+      this.tracer.addLatLng(latlng);
+      
+    } else {
+      const latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
       this.tracer.addLatLng(latlng);
       console.log(this.tracer.toGeoJSON());
     }
