@@ -3,23 +3,27 @@
   "mergePolygons": true,
   "kinks": false,
   "modes": {
-    "attachElbow": false
+    "attachElbow": false,
+    "dragElbow": true
   },
   "markers": {
     "deleteMarker": true,
     "infoMarker": true,
     "menuMarker": true,
     "coordsTitle": true,
+    "zIndexOffset": 0,
     "markerIcon": {
       "styleClasses": [
         "polygon-marker"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "holeIcon": {
       "styleClasses": [
         "polygon-marker",
         "hole"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "markerInfoIcon": {
       "position": 3,
@@ -71,21 +75,24 @@
       "styleClasses": [
         "polygon-marker",
         "info"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "markerMenuIcon": {
       "position": 7,
       "styleClasses": [
         "polygon-marker",
         "menu"
-      ]
+      ],
+      "zIndexOffset": null
     },
     "markerDeleteIcon": {
       "position": 5,
       "styleClasses": [
         "polygon-marker",
         "delete"
-      ]
+      ],
+      "zIndexOffset": null
     }
   },
   "polyLineOptions": {
@@ -123,5 +130,9 @@
   },
   "boundingBox": {
     "addMidPointMarkers": true
+  },
+  "bezier": {
+    "resolution": 10000,
+    "sharpness": 0.75
   }
 }

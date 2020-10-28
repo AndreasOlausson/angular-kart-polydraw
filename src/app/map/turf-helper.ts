@@ -1,11 +1,12 @@
 import * as turf from "@turf/turf";
 import * as concaveman from "concaveman";
-import { Feature, Polygon, MultiPolygon, Position } from "@turf/turf";
+import { Feature, Polygon, MultiPolygon, Position, Point } from "@turf/turf";
 import { MarkerPosition } from "./enums";
 import { ICompass } from "./interface";
 import { Compass } from "./utils";
 import { ILatLng } from "./polygon-helpers";
 import defaultConfig from "./config.json";
+import { LatLng } from 'leaflet';
 
 export class TurfHelper {
     private config: typeof defaultConfig = null;
@@ -284,5 +285,39 @@ export class TurfHelper {
         return length;
     }
 
+    getDoubleElbowLatLngs(points: ILatLng[]): ILatLng[] {
 
+        const doubleized: ILatLng[] = [];
+        doubleized.push(points[0]);
+
+        for (let i = 1; i < points.length; i++) {
+            const p1 = turf.point([points[i-1].lng, points[i-1].lat]);
+            const p2 = turf.point([points[i].lng, points[i].lat]);
+            const midPoint = turf.midpoint(p1, p2);
+
+            doubleized.push(new LatLng(midPoint.geometry.coordinates[1], midPoint.geometry.coordinates[0]));
+            doubleized.push(points[i]);
+        }
+
+        return doubleized;
+
+    }
+    getBezierMultiPolygon(polygonArray: Position[][][]): Feature<Polygon | MultiPolygon> {
+
+        const t = turf;
+
+        const poly = this.getMultiPolygon(polygonArray);
+
+        const line = turf.polygonToLineString(poly);
+
+        //Add first point to "close" the line
+        (line as any).features[0].geometry.coordinates.push((line as any).features[0].geometry.coordinates[0])
+
+        const bezierLine = turf.bezierSpline((line as any).features[0].geometry, {resolution: this.config.bezier.resolution, sharpness: this.config.bezier.sharpness});
+
+        const bezierPoly = turf.lineStringToPolygon(bezierLine);
+
+        return bezierPoly;
+
+    }
 }
