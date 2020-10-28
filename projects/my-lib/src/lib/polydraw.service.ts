@@ -231,9 +231,7 @@ export class PolyDrawService {
     const container: HTMLElement = this.map.getContainer();
     const drawMode = this.getDrawMode();
     if (this.config.touchSupport) {
-      
       container.addEventListener("touchstart", (e) => {
-      
         this.mouseDown(e);
       });
 
@@ -269,14 +267,17 @@ export class PolyDrawService {
 
   // TODO event type, create containerPointToLatLng-method
   private mouseMove(event) {
-    if (event.touches != null) {
-      const latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-      this.tracer.addLatLng(latlng);
-      
+    if (event.originalEvent != null) {
+      this.tracer.addLatLng(event.latlng);
     } else {
-      const latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
+      const latlng = this.map.containerPointToLatLng([
+        event.touches[0].clientX,
+        event.touches[0].clientY,
+      ]);
       this.tracer.addLatLng(latlng);
     }
+      
+    
   }
 
   // fine
@@ -325,18 +326,24 @@ export class PolyDrawService {
   private drawStartedEvents(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
 
-    this.map[onoroff]("mousemove", this.mouseMove, this);	
+    this.map[onoroff]("mousemove", this.mouseMove, this);
     this.map[onoroff]("mouseup", this.mouseUpLeave, this);
 
-    if(onoff){
-
-      this.map.getContainer().addEventListener("touchmove", e => this.mouseMove(e));
-      this.map.getContainer().addEventListener("touchend", e =>this.mouseUpLeave(e));}
-      else {
-        this.map.getContainer().removeEventListener("touchmove", e => this.mouseMove(e),true);
-        this.map.getContainer().removeEventListener("touchend",  e =>this.mouseUpLeave(e),true);
-      }
-    
+    if (onoff) {
+      this.map
+        .getContainer()
+        .addEventListener("touchmove", (e) => this.mouseMove(e));
+      this.map
+        .getContainer()
+        .addEventListener("touchend", (e) => this.mouseUpLeave(e));
+    } else {
+      this.map
+        .getContainer()
+        .removeEventListener("touchmove", (e) => this.mouseMove(e), true);
+      this.map
+        .getContainer()
+        .removeEventListener("touchend", (e) => this.mouseUpLeave(e), true);
+    }
   }
   // On hold
   private subtractPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
@@ -478,14 +485,15 @@ export class PolyDrawService {
   private events(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
     this.map[onoroff]("mousedown", this.mouseDown, this);
-    if(onoff){
-
-      this.map.getContainer().addEventListener("touchstart", e => this.mouseDown(e));
+    if (onoff) {
+      this.map
+        .getContainer()
+        .addEventListener("touchstart", (e) => this.mouseDown(e));
+    } else {
+      this.map
+        .getContainer()
+        .removeEventListener("touchstart", (e) => this.mouseDown(e), true);
     }
-      else {
-        this.map.getContainer().removeEventListener("touchstart", e => this.mouseDown(e), true);
-      ;
-      }
   }
   // fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {

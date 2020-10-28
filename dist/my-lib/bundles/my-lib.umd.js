@@ -1281,12 +1281,14 @@
         };
         // TODO event type, create containerPointToLatLng-method
         PolyDrawService.prototype.mouseMove = function (event) {
-            if (event.touches != null) {
-                var latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-                this.tracer.addLatLng(latlng);
+            if (event.originalEvent != null) {
+                this.tracer.addLatLng(event.latlng);
             }
             else {
-                var latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
+                var latlng = this.map.containerPointToLatLng([
+                    event.touches[0].clientX,
+                    event.touches[0].clientY,
+                ]);
                 this.tracer.addLatLng(latlng);
             }
         };
@@ -1333,12 +1335,20 @@
             this.map[onoroff]("mousemove", this.mouseMove, this);
             this.map[onoroff]("mouseup", this.mouseUpLeave, this);
             if (onoff) {
-                this.map.getContainer().addEventListener("touchmove", function (e) { return _this.mouseMove(e); });
-                this.map.getContainer().addEventListener("touchend", function (e) { return _this.mouseUpLeave(e); });
+                this.map
+                    .getContainer()
+                    .addEventListener("touchmove", function (e) { return _this.mouseMove(e); });
+                this.map
+                    .getContainer()
+                    .addEventListener("touchend", function (e) { return _this.mouseUpLeave(e); });
             }
             else {
-                this.map.getContainer().removeEventListener("touchmove", function (e) { return _this.mouseMove(e); }, true);
-                this.map.getContainer().removeEventListener("touchend", function (e) { return _this.mouseUpLeave(e); }, true);
+                this.map
+                    .getContainer()
+                    .removeEventListener("touchmove", function (e) { return _this.mouseMove(e); }, true);
+                this.map
+                    .getContainer()
+                    .removeEventListener("touchend", function (e) { return _this.mouseUpLeave(e); }, true);
             }
         };
         // On hold
@@ -1463,11 +1473,14 @@
             var onoroff = onoff ? "on" : "off";
             this.map[onoroff]("mousedown", this.mouseDown, this);
             if (onoff) {
-                this.map.getContainer().addEventListener("touchstart", function (e) { return _this.mouseDown(e); });
+                this.map
+                    .getContainer()
+                    .addEventListener("touchstart", function (e) { return _this.mouseDown(e); });
             }
             else {
-                this.map.getContainer().removeEventListener("touchstart", function (e) { return _this.mouseDown(e); }, true);
-                ;
+                this.map
+                    .getContainer()
+                    .removeEventListener("touchstart", function (e) { return _this.mouseDown(e); }, true);
             }
         };
         // fine, TODO: if special markers

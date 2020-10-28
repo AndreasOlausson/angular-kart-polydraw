@@ -1029,12 +1029,14 @@ class PolyDrawService {
     }
     // TODO event type, create containerPointToLatLng-method
     mouseMove(event) {
-        if (event.touches != null) {
-            const latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
-            this.tracer.addLatLng(latlng);
+        if (event.originalEvent != null) {
+            this.tracer.addLatLng(event.latlng);
         }
         else {
-            const latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
+            const latlng = this.map.containerPointToLatLng([
+                event.touches[0].clientX,
+                event.touches[0].clientY,
+            ]);
             this.tracer.addLatLng(latlng);
         }
     }
@@ -1080,12 +1082,20 @@ class PolyDrawService {
         this.map[onoroff]("mousemove", this.mouseMove, this);
         this.map[onoroff]("mouseup", this.mouseUpLeave, this);
         if (onoff) {
-            this.map.getContainer().addEventListener("touchmove", e => this.mouseMove(e));
-            this.map.getContainer().addEventListener("touchend", e => this.mouseUpLeave(e));
+            this.map
+                .getContainer()
+                .addEventListener("touchmove", (e) => this.mouseMove(e));
+            this.map
+                .getContainer()
+                .addEventListener("touchend", (e) => this.mouseUpLeave(e));
         }
         else {
-            this.map.getContainer().removeEventListener("touchmove", e => this.mouseMove(e), true);
-            this.map.getContainer().removeEventListener("touchend", e => this.mouseUpLeave(e), true);
+            this.map
+                .getContainer()
+                .removeEventListener("touchmove", (e) => this.mouseMove(e), true);
+            this.map
+                .getContainer()
+                .removeEventListener("touchend", (e) => this.mouseUpLeave(e), true);
         }
     }
     // On hold
@@ -1205,11 +1215,14 @@ class PolyDrawService {
         const onoroff = onoff ? "on" : "off";
         this.map[onoroff]("mousedown", this.mouseDown, this);
         if (onoff) {
-            this.map.getContainer().addEventListener("touchstart", e => this.mouseDown(e));
+            this.map
+                .getContainer()
+                .addEventListener("touchstart", (e) => this.mouseDown(e));
         }
         else {
-            this.map.getContainer().removeEventListener("touchstart", e => this.mouseDown(e), true);
-            ;
+            this.map
+                .getContainer()
+                .removeEventListener("touchstart", (e) => this.mouseDown(e), true);
         }
     }
     // fine, TODO: if special markers
