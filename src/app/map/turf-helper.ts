@@ -25,11 +25,13 @@ export class TurfHelper {
     }
 
     turfConcaveman(feature: Feature<Polygon | MultiPolygon>): Feature<Polygon | MultiPolygon> {
-        //console.log("turfConcaveman", points);
+        
         let points = turf.explode(feature);
-
+        console.log("turfConcaveman", points);
         const coordinates = points.features.map(f => f.geometry.coordinates);
+        console.log("coords ", coordinates);
         return turf.multiPolygon([[concaveman(coordinates)]]);
+        
     }
 
     getSimplified(polygon: Feature<Polygon | MultiPolygon>, dynamicTolerance: boolean = false): Feature<Polygon | MultiPolygon> {
