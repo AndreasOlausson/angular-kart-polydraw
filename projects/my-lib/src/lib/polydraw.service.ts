@@ -325,12 +325,17 @@ export class PolyDrawService {
   private drawStartedEvents(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
 
+    this.map[onoroff]("mousemove", this.mouseMove, this);	
+    this.map[onoroff]("mouseup", this.mouseUpLeave, this);
+
     if(onoff){
 
-      this.map.getContainer().addEventListener("mousemove", e => this.mouseMove(e));
-      this.map.getContainer().addEventListener("mouseup", e =>this.mouseUpLeave(e));
       this.map.getContainer().addEventListener("touchmove", e => this.mouseMove(e));
       this.map.getContainer().addEventListener("touchend", e =>this.mouseUpLeave(e));}
+      else {
+        this.map.getContainer().removeEventListener("touchmove", e => this.mouseMove(e),true);
+        this.map.getContainer().removeEventListener("touchend",  e =>this.mouseUpLeave(e),true);
+      }
     
   }
   // On hold
@@ -473,6 +478,14 @@ export class PolyDrawService {
   private events(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
     this.map[onoroff]("mousedown", this.mouseDown, this);
+    if(onoff){
+
+      this.map.getContainer().addEventListener("touchstart", e => this.mouseDown(e));
+    }
+      else {
+        this.map.getContainer().removeEventListener("touchstart", e => this.mouseDown(e), true);
+      ;
+      }
   }
   // fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {

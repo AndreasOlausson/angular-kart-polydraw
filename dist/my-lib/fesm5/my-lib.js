@@ -1111,11 +1111,15 @@ var PolyDrawService = /** @class */ (function () {
     PolyDrawService.prototype.drawStartedEvents = function (onoff) {
         var _this = this;
         var onoroff = onoff ? "on" : "off";
+        this.map[onoroff]("mousemove", this.mouseMove, this);
+        this.map[onoroff]("mouseup", this.mouseUpLeave, this);
         if (onoff) {
-            this.map.getContainer().addEventListener("mousemove", function (e) { return _this.mouseMove(e); });
-            this.map.getContainer().addEventListener("mouseup", function (e) { return _this.mouseUpLeave(e); });
             this.map.getContainer().addEventListener("touchmove", function (e) { return _this.mouseMove(e); });
             this.map.getContainer().addEventListener("touchend", function (e) { return _this.mouseUpLeave(e); });
+        }
+        else {
+            this.map.getContainer().removeEventListener("touchmove", function (e) { return _this.mouseMove(e); }, true);
+            this.map.getContainer().removeEventListener("touchend", function (e) { return _this.mouseUpLeave(e); }, true);
         }
     };
     // On hold
@@ -1236,8 +1240,16 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.events = function (onoff) {
+        var _this = this;
         var onoroff = onoff ? "on" : "off";
         this.map[onoroff]("mousedown", this.mouseDown, this);
+        if (onoff) {
+            this.map.getContainer().addEventListener("touchstart", function (e) { return _this.mouseDown(e); });
+        }
+        else {
+            this.map.getContainer().removeEventListener("touchstart", function (e) { return _this.mouseDown(e); }, true);
+            ;
+        }
     };
     // fine, TODO: if special markers
     PolyDrawService.prototype.addMarker = function (latlngs, FeatureGroup) {
