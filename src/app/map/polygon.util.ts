@@ -114,23 +114,3 @@ export class PolygonUtil {
 
     }
 }
-
-//export class FreedrawSubtract extends L.FreeDraw {
-
-
-//    constructor() {
-
-//        //this will become L.FreeDraw
-//        super(null);
-//        //call methods in freedraw by this
-//        const foo = this.size();
-
-//        this.consoleLogNumberOfPolygons(foo);
-
-//    }
-
-//    consoleLogNumberOfPolygons(size: number): void {
-//        console.log("Number of polygons: ", size);
-//    }
-
-//}
