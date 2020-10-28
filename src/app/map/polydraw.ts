@@ -225,9 +225,10 @@ export class PolyDrawService {
     const drawMode = this.getDrawMode();
     if (this.config.touchSupport) {
       container.addEventListener("touchstart", e => {
+        if (drawMode !== DrawMode.Off) {
         console.log(e);
           this.mouseDown(e);
-        
+        }
       });
 
       container.addEventListener("touchend", e => {
@@ -256,23 +257,22 @@ export class PolyDrawService {
       const latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
       
       this.tracer.setLatLngs([latlng]);
-      console.log(this.tracer.getLatLngs());
+      
     }
+    console.log(this.tracer.getLatLngs());
     this.startDraw();
   }
 
   //TODO event type, create containerPointToLatLng-method
   private mouseMove(event) {
     console.log("mouseMove", event);
-
-    if (event.touches != null) {
+    if (event.originalEvent != null) {
+      this.tracer.addLatLng(event.latlng);
+    } else {
       const latlng = this.map.containerPointToLatLng([event.touches[0].clientX, event.touches[0].clientY]);
+      
       this.tracer.addLatLng(latlng);
       
-    } else {
-      const latlng = this.map.containerPointToLatLng([event.clientX, event.clientY]);
-      this.tracer.addLatLng(latlng);
-      console.log(this.tracer.toGeoJSON());
     }
   }
 
@@ -308,7 +308,7 @@ export class PolyDrawService {
   private stopDraw() {
     //console.log("stopDraw", null);
 
-    // this.resetTracker();
+    this.resetTracker();
     this.drawStartedEvents(false);
   }
   //fine
@@ -316,18 +316,18 @@ export class PolyDrawService {
     console.log("drawStartedEvents", onoff);
 
     const onoroff = onoff ? "on" : "off";
+
+    this.map[onoroff]("mousemove", this.mouseMove, this);	
+    this.map[onoroff]("mouseup", this.mouseUpLeave, this);
     if(onoff){
 
-    this.map.getContainer().addEventListener("mousemove", e => this.mouseMove(e));
-    this.map.getContainer().addEventListener("mouseup", e =>this.mouseUpLeave(e));
     this.map.getContainer().addEventListener("touchmove", e => this.mouseMove(e));
     this.map.getContainer().addEventListener("touchend", e =>this.mouseUpLeave(e));}
-  /*   else {
-      this.map.getContainer().removeEventListener("mousemove", e => this.mouseMove(e))
-      this.map.getContainer().removeEventListener("mouseup", this.mouseUpLeave);
-      this.map.getContainer().removeEventListener("touchmove", e => this.mouseMove(e));
-      this.map.getContainer().removeEventListener("touchend", this.mouseUpLeave);
-    } */
+    else {
+      this.map.getContainer().removeEventListener("touchmove", e => this.mouseMove(e), true);
+      this.map.getContainer().removeEventListener("touchmove", e => this.mouseMove(e), true);
+      this.map.getContainer().removeEventListener("touchend", e =>this.mouseUpLeave(e), true);
+    }
     
   }
   //On hold
@@ -452,7 +452,14 @@ export class PolyDrawService {
   private events(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
     this.map[onoroff]("mousedown", this.mouseDown, this);
-    this.map[onoroff]("touchstart", this.mouseDown, this);
+    if(onoff){
+
+      this.map.getContainer().addEventListener("touchstart", e => this.mouseDown(e));
+    }
+      else {
+        this.map.getContainer().removeEventListener("touchstart", e => this.mouseDown(e), true);
+      ;
+      }
   }
   //fine, TODO: if special markers
   private addMarker(latlngs: ILatLng[], FeatureGroup: L.FeatureGroup) {
