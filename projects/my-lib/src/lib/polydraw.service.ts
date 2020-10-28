@@ -231,7 +231,12 @@ export class PolyDrawService {
     const container: HTMLElement = this.map.getContainer();
     const drawMode = this.getDrawMode();
     if (this.config.touchSupport) {
+      container.addEventListener("mousedown", (e) => {
+        console.log("mouse", e);
+        this.mouseDown(e);
+      });
       container.addEventListener("touchstart", (e) => {
+        console.log("touch", e);
         this.mouseDown(e);
       });
 

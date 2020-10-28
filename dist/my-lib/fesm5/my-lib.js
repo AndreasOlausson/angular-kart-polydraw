@@ -787,7 +787,7 @@ var AlterPolygonComponent = /** @class */ (function () {
     AlterPolygonComponent = __decorate([
         Component({
             selector: 'app-alter-polygon',
-            template: "<div class=\"marker-menu-inner-wrapper\">\n  <div class=\"marker-menu-header\">Alter polygon</div>\n  <div class=\"marker-menu-content\">\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\n    <div class=\"marker-menu-separator\"></div>\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\n  </div>\n</div>",
+            template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
             styles: [""]
         })
     ], AlterPolygonComponent);
@@ -1029,7 +1029,12 @@ var PolyDrawService = /** @class */ (function () {
         var container = this.map.getContainer();
         var drawMode = this.getDrawMode();
         if (this.config.touchSupport) {
+            container.addEventListener("mousedown", function (e) {
+                console.log("mouse", e);
+                _this.mouseDown(e);
+            });
             container.addEventListener("touchstart", function (e) {
+                console.log("touch", e);
                 _this.mouseDown(e);
             });
             container.addEventListener("touchend", function (e) {
