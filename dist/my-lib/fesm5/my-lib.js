@@ -1029,17 +1029,12 @@ var PolyDrawService = /** @class */ (function () {
         var container = this.map.getContainer();
         var drawMode = this.getDrawMode();
         if (this.config.touchSupport) {
-            container.addEventListener("mousedown", function (e) {
-                console.log("mouse", e);
-                _this.mouseDown(e);
-            });
             container.addEventListener("touchstart", function (e) {
-                console.log("touch", e);
                 _this.mouseDown(e);
             });
             container.addEventListener("touchend", function (e) {
                 if (drawMode !== DrawMode.Off) {
-                    _this.mouseUpLeave();
+                    _this.mouseUpLeave(e);
                 }
             });
             container.addEventListener("touchmove", function (e) {
@@ -1079,7 +1074,7 @@ var PolyDrawService = /** @class */ (function () {
         }
     };
     // fine
-    PolyDrawService.prototype.mouseUpLeave = function () {
+    PolyDrawService.prototype.mouseUpLeave = function (event) {
         this.polygonInformation.deletePolygonInformationStorage();
         var geoPos = this.turfHelper.turfConcaveman(this.tracer.toGeoJSON());
         this.stopDraw();
@@ -1116,9 +1111,14 @@ var PolyDrawService = /** @class */ (function () {
     };
     // fine
     PolyDrawService.prototype.drawStartedEvents = function (onoff) {
+        var _this = this;
         var onoroff = onoff ? "on" : "off";
-        this.map[onoroff]("mousemove", this.mouseMove, this);
-        this.map[onoroff]("mouseup", this.mouseUpLeave, this);
+        if (onoff) {
+            this.map.getContainer().addEventListener("mousemove", function (e) { return _this.mouseMove(e); });
+            this.map.getContainer().addEventListener("mouseup", function (e) { return _this.mouseUpLeave(e); });
+            this.map.getContainer().addEventListener("touchmove", function (e) { return _this.mouseMove(e); });
+            this.map.getContainer().addEventListener("touchend", function (e) { return _this.mouseUpLeave(e); });
+        }
     };
     // On hold
     PolyDrawService.prototype.subtractPolygon = function (latlngs) {

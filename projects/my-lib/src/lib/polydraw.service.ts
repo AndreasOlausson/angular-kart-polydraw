@@ -231,18 +231,15 @@ export class PolyDrawService {
     const container: HTMLElement = this.map.getContainer();
     const drawMode = this.getDrawMode();
     if (this.config.touchSupport) {
-      container.addEventListener("mousedown", (e) => {
-        console.log("mouse", e);
-        this.mouseDown(e);
-      });
+      
       container.addEventListener("touchstart", (e) => {
-        console.log("touch", e);
+      
         this.mouseDown(e);
       });
 
       container.addEventListener("touchend", (e) => {
         if (drawMode !== DrawMode.Off) {
-          this.mouseUpLeave();
+          this.mouseUpLeave(e);
         }
       });
 
@@ -284,7 +281,7 @@ export class PolyDrawService {
   }
 
   // fine
-  private mouseUpLeave() {
+  private mouseUpLeave(event) {
     this.polygonInformation.deletePolygonInformationStorage();
 
     const geoPos: Feature<
@@ -329,8 +326,13 @@ export class PolyDrawService {
   private drawStartedEvents(onoff: boolean) {
     const onoroff = onoff ? "on" : "off";
 
-    this.map[onoroff]("mousemove", this.mouseMove, this);
-    this.map[onoroff]("mouseup", this.mouseUpLeave, this);
+    if(onoff){
+
+      this.map.getContainer().addEventListener("mousemove", e => this.mouseMove(e));
+      this.map.getContainer().addEventListener("mouseup", e =>this.mouseUpLeave(e));
+      this.map.getContainer().addEventListener("touchmove", e => this.mouseMove(e));
+      this.map.getContainer().addEventListener("touchend", e =>this.mouseUpLeave(e));}
+    
   }
   // On hold
   private subtractPolygon(latlngs: Feature<Polygon | MultiPolygon>) {
