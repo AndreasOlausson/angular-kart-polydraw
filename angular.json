@@ -36,11 +36,16 @@
               "projects/my-lib/tsconfig.lib.json",
               "projects/my-lib/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "my-lib"
+  "defaultProject": "my-lib",
+  "cli": {
+    "analytics": "8a5c77e3-6dfe-4507-bb8a-63e7435adb1f"
+  }
 }
