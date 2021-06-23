@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "my-lib": {
+    "@ev/my-lib": {
       "projectType": "library",
       "root": "projects/my-lib",
       "sourceRoot": "projects/my-lib/src",
@@ -44,7 +44,7 @@
       }
     }
   },
-  "defaultProject": "my-lib",
+  "defaultProject": "@ev/my-lib",
   "cli": {
     "analytics": "8a5c77e3-6dfe-4507-bb8a-63e7435adb1f"
   }
