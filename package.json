@@ -3,14 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "dependencies": {
-    "@angular/common": "^11.2.14",
-    "@angular/compiler": "^11.2.14",
-    "@angular/core": "^11.2.14",
-    "@angular/forms": "^11.2.14",
-    "@angular/localize": "^11.2.14",
-    "@angular/platform-browser": "^11.2.14",
-    "@angular/platform-browser-dynamic": "^11.2.14",
-    "@angular/router": "^11.2.14",
+    "@angular/common": "^12.1.4",
+    "@angular/compiler": "^12.1.4",
+    "@angular/core": "^12.1.4",
+    "@angular/forms": "^12.1.4",
+    "@angular/localize": "^12.1.4",
+    "@angular/platform-browser": "^12.1.4",
+    "@angular/platform-browser-dynamic": "^12.1.4",
+    "@angular/router": "^12.1.4",
     "@turf/turf": "^5.1.6",
     "@types/leaflet": "^1.5.7",
     "clipper-lib": "^6.4.2",
@@ -33,7 +33,7 @@
     "tsyringe": "^4.1.0",
     "turf-intersect": "^3.0.12",
     "turf-polygon": "^1.0.3",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.11.4"
   },
   "scripts": {
     "ng": "ng",
@@ -45,10 +45,10 @@
     "test-build": "tsc"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1102.14",
-    "@angular/cli": "~11.2.14",
-    "@angular/compiler-cli": "~11.2.14",
-    "@angular/language-service": "~11.2.14",
+    "@angular-devkit/build-angular": "~12.1.4",
+    "@angular/cli": "~12.1.4",
+    "@angular/compiler-cli": "~12.1.4",
+    "@angular/language-service": "~12.1.4",
     "@types/node": "~8.9.4",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
@@ -63,6 +63,6 @@
     "protractor": "~7.0.0",
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
-    "typescript": "~4.0.8"
+    "typescript": "~4.3.5"
   }
 }
