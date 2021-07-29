@@ -3,7 +3,9 @@ import { singleton } from 'tsyringe';
 import { BehaviorSubject, Observable } from 'rxjs';
 import * as L from "leaflet"
 import { ILatLng } from './polygon-helpers';
+import { Injectable } from "@angular/core";
 
+@Injectable()
 @singleton()
 export class MapStateService {
     constructor() { }
