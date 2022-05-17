@@ -13,6 +13,7 @@ import { Compass, PolyDrawUtil, Perimeter, Area } from "./utils";
 import { MarkerPosition, DrawMode } from "./enums";
 import { TurfHelper } from "./turf-helper";
 import { PolygonUtil } from "./polygon.util";
+import {IconFactory} from "./icon-factory";
 
 
 @injectable()
@@ -479,7 +480,7 @@ export class PolyDrawService {
         iconClasses = this.config.markers.markerInfoIcon.styleClasses;
       }
       const marker = new L.Marker(latlng, {
-        icon: this.createDivIcon(iconClasses),
+        icon: IconFactory.createDivIcon(iconClasses),
         draggable: this.config.modes.dragElbow,
         title: (this.config.markers.coordsTitle ? this.getLatLngInfoString(latlng) : ""),
         zIndexOffset: this.config.markers.markerIcon.zIndexOffset ?? this.config.markers.zIndexOffset
@@ -523,7 +524,7 @@ export class PolyDrawService {
     latlngs.forEach((latlng, i) => {
       let iconClasses = this.config.markers.markerIcon.styleClasses;
       const marker = new L.Marker(latlng, {
-        icon: this.createDivIcon(iconClasses),
+        icon: IconFactory.createDivIcon(iconClasses),
         draggable: true,
         title: this.getLatLngInfoString(latlng),
         zIndexOffset: this.config.markers.holeIcon.zIndexOffset ?? this.config.markers.zIndexOffset
@@ -538,11 +539,11 @@ export class PolyDrawService {
       });
     });
   }
-  private createDivIcon(classNames: string[]): L.DivIcon {
-    const classes = classNames.join(" ");
-    const icon = L.divIcon({ className: classes });
-    return icon;
-  }
+  // private createDivIcon(classNames: string[]): L.DivIcon {
+  //   const classes = classNames.join(" ");
+  //   const icon = L.divIcon({ className: classes });
+  //   return icon;
+  // }
   //TODO: Cleanup
   private markerDrag(FeatureGroup: L.FeatureGroup) {
     const newPos = [];
