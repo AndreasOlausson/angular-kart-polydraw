@@ -2,6 +2,7 @@ import * as turf from '@turf/turf';
 import { Feature, Polygon, MultiPolygon, Position } from '@turf/turf';
 import { ICompass } from './interface';
 import { ILatLng } from './polygon-helpers';
+import * as i0 from "@angular/core";
 export declare class TurfHelperService {
     private simplifyTolerance;
     constructor();
@@ -27,4 +28,6 @@ export declare class TurfHelperService {
     getNearestPointIndex(targetPoint: turf.Coord, points: turf.FeatureCollection<turf.Point>): number;
     getCoord(point: ILatLng): turf.Coord;
     getFeaturePointCollection(points: ILatLng[]): turf.FeatureCollection;
+    static ɵfac: i0.ɵɵFactoryDeclaration<TurfHelperService, never>;
+    static ɵprov: i0.ɵɵInjectableDeclaration<TurfHelperService>;
 }

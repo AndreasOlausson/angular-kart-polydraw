@@ -1,5 +1,5 @@
-import { __assign, __decorate, __metadata, __spread } from 'tslib';
-import { ɵɵdefineInjectable, Injectable, ɵɵinject, EventEmitter, Output, Component, ComponentFactoryResolver, Injector, INJECTOR, NgModule } from '@angular/core';
+import { __assign, __spreadArray, __read } from 'tslib';
+import { ɵɵdefineInjectable, ɵsetClassMetadata, Injectable, ɵɵinject, EventEmitter, ɵɵdefineComponent, ɵɵelementStart, ɵɵtext, ɵɵelementEnd, ɵɵlistener, ɵɵelement, Component, Output, ComponentFactoryResolver, Injector, ɵɵdefineNgModule, ɵɵdefineInjector, NgModule, ɵɵsetNgModuleScope } from '@angular/core';
 import { Polyline, Polygon, polygon as polygon$1, polyline, FeatureGroup, GeoJSON, Marker, divIcon, DomUtil } from 'leaflet';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { map, filter, debounceTime, takeUntil } from 'rxjs/operators';
@@ -30,15 +30,16 @@ var PolyStateService = /** @class */ (function () {
     PolyStateService.prototype.updateMapBounds = function (mapBounds) {
         this.updateMapStates({ mapBoundState: mapBounds });
     };
-    PolyStateService.ɵprov = ɵɵdefineInjectable({ factory: function PolyStateService_Factory() { return new PolyStateService(); }, token: PolyStateService, providedIn: "root" });
-    PolyStateService = __decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [])
-    ], PolyStateService);
+    PolyStateService.ɵfac = function PolyStateService_Factory(t) { return new (t || PolyStateService)(); };
+    PolyStateService.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: PolyStateService, factory: PolyStateService.ɵfac, providedIn: 'root' });
     return PolyStateService;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PolyStateService, [{
+        type: Injectable,
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return []; }, null); })();
 var MapStateModel = /** @class */ (function () {
     function MapStateModel(mapBoundState) {
         if (mapBoundState === void 0) { mapBoundState = new MapBoundsState(null, 11); }
@@ -226,7 +227,6 @@ var TurfHelperService = /** @class */ (function () {
         return kinks.features.length > 0;
     };
     TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
-        var _a, _b;
         // const oldPolygon = polygon.toGeoJSON();
         var poly = [];
         var poly2 = [];
@@ -246,11 +246,11 @@ var TurfHelperService = /** @class */ (function () {
                 for (var j = 0; j < poly2.length; j++) {
                     if (this.getKinks(poly2[j]).length < 2) {
                         var test = intersect(poly[i], poly2[j]);
-                        if (((_a = test) === null || _a === void 0 ? void 0 : _a.geometry.type) === 'Point') {
+                        if ((test === null || test === void 0 ? void 0 : test.geometry.type) === 'Point') {
                             intersect$1 = !(booleanPointInPolygon(test, poly[i]) &&
                                 booleanPointInPolygon(test, poly2[j]));
                         }
-                        else if (((_b = test) === null || _b === void 0 ? void 0 : _b.geometry.type) === 'Polygon') {
+                        else if ((test === null || test === void 0 ? void 0 : test.geometry.type) === 'Polygon') {
                             intersect$1 = !!intersect(poly[i], poly2[j]);
                         }
                         if (intersect$1) {
@@ -298,9 +298,9 @@ var TurfHelperService = /** @class */ (function () {
                 .featureIndex;
             var test = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                 if (index_1 === i) {
-                    return __spread(accumulator, [oldPoint, point]);
+                    return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint, point]);
                 }
-                return __spread(accumulator, [oldPoint]);
+                return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint]);
             }, []);
             newPolygon = multiPolygon([[test]]);
         }
@@ -316,9 +316,9 @@ var TurfHelperService = /** @class */ (function () {
                         .featureIndex;
                     coordinates_1 = coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                         if (index_2 === i) {
-                            return __spread(accumulator, [oldPoint, point]);
+                            return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint, point]);
                         }
-                        return __spread(accumulator, [oldPoint]);
+                        return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint]);
                     }, []);
                 }
                 else {
@@ -371,13 +371,14 @@ var TurfHelperService = /** @class */ (function () {
         var fc = featureCollection(pts);
         return fc;
     };
-    TurfHelperService.ɵprov = ɵɵdefineInjectable({ factory: function TurfHelperService_Factory() { return new TurfHelperService(); }, token: TurfHelperService, providedIn: "root" });
-    TurfHelperService = __decorate([
-        Injectable({ providedIn: 'root' }),
-        __metadata("design:paramtypes", [])
-    ], TurfHelperService);
+    TurfHelperService.ɵfac = function TurfHelperService_Factory(t) { return new (t || TurfHelperService)(); };
+    TurfHelperService.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: TurfHelperService, factory: TurfHelperService.ɵfac, providedIn: 'root' });
     return TurfHelperService;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(TurfHelperService, [{
+        type: Injectable,
+        args: [{ providedIn: 'root' }]
+    }], function () { return []; }, null); })();
 
 var PolygonUtil = /** @class */ (function () {
     function PolygonUtil() {
@@ -545,14 +546,12 @@ var addClass = function (selector, className) {
         elements.item(i).classList.add(className);
     }
 };
-var ɵ0 = addClass;
 var removeClass = function (selector, className) {
     var elements = document.querySelectorAll(selector);
     for (var i = 0; i < elements.length; i++) {
         elements.item(i).classList.remove(className);
     }
 };
-var ɵ1 = removeClass;
 var PolygonDrawStates = /** @class */ (function () {
     function PolygonDrawStates() {
         this.canUsePolyDraw = false;
@@ -620,7 +619,7 @@ var PolygonInformationService = /** @class */ (function () {
                 v.polygon.forEach(function (poly) {
                     var test2 = [];
                     poly.forEach(function (polygon) {
-                        test2 = __spread(polygon);
+                        test2 = __spreadArray([], __read(polygon));
                         if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
                             test2.push(polygon[0]);
                         }
@@ -690,16 +689,14 @@ var PolygonInformationService = /** @class */ (function () {
     PolygonInformationService.prototype.setFreeDrawMode = function () {
         this.polygonDrawStates.setFreeDrawMode();
     };
-    PolygonInformationService.ctorParameters = function () { return [
-        { type: PolyStateService }
-    ]; };
-    PolygonInformationService.ɵprov = ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
-    PolygonInformationService = __decorate([
-        Injectable({ providedIn: "root" }),
-        __metadata("design:paramtypes", [PolyStateService])
-    ], PolygonInformationService);
+    PolygonInformationService.ɵfac = function PolygonInformationService_Factory(t) { return new (t || PolygonInformationService)(ɵɵinject(PolyStateService)); };
+    PolygonInformationService.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: PolygonInformationService, factory: PolygonInformationService.ɵfac, providedIn: "root" });
     return PolygonInformationService;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PolygonInformationService, [{
+        type: Injectable,
+        args: [{ providedIn: "root" }]
+    }], function () { return [{ type: PolyStateService }]; }, null); })();
 
 var touchSupport = true;
 var mergePolygons = true;
@@ -776,23 +773,39 @@ var AlterPolygonComponent = /** @class */ (function () {
     AlterPolygonComponent.prototype.onBbox = function ($event) {
         this.bboxClicked.emit($event);
     };
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
-    __decorate([
-        Output(),
-        __metadata("design:type", EventEmitter)
-    ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
-    AlterPolygonComponent = __decorate([
-        Component({
-            selector: 'app-alter-polygon',
-            template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
-            styles: [""]
-        })
-    ], AlterPolygonComponent);
+    AlterPolygonComponent.ɵfac = function AlterPolygonComponent_Factory(t) { return new (t || AlterPolygonComponent)(); };
+    AlterPolygonComponent.ɵcmp = /*@__PURE__*/ ɵɵdefineComponent({ type: AlterPolygonComponent, selectors: [["app-alter-polygon"]], outputs: { simplyfiClicked: "simplyfiClicked", bboxClicked: "bboxClicked" }, decls: 9, vars: 0, consts: [[1, "marker-menu-inner-wrapper"], [1, "marker-menu-header"], [1, "marker-menu-content"], [1, "marker-menu-button", "simplify", 3, "click"], [1, "marker-menu-separator"], [1, "marker-menu-button", "bbox", 3, "click"]], template: function AlterPolygonComponent_Template(rf, ctx) { if (rf & 1) {
+            ɵɵelementStart(0, "div", 0);
+            ɵɵelementStart(1, "div", 1);
+            ɵɵtext(2, "Alter polygon");
+            ɵɵelementEnd();
+            ɵɵelementStart(3, "div", 2);
+            ɵɵelementStart(4, "div", 3);
+            ɵɵlistener("click", function AlterPolygonComponent_Template_div_click_4_listener($event) { return ctx.onSimplify($event); });
+            ɵɵtext(5, "Simplify");
+            ɵɵelementEnd();
+            ɵɵelement(6, "div", 4);
+            ɵɵelementStart(7, "div", 5);
+            ɵɵlistener("click", function AlterPolygonComponent_Template_div_click_7_listener($event) { return ctx.onBbox($event); });
+            ɵɵtext(8, "bbox");
+            ɵɵelementEnd();
+            ɵɵelementEnd();
+            ɵɵelementEnd();
+        } }, styles: [""] });
     return AlterPolygonComponent;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(AlterPolygonComponent, [{
+        type: Component,
+        args: [{
+                selector: 'app-alter-polygon',
+                templateUrl: './alter-polygon.component.html',
+                styleUrls: ['./alter-polygon.component.css']
+            }]
+    }], null, { simplyfiClicked: [{
+            type: Output
+        }], bboxClicked: [{
+            type: Output
+        }] }); })();
 
 var ComponentGeneraterService = /** @class */ (function () {
     function ComponentGeneraterService(cfr, injector) {
@@ -817,20 +830,16 @@ var ComponentGeneraterService = /** @class */ (function () {
         });
         this.clusterPopuprefs = [];
     };
-    ComponentGeneraterService.ctorParameters = function () { return [
-        { type: ComponentFactoryResolver },
-        { type: Injector }
-    ]; };
-    ComponentGeneraterService.ɵprov = ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(ɵɵinject(ComponentFactoryResolver), ɵɵinject(INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
-    ComponentGeneraterService = __decorate([
-        Injectable({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [ComponentFactoryResolver,
-            Injector])
-    ], ComponentGeneraterService);
+    ComponentGeneraterService.ɵfac = function ComponentGeneraterService_Factory(t) { return new (t || ComponentGeneraterService)(ɵɵinject(ComponentFactoryResolver), ɵɵinject(Injector)); };
+    ComponentGeneraterService.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: ComponentGeneraterService, factory: ComponentGeneraterService.ɵfac, providedIn: 'root' });
     return ComponentGeneraterService;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(ComponentGeneraterService, [{
+        type: Injectable,
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return [{ type: ComponentFactoryResolver }, { type: Injector }]; }, null); })();
 
 var LeafletHelperService = /** @class */ (function () {
     function LeafletHelperService() {
@@ -839,13 +848,14 @@ var LeafletHelperService = /** @class */ (function () {
         var p = polygon$1(latLngs);
         return p;
     };
-    LeafletHelperService.ɵprov = ɵɵdefineInjectable({ factory: function LeafletHelperService_Factory() { return new LeafletHelperService(); }, token: LeafletHelperService, providedIn: "root" });
-    LeafletHelperService = __decorate([
-        Injectable({ providedIn: "root" }),
-        __metadata("design:paramtypes", [])
-    ], LeafletHelperService);
+    LeafletHelperService.ɵfac = function LeafletHelperService_Factory(t) { return new (t || LeafletHelperService)(); };
+    LeafletHelperService.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: LeafletHelperService, factory: LeafletHelperService.ɵfac, providedIn: "root" });
     return LeafletHelperService;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(LeafletHelperService, [{
+        type: Injectable,
+        args: [{ providedIn: "root" }]
+    }], function () { return []; }, null); })();
 
 var PolyDrawService = /** @class */ (function () {
     function PolyDrawService(mapState, popupGenerator, turfHelper, polygonInformation, leafletHelper) {
@@ -906,7 +916,7 @@ var PolyDrawService = /** @class */ (function () {
                 //  = []
                 latlngs.forEach(function (latlng, index) {
                     var polygon3;
-                    var test = __spread(latlng);
+                    var test = __spreadArray([], __read(latlng));
                     if (latlng.length > 1) {
                         if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
                             test[0].push(latlng[0][0]);
@@ -1533,7 +1543,7 @@ var PolyDrawService = /** @class */ (function () {
             this.arrayOfFeatureGroups.forEach(function (featureGroup) {
                 var layer = featureGroup.getLayers()[0];
                 var latlngs = layer.getLatLngs()[0];
-                polygon2 = __spread(latlngs[0]);
+                polygon2 = __spreadArray([], __read(latlngs[0]));
                 if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
                     polygon2.push(latlngs[0][0]);
                 }
@@ -1690,43 +1700,36 @@ var PolyDrawService = /** @class */ (function () {
         var nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc);
         return nearestPointIdx;
     };
-    PolyDrawService.ctorParameters = function () { return [
-        { type: PolyStateService },
-        { type: ComponentGeneraterService },
-        { type: TurfHelperService },
-        { type: PolygonInformationService },
-        { type: LeafletHelperService }
-    ]; };
-    PolyDrawService.ɵprov = ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(ɵɵinject(PolyStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
-    PolyDrawService = __decorate([
-        Injectable({
-            providedIn: "root",
-        })
-        // Rename - PolyDrawService
-        ,
-        __metadata("design:paramtypes", [PolyStateService,
-            ComponentGeneraterService,
-            TurfHelperService,
-            PolygonInformationService,
-            LeafletHelperService])
-    ], PolyDrawService);
+    PolyDrawService.ɵfac = function PolyDrawService_Factory(t) { return new (t || PolyDrawService)(ɵɵinject(PolyStateService), ɵɵinject(ComponentGeneraterService), ɵɵinject(TurfHelperService), ɵɵinject(PolygonInformationService), ɵɵinject(LeafletHelperService)); };
+    PolyDrawService.ɵprov = /*@__PURE__*/ ɵɵdefineInjectable({ token: PolyDrawService, factory: PolyDrawService.ɵfac, providedIn: "root" });
     return PolyDrawService;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(PolyDrawService, [{
+        type: Injectable,
+        args: [{
+                providedIn: "root",
+            }]
+    }], function () { return [{ type: PolyStateService }, { type: ComponentGeneraterService }, { type: TurfHelperService }, { type: PolygonInformationService }, { type: LeafletHelperService }]; }, null); })();
 
 var MyLibModule = /** @class */ (function () {
     function MyLibModule() {
     }
-    MyLibModule = __decorate([
-        NgModule({
-            declarations: [AlterPolygonComponent],
-            imports: [],
-            providers: [PolyDrawService, PolygonInformationService, PolyStateService],
-            exports: [AlterPolygonComponent],
-            entryComponents: [AlterPolygonComponent]
-        })
-    ], MyLibModule);
+    MyLibModule.ɵfac = function MyLibModule_Factory(t) { return new (t || MyLibModule)(); };
+    MyLibModule.ɵmod = /*@__PURE__*/ ɵɵdefineNgModule({ type: MyLibModule });
+    MyLibModule.ɵinj = /*@__PURE__*/ ɵɵdefineInjector({ providers: [PolyDrawService, PolygonInformationService, PolyStateService], imports: [[]] });
     return MyLibModule;
 }());
+(function () { (typeof ngDevMode === "undefined" || ngDevMode) && ɵsetClassMetadata(MyLibModule, [{
+        type: NgModule,
+        args: [{
+                declarations: [AlterPolygonComponent],
+                imports: [],
+                providers: [PolyDrawService, PolygonInformationService, PolyStateService],
+                exports: [AlterPolygonComponent],
+                entryComponents: [AlterPolygonComponent]
+            }]
+    }], null, null); })();
+(function () { (typeof ngJitMode === "undefined" || ngJitMode) && ɵɵsetNgModuleScope(MyLibModule, { declarations: [AlterPolygonComponent], exports: [AlterPolygonComponent] }); })();
 
 /*
  * Public API Surface of my-lib
@@ -1736,5 +1739,5 @@ var MyLibModule = /** @class */ (function () {
  * Generated bundle index. Do not edit.
  */
 
-export { AlterPolygonComponent, ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService, ɵ0, ɵ1, TurfHelperService as ɵa, LeafletHelperService as ɵb };
+export { AlterPolygonComponent, ComponentGeneraterService, DrawMode, MarkerPosition, MyLibModule, PolyDrawService, PolyStateService, PolygonDrawStates, PolygonInfo, PolygonInformationService };
 //# sourceMappingURL=my-lib.js.map

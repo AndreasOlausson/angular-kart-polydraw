@@ -6,7 +6,7 @@
 
     concaveman = concaveman && Object.prototype.hasOwnProperty.call(concaveman, 'default') ? concaveman['default'] : concaveman;
 
-    /*! *****************************************************************************
+    /******************************************************************************
     Copyright (c) Microsoft Corporation.
 
     Permission to use, copy, modify, and/or distribute this software for any
@@ -25,11 +25,13 @@
     var extendStatics = function(d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
 
     function __extends(d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -111,13 +113,20 @@
         }
     }
 
-    function __createBinding(o, m, k, k2) {
+    var __createBinding = Object.create ? (function(o, m, k, k2) {
+        if (k2 === undefined) k2 = k;
+        var desc = Object.getOwnPropertyDescriptor(m, k);
+        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+            desc = { enumerable: true, get: function() { return m[k]; } };
+        }
+        Object.defineProperty(o, k2, desc);
+    }) : (function(o, m, k, k2) {
         if (k2 === undefined) k2 = k;
         o[k2] = m[k];
-    }
+    });
 
-    function __exportStar(m, exports) {
-        for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
+    function __exportStar(m, o) {
+        for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p)) __createBinding(o, m, p);
     }
 
     function __values(o) {
@@ -149,19 +158,31 @@
         return ar;
     }
 
+    /** @deprecated */
     function __spread() {
         for (var ar = [], i = 0; i < arguments.length; i++)
             ar = ar.concat(__read(arguments[i]));
         return ar;
     }
 
+    /** @deprecated */
     function __spreadArrays() {
         for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
         for (var r = Array(s), k = 0, i = 0; i < il; i++)
             for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
                 r[k] = a[j];
         return r;
-    };
+    }
+
+    function __spreadArray(to, from, pack) {
+        if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+            if (ar || !(i in from)) {
+                if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                ar[i] = from[i];
+            }
+        }
+        return to.concat(ar || Array.prototype.slice.call(from));
+    }
 
     function __await(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
@@ -198,11 +219,17 @@
         return cooked;
     };
 
+    var __setModuleDefault = Object.create ? (function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+    }) : function(o, v) {
+        o["default"] = v;
+    };
+
     function __importStar(mod) {
         if (mod && mod.__esModule) return mod;
         var result = {};
-        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-        result.default = mod;
+        if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        __setModuleDefault(result, mod);
         return result;
     }
 
@@ -210,19 +237,22 @@
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
 
-    function __classPrivateFieldGet(receiver, privateMap) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to get private field on non-instance");
-        }
-        return privateMap.get(receiver);
+    function __classPrivateFieldGet(receiver, state, kind, f) {
+        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+        return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
     }
 
-    function __classPrivateFieldSet(receiver, privateMap, value) {
-        if (!privateMap.has(receiver)) {
-            throw new TypeError("attempted to set private field on non-instance");
-        }
-        privateMap.set(receiver, value);
-        return value;
+    function __classPrivateFieldSet(receiver, state, value, kind, f) {
+        if (kind === "m") throw new TypeError("Private method is not writable");
+        if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+        if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+        return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
+    }
+
+    function __classPrivateFieldIn(state, receiver) {
+        if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+        return typeof state === "function" ? receiver === state : state.has(receiver);
     }
 
     var PolyStateService = /** @class */ (function () {
@@ -249,15 +279,16 @@
         PolyStateService.prototype.updateMapBounds = function (mapBounds) {
             this.updateMapStates({ mapBoundState: mapBounds });
         };
-        PolyStateService.ɵprov = core.ɵɵdefineInjectable({ factory: function PolyStateService_Factory() { return new PolyStateService(); }, token: PolyStateService, providedIn: "root" });
-        PolyStateService = __decorate([
-            core.Injectable({
-                providedIn: 'root'
-            }),
-            __metadata("design:paramtypes", [])
-        ], PolyStateService);
+        PolyStateService.ɵfac = function PolyStateService_Factory(t) { return new (t || PolyStateService)(); };
+        PolyStateService.ɵprov = /*@__PURE__*/ core.ɵɵdefineInjectable({ token: PolyStateService, factory: PolyStateService.ɵfac, providedIn: 'root' });
         return PolyStateService;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(PolyStateService, [{
+            type: core.Injectable,
+            args: [{
+                    providedIn: 'root'
+                }]
+        }], function () { return []; }, null); })();
     var MapStateModel = /** @class */ (function () {
         function MapStateModel(mapBoundState) {
             if (mapBoundState === void 0) { mapBoundState = new MapBoundsState(null, 11); }
@@ -445,7 +476,6 @@
             return kinks.features.length > 0;
         };
         TurfHelperService.prototype.polygonIntersect = function (polygon, latlngs) {
-            var _a, _b;
             // const oldPolygon = polygon.toGeoJSON();
             var poly = [];
             var poly2 = [];
@@ -465,11 +495,11 @@
                     for (var j = 0; j < poly2.length; j++) {
                         if (this.getKinks(poly2[j]).length < 2) {
                             var test = turf.intersect(poly[i], poly2[j]);
-                            if (((_a = test) === null || _a === void 0 ? void 0 : _a.geometry.type) === 'Point') {
+                            if ((test === null || test === void 0 ? void 0 : test.geometry.type) === 'Point') {
                                 intersect$1 = !(turf.booleanPointInPolygon(test, poly[i]) &&
                                     turf.booleanPointInPolygon(test, poly2[j]));
                             }
-                            else if (((_b = test) === null || _b === void 0 ? void 0 : _b.geometry.type) === 'Polygon') {
+                            else if ((test === null || test === void 0 ? void 0 : test.geometry.type) === 'Polygon') {
                                 intersect$1 = !!turf.intersect(poly[i], poly2[j]);
                             }
                             if (intersect$1) {
@@ -517,9 +547,9 @@
                     .featureIndex;
                 var test = turf.coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                     if (index_1 === i) {
-                        return __spread(accumulator, [oldPoint, point]);
+                        return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint, point]);
                     }
-                    return __spread(accumulator, [oldPoint]);
+                    return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint]);
                 }, []);
                 newPolygon = turf.multiPolygon([[test]]);
             }
@@ -535,9 +565,9 @@
                             .featureIndex;
                         coordinates_1 = turf.coordReduce(polygonPoints, function (accumulator, oldPoint, i) {
                             if (index_2 === i) {
-                                return __spread(accumulator, [oldPoint, point]);
+                                return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint, point]);
                             }
-                            return __spread(accumulator, [oldPoint]);
+                            return __spreadArray(__spreadArray([], __read(accumulator)), [oldPoint]);
                         }, []);
                     }
                     else {
@@ -590,13 +620,14 @@
             var fc = turf.featureCollection(pts);
             return fc;
         };
-        TurfHelperService.ɵprov = core.ɵɵdefineInjectable({ factory: function TurfHelperService_Factory() { return new TurfHelperService(); }, token: TurfHelperService, providedIn: "root" });
-        TurfHelperService = __decorate([
-            core.Injectable({ providedIn: 'root' }),
-            __metadata("design:paramtypes", [])
-        ], TurfHelperService);
+        TurfHelperService.ɵfac = function TurfHelperService_Factory(t) { return new (t || TurfHelperService)(); };
+        TurfHelperService.ɵprov = /*@__PURE__*/ core.ɵɵdefineInjectable({ token: TurfHelperService, factory: TurfHelperService.ɵfac, providedIn: 'root' });
         return TurfHelperService;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(TurfHelperService, [{
+            type: core.Injectable,
+            args: [{ providedIn: 'root' }]
+        }], function () { return []; }, null); })();
 
     var PolygonUtil = /** @class */ (function () {
         function PolygonUtil() {
@@ -764,14 +795,12 @@
             elements.item(i).classList.add(className);
         }
     };
-    var ɵ0 = addClass;
     var removeClass = function (selector, className) {
         var elements = document.querySelectorAll(selector);
         for (var i = 0; i < elements.length; i++) {
             elements.item(i).classList.remove(className);
         }
     };
-    var ɵ1 = removeClass;
     var PolygonDrawStates = /** @class */ (function () {
         function PolygonDrawStates() {
             this.canUsePolyDraw = false;
@@ -839,7 +868,7 @@
                     v.polygon.forEach(function (poly) {
                         var test2 = [];
                         poly.forEach(function (polygon) {
-                            test2 = __spread(polygon);
+                            test2 = __spreadArray([], __read(polygon));
                             if (polygon[0].toString() !== polygon[polygon.length - 1].toString()) {
                                 test2.push(polygon[0]);
                             }
@@ -909,16 +938,14 @@
         PolygonInformationService.prototype.setFreeDrawMode = function () {
             this.polygonDrawStates.setFreeDrawMode();
         };
-        PolygonInformationService.ctorParameters = function () { return [
-            { type: PolyStateService }
-        ]; };
-        PolygonInformationService.ɵprov = core.ɵɵdefineInjectable({ factory: function PolygonInformationService_Factory() { return new PolygonInformationService(core.ɵɵinject(PolyStateService)); }, token: PolygonInformationService, providedIn: "root" });
-        PolygonInformationService = __decorate([
-            core.Injectable({ providedIn: "root" }),
-            __metadata("design:paramtypes", [PolyStateService])
-        ], PolygonInformationService);
+        PolygonInformationService.ɵfac = function PolygonInformationService_Factory(t) { return new (t || PolygonInformationService)(core.ɵɵinject(PolyStateService)); };
+        PolygonInformationService.ɵprov = /*@__PURE__*/ core.ɵɵdefineInjectable({ token: PolygonInformationService, factory: PolygonInformationService.ɵfac, providedIn: "root" });
         return PolygonInformationService;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(PolygonInformationService, [{
+            type: core.Injectable,
+            args: [{ providedIn: "root" }]
+        }], function () { return [{ type: PolyStateService }]; }, null); })();
 
     var touchSupport = true;
     var mergePolygons = true;
@@ -995,23 +1022,39 @@
         AlterPolygonComponent.prototype.onBbox = function ($event) {
             this.bboxClicked.emit($event);
         };
-        __decorate([
-            core.Output(),
-            __metadata("design:type", core.EventEmitter)
-        ], AlterPolygonComponent.prototype, "simplyfiClicked", void 0);
-        __decorate([
-            core.Output(),
-            __metadata("design:type", core.EventEmitter)
-        ], AlterPolygonComponent.prototype, "bboxClicked", void 0);
-        AlterPolygonComponent = __decorate([
-            core.Component({
-                selector: 'app-alter-polygon',
-                template: "<div class=\"marker-menu-inner-wrapper\">\r\n  <div class=\"marker-menu-header\">Alter polygon</div>\r\n  <div class=\"marker-menu-content\">\r\n    <div class=\"marker-menu-button simplify\" (click)=\"onSimplify($event)\">Simplify</div>\r\n    <div class=\"marker-menu-separator\"></div>\r\n    <div class=\"marker-menu-button bbox\" (click)=\"onBbox($event)\" >bbox</div>\r\n  </div>\r\n</div>",
-                styles: [""]
-            })
-        ], AlterPolygonComponent);
+        AlterPolygonComponent.ɵfac = function AlterPolygonComponent_Factory(t) { return new (t || AlterPolygonComponent)(); };
+        AlterPolygonComponent.ɵcmp = /*@__PURE__*/ core.ɵɵdefineComponent({ type: AlterPolygonComponent, selectors: [["app-alter-polygon"]], outputs: { simplyfiClicked: "simplyfiClicked", bboxClicked: "bboxClicked" }, decls: 9, vars: 0, consts: [[1, "marker-menu-inner-wrapper"], [1, "marker-menu-header"], [1, "marker-menu-content"], [1, "marker-menu-button", "simplify", 3, "click"], [1, "marker-menu-separator"], [1, "marker-menu-button", "bbox", 3, "click"]], template: function AlterPolygonComponent_Template(rf, ctx) { if (rf & 1) {
+                core.ɵɵelementStart(0, "div", 0);
+                core.ɵɵelementStart(1, "div", 1);
+                core.ɵɵtext(2, "Alter polygon");
+                core.ɵɵelementEnd();
+                core.ɵɵelementStart(3, "div", 2);
+                core.ɵɵelementStart(4, "div", 3);
+                core.ɵɵlistener("click", function AlterPolygonComponent_Template_div_click_4_listener($event) { return ctx.onSimplify($event); });
+                core.ɵɵtext(5, "Simplify");
+                core.ɵɵelementEnd();
+                core.ɵɵelement(6, "div", 4);
+                core.ɵɵelementStart(7, "div", 5);
+                core.ɵɵlistener("click", function AlterPolygonComponent_Template_div_click_7_listener($event) { return ctx.onBbox($event); });
+                core.ɵɵtext(8, "bbox");
+                core.ɵɵelementEnd();
+                core.ɵɵelementEnd();
+                core.ɵɵelementEnd();
+            } }, styles: [""] });
         return AlterPolygonComponent;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(AlterPolygonComponent, [{
+            type: core.Component,
+            args: [{
+                    selector: 'app-alter-polygon',
+                    templateUrl: './alter-polygon.component.html',
+                    styleUrls: ['./alter-polygon.component.css']
+                }]
+        }], null, { simplyfiClicked: [{
+                type: core.Output
+            }], bboxClicked: [{
+                type: core.Output
+            }] }); })();
 
     var ComponentGeneraterService = /** @class */ (function () {
         function ComponentGeneraterService(cfr, injector) {
@@ -1036,20 +1079,16 @@
             });
             this.clusterPopuprefs = [];
         };
-        ComponentGeneraterService.ctorParameters = function () { return [
-            { type: core.ComponentFactoryResolver },
-            { type: core.Injector }
-        ]; };
-        ComponentGeneraterService.ɵprov = core.ɵɵdefineInjectable({ factory: function ComponentGeneraterService_Factory() { return new ComponentGeneraterService(core.ɵɵinject(core.ComponentFactoryResolver), core.ɵɵinject(core.INJECTOR)); }, token: ComponentGeneraterService, providedIn: "root" });
-        ComponentGeneraterService = __decorate([
-            core.Injectable({
-                providedIn: 'root'
-            }),
-            __metadata("design:paramtypes", [core.ComponentFactoryResolver,
-                core.Injector])
-        ], ComponentGeneraterService);
+        ComponentGeneraterService.ɵfac = function ComponentGeneraterService_Factory(t) { return new (t || ComponentGeneraterService)(core.ɵɵinject(core.ComponentFactoryResolver), core.ɵɵinject(core.Injector)); };
+        ComponentGeneraterService.ɵprov = /*@__PURE__*/ core.ɵɵdefineInjectable({ token: ComponentGeneraterService, factory: ComponentGeneraterService.ɵfac, providedIn: 'root' });
         return ComponentGeneraterService;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(ComponentGeneraterService, [{
+            type: core.Injectable,
+            args: [{
+                    providedIn: 'root'
+                }]
+        }], function () { return [{ type: core.ComponentFactoryResolver }, { type: core.Injector }]; }, null); })();
 
     var LeafletHelperService = /** @class */ (function () {
         function LeafletHelperService() {
@@ -1058,13 +1097,14 @@
             var p = leaflet.polygon(latLngs);
             return p;
         };
-        LeafletHelperService.ɵprov = core.ɵɵdefineInjectable({ factory: function LeafletHelperService_Factory() { return new LeafletHelperService(); }, token: LeafletHelperService, providedIn: "root" });
-        LeafletHelperService = __decorate([
-            core.Injectable({ providedIn: "root" }),
-            __metadata("design:paramtypes", [])
-        ], LeafletHelperService);
+        LeafletHelperService.ɵfac = function LeafletHelperService_Factory(t) { return new (t || LeafletHelperService)(); };
+        LeafletHelperService.ɵprov = /*@__PURE__*/ core.ɵɵdefineInjectable({ token: LeafletHelperService, factory: LeafletHelperService.ɵfac, providedIn: "root" });
         return LeafletHelperService;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(LeafletHelperService, [{
+            type: core.Injectable,
+            args: [{ providedIn: "root" }]
+        }], function () { return []; }, null); })();
 
     var PolyDrawService = /** @class */ (function () {
         function PolyDrawService(mapState, popupGenerator, turfHelper, polygonInformation, leafletHelper) {
@@ -1125,7 +1165,7 @@
                     //  = []
                     latlngs.forEach(function (latlng, index) {
                         var polygon3;
-                        var test = __spread(latlng);
+                        var test = __spreadArray([], __read(latlng));
                         if (latlng.length > 1) {
                             if (latlng[0][0] !== latlng[0][latlng[0].length - 1]) {
                                 test[0].push(latlng[0][0]);
@@ -1752,7 +1792,7 @@
                 this.arrayOfFeatureGroups.forEach(function (featureGroup) {
                     var layer = featureGroup.getLayers()[0];
                     var latlngs = layer.getLatLngs()[0];
-                    polygon2 = __spread(latlngs[0]);
+                    polygon2 = __spreadArray([], __read(latlngs[0]));
                     if (latlngs[0][0] !== latlngs[0][latlngs[0].length - 1]) {
                         polygon2.push(latlngs[0][0]);
                     }
@@ -1909,43 +1949,36 @@
             var nearestPointIdx = this.turfHelper.getNearestPointIndex(targetPoint, fc);
             return nearestPointIdx;
         };
-        PolyDrawService.ctorParameters = function () { return [
-            { type: PolyStateService },
-            { type: ComponentGeneraterService },
-            { type: TurfHelperService },
-            { type: PolygonInformationService },
-            { type: LeafletHelperService }
-        ]; };
-        PolyDrawService.ɵprov = core.ɵɵdefineInjectable({ factory: function PolyDrawService_Factory() { return new PolyDrawService(core.ɵɵinject(PolyStateService), core.ɵɵinject(ComponentGeneraterService), core.ɵɵinject(TurfHelperService), core.ɵɵinject(PolygonInformationService), core.ɵɵinject(LeafletHelperService)); }, token: PolyDrawService, providedIn: "root" });
-        PolyDrawService = __decorate([
-            core.Injectable({
-                providedIn: "root",
-            })
-            // Rename - PolyDrawService
-            ,
-            __metadata("design:paramtypes", [PolyStateService,
-                ComponentGeneraterService,
-                TurfHelperService,
-                PolygonInformationService,
-                LeafletHelperService])
-        ], PolyDrawService);
+        PolyDrawService.ɵfac = function PolyDrawService_Factory(t) { return new (t || PolyDrawService)(core.ɵɵinject(PolyStateService), core.ɵɵinject(ComponentGeneraterService), core.ɵɵinject(TurfHelperService), core.ɵɵinject(PolygonInformationService), core.ɵɵinject(LeafletHelperService)); };
+        PolyDrawService.ɵprov = /*@__PURE__*/ core.ɵɵdefineInjectable({ token: PolyDrawService, factory: PolyDrawService.ɵfac, providedIn: "root" });
         return PolyDrawService;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(PolyDrawService, [{
+            type: core.Injectable,
+            args: [{
+                    providedIn: "root",
+                }]
+        }], function () { return [{ type: PolyStateService }, { type: ComponentGeneraterService }, { type: TurfHelperService }, { type: PolygonInformationService }, { type: LeafletHelperService }]; }, null); })();
 
     var MyLibModule = /** @class */ (function () {
         function MyLibModule() {
         }
-        MyLibModule = __decorate([
-            core.NgModule({
-                declarations: [AlterPolygonComponent],
-                imports: [],
-                providers: [PolyDrawService, PolygonInformationService, PolyStateService],
-                exports: [AlterPolygonComponent],
-                entryComponents: [AlterPolygonComponent]
-            })
-        ], MyLibModule);
+        MyLibModule.ɵfac = function MyLibModule_Factory(t) { return new (t || MyLibModule)(); };
+        MyLibModule.ɵmod = /*@__PURE__*/ core.ɵɵdefineNgModule({ type: MyLibModule });
+        MyLibModule.ɵinj = /*@__PURE__*/ core.ɵɵdefineInjector({ providers: [PolyDrawService, PolygonInformationService, PolyStateService], imports: [[]] });
         return MyLibModule;
     }());
+    (function () { (typeof ngDevMode === "undefined" || ngDevMode) && core.ɵsetClassMetadata(MyLibModule, [{
+            type: core.NgModule,
+            args: [{
+                    declarations: [AlterPolygonComponent],
+                    imports: [],
+                    providers: [PolyDrawService, PolygonInformationService, PolyStateService],
+                    exports: [AlterPolygonComponent],
+                    entryComponents: [AlterPolygonComponent]
+                }]
+        }], null, null); })();
+    (function () { (typeof ngJitMode === "undefined" || ngJitMode) && core.ɵɵsetNgModuleScope(MyLibModule, { declarations: [AlterPolygonComponent], exports: [AlterPolygonComponent] }); })();
 
     exports.AlterPolygonComponent = AlterPolygonComponent;
     exports.ComponentGeneraterService = ComponentGeneraterService;
@@ -1955,10 +1988,6 @@
     exports.PolygonDrawStates = PolygonDrawStates;
     exports.PolygonInfo = PolygonInfo;
     exports.PolygonInformationService = PolygonInformationService;
-    exports.ɵ0 = ɵ0;
-    exports.ɵ1 = ɵ1;
-    exports.ɵa = TurfHelperService;
-    exports.ɵb = LeafletHelperService;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
