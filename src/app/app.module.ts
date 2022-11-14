@@ -9,15 +9,13 @@ import { MapComponent } from './map/map.component';
 import { MapStateService } from './map/map-state';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule],
-  declarations: [AppComponent, HelloComponent,
-    MapComponent,
-  ],
-  bootstrap: [AppComponent],
-  entryComponents: [
-  ],
-  providers:[
-    MapStateService,
-  ]
+    imports: [BrowserModule, FormsModule],
+    declarations: [AppComponent, HelloComponent,
+        MapComponent,
+    ],
+    bootstrap: [AppComponent],
+    providers: [
+        MapStateService,
+    ]
 })
 export class AppModule { }
