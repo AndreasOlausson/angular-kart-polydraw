@@ -95,6 +95,24 @@
       "zIndexOffset": null
     }
   },
+  "tools":  {
+    "simplify": {
+      "visible": true
+    },
+    "doubleElbow": {
+      "visible": true
+    },
+    "boundingBox": {
+      "visible": true
+    },
+    "bezier": {
+      "visible": true,
+      "markerParams": {
+        "hiddenModuloLevel": 16,
+        "markerClass": "bezier-marker"
+      }
+    }
+  },
   "polyLineOptions": {
     "color": "#50622b",
     "opacity": 1,

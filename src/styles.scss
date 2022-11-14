@@ -378,3 +378,10 @@ body {
 .right-margin {
   margin-right: 8px;
 }
+
+.bezier-marker {
+  opacity: 0.0;
+  &:hover {
+    opacity: 0.9;
+  }
+}

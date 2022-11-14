@@ -19,7 +19,8 @@ export enum MarkerPosition {
     NorthWest = 6,
     West = 7
     // CenterOfMass = 8,
-    // BoundingBoxCenter = 9
+    // BoundingBoxCenter = 9 // 
 }
 
 
+    
