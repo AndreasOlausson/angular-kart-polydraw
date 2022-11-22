@@ -22,5 +22,9 @@ export enum MarkerPosition {
     // BoundingBoxCenter = 9 // 
 }
 
-
+export enum PolygonEventType {
+    Create = 0,
+    Modify = 1,
+    Delete = 2
+}
     

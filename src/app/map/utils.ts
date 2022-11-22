@@ -19,6 +19,9 @@ export class PolyDrawUtil {
         }
         return bounds;
     }
+    static isTouchDevice(): boolean {
+        return !!('ontouchstart' in window) || !!('msmaxtouchpoints' in window.navigator);
+    }
 }
 export class Compass {
     public direction: ICompass = {

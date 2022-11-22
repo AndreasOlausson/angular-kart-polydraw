@@ -116,15 +116,19 @@ export class TurfHelper {
                 for (let j = 0; j < poly2.length; j++) {
                     if (this.getKinks(poly2[j]).length < 2) {
                         let test = turf.intersect(poly[i], poly2[j]);
+                        let lineTest = turf.lineIntersect(poly[i], poly[j]);
                     //     if(test?.geometry.type === "Point"){
                     //        intersect = !(turf.booleanPointInPolygon(test, poly[i]) && turf.booleanPointInPolygon(test, poly2[j]));
                     //     console.log("Intersect test: ",   );
                     //
                     // } else 
                         if (test?.geometry.type === "Polygon"){
-                        intersect = !!turf.intersect(poly[i], poly2[j]);
-                    }
-                        
+                            intersect = !!turf.intersect(poly[i], poly2[j]);
+                        }
+                        if (test?.geometry.type === "MultiPolygon"){
+                            intersect = !!turf.intersect(poly[i], poly2[j]);
+                        }
+
                         if (intersect) {
                             break loop1;
                         }

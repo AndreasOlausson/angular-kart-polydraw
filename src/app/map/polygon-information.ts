@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { injectable } from "tsyringe";
-import { Subject, Observable } from "rxjs";
-import { PolygonInfo, PolygonDrawStates, ILatLng } from "./polygon-helpers";
+import { Subject, Observable, BehaviorSubject } from "rxjs";
+import { PolygonInfo, PolygonDrawStates, ILatLng, PolygonState } from "./polygon-helpers";
 import { MapStateService } from "./map-state";
 
 @injectable()
@@ -11,9 +11,23 @@ export class PolygonInformationService {
   polygonDrawStatesSubject: Subject<PolygonDrawStates> = new Subject<PolygonDrawStates>();
   polygonDrawStates$: Observable<PolygonDrawStates> = this.polygonDrawStatesSubject.asObservable();
 
+  polygonStateSubject: BehaviorSubject<PolygonState> = new BehaviorSubject<PolygonState>(new PolygonState());
+  polygonState$: Observable<PolygonState> = this.polygonStateSubject.asObservable();
+
+  polygonState: PolygonState = null;
+  polygonDrawStates: PolygonDrawStates = null;
   polygonInformationStorage = [];
 
-  constructor(public mapStateService: MapStateService) {}
+  constructor(public mapStateService: MapStateService) {
+    this.polygonDrawStates = new PolygonDrawStates();
+    this.polygonState = new PolygonState();
+
+    this.polygonDrawStates$?.subscribe(drawState => {
+      let currentState = this.polygonStateSubject.getValue();
+      currentState.drawStates = drawState;
+      this.polygonStateSubject.next(currentState);
+    })
+  }
 
   updatePolygons() {
     console.log("updatePolygons: ", this.polygonInformationStorage);

@@ -619,6 +619,9 @@ export class PolyDrawService {
         latlngs.forEach((latlng, i) => {
             console.log(i)
             let iconClasses = this.config.markers.markerIcon.styleClasses;
+            if (PolyDrawUtil.isTouchDevice()) {
+                iconClasses.push("enlarged");
+            }
             console.log(iconClasses)
             let ignoreMarkerParams: boolean = false;
             if (i === menuMarkerIdx && this.config.markers.menuMarker) {
@@ -1049,7 +1052,7 @@ export class PolyDrawService {
     private convertToSimplifiedPolygon(latlngs: ILatLng[]) {
         this.deletePolygon([latlngs]);
         let newPolygon = this.turfHelper.getMultiPolygon(this.convertToCoords([latlngs]));
-        this.addPolygonLayer({latlngs: this.turfHelper.getTurfPolygon(newPolygon), simplify: false, dynamicTolerance: true});
+        this.addPolygonLayer({latlngs: this.turfHelper.getTurfPolygon(newPolygon), simplify: true, dynamicTolerance: true});
     }
 
     private doubleElbows(latlngs: ILatLng[]) {

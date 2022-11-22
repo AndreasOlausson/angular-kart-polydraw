@@ -11,6 +11,41 @@ import { PolyDrawService } from './map/polydraw';
   styleUrls: ["./hello.component.css"]
 })
 export class HelloComponent {
+
+  ey: ILatLng[][][] = [[[
+    { lat: 59.91, lng: 10.70 },
+    { lat: 59.94, lng: 10.70 },
+    { lat: 59.94, lng: 10.71 },
+    { lat: 59.92, lng: 10.71 },
+    { lat: 59.92, lng: 10.72 },
+    { lat: 59.94, lng: 10.72 },
+    { lat: 59.94, lng: 10.73 },
+    { lat: 59.91, lng: 10.73 },
+    { lat: 59.91, lng: 10.70 }
+  ]]];
+  ey2: ILatLng[][][] = [[[
+    { lat: 59.925, lng: 10.69 },
+    { lat: 59.935, lng: 10.69 },
+    { lat: 59.935, lng: 10.74 },
+    { lat: 59.925, lng: 10.74 },
+    { lat: 59.925, lng: 10.69 }
+  ]]];
+  ey3: ILatLng[][][] = [[[
+    { lat: 59.925, lng: 10.69 },
+    { lat: 59.935, lng: 10.69 },
+    { lat: 59.935, lng: 10.705 },
+    { lat: 59.925, lng: 10.705 },
+    { lat: 59.925, lng: 10.69 }
+  ]]];
+  ey4: ILatLng[][][] = [[[
+    { lat: 59.925, lng: 10.69 },
+    { lat: 59.935, lng: 10.69 },
+    { lat: 59.925, lng: 10.705 },
+    { lat: 59.925, lng: 10.69 }
+  ]]];
+
+
+
   star: ILatLng[][][] = [[
     [
       { lat: 59.903, lng: 10.718 },
@@ -200,6 +235,12 @@ export class HelloComponent {
 
   addStar() {
     this.mapHelperService.addAutoPolygon(this.star as any);
+
+  }
+
+  addEy() {
+    this.mapHelperService.addAutoPolygon(this.ey as any);
+    this.mapHelperService.addAutoPolygon(this.ey4 as any);
 
   }
 

@@ -76,7 +76,7 @@
         "polygon-marker",
         "info"
       ],
-      "zIndexOffset": null
+      "zIndexOffset": 99997
     },
     "markerMenuIcon": {
       "position": 7,
@@ -84,7 +84,7 @@
         "polygon-marker",
         "menu"
       ],
-      "zIndexOffset": null
+      "zIndexOffset": 99998
     },
     "markerDeleteIcon": {
       "position": 5,
@@ -92,7 +92,7 @@
         "polygon-marker",
         "delete"
       ],
-      "zIndexOffset": null
+      "zIndexOffset": 99999
     }
   },
   "tools":  {
